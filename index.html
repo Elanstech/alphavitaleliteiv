@@ -43,6 +43,17 @@
 <link rel="icon" type="image/png" href="assets/images/logo.png">
 <link rel="stylesheet" href="styles.css">
 
+<!-- If scripting is off, the preloader must not become a wall -->
+<noscript><style>
+  .pre { display: none !important; }
+  html.is-preloading { overflow: auto !important; }
+  .head__mark img { opacity: 1 !important; }
+  [data-rise] { opacity: 1 !important; transform: none !important; }
+  .hero__title .line > span { transform: none !important; }
+  .hero__line-rule { transform: scaleY(1) !important; }
+  .portal__frame { clip-path: none !important; }
+</style></noscript>
+
 <!-- ============================================================
      STRUCTURED DATA
      ============================================================ -->
@@ -120,7 +131,7 @@
 
   <div class="pre__core">
     <div class="pre__mark" id="preMark">
-      <img src="logo.png" alt="Precision Medical IV by Dr. Aronov" width="260" height="240">
+      <img src="assets/images/logo.png" alt="Precision Medical IV by Dr. Aronov" width="260" height="240">
     </div>
 
     <div class="pre__instrument">
@@ -149,7 +160,7 @@
   <div class="head__rail">
 
     <a class="head__mark" href="/" id="navMark" aria-label="Precision Medical IV, home">
-      <img src="logo.png" alt="Precision Medical IV by Dr. Aronov" width="200" height="185">
+      <img src="assets/images/logo.png" alt="Precision Medical IV by Dr. Aronov" width="200" height="185">
     </a>
 
     <nav class="head__nav" id="headNav" aria-label="Primary">
