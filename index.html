@@ -1,1 +1,340 @@
-Welcome To Elan's Tech World. We are brewing some tea stand by. 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alpha Vital Elite — Precision Medical IV | Physician-Directed Infusion Therapy, Queens NYC</title>
+  <meta name="description" content="Physician-directed IV therapy built around your labs, your diagnosis, and your goals. Targeted infusion programs for autoimmune, immune, metabolic, and liver health — Rego Park, Queens." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="home">
+
+  <!-- ══════════════════════ SIGNATURE: THE LINE ══════════════════════
+       A vertical "IV line" that runs down the page. A gold drop travels
+       along it as the visitor scrolls — the infusion metaphor, ambient. -->
+  <div class="iv-line" aria-hidden="true">
+    <span class="iv-line__track"></span>
+    <span class="iv-line__drop"></span>
+  </div>
+
+  <!-- ══════════════════════ HEADER ══════════════════════ -->
+  <header class="header" id="siteHeader">
+    <div class="header__inner">
+      <a href="#top" class="header__brand" aria-label="Alpha Vital Elite — home">
+        <span class="brand__mark" aria-hidden="true">
+          <!-- AV monogram + drop -->
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M10 36 L20 10 L27 28" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 12 L31 34 L38 12" stroke="var(--gold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="brand__droplet" d="M38 30 c0 0 -3.4 4.4 -3.4 6.6 a3.4 3.4 0 0 0 6.8 0 c0 -2.2 -3.4 -6.6 -3.4 -6.6z" fill="var(--gold)"/>
+          </svg>
+        </span>
+        <span class="brand__text">
+          <span class="brand__name">Alpha Vital <em>Elite</em></span>
+          <span class="brand__tag">Precision Medical IV</span>
+        </span>
+      </a>
+
+      <nav class="header__nav" id="primaryNav" aria-label="Primary">
+        <a href="#standard" class="nav__link">The Standard</a>
+        <a href="#programs" class="nav__link">Targeted Programs</a>
+        <a href="#process" class="nav__link">How It Works</a>
+        <a href="#suite" class="nav__link">The Suite</a>
+      </nav>
+
+      <div class="header__actions">
+        <!-- TODO(Elan): confirm final digits of the phone number from the banner -->
+        <a href="tel:+13479060090" class="header__phone">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          (347) 906-0090
+        </a>
+        <a href="#screening" class="btn btn--gold header__cta">Start Screening</a>
+        <button class="header__burger" id="navToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <nav class="mobile-nav__links" aria-label="Mobile">
+        <a href="#standard" class="mobile-nav__link" style="--i:0">The Standard</a>
+        <a href="#programs" class="mobile-nav__link" style="--i:1">Targeted Programs</a>
+        <a href="#process" class="mobile-nav__link" style="--i:2">How It Works</a>
+        <a href="#suite" class="mobile-nav__link" style="--i:3">The Suite</a>
+        <a href="#screening" class="mobile-nav__link mobile-nav__link--cta" style="--i:4">Start Screening</a>
+      </nav>
+      <div class="mobile-nav__foot">
+        <a href="tel:+13479060090">(347) 906-0090</a>
+        <span>Rego Park · Queens, NY</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ══════════════════════ HERO ══════════════════════ -->
+    <section class="hero" id="hero">
+      <div class="hero__media" data-parallax>
+        <!--
+          VIDEO PLACEHOLDER — when the film crew delivers, drop the file in
+          /assets and uncomment the <source>. The poster (real suite photo)
+          plays a slow drift until then, so the section never looks unfinished.
+        -->
+        <video class="hero__video" id="heroVideo" autoplay muted loop playsinline poster="assets/suite-wide.jpg">
+          <!-- <source src="assets/hero-film.mp4" type="video/mp4" /> -->
+        </video>
+        <div class="hero__scrim" aria-hidden="true"></div>
+        <div class="hero__grain" aria-hidden="true"></div>
+      </div>
+
+      <div class="hero__content">
+        <p class="eyebrow hero__eyebrow"><span class="eyebrow__rule"></span>Physician-Directed IV Therapy · Queens, NYC</p>
+        <h1 class="hero__title">
+          <span class="hero__line"><span>Precision begins</span></span>
+          <span class="hero__line"><span>before the <em>first drop.</em></span></span>
+        </h1>
+        <p class="hero__sub">Infusion protocols built around your labs, your diagnosis, and your goals — not a menu on the wall.</p>
+        <div class="hero__ctas">
+          <a href="#screening" class="btn btn--gold">Start Your Screening</a>
+          <a href="#programs" class="btn btn--ghost">Explore Targeted Programs</a>
+        </div>
+      </div>
+
+      <div class="hero__foot" aria-hidden="true">
+        <span class="hero__scroll">
+          <span class="hero__scroll-drip"></span>
+        </span>
+        <span class="hero__scroll-label">Scroll</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ MARQUEE STRIP ══════════════════════ -->
+    <section class="marquee" aria-label="What sets us apart">
+      <div class="marquee__track" data-marquee>
+        <span class="marquee__item">Physician-Directed</span><span class="marquee__dot"></span>
+        <span class="marquee__item">Screening Before Every Protocol</span><span class="marquee__dot"></span>
+        <span class="marquee__item">Registered Nurse Administered</span><span class="marquee__dot"></span>
+        <span class="marquee__item">Condition-Targeted Formulations</span><span class="marquee__dot"></span>
+        <span class="marquee__item">Monitored Throughout</span><span class="marquee__dot"></span>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ THE STANDARD (POSITIONING) ══════════════════════ -->
+    <section class="standard" id="standard">
+      <div class="standard__inner">
+        <div class="standard__media" data-reveal="left">
+          <figure class="standard__frame">
+            <img src="assets/suite-chair.jpg" alt="Private infusion station with monitoring equipment, living green wall, and a medical recliner" loading="lazy" />
+            <figcaption class="standard__caption">Infusion Suite · Rego Park</figcaption>
+          </figure>
+          <div class="standard__slab" aria-hidden="true"></div>
+        </div>
+        <div class="standard__copy">
+          <p class="eyebrow" data-reveal><span class="eyebrow__rule"></span>The Alpha Vital Standard</p>
+          <h2 class="standard__title" data-reveal>This is not<br />a drip bar.</h2>
+          <p class="lede" data-reveal>Most IV lounges hand you a laminated menu. We hand you a health screening — because an infusion should answer a question your body is actually asking.</p>
+          <div class="standard__points">
+            <div class="standard__point" data-reveal>
+              <h3>Diagnosis first</h3>
+              <p>Every protocol starts with your history, your symptoms, and — where relevant — your labs. The formulation follows the findings, never the other way around.</p>
+            </div>
+            <div class="standard__point" data-reveal>
+              <h3>Structured, goal-oriented care</h3>
+              <p>Each program has a defined objective and a defined timeline. You'll know what we're targeting, why, and how progress gets measured.</p>
+            </div>
+            <div class="standard__point" data-reveal>
+              <h3>Clinical, not casual</h3>
+              <p>Physician-directed protocols, RN administration, and monitoring from the first drop to the last. Comfort is the setting — medicine is the standard.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ TARGETED PROGRAMS ══════════════════════ -->
+    <section class="programs" id="programs">
+      <div class="programs__head">
+        <p class="eyebrow eyebrow--center" data-reveal><span class="eyebrow__rule"></span>Targeted Infusion Programs<span class="eyebrow__rule"></span></p>
+        <h2 class="programs__title" data-reveal>Built for the condition,<br /><em>calibrated to the person.</em></h2>
+        <p class="programs__sub" data-reveal>Structured, goal-oriented infusions — not generic vitamin mixes.</p>
+      </div>
+
+      <div class="programs__grid">
+        <article class="program program--feature" data-reveal data-tilt>
+          <div class="program__glow" aria-hidden="true"></div>
+          <p class="program__index">Focused Care</p>
+          <h3 class="program__name">Autoimmune &amp; Inflammatory</h3>
+          <p class="program__desc">Focused support for patients managing chronic inflammatory and autoimmune conditions, coordinated with your existing care.</p>
+          <ul class="program__list">
+            <li>Ulcerative Colitis</li>
+            <li>Crohn's Disease</li>
+            <li>Psoriasis</li>
+            <li>Rheumatoid Arthritis</li>
+          </ul>
+          <a href="#screening" class="program__link">Begin screening<span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="program" data-reveal data-tilt>
+          <div class="program__glow" aria-hidden="true"></div>
+          <p class="program__index">Defense</p>
+          <h3 class="program__name">Immune Support</h3>
+          <p class="program__desc">For frequent illness, slow recovery, and demanding seasons — formulations designed to reinforce the system that protects everything else.</p>
+          <a href="#screening" class="program__link">Begin screening<span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="program" data-reveal data-tilt>
+          <div class="program__glow" aria-hidden="true"></div>
+          <p class="program__index">Balance</p>
+          <h3 class="program__name">Metabolic &amp; Cholesterol</h3>
+          <p class="program__desc">Support for patients working on metabolic and lipid goals — structured around bloodwork, tracked against it over time.</p>
+          <a href="#screening" class="program__link">Begin screening<span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="program" data-reveal data-tilt>
+          <div class="program__glow" aria-hidden="true"></div>
+          <p class="program__index">Renewal</p>
+          <h3 class="program__name">Liver Health</h3>
+          <p class="program__desc">Targeted support for the organ that filters your entire life — built for patients focused on long-term liver wellness.</p>
+          <a href="#screening" class="program__link">Begin screening<span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ PROCESS ══════════════════════ -->
+    <section class="process" id="process">
+      <div class="process__inner">
+        <div class="process__head">
+          <p class="eyebrow eyebrow--light" data-reveal><span class="eyebrow__rule"></span>How It Works</p>
+          <h2 class="process__title" data-reveal>Five steps.<br />Zero guesswork.</h2>
+          <p class="process__sub" data-reveal>The sequence matters — it's what separates a protocol from a product.</p>
+        </div>
+        <ol class="process__steps">
+          <li class="step" data-reveal>
+            <span class="step__num">01</span>
+            <div class="step__body">
+              <h3>Screen</h3>
+              <p>A structured health screening — history, symptoms, medications, and goals. It takes minutes and shapes everything after it.</p>
+            </div>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__num">02</span>
+            <div class="step__body">
+              <h3>Physician Review</h3>
+              <p>A physician reviews your screening — and your labs where relevant — before anything is formulated. If an infusion isn't right for you, we'll say so.</p>
+            </div>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__num">03</span>
+            <div class="step__body">
+              <h3>Personalized Protocol</h3>
+              <p>Your formulation, dosing, and cadence are set to your findings and your goal — documented, so you can see the reasoning.</p>
+            </div>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__num">04</span>
+            <div class="step__body">
+              <h3>Infuse</h3>
+              <p>Administered by a registered nurse in our Rego Park suite — monitored throughout, in a room designed to slow your pulse, not raise it.</p>
+            </div>
+          </li>
+          <li class="step" data-reveal>
+            <span class="step__num">05</span>
+            <div class="step__body">
+              <h3>Monitor &amp; Adjust</h3>
+              <p>Progress is reviewed against your goal. Protocols evolve as your results do — that's the "precision" in Precision Medical IV.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ THE SUITE ══════════════════════ -->
+    <section class="suite" id="suite">
+      <div class="suite__head">
+        <p class="eyebrow eyebrow--center" data-reveal><span class="eyebrow__rule"></span>The Suite<span class="eyebrow__rule"></span></p>
+        <h2 class="suite__title" data-reveal>Clinical inside the line.<br /><em>Calm everywhere else.</em></h2>
+        <p class="suite__sub" data-reveal>White oak, living greenery, and medical-grade monitoring — because healing environments are part of the protocol.</p>
+      </div>
+      <div class="suite__gallery">
+        <figure class="suite__panel suite__panel--tall" data-reveal>
+          <img src="assets/suite-chair.jpg" alt="Infusion recliner beside a living green wall with vitals monitor" loading="lazy" />
+          <figcaption>Private infusion station</figcaption>
+        </figure>
+        <figure class="suite__panel" data-reveal>
+          <img src="assets/suite-wide.jpg" alt="The full infusion suite with white oak slat walls and reclining chairs" loading="lazy" />
+          <figcaption>The infusion floor</figcaption>
+        </figure>
+        <div class="suite__panel suite__panel--note" data-reveal>
+          <p class="suite__note-title">Designed like a retreat.<br />Run like a clinic.</p>
+          <ul class="suite__note-list">
+            <li>Medical recliners with full monitoring</li>
+            <li>Living green wall &amp; white oak millwork</li>
+            <li>RN on the floor at all times</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ SCREENING CTA ══════════════════════ -->
+    <section class="screening" id="screening">
+      <div class="screening__inner">
+        <div class="screening__drip" aria-hidden="true">
+          <svg viewBox="0 0 60 120" fill="none">
+            <path d="M30 4 v52" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="2 6" stroke-linecap="round"/>
+            <path class="screening__droplet" d="M30 66 c0 0 -9 11.5 -9 17.4 a9 9 0 0 0 18 0 c0 -5.9 -9 -17.4 -9 -17.4z" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <p class="eyebrow eyebrow--light eyebrow--center" data-reveal><span class="eyebrow__rule"></span>Begin<span class="eyebrow__rule"></span></p>
+        <h2 class="screening__title" data-reveal>Your protocol starts<br />with a conversation.</h2>
+        <p class="screening__sub" data-reveal>Complete a short screening and our clinical team will review it — no obligation, no laminated menu.</p>
+        <div class="screening__ctas" data-reveal>
+          <a href="#" class="btn btn--gold btn--lg">Start Your Screening</a>
+          <a href="tel:+13479060090" class="btn btn--ghost btn--lg">Call (347) 906-0090</a>
+        </div>
+        <p class="screening__fine" data-reveal>Rego Park · Queens, New York</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════════════════ FOOTER ══════════════════════ -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <span class="brand__name brand__name--footer">Alpha Vital <em>Elite</em></span>
+        <span class="brand__tag">Precision Medical IV</span>
+        <p class="footer__blurb">Physician-directed infusion therapy for patients who expect their care to be as specific as their condition.</p>
+      </div>
+      <nav class="footer__col" aria-label="Footer — programs">
+        <h4>Programs</h4>
+        <a href="#programs">Autoimmune &amp; Inflammatory</a>
+        <a href="#programs">Immune Support</a>
+        <a href="#programs">Metabolic &amp; Cholesterol</a>
+        <a href="#programs">Liver Health</a>
+      </nav>
+      <nav class="footer__col" aria-label="Footer — clinic">
+        <h4>Clinic</h4>
+        <a href="#standard">The Standard</a>
+        <a href="#process">How It Works</a>
+        <a href="#suite">The Suite</a>
+        <a href="#screening">Start Screening</a>
+      </nav>
+      <div class="footer__col">
+        <h4>Visit</h4>
+        <p>Rego Park, Queens, NY</p>
+        <a href="tel:+13479060090">(347) 906-0090</a>
+      </div>
+    </div>
+    <div class="footer__bar">
+      <p>© 2026 Alpha Vital Elite. All rights reserved.</p>
+      <p class="footer__credit">Site by <a href="https://elanstechworld.com" rel="noopener">Elan's Tech World</a></p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
