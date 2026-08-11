@@ -226,13 +226,64 @@ class WordLoop {
         this.index = (this.index + 1) % this.words.length;
         const incoming = this.words[this.index];
 
+        // Roll out through the top of the mask…
         current.classList.remove('is-on');
-        current.classList.add('is-off');
-        incoming.classList.remove('is-off');
-        incoming.classList.add('is-on');
+        current.classList.add('is-out');
 
-        // Tidy the exit class once the transition is done
-        setTimeout(() => current.classList.remove('is-off'), 800);
+        // …and only then bring the next word up through the bottom,
+        // so two words are never legible at once.
+        setTimeout(() => {
+            current.classList.remove('is-out');
+            incoming.classList.add('is-on');
+        }, 220);
+    }
+}
+
+
+/* =============================================================================
+   VIMEO BACKDROP — dormant on this page, ready for the About page.
+   Give any element the class "hero__media" (or restyle the selector) plus
+   data-vimeo="VIDEO_ID" and this covers it with that footage, object-fit
+   style. The practice's clip of Dr. Aronov speaking is Vimeo 1206022178.
+   Without a data-vimeo element on the page, this does nothing.
+============================================================================= */
+class VimeoBackdrop {
+    constructor() {
+        this.media = $('.hero__media[data-vimeo]');
+        this.id    = this.media?.dataset.vimeo ?? '';
+        this.frame = null;
+        this.RATIO = 16 / 9;
+    }
+
+    init() {
+        if (!this.media || !this.id || REDUCED) return;
+
+        this.frame = document.createElement('iframe');
+        this.frame.className = 'hero__vimeo';
+        this.frame.src =
+            `https://player.vimeo.com/video/${this.id}` +
+            `?background=1&autoplay=1&muted=1&loop=1&autopause=0&controls=0&playsinline=1&dnt=1`;
+        this.frame.allow = 'autoplay; fullscreen';
+        this.frame.setAttribute('aria-hidden', 'true');
+        this.frame.tabIndex = -1;
+
+        this.frame.addEventListener('load', () => this.media.classList.add('has-vimeo'), { once: true });
+
+        this.size();
+        this.media.appendChild(this.frame);
+        window.addEventListener('resize', debounce(() => this.size(), 150));
+    }
+
+    /** Cover-fit a fixed 16:9 iframe inside whatever box the hero is. */
+    size() {
+        if (!this.frame) return;
+        const { width, height } = this.media.getBoundingClientRect();
+        const w = Math.ceil(Math.max(width, height * this.RATIO));
+        const h = Math.ceil(Math.max(height, width / this.RATIO));
+        this.frame.width  = w;
+        this.frame.height = h;
+        this.frame.style.width  = `${w}px`;
+        this.frame.style.height = `${h}px`;
     }
 }
 
@@ -337,6 +388,7 @@ const modules = {
     header:    new Header(),
     menu:      new Menu(),
     wordLoop:  new WordLoop(),
+    vimeo:     new VimeoBackdrop(),
     heroVideo: new HeroVideo(),
     magnetic:  new Magnetic(),
     reveal:    new Reveal(),
