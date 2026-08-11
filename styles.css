@@ -105,12 +105,12 @@ ul { list-style: none; }
 ============================================================================= */
 
 /* --- the four-point star lifted out of the lockup --- */
-.star { display: inline-block; width: 9px; height: 9px; }
+.star { display: inline-block; flex: 0 0 auto; width: 9px; height: 9px; margin-top: 0.42em; }
 .star svg { width: 100%; height: 100%; fill: var(--gold); }
 
 /* --- eyebrow --- */
 .eyebrow {
-    display: flex; align-items: center; gap: 0.75rem;
+    display: flex; align-items: flex-start; gap: 0.75rem;
     font-family: var(--engraved);
     font-size: 0.74rem;
     letter-spacing: 0.24em;
@@ -174,8 +174,11 @@ ul { list-style: none; }
     background: var(--cream);
     transition: transform 1.15s var(--ease);
 }
-.pre__half--top    { top: 0;    box-shadow: inset 0 -1px 0 var(--rule-gold); }
-.pre__half--bottom { bottom: 0; box-shadow: inset 0 1px 0 var(--rule-gold); }
+.pre__half--top    { top: 0; }
+.pre__half--bottom { bottom: 0; }
+/* the seam only exists at the moment of the split */
+.pre.is-draining .pre__half--top    { box-shadow: inset 0 -1px 0 var(--rule-gold); }
+.pre.is-draining .pre__half--bottom { box-shadow: inset 0 1px 0 var(--rule-gold); }
 
 /* warm vignette so the cream field is not flat */
 .pre::after {
@@ -198,23 +201,23 @@ ul { list-style: none; }
             mask-image: linear-gradient(to top, #000 40%, transparent 72%);
     -webkit-mask-size: 100% 260%;
             mask-size: 100% 260%;
-    -webkit-mask-position: 0 100%;
-            mask-position: 0 100%;
-    animation: pre-wipe 1.5s var(--ease) .12s forwards;
+    -webkit-mask-position: 0 0;
+            mask-position: 0 0;
+    animation: pre-wipe 1.6s var(--ease) .12s forwards;
     opacity: 0;
     transform-origin: center center;
 }
 .pre__mark img { width: 100%; height: auto; }
 @keyframes pre-wipe {
-    0%   { opacity: 0; -webkit-mask-position: 0 100%; mask-position: 0 100%; }
-    12%  { opacity: 1; }
-    100% { opacity: 1; -webkit-mask-position: 0 0; mask-position: 0 0; }
+    0%   { opacity: 0; -webkit-mask-position: 0 0;    mask-position: 0 0; }
+    10%  { opacity: 1; }
+    100% { opacity: 1; -webkit-mask-position: 0 100%; mask-position: 0 100%; }
 }
 
 /* --- instrument: feed line, vial, readout --- */
 .pre__instrument {
     position: relative;
-    display: flex; align-items: flex-end; gap: 1rem;
+    display: flex; align-items: flex-end; justify-content: center;
     margin-top: 1.75rem;
     opacity: 0;
     animation: pre-fade .9s var(--ease) .75s forwards;
@@ -277,6 +280,7 @@ ul { list-style: none; }
 }
 
 .pre__readout {
+    position: absolute; left: calc(50% + 1.9rem); bottom: 0;
     font-family: var(--ui);
     font-size: 0.78rem;
     font-weight: 400;
@@ -512,6 +516,21 @@ html.is-preloading .head__mark img { opacity: 0; }
     color: rgba(246, 241, 231, .45);
 }
 
+/* the overlay covers the page, so the header rides above it and drops
+   everything that would be invisible against the panelling */
+body.menu-open .head { z-index: 1200; }
+body.menu-open .head__rail {
+    background: transparent; border-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+body.menu-open .head__mark { opacity: 0; pointer-events: none; }
+body.menu-open .head__tel  { opacity: 0; pointer-events: none; }
+body.menu-open .head__mark,
+body.menu-open .head__tel  { transition: opacity .35s var(--ease); }
+body.menu-open .head__burger { border-color: rgba(231, 203, 134, .38); }
+body.menu-open .head__burger span { background: var(--cream); }
+
 /* ---------- header · mobile ---------- */
 @media (max-width: 1080px) {
     .head__nav { display: none; }
@@ -541,7 +560,7 @@ html.is-preloading .head__mark img { opacity: 0; }
     min-height: 100vh;
     min-height: 100svh;
     display: flex; flex-direction: column;
-    padding: calc(var(--head-h) + clamp(1rem, 4vh, 3rem)) var(--gut) clamp(1.25rem, 3vh, 2rem);
+    padding: calc(var(--head-h) + clamp(0.5rem, 2vh, 1.75rem)) var(--gut) clamp(1.25rem, 3vh, 2rem);
     overflow: hidden;
     background:
         radial-gradient(ellipse at 78% 8%,  rgba(231, 203, 134, .30), transparent 55%),
@@ -612,7 +631,7 @@ body.is-ready .hero__line-ring { animation: hero-ring 5.2s ease-out 2.5s infinit
     gap: clamp(2rem, 6vw, 6rem);
     width: 100%; max-width: var(--maxw);
     margin: 0 auto;
-    padding: clamp(1rem, 3vh, 2.5rem) 0;
+    padding: clamp(0.5rem, 2vh, 2rem) 0;
 }
 
 /* --- copy --- */
@@ -623,7 +642,7 @@ body.is-ready .hero__line-ring { animation: hero-ring 5.2s ease-out 2.5s infinit
     font-family: var(--display);
     font-optical-sizing: auto;
     font-weight: 400;
-    font-size: clamp(2.65rem, 5.6vw, 5.05rem);
+    font-size: clamp(2.6rem, 5.1vw, 4.6rem);
     line-height: 1.03;
     letter-spacing: -0.018em;
     color: var(--forest);
@@ -635,8 +654,11 @@ body.is-ready .hero__line-ring { animation: hero-ring 5.2s ease-out 2.5s infinit
     font-style: italic;
     font-weight: 500;
     color: var(--gold-deep);
-    /* a hairline underscore, the same weight as the IV line */
-    box-shadow: inset 0 -1px 0 var(--rule-gold);
+    /* a hairline the same weight as the IV line, cleared of the descenders */
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--rule-gold);
+    text-underline-offset: 0.16em;
 }
 
 .hero__dek {
@@ -648,30 +670,39 @@ body.is-ready .hero__line-ring { animation: hero-ring 5.2s ease-out 2.5s infinit
 .hero__actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-bottom: clamp(2rem, 5vh, 3rem); }
 
 .hero__assurances {
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: 0.5rem clamp(0.9rem, 2vw, 1.5rem);
-    padding-top: 1.4rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, auto));
+    justify-content: start;
+    gap: 0.55rem clamp(1.5rem, 3.5vw, 3rem);
+    padding-top: 1.3rem;
     border-top: 1px solid var(--rule-soft);
 }
 .hero__assurances li {
-    position: relative;
-    display: flex; align-items: center; gap: clamp(0.9rem, 2vw, 1.5rem);
+    display: flex; align-items: center; gap: 0.65rem;
     font-family: var(--engraved);
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
+    font-size: clamp(0.62rem, 0.72vw, 0.7rem);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--mist);
 }
-/* the star, again, doing structural work as a separator */
-.hero__assurances li:not(:last-child)::after {
+/* the star from the lockup, doing structural work as the bullet */
+.hero__assurances li::before {
     content: '';
+    flex: 0 0 auto;
     width: 7px; height: 7px;
-    background: var(--gold); opacity: .75;
+    background: var(--gold); opacity: .8;
     clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
 }
 
 /* --- portal --- */
-.hero__portal { position: relative; justify-self: center; width: 100%; max-width: 33rem; }
+/* 47/62 is the arch ratio — the second term keeps the whole arch on screen
+   on short laptops instead of letting it run past the fold */
+.hero__portal {
+    position: relative;
+    justify-self: center;
+    width: 100%;
+    max-width: min(32rem, calc((100svh - var(--head-h) - 11rem) * 0.758));
+}
 
 .portal {
     position: relative;
@@ -836,24 +867,34 @@ body.is-ready .hero__title .line { transform: none; }
 }
 
 @media (max-width: 640px) {
-    .hero { padding-bottom: 2.5rem; }
-    .hero__title { font-size: clamp(2.35rem, 10.5vw, 3.4rem); }
-    .hero__dek { font-size: 1rem; }
+    .hero { padding-top: calc(var(--head-h) + 0.75rem); padding-bottom: 2.5rem; }
+    .hero__grid { padding-top: 0; gap: 2.5rem; }
+    .hero__title { font-size: clamp(2.3rem, 10.2vw, 3.3rem); }
+    .hero__dek { font-size: 0.98rem; }
     .hero__actions { gap: 0.7rem; }
     .hero__actions .btn { flex: 1 1 100%; }
-    .hero__assurances { gap: 0.65rem 1rem; }
-    .hero__assurances li { font-size: 0.63rem; gap: 1rem; }
     .hero__portal { max-width: none; }
     .plaque { margin-left: 1rem; padding: 0.9rem 1.1rem; }
     .hero__foot { flex-direction: column; align-items: flex-start; gap: 1.1rem; }
     .hero__scroll { font-size: 0.6rem; }
     .hero__scroll i { height: 32px; }
     .hero__motes { display: none; }
+
+    /* the rail becomes a stacked list — the labels are too long to sit in a row
+       at this width, and a wrapped row reads like a mistake */
+    .hero__assurances { grid-template-columns: 1fr; gap: 0.42rem; padding-top: 1.15rem; }
+    .hero__assurances li { font-size: 0.63rem; line-height: 1.5; }
+    .hero__assurances li::before { width: 6px; height: 6px; }
 }
 
-@media (max-width: 400px) {
-    .hero__assurances li:not(:last-child)::after { display: none; }
-    .hero__assurances li { width: 100%; }
+/* ---------- hero · short viewports (laptops, landscape tablets) ---------- */
+@media (min-width: 981px) and (max-height: 960px) {
+    .hero__title { font-size: clamp(2.4rem, 4.2vw, 3.6rem); }
+    .hero__dek { margin-bottom: 1.5rem; }
+    .hero__actions { margin-bottom: 1.4rem; }
+    .hero__copy .eyebrow { margin-bottom: 1rem; }
+    .hero__title { margin-bottom: 1.35rem; }
+    .hero__assurances { padding-top: 1.05rem; }
 }
 
 
