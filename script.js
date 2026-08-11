@@ -1,256 +1,476 @@
-/* ═══════════════════════════════════════════════════════════════════
-   ALPHA VITAL ELITE — app.js
-   ES6 class architecture. Each concern is its own class;
-   App bootstraps everything and respects prefers-reduced-motion.
-   ═══════════════════════════════════════════════════════════════════ */
+/* =============================================================================
+   PRECISION MEDICAL IV — SCRIPT.JS  (ES6 module)
+   -----------------------------------------------------------------------------
+   Loaded with <script type="module">: module scope, strict mode, deferred by
+   default. Every class feature-detects and no-ops when its elements are absent,
+   so you can drop new sections in without touching this file.
 
-'use strict';
+     Helpers
+     Preloader   the vial, the count, the split, the mark's flight
+     Header      condense on scroll, hide/reveal, star indicator
+     Menu        mobile overlay, scroll lock, escape, focus return
+     Hero        entrance, mote field, portal parallax, image fallback
+     Magnetic    pointer attraction on primary buttons (fine pointers only)
+     Boot
+============================================================================= */
 
-/* ─────────────────────────────────────────────
-   SiteHeader
-   Solid-on-scroll + hide-on-scroll-down / show-on-scroll-up
-   ───────────────────────────────────────────── */
-class SiteHeader {
-  constructor(el) {
-    this.el = el;
-    this.lastY = 0;
-    this.ticking = false;
-    this.onScroll = this.onScroll.bind(this);
-    window.addEventListener('scroll', this.onScroll, { passive: true });
-    this.update();
-  }
 
-  onScroll() {
-    if (this.ticking) return;
-    this.ticking = true;
-    requestAnimationFrame(() => {
-      this.update();
-      this.ticking = false;
-    });
-  }
+/* =============================================================================
+   HELPERS
+============================================================================= */
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE_POINTER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  update() {
-    const y = window.scrollY;
-    this.el.classList.toggle('header--solid', y > 40);
+const $  = (sel, ctx = document) => ctx.querySelector(sel);
+const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
-    const goingDown = y > this.lastY && y > 320;
-    this.el.classList.toggle('header--hidden', goingDown && !document.body.classList.contains('nav-open'));
-    this.lastY = y;
-  }
-}
+const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
+const lerp  = (a, b, t) => a + (b - a) * t;
 
-/* ─────────────────────────────────────────────
-   MobileNav
-   Burger toggle, staggered link entrance (CSS),
-   closes on link tap / Escape, locks body scroll
-   ───────────────────────────────────────────── */
-class MobileNav {
-  constructor(toggleEl, drawerEl) {
-    this.toggle = toggleEl;
-    this.drawer = drawerEl;
-    this.open = false;
+/** Run a handler at most once per frame. */
+const onFrame = (fn) => {
+    let queued = false;
+    return (...args) => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => { fn(...args); queued = false; });
+    };
+};
 
-    this.toggle.addEventListener('click', () => this.set(!this.open));
-    this.drawer.querySelectorAll('a').forEach((a) =>
-      a.addEventListener('click', () => this.set(false))
-    );
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.open) this.set(false);
-    });
-  }
+const debounce = (fn, wait = 150) => {
+    let t;
+    return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+};
 
-  set(open) {
-    this.open = open;
-    this.drawer.classList.toggle('mobile-nav--open', open);
-    this.drawer.setAttribute('aria-hidden', String(!open));
-    this.toggle.setAttribute('aria-expanded', String(open));
-    document.body.classList.toggle('nav-open', open);
-    document.body.style.overflow = open ? 'hidden' : '';
-  }
-}
+const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
-/* ─────────────────────────────────────────────
-   RevealOnScroll
-   IntersectionObserver → .is-revealed
-   Siblings inside the same parent get a stagger.
-   ───────────────────────────────────────────── */
-class RevealOnScroll {
-  constructor(selector = '[data-reveal]') {
-    this.items = [...document.querySelectorAll(selector)];
-    this.assignStagger();
 
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-revealed');
-          this.observer.unobserve(entry.target);
+/* =============================================================================
+   PRELOADER
+   Progress is real where it can be (fonts + images), padded by elapsed time so
+   the vial never sits still on a fast connection. Minimum 1.5s so the sequence
+   reads; hard ceiling of 6s so a stalled asset can never trap anyone.
+============================================================================= */
+class Preloader {
+    constructor() {
+        this.el      = $('#pre');
+        this.mark    = $('#preMark');
+        this.liquid  = $('#preLiquid');
+        this.pct     = $('#prePct');
+        this.navMark = $('#navMark');
+
+        this.MIN_MS  = 1500;
+        this.MAX_MS  = 6000;
+        this.start   = performance.now();
+        this.shown   = 0;    // what the vial is displaying
+        this.target  = 0;    // what loading says
+        this.loaded  = false;
+    }
+
+    init() {
+        if (!this.el) { this.finish(true); return; }
+
+        if (REDUCED) { this.finish(true); return; }
+
+        this.watchAssets();
+        this.tick();
+
+        // Never let a slow asset hold the page hostage
+        setTimeout(() => { this.loaded = true; }, this.MAX_MS);
+    }
+
+    /** Real progress: fonts, then every image with a src. */
+    watchAssets() {
+        const images = $$('img').filter((img) => img.getAttribute('src'));
+        const total  = images.length + 1; // +1 for the font set
+        let done     = 0;
+
+        const step = () => {
+            done += 1;
+            this.target = Math.max(this.target, (done / total) * 100);
+        };
+
+        (document.fonts ? document.fonts.ready : Promise.resolve()).then(step);
+
+        images.forEach((img) => {
+            if (img.complete) { step(); return; }
+            img.addEventListener('load',  step, { once: true });
+            img.addEventListener('error', step, { once: true });
         });
-      },
-      { threshold: 0.18, rootMargin: '0px 0px -6% 0px' }
-    );
-    this.items.forEach((el) => this.observer.observe(el));
-  }
 
-  assignStagger() {
-    const groups = new Map();
-    this.items.forEach((el) => {
-      const parent = el.parentElement;
-      if (!groups.has(parent)) groups.set(parent, []);
-      groups.get(parent).push(el);
-    });
-    groups.forEach((els) =>
-      els.forEach((el, i) => el.style.setProperty('--reveal-delay', `${i * 90}ms`))
-    );
-  }
-}
-
-/* ─────────────────────────────────────────────
-   IVLine  — the signature
-   A gold drop travels the fixed vertical line
-   according to scroll progress (smoothed / lerped).
-   ───────────────────────────────────────────── */
-class IVLine {
-  constructor(el) {
-    this.el = el;
-    this.drop = el.querySelector('.iv-line__drop');
-    this.current = 0;
-    this.target = 0;
-    this.raf = null;
-
-    window.addEventListener('scroll', () => this.onScroll(), { passive: true });
-    this.onScroll();
-    this.loop();
-  }
-
-  onScroll() {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    this.target = max > 0 ? window.scrollY / max : 0;
-  }
-
-  loop() {
-    // lerp toward target for that fluid "drip" lag
-    this.current += (this.target - this.current) * 0.07;
-    const pad = 0.06; // keep the drop inside the faded ends of the track
-    const t = pad + this.current * (1 - pad * 2);
-    this.drop.style.top = `${t * 100}%`;
-    this.raf = requestAnimationFrame(() => this.loop());
-  }
-}
-
-/* ─────────────────────────────────────────────
-   HeroStage
-   • Kicks off the line-mask entrance
-   • Ken Burns drift while the film is a placeholder
-   • Subtle parallax on the media layer
-   ───────────────────────────────────────────── */
-class HeroStage {
-  constructor(section) {
-    this.section = section;
-    this.media = section.querySelector('[data-parallax]');
-    this.video = section.querySelector('#heroVideo');
-
-    // entrance
-    requestAnimationFrame(() => this.section.classList.add('hero--in'));
-
-    // no <source> yet → poster-only mode with slow drift
-    if (this.video && this.video.querySelectorAll('source').length === 0) {
-      this.video.classList.add('hero__video--poster-only');
+        window.addEventListener('load', () => { this.target = 100; this.loaded = true; }, { once: true });
     }
 
-    // parallax
-    window.addEventListener('scroll', () => this.parallax(), { passive: true });
-  }
+    tick() {
+        const elapsed = performance.now() - this.start;
 
-  parallax() {
-    const y = window.scrollY;
-    if (y > window.innerHeight) return;
-    this.media.style.transform = `translateY(${y * 0.18}px)`;
-  }
-}
+        // Pad with time so the bar always creeps, but cap it below 100
+        const paced = clamp((elapsed / this.MIN_MS) * 96, 0, 96);
+        const goal  = this.loaded ? 100 : Math.max(this.target, paced);
 
-/* ─────────────────────────────────────────────
-   Marquee
-   Duplicates the track content once so the CSS
-   -50% translate loops seamlessly.
-   ───────────────────────────────────────────── */
-class Marquee {
-  constructor(track) {
-    this.track = track;
-    this.track.innerHTML += this.track.innerHTML;
-    this.track.classList.add('marquee__track--run');
-  }
-}
+        this.shown = lerp(this.shown, goal, 0.09);
+        if (goal - this.shown < 0.4) this.shown = goal;
 
-/* ─────────────────────────────────────────────
-   CardGlow
-   Radial gold glow follows the cursor inside
-   each program card (sets CSS vars).
-   ───────────────────────────────────────────── */
-class CardGlow {
-  constructor(selector = '[data-tilt]') {
-    document.querySelectorAll(selector).forEach((card) => {
-      card.addEventListener('pointermove', (e) => {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty('--gx', `${e.clientX - r.left}px`);
-        card.style.setProperty('--gy', `${e.clientY - r.top}px`);
-      });
-    });
-  }
-}
+        this.render(this.shown);
 
-/* ─────────────────────────────────────────────
-   SmoothAnchors
-   Offsets in-page anchor jumps below the fixed header.
-   ───────────────────────────────────────────── */
-class SmoothAnchors {
-  constructor(headerEl, offsetExtra = 16) {
-    this.header = headerEl;
-    this.extra = offsetExtra;
-    document.querySelectorAll('a[href^="#"]').forEach((a) => {
-      a.addEventListener('click', (e) => this.go(e, a));
-    });
-  }
-
-  go(e, a) {
-    const id = a.getAttribute('href');
-    if (id === '#' || id === '#top') return;
-    const target = document.querySelector(id);
-    if (!target) return;
-    e.preventDefault();
-    const top =
-      target.getBoundingClientRect().top +
-      window.scrollY -
-      this.header.offsetHeight -
-      this.extra;
-    window.scrollTo({ top, behavior: 'smooth' });
-  }
-}
-
-/* ─────────────────────────────────────────────
-   App — bootstrap
-   ───────────────────────────────────────────── */
-class App {
-  constructor() {
-    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const header = document.getElementById('siteHeader');
-
-    this.header = new SiteHeader(header);
-    this.nav = new MobileNav(
-      document.getElementById('navToggle'),
-      document.getElementById('mobileNav')
-    );
-    this.anchors = new SmoothAnchors(header);
-    this.reveals = new RevealOnScroll();
-    this.hero = new HeroStage(document.getElementById('hero'));
-    this.marquee = new Marquee(document.querySelector('[data-marquee]'));
-    this.glow = new CardGlow();
-
-    if (!this.reducedMotion) {
-      this.ivLine = new IVLine(document.querySelector('.iv-line'));
+        if (this.shown >= 99.6 && elapsed >= this.MIN_MS) { this.finish(); return; }
+        requestAnimationFrame(() => this.tick());
     }
-  }
+
+    render(value) {
+        const v = Math.round(value);
+        if (this.liquid) this.liquid.style.height = `${value.toFixed(1)}%`;
+        if (this.pct && this.pct.textContent !== String(v)) this.pct.textContent = v;
+    }
+
+    /** Drain, fly the mark home, split the field. */
+    async finish(instant = false) {
+        this.render(100);
+
+        if (instant) {
+            this.el?.classList.add('is-done');
+            document.documentElement.classList.remove('is-preloading');
+            document.body.classList.add('is-ready');
+            return;
+        }
+
+        await wait(320);
+        this.flyMark();
+        this.el.classList.add('is-draining');
+
+        await wait(420);
+        this.el.classList.add('is-open');
+        document.documentElement.classList.remove('is-preloading');
+        document.body.classList.add('is-ready');
+
+        await wait(1250);
+        this.el.classList.add('is-done');
+        this.el.remove();
+    }
+
+    /**
+     * FLIP the preloader mark onto the header mark so the logo appears to
+     * travel to its resting place rather than cross-fading.
+     */
+    flyMark() {
+        const target = this.navMark?.querySelector('img');
+        if (!this.mark || !target) return;
+
+        const from = this.mark.getBoundingClientRect();
+        const to   = target.getBoundingClientRect();
+        if (!from.width || !to.width) return;
+
+        const scale = to.width / from.width;
+        const dx    = (to.left + to.width  / 2) - (from.left + from.width  / 2);
+        const dy    = (to.top  + to.height / 2) - (from.top  + from.height / 2);
+
+        this.mark.classList.add('is-travelling');
+        requestAnimationFrame(() => {
+            this.mark.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+        });
+    }
 }
 
-document.addEventListener('DOMContentLoaded', () => new App());
+
+/* =============================================================================
+   HEADER
+============================================================================= */
+class Header {
+    constructor() {
+        this.el   = $('#head');
+        this.nav  = $('#headNav');
+        this.star = $('#headStar');
+        this.links = $$('[data-nav]', this.nav || document);
+        this.lastY = 0;
+    }
+
+    init() {
+        if (!this.el) return;
+        this.bindScroll();
+        this.bindStar();
+    }
+
+    bindScroll() {
+        const onScroll = onFrame(() => {
+            const y = window.scrollY;
+
+            this.el.classList.toggle('is-stuck', y > 30);
+
+            // Hide going down, return going up — but never over the hero
+            const goingDown = y > this.lastY && y > 260;
+            this.el.classList.toggle('is-hidden', goingDown && !document.body.classList.contains('menu-open'));
+
+            this.lastY = y;
+        });
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
+
+    /** The star slides to whichever link is hovered, and parks on the current one. */
+    bindStar() {
+        if (!this.nav || !this.star || !this.links.length) return;
+
+        const moveTo = (link) => {
+            if (!link) return;
+            const navBox  = this.nav.getBoundingClientRect();
+            const linkBox = link.getBoundingClientRect();
+            const x = (linkBox.left - navBox.left) + (linkBox.width / 2) - 4.5;
+            this.star.style.setProperty('--x', `${x.toFixed(1)}px`);
+            this.nav.classList.add('is-marking');
+        };
+
+        const park = () => moveTo(this.nav.querySelector('.is-current') || this.links[0]);
+
+        this.links.forEach((link) => {
+            link.addEventListener('mouseenter', () => moveTo(link));
+            link.addEventListener('focus', () => moveTo(link));
+        });
+        this.nav.addEventListener('mouseleave', park);
+
+        // Park once the display face has loaded, or the measurement is wrong
+        (document.fonts ? document.fonts.ready : Promise.resolve()).then(park);
+        window.addEventListener('resize', debounce(park, 200));
+    }
+}
+
+
+/* =============================================================================
+   MENU — mobile overlay
+============================================================================= */
+class Menu {
+    constructor() {
+        this.el     = $('#menu');
+        this.burger = $('#burger');
+        this.open   = false;
+    }
+
+    init() {
+        if (!this.el || !this.burger) return;
+
+        this.burger.addEventListener('click', () => this.set(!this.open));
+
+        $$('a', this.el).forEach((a) =>
+            a.addEventListener('click', () => this.set(false))
+        );
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.open) { this.set(false); this.burger.focus(); }
+        });
+
+        window.addEventListener('resize', debounce(() => {
+            if (this.open && window.innerWidth > 860) this.set(false);
+        }, 200));
+    }
+
+    set(open) {
+        this.open = open;
+        this.el.classList.toggle('is-open', open);
+        this.el.setAttribute('aria-hidden', String(!open));
+        this.burger.classList.toggle('is-open', open);
+        this.burger.setAttribute('aria-expanded', String(open));
+        this.burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        document.documentElement.classList.toggle('is-locked', open);
+        document.body.classList.toggle('menu-open', open);
+    }
+}
+
+
+/* =============================================================================
+   HERO — mote field, portal parallax, photo fallback
+============================================================================= */
+class Hero {
+    constructor() {
+        this.el      = $('#hero');
+        this.canvas  = $('#heroMotes');
+        this.portal  = $('[data-parallax]', this.el || document);
+        this.photo   = $('#portalPhoto');
+        this.motes   = [];
+        this.pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
+        this.raf     = null;
+    }
+
+    init() {
+        if (!this.el) return;
+        this.guardPhoto();
+        this.startMotes();
+        this.bindParallax();
+    }
+
+    /** If the photograph is missing, fall back to the drawn scene beneath it. */
+    guardPhoto() {
+        if (!this.photo) return;
+        const fail = () => this.photo.classList.add('is-missing');
+        if (this.photo.complete && this.photo.naturalWidth === 0) fail();
+        this.photo.addEventListener('error', fail, { once: true });
+    }
+
+    /* --- ambient gold motes ------------------------------------------------ */
+    startMotes() {
+        if (!this.canvas || REDUCED) return;
+        if (window.matchMedia('(max-width: 640px)').matches) return;
+
+        this.ctx = this.canvas.getContext('2d', { alpha: true });
+        this.sizeCanvas();
+        this.seedMotes();
+        this.loop();
+
+        window.addEventListener('resize', debounce(() => {
+            this.sizeCanvas();
+            this.seedMotes();
+        }, 200));
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) { cancelAnimationFrame(this.raf); this.raf = null; }
+            else if (!this.raf) this.loop();
+        });
+    }
+
+    sizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const { width, height } = this.el.getBoundingClientRect();
+        this.w = width; this.h = height;
+        this.canvas.width  = Math.round(width * dpr);
+        this.canvas.height = Math.round(height * dpr);
+        this.canvas.style.width  = `${width}px`;
+        this.canvas.style.height = `${height}px`;
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    seedMotes() {
+        const count = clamp(Math.round(this.w / 26), 20, 54);
+        this.motes = Array.from({ length: count }, () => ({
+            x: Math.random() * this.w,
+            y: Math.random() * this.h,
+            r: 0.5 + Math.random() * 1.5,
+            speed: 0.08 + Math.random() * 0.24,
+            drift: 0.4 + Math.random() * 1.4,
+            phase: Math.random() * Math.PI * 2,
+            alpha: 0.16 + Math.random() * 0.4,
+        }));
+    }
+
+    loop() {
+        this.raf = requestAnimationFrame(() => this.loop());
+
+        const { ctx } = this;
+        const t = performance.now() / 1000;
+
+        // ease the pointer influence
+        this.pointer.x = lerp(this.pointer.x, this.pointer.tx, 0.05);
+        this.pointer.y = lerp(this.pointer.y, this.pointer.ty, 0.05);
+        const pushX = (this.pointer.x - 0.5) * 26;
+        const pushY = (this.pointer.y - 0.5) * 16;
+
+        ctx.clearRect(0, 0, this.w, this.h);
+
+        this.motes.forEach((m) => {
+            m.y -= m.speed;
+            if (m.y < -6) { m.y = this.h + 6; m.x = Math.random() * this.w; }
+
+            const x = m.x + Math.sin(t * 0.5 + m.phase) * m.drift * 6 + pushX * (m.r / 2);
+            const y = m.y + pushY * (m.r / 2);
+
+            ctx.beginPath();
+            ctx.arc(x, y, m.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(193, 150, 63, ${m.alpha})`;
+            ctx.fill();
+
+            if (m.r > 1.4) {
+                ctx.beginPath();
+                ctx.arc(x, y, m.r * 3.4, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(231, 203, 134, ${m.alpha * 0.12})`;
+                ctx.fill();
+            }
+        });
+    }
+
+    /* --- portal parallax ---------------------------------------------------- */
+    bindParallax() {
+        if (REDUCED || !FINE_POINTER) return;
+
+        const onMove = onFrame((e) => {
+            const nx = e.clientX / window.innerWidth;
+            const ny = e.clientY / window.innerHeight;
+            this.pointer.tx = nx;
+            this.pointer.ty = ny;
+
+            if (!this.portal) return;
+            const rx = (0.5 - ny) * 3.2;
+            const ry = (nx - 0.5) * 4.2;
+            this.portal.style.transform =
+                `perspective(1400px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(${((0.5 - ny) * 10).toFixed(1)}px)`;
+        });
+
+        window.addEventListener('mousemove', onMove, { passive: true });
+        this.el.addEventListener('mouseleave', () => {
+            if (this.portal) this.portal.style.transform = '';
+        });
+    }
+}
+
+
+/* =============================================================================
+   MAGNETIC — primary buttons lean toward the pointer
+============================================================================= */
+class Magnetic {
+    constructor() {
+        this.items = $$('[data-magnetic]');
+    }
+
+    init() {
+        if (!this.items.length || REDUCED || !FINE_POINTER) return;
+
+        this.items.forEach((el) => {
+            const strength = 0.28;
+
+            el.addEventListener('mousemove', (e) => {
+                const box = el.getBoundingClientRect();
+                const x = (e.clientX - (box.left + box.width  / 2)) * strength;
+                const y = (e.clientY - (box.top  + box.height / 2)) * strength;
+                el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+            });
+
+            el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+        });
+    }
+}
+
+
+/* =============================================================================
+   BOOT
+============================================================================= */
+const modules = {
+    preloader: new Preloader(),
+    header:    new Header(),
+    menu:      new Menu(),
+    hero:      new Hero(),
+    magnetic:  new Magnetic(),
+};
+
+/** Nothing here is worth trapping someone behind a cream screen for. */
+const release = () => {
+    document.documentElement.classList.remove('is-preloading');
+    document.body.classList.add('is-ready');
+    $('#pre')?.remove();
+};
+
+const boot = () => {
+    setTimeout(release, 8000); // failsafe, whatever else happens
+
+    Object.values(modules).forEach((m) => {
+        try { m.init(); }
+        catch (err) { console.error(`[PMIV] ${m.constructor.name} failed to start`, err); release(); }
+    });
+
+    if ('ontouchstart' in window) document.documentElement.classList.add('is-touch');
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+} else {
+    boot();
+}
+
+// handy in the console while you build the rest of the page
+window.PMIV = { modules, boot, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
