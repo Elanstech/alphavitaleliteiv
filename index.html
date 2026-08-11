@@ -12,7 +12,7 @@
 <meta name="author" content="Dr. Violeta Aronov, DO">
 <link rel="canonical" href="https://precisionmedicaliv.com/">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<meta name="theme-color" content="#F6F1E7">
+<meta name="theme-color" content="#101B13">
 <meta name="format-detection" content="telephone=yes">
 
 <meta name="geo.region" content="US-NY">
@@ -31,27 +31,27 @@
 
 <!-- ============================================================
      PERFORMANCE + FONTS
-     Bodoni Moda — display, echoes the hairline contrast in the mark
-     Marcellus  — engraved Roman caps, echoes the wordmark
-     Jost       — geometric utility face for UI and body
+     Prata           display serif — Didone contrast, cuts hard on video
+     Cormorant       italic accent — the living word, pull-quotes
+     Marcellus       engraved caps — labels, matches the wordmark
+     Instrument Sans body + UI
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="logo.png" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Jost:wght@300;400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/images/logo.png" fetchpriority="high">
+<link rel="preload" as="image" href="assets/images/hero-poster.jpg" fetchpriority="high">
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
-<link rel="icon" type="image/png" href="logo.png">
+<link rel="icon" type="image/png" href="assets/images/logo.png">
 <link rel="stylesheet" href="styles.css">
 
 <!-- If scripting is off, the preloader must not become a wall -->
 <noscript><style>
   .pre { display: none !important; }
   html.is-preloading { overflow: auto !important; }
-  .head__mark img { opacity: 1 !important; }
-  [data-rise] { opacity: 1 !important; transform: none !important; }
-  .hero__title .line > span { transform: none !important; }
-  .hero__line-rule { transform: scaleY(1) !important; }
-  .portal__frame { clip-path: none !important; }
+  [data-rise], .hero__title .word > span { opacity: 1 !important; transform: none !important; }
+  .loop__stack { display: none !important; }
+  .loop__fallback { display: inline !important; }
 </style></noscript>
 
 <!-- ============================================================
@@ -118,70 +118,44 @@
 <body>
 
 <!-- ==============================================================
-     PRELOADER
-     The loading state is the practice's own instrument: a glass vial
-     filling with gold. Each drop that falls from the line above it
-     ripples the meniscus. On completion the liquid drains into a
-     hairline, the field splits along that line, and the mark travels
-     up to its resting place in the header.
+     PRELOADER — one cream panel. The mark, a hairline that draws
+     itself with the load, the count. Then the panel lifts like a
+     curtain onto the film. Three seconds, no theatre.
      ============================================================== -->
 <div class="pre" id="pre" role="status" aria-label="Loading">
-  <span class="pre__half pre__half--top"></span>
-  <span class="pre__half pre__half--bottom"></span>
-
   <div class="pre__core">
-    <div class="pre__mark" id="preMark">
-      <img src="logo.png" alt="Precision Medical IV by Dr. Aronov" width="260" height="240">
+    <img class="pre__mark" src="assets/images/logo.png" alt="Precision Medical IV by Dr. Aronov" width="640" height="592">
+    <div class="pre__meter">
+      <span class="pre__bar" id="preBar"></span>
+      <span class="pre__pct" id="prePct">0</span>
     </div>
-
-    <div class="pre__instrument">
-      <span class="pre__feed"><i class="pre__drop"></i></span>
-
-      <div class="pre__vial" aria-hidden="true">
-        <span class="pre__liquid" id="preLiquid"><i class="pre__meniscus"></i></span>
-        <span class="pre__gauge"></span>
-      </div>
-
-      <p class="pre__readout"><span id="prePct">0</span><i>%</i></p>
-    </div>
-
-    <p class="pre__caption">Physician-directed IV wellness &middot; Middle Village, New York</p>
   </div>
 </div>
 
 
 <!-- ==============================================================
-     HEADER
-     Full-bleed over the hero, then condenses on scroll into an
-     inset brass rail. The four-point star from the lockup is the
-     navigation indicator — it slides to whatever you are pointing at.
+     HEADER — a floating parchment rail over the film. The logo is
+     the centrepiece and stays large; the rail condenses on scroll,
+     retreats on the way down, returns on the way up.
      ============================================================== -->
 <header class="head" id="head">
   <div class="head__rail">
 
-    <a class="head__mark" href="/" id="navMark" aria-label="Precision Medical IV, home">
-      <img src="logo.png" alt="Precision Medical IV by Dr. Aronov" width="200" height="185">
+    <a class="head__mark" href="/" aria-label="Precision Medical IV, home">
+      <img src="assets/images/logo.png" alt="Precision Medical IV by Dr. Aronov" width="240" height="222">
     </a>
 
     <nav class="head__nav" id="headNav" aria-label="Primary">
-      <a class="head__link is-current" href="#infusions" data-nav>Infusions</a>
+      <a class="head__link" href="#infusions" data-nav>Infusions</a>
       <a class="head__link" href="#practice" data-nav>The Practice</a>
-      <a class="head__link" href="#physician" data-nav>Dr. Aronov</a>
+      <a class="head__link" href="#physician" data-nav>Dr.&nbsp;Aronov</a>
       <a class="head__link" href="#research" data-nav>Research</a>
       <a class="head__link" href="#contact" data-nav>Contact</a>
-      <span class="head__star" id="headStar" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="M12 0 14.4 9.6 24 12 14.4 14.4 12 24 9.6 14.4 0 12 9.6 9.6Z"/></svg>
-      </span>
     </nav>
 
     <div class="head__actions">
-      <a class="head__tel" href="tel:+19292010740">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .57 3.6 1 1 0 0 1-.25 1Z"/></svg>
-        929-201-0740
-      </a>
-      <a class="btn btn--solid head__cta" href="#screening" data-magnetic>
-        <span>Begin screening</span>
-      </a>
+      <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
+      <a class="btn btn--forest head__cta" href="#screening" data-magnetic><span>Begin screening</span></a>
       <button class="head__burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
         <span></span><span></span>
       </button>
@@ -190,21 +164,20 @@
   </div>
 </header>
 
-<!-- Mobile menu -->
+<!-- Mobile menu — a parchment page, not a panel -->
 <div class="menu" id="menu" aria-hidden="true">
-  <div class="menu__panel">
-    <p class="menu__eyebrow">Precision Medical IV</p>
+  <div class="menu__inner">
     <nav class="menu__nav" aria-label="Mobile">
-      <a href="#infusions"><em>Infusions</em><span>Nine signature protocols</span></a>
-      <a href="#practice"><em>The Practice</em><span>Why this is not a med spa</span></a>
-      <a href="#physician"><em>Dr. Aronov</em><span>Board-certified anesthesiologist</span></a>
-      <a href="#research"><em>Research</em><span>The literature we publish</span></a>
-      <a href="#contact"><em>Contact</em><span>Middle Village, Queens</span></a>
+      <a href="#infusions"><i>i.</i><em>Infusions</em></a>
+      <a href="#practice"><i>ii.</i><em>The Practice</em></a>
+      <a href="#physician"><i>iii.</i><em>Dr. Aronov</em></a>
+      <a href="#research"><i>iv.</i><em>Research</em></a>
+      <a href="#contact"><i>v.</i><em>Contact</em></a>
     </nav>
     <div class="menu__foot">
       <a class="btn btn--gold" href="#screening"><span>Begin screening</span></a>
-      <a class="menu__tel" href="tel:+19292010740">929-201-0740</a>
-      <p class="menu__addr">79-01 Metropolitan Avenue<br>Middle Village, NY 11379</p>
+      <a class="menu__tel" href="tel:+19292010740">929 · 201 · 0740</a>
+      <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
   </div>
 </div>
@@ -213,143 +186,92 @@
 <main id="main">
 
 <!-- ==============================================================
-     HERO
-     Left: the thesis, set as three staggered lines.
-     Right: an arched portal into the room itself — wood panelling,
-     green light, her equipment. The gold IV line falls between them
-     and its drop lands on the crown of the arch.
+     HERO — the film. Full-bleed footage of the room under a forest
+     scrim and film grain. One oversized Prata headline whose middle
+     word is alive, cycling through what patients come in for. The
+     credential ticker closes the frame.
      ============================================================== -->
 <section class="hero" id="hero">
 
-  <canvas class="hero__motes" id="heroMotes" aria-hidden="true"></canvas>
-
-  <!-- the line, and the drop that runs down it -->
-  <div class="hero__line" aria-hidden="true">
-    <span class="hero__line-rule"></span>
-    <span class="hero__line-drop"></span>
-    <span class="hero__line-ring"></span>
+  <!-- film -->
+  <div class="hero__media" aria-hidden="true">
+    <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata"
+           poster="assets/images/hero-poster.jpg">
+      <source src="assets/video/hero.mp4" type="video/mp4">
+      <!-- or host the footage on a GitHub release, same as eviaesthetics:
+      <source src="https://github.com/Elanstech/precisionmedicaliv/releases/download/v1/hero.mp4" type="video/mp4"> -->
+    </video>
+    <span class="hero__scrim"></span>
+    <span class="hero__grain"></span>
   </div>
 
-  <div class="hero__grid">
+  <!-- folio line under the header, like a masthead rule -->
+  <div class="hero__folio" data-rise style="--i:1">
+    <span>Est. Middle Village · Queens, NY</span>
+    <span class="hero__folio-mid">A Physician-Directed Practice</span>
+    <span>By Screening Only</span>
+  </div>
 
-    <!-- ---------- thesis ---------- -->
-    <div class="hero__copy">
-      <p class="eyebrow" data-rise style="--i:1">
-        <span class="star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 0 14.4 9.6 24 12 14.4 14.4 12 24 9.6 14.4 0 12 9.6 9.6Z"/></svg></span>
-        Middle Village, Queens &middot; By physician review only
+  <div class="hero__stage">
+    <p class="hero__kicker" data-rise style="--i:2">
+      <span class="hero__rule"></span>
+      Hospital-level safety &middot; Personalized IV care
+    </p>
+
+    <h1 class="hero__title">
+      <span class="word" data-rise style="--i:3"><span>Infusions for</span></span>
+      <span class="word word--loop" data-rise style="--i:4">
+        <span class="loop" id="wordLoop">
+          <span class="loop__fallback">recovery</span>
+          <span class="loop__stack" aria-hidden="true">
+            <span class="is-on">recovery,</span>
+            <span>immunity,</span>
+            <span>longevity,</span>
+            <span>radiance,</span>
+            <span>hydration,</span>
+          </span>
+        </span>
+      </span>
+      <span class="word" data-rise style="--i:5"><span>held to hospital standards.</span></span>
+    </h1>
+
+    <div class="hero__row" data-rise style="--i:6">
+      <p class="hero__dek">
+        Dr. Violeta Aronov — board-certified anesthesiologist, nearly two decades in the
+        operating room — reads every history, calculates every dose, and stays with you
+        from the first drop to the last.
       </p>
-
-      <h1 class="hero__title">
-        <span class="line" data-rise style="--i:2"><span>Every infusion</span></span>
-        <span class="line" data-rise style="--i:3"><span>begins with a <em>physician</em>,</span></span>
-        <span class="line" data-rise style="--i:4"><span>not a menu.</span></span>
-      </h1>
-
-      <p class="hero__dek" data-rise style="--i:5">
-        Dr. Violeta Aronov reads every history herself, calculates every dose herself,
-        and stays in the room from the first drop to the last. Nothing is administered
-        here that she has not reviewed and approved.
-      </p>
-
-      <div class="hero__actions" data-rise style="--i:6">
-        <a class="btn btn--solid btn--lg" href="#screening" data-magnetic>
+      <div class="hero__actions">
+        <a class="btn btn--gold btn--lg" href="#screening" data-magnetic>
           <span>Begin screening</span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a class="btn btn--quiet btn--lg" href="tel:+19292010740"><span>929-201-0740</span></a>
+        <a class="btn btn--ghost btn--lg" href="#infusions"><span>View infusions</span></a>
       </div>
-
-      <ul class="hero__assurances" data-rise style="--i:7">
-        <li>Board-certified anesthesiologist</li>
-        <li>Individual physician review</li>
-        <li>Continuous monitoring</li>
-        <li>Nearly two decades in the OR</li>
-      </ul>
     </div>
-
-    <!-- ---------- the portal ---------- -->
-    <div class="hero__portal" data-rise style="--i:4">
-      <div class="portal" data-parallax>
-
-        <!-- drawn scene: sits under the photograph, and stands in for it
-             if the file is missing so the frame is never empty -->
-        <svg class="portal__scene" viewBox="0 0 520 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <defs>
-            <linearGradient id="pWall" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#2C4530"/><stop offset="100%" stop-color="#14231A"/>
-            </linearGradient>
-            <linearGradient id="pGlow" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#E7CB86" stop-opacity=".55"/>
-              <stop offset="100%" stop-color="#E7CB86" stop-opacity="0"/>
-            </linearGradient>
-            <radialGradient id="pLamp" cx="50%" cy="50%">
-              <stop offset="0%" stop-color="#F2DDA8" stop-opacity=".85"/>
-              <stop offset="100%" stop-color="#F2DDA8" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-
-          <rect width="520" height="700" fill="url(#pWall)"/>
-          <!-- wood panelling -->
-          <g opacity=".5" stroke="#0E1A12" stroke-width="1.4">
-            <path d="M60 0V700M120 0V700M180 0V700M240 0V700M300 0V700M360 0V700M420 0V700M480 0V700"/>
-          </g>
-          <g opacity=".18" stroke="#8FBE9B" stroke-width=".7">
-            <path d="M62 0V700M122 0V700M182 0V700M242 0V700M302 0V700M362 0V700M422 0V700M482 0V700"/>
-          </g>
-          <!-- arched window, light spilling in -->
-          <path d="M150 640V300a110 110 0 0 1 220 0v340Z" fill="url(#pGlow)"/>
-          <path d="M150 640V300a110 110 0 0 1 220 0v340" fill="none" stroke="#C1963F" stroke-width="1.6" opacity=".8"/>
-          <path d="M260 190v450M150 380h220" stroke="#C1963F" stroke-width="1" opacity=".45"/>
-          <!-- foliage -->
-          <g stroke="#8FBE9B" stroke-width="1.5" fill="none" opacity=".65">
-            <path d="M96 700c0-90 14-150 46-196"/>
-            <path d="M142 504c-30-6-44-30-40-62 30 4 46 26 40 62Z"/>
-            <path d="M132 560c-32 2-52-16-56-48 30-6 52 10 56 48Z"/>
-            <path d="M124 620c-32 8-56-6-66-38 28-12 54-2 66 38Z"/>
-            <path d="M424 700c0-70-10-118-34-154"/>
-            <path d="M390 556c24-6 36-24 32-50-24 4-36 22-32 50Z"/>
-            <path d="M400 612c26 0 42-14 44-38-24-6-42 8-44 38Z"/>
-          </g>
-          <!-- IV stand, bag and line -->
-          <g stroke="#C1963F" stroke-width="1.6" fill="none">
-            <path d="M300 700V232M300 232h34"/>
-            <rect x="322" y="240" width="26" height="52" rx="8" fill="#E7CB86" fill-opacity=".28"/>
-            <path d="M335 292v40c0 26-22 26-22 52v128"/>
-            <path d="M282 700h36" opacity=".7"/>
-          </g>
-          <circle cx="335" cy="266" r="46" fill="url(#pLamp)"/>
-          <!-- chair -->
-          <g stroke="#C1963F" stroke-width="1.6" fill="none" opacity=".85">
-            <path d="M120 700v-84h150v84M120 616l-8-120a20 20 0 0 1 20-22h26a20 20 0 0 1 20 22l-6 120M270 616l10-92"/>
-          </g>
-        </svg>
-
-        <img class="portal__photo" id="portalPhoto" src="infusion-room.jpg" alt="The infusion room at Precision Medical IV — wood-panelled walls, green light and medical equipment" loading="eager" decoding="async">
-
-        <span class="portal__wash" aria-hidden="true"></span>
-        <span class="portal__sheen" aria-hidden="true"></span>
-        <span class="portal__frame" aria-hidden="true"></span>
-      </div>
-
-      <figure class="plaque">
-        <figcaption>
-          <strong>Dr. Violeta Aronov, DO</strong>
-          <span>Board-certified anesthesiologist &middot; She performs every infusion herself</span>
-        </figcaption>
-      </figure>
-    </div>
-
   </div>
 
-  <!-- ---------- foot ---------- -->
-  <div class="hero__foot">
-    <p class="hero__gate" data-rise style="--i:8">
-      No walk-ins. Screening is reviewed before an appointment is offered.
-    </p>
-    <a class="hero__scroll" href="#practice" data-rise style="--i:8">
-      <span>Scroll</span>
-      <i aria-hidden="true"></i>
-    </a>
+  <div class="hero__foot" data-rise style="--i:7">
+    <p class="hero__cred">Dr. Violeta Aronov, DO — <em>she performs every infusion herself</em></p>
+    <a class="hero__scroll" href="#practice"><span>Scroll</span><i aria-hidden="true"></i></a>
+  </div>
+
+  <!-- ticker -->
+  <div class="hero__wire" aria-label="Credentials">
+    <div class="hero__wire-track">
+      <span>Board-Certified Anesthesiologist</span><b>&#10022;</b>
+      <span>Every History Reviewed by the Physician</span><b>&#10022;</b>
+      <span>Continuous Monitoring, Start to Finish</span><b>&#10022;</b>
+      <span>Medical-Grade, Preservative-Free Preparation</span><b>&#10022;</b>
+      <span>Queens · Brooklyn · Long Island</span><b>&#10022;</b>
+      <span>No Walk-Ins — By Physician Review Only</span><b>&#10022;</b>
+      <span>Board-Certified Anesthesiologist</span><b>&#10022;</b>
+      <span>Every History Reviewed by the Physician</span><b>&#10022;</b>
+      <span>Continuous Monitoring, Start to Finish</span><b>&#10022;</b>
+      <span>Medical-Grade, Preservative-Free Preparation</span><b>&#10022;</b>
+      <span>Queens · Brooklyn · Long Island</span><b>&#10022;</b>
+      <span>No Walk-Ins — By Physician Review Only</span><b>&#10022;</b>
+    </div>
   </div>
 
 </section>
