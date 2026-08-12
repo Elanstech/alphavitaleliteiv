@@ -863,8 +863,14 @@ class Quiz {
     }
 
     swap(html) {
+        // Pin the stage height for a beat so removing the old panel cannot
+        // collapse the modal, then take the old panel out of flow entirely.
+        const h = this.stage.offsetHeight;
+        this.stage.style.minHeight = h + 'px';
+
         $$('.q', this.stage).forEach((old) => {
             old.classList.remove('is-live');
+            old.classList.add('is-out');
             old.setAttribute('inert', '');
             setTimeout(() => old.remove(), 420);
         });
@@ -872,7 +878,11 @@ class Quiz {
         p.className = 'q';
         p.innerHTML = html;
         this.stage.appendChild(p);
-        requestAnimationFrame(() => p.classList.add('is-live'));
+        requestAnimationFrame(() => {
+            p.classList.add('is-live');
+            // release the pinned height once the new panel has its own
+            requestAnimationFrame(() => { this.stage.style.minHeight = ''; });
+        });
         this.stage.scrollTop = 0;
         return p;
     }
@@ -976,6 +986,61 @@ class Quiz {
     }
 }
 
+
+/* =============================================================================
+   CONDITIONS — the sticky index on conditions.html
+   Each condition claims the index and its own accent as it takes the screen.
+   No-ops on every other page.
+============================================================================= */
+class Conditions {
+    constructor() {
+        this.rail  = $('#condRail');
+        this.cards = $$('.cond');
+    }
+
+    init() {
+        if (!this.rail || !this.cards.length) return;
+
+        const items = $$('.rail__item', this.rail);
+
+        // clicking the index jumps to the card
+        items.forEach((b) => b.addEventListener('click', () => {
+            const t = $('#' + b.dataset.goto);
+            t?.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+        }));
+
+        const mark = (i) => {
+            items.forEach((b, n) => b.classList.toggle('is-here', n === i));
+            this.cards.forEach((c, n) => c.classList.toggle('is-here', n === i));
+        };
+        mark(0);
+
+        if (typeof window.gsap === 'undefined') { this.cards.forEach((c) => c.classList.add('is-here')); return; }
+        gsap.registerPlugin(ScrollTrigger);
+
+        this.cards.forEach((card, i) => {
+            ScrollTrigger.create({
+                trigger: card, start: 'top 55%', end: 'bottom 45%',
+                onToggle: (self) => { if (self.isActive) mark(i); },
+            });
+            if (REDUCED) return;
+            gsap.from(card, {
+                y: 46, opacity: 0, duration: .9, ease: 'expo.out',
+                scrollTrigger: { trigger: card, start: 'top 88%', once: true },
+            });
+        });
+
+        // the one rule lands a line at a time
+        const gate = $('[data-gate]');
+        if (gate && !REDUCED) {
+            gsap.from(gate, { y: 30, opacity: 0, duration: 1, ease: 'expo.out',
+                scrollTrigger: { trigger: gate, start: 'top 85%', once: true } });
+            gsap.from($$('.gate__cell'), { y: 26, opacity: 0, duration: .8, ease: 'expo.out', stagger: .08,
+                scrollTrigger: { trigger: '.gate__grid', start: 'top 88%', once: true } });
+        }
+    }
+}
+
 /* =============================================================================
    REVEAL — generic scroll reveal for the sections still to come
    Mark anything with [data-reveal]; siblings cascade automatically.
@@ -1024,6 +1089,7 @@ const modules = {
     route:     new Route(),
     dock:      new Dock(),
     quiz:      new Quiz(),
+    conditions: new Conditions(),
     physician: new Physician(),
     reveal:    new Reveal(),
 };
