@@ -1903,7 +1903,7 @@ body.is-ready .hero__title .word .loop {
     gap: clamp(2rem, 5vw, 4rem);
     align-items: start;
 }
-.conds__rail { position: sticky; top: calc(var(--head-h) + 2rem); }
+.conds__rail { position: sticky; top: calc(var(--head-h) + 2rem); align-self: start; }
 .rail__title {
     font-family: var(--micro); font-size: .56rem; font-weight: 700;
     letter-spacing: .22em; text-transform: uppercase; color: var(--mist);
@@ -1923,9 +1923,21 @@ body.is-ready .hero__title .word .loop {
 .rail__item.is-here { padding-left: .5rem; }
 .rail__item.is-here .rail__no,
 .rail__item.is-here .rail__name { color: var(--cond); }
+.rail__item.is-here .rail__name { font-style: italic; }
+/* a marker so it reads as a control, not a list */
+.rail__item::after {
+    content: ''; margin-left: auto; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cond); opacity: 0; transform: scale(.4);
+    transition: opacity .35s var(--ease), transform .35s var(--ease);
+}
+.rail__item.is-here::after { opacity: 1; transform: scale(1); }
 .rail__note { margin-top: 1rem; font-size: .76rem; line-height: 1.6; color: var(--mist); }
 
-.conds__flow { display: grid; gap: clamp(1.75rem, 3.5vw, 2.75rem); }
+.conds__flow { position: relative; display: grid; }
+/* one card at a time — five stacked made this the longest block on the page */
+.conds__flow .cond { grid-area: 1 / 1; }
+.cond { visibility: hidden; opacity: 0; pointer-events: none; }
+.cond.is-live { visibility: visible; opacity: 1; pointer-events: auto; }
 
 .cond {
     --cond: var(--gold);
@@ -1936,13 +1948,13 @@ body.is-ready .hero__title .word .loop {
     scroll-margin-top: calc(var(--head-h) + 2rem);
     transition: border-color .6s var(--ease), box-shadow .6s var(--ease);
 }
-.cond.is-here { border-color: color-mix(in oklab, var(--cond) 45%, transparent); box-shadow: 0 30px 70px -42px rgba(32,52,33,.35); }
+.cond.is-live { border-color: color-mix(in oklab, var(--cond) 45%, transparent); box-shadow: 0 30px 70px -42px rgba(32,52,33,.35); }
 .cond::before {
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
     background: var(--cond); transform: scaleY(0); transform-origin: top;
     transition: transform .7s var(--ease);
 }
-.cond.is-here::before { transform: scaleY(1); }
+.cond.is-live::before { transform: scaleY(1); }
 
 .cond__head {
     display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: .9rem;
@@ -2037,6 +2049,7 @@ body.is-ready .hero__title .word .loop {
 }
 @media (prefers-reduced-motion: reduce) {
     .cond::before { transform: scaleY(1) !important; }
+    .cond.is-live { opacity: 1 !important; }
 }
 
 /* =============================================================================
