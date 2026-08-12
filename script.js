@@ -686,6 +686,296 @@ class Route {
     }
 }
 
+
+/* =============================================================================
+   THE DOCK — back to top (left) and the action dial (right)
+   Both surface once you are past the hero. The dial closes on Escape, on an
+   outside click, and whenever one of its actions is taken.
+============================================================================= */
+class Dock {
+    constructor() {
+        this.top    = $('#toTop');
+        this.fab    = $('#fab');
+        this.toggle = $('#fabToggle');
+        this.open   = false;
+    }
+
+    init() {
+        if (!this.top && !this.fab) return;
+
+        const onScroll = onFrame(() => {
+            const past = window.scrollY > window.innerHeight * 0.6;
+            this.top?.classList.toggle('is-up', past);
+            this.fab?.classList.toggle('is-up', past);
+            if (!past && this.open) this.set(false);
+        });
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        this.top?.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' });
+        });
+
+        this.toggle?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.set(!this.open);
+        });
+
+        // any action taken closes the dial behind it
+        $$('.fab__act', this.fab ?? document).forEach((a) =>
+            a.addEventListener('click', () => this.set(false))
+        );
+
+        document.addEventListener('click', (e) => {
+            if (this.open && !this.fab.contains(e.target)) this.set(false);
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.open) { this.set(false); this.toggle.focus(); }
+        });
+    }
+
+    set(open) {
+        this.open = open;
+        this.fab?.classList.toggle('is-open', open);
+        this.toggle?.setAttribute('aria-expanded', String(open));
+        this.toggle?.setAttribute('aria-label', open ? 'Close contact options' : 'Open contact options');
+    }
+}
+
+
+/* =============================================================================
+   THE QUIZ — modal, four questions, weighted across all ten protocols
+   Every price below is her published figure. The engine proposes a starting
+   point and says plainly that it is not a medical opinion.
+============================================================================= */
+const DRIPS = [
+    { id:'immuno',    name:'Immun-O-Boost IV Support',            slug:'/drips/immuno-boost/',                    img:'immuneoboost',  time:'2 h 30',    price:'$650', prog:'$585',    tag:'Immunity',
+      why:'Immune support, hydration and recovery — the deep seasonal replenishment.' },
+    { id:'muscle',    name:'LIQUIXO Muscle Recovery IV',          slug:'/drips/muscle-support/',                  img:'liquixo',       time:'45 min',    price:'$495', prog:'$445.50', tag:'Recovery',
+      why:'Lean-muscle support through GLP-1 and weight-loss programmes — the full amino profile.' },
+    { id:'antiox',    name:'Antioxidant ×3 Reset IV',             slug:'/drips/antioxidant-reset/',               img:'antioxidant',   time:'75 min',    price:'$500', prog:'$450',    tag:'Longevity',
+      why:'Three antioxidants that recharge one another rather than working alone.' },
+    { id:'glynac',    name:'GLyNAC Longevity Restoration IV',     slug:'/drips/glynac-longevity/',                img:'glynac',        time:'60 min',    price:'$450', prog:'$405',    tag:'Longevity',
+      why:'The two components your body uses to make its own glutathione.' },
+    { id:'brain',     name:'Stress, Burnout & Brain Wellness IV', slug:'/drips/mental-recovery-brain-wellness/',  img:'brainwellness', time:'1 h 30',    price:'$700', prog:'$630',    tag:'Mind',
+      why:'Brain fuel for stress, mental burnout and demanding schedules.' },
+    { id:'curcumin',  name:'Curcumin IV Infusion',                slug:'/drips/curcumin/',                        img:'curcumin',      time:'45 min',    price:'$325', prog:'$292.50', tag:'Recovery',
+      why:'Turmeric’s active compound, delivered past the gut — joint comfort.' },
+    { id:'gluta',     name:'Glutathione IV Injection',            slug:'/drips/glutathione/',                     img:'glutathione',   time:'10–20 min', price:'$125', prog:'$112.50', tag:'Radiance',
+      why:'The master antioxidant, in and out inside twenty minutes.' },
+    { id:'quercetin', name:'Quercetin Seasonal Allergy Support IV',slug:'/drips/quercetin/',                      img:'quercetin',     time:'45 min',    price:'$300', prog:'$270',    tag:'Immunity',
+      why:'A plant flavonoid for pollen season, delivered past digestion.' },
+    { id:'revive',    name:'Revive IV Support',                   slug:'/drips/revive/',                          img:'revive',        time:'2 h 30',    price:'$625', prog:'$562.50', tag:'Recovery',
+      why:'Replenish, recharge, revive — the unhurried full restoration.' },
+    { id:'custom',    name:'The Customized Drip',                 slug:'/drips/customized-drip/',                 img:'customized',    time:'Bespoke',   price:'By consultation', prog:'Quoted', tag:'Bespoke',
+      why:'Composed for you alone after a private consultation.' },
+];
+
+const ASKS = [
+    { ask:'What brought you here?', hint:'Pick whichever is loudest right now.', opts:[
+        { t:'I keep getting sick',   s:'Run-down, seasonal',             i:'ph-shield-check', w:{ immuno:5, quercetin:2, revive:2 } },
+        { t:'I am exhausted',        s:'Depleted, dehydrated',           i:'ph-battery-low',  w:{ revive:5, immuno:2, brain:2 } },
+        { t:'My head is foggy',      s:'Burnout, stress, poor sleep',    i:'ph-brain',        w:{ brain:5, revive:2 } },
+        { t:'My joints ache',        s:'Stiffness, inflammatory stress', i:'ph-bone',         w:{ curcumin:5, antiox:3 } },
+        { t:'I am losing muscle',    s:'On a GLP-1 or weight-loss plan', i:'ph-barbell',      w:{ muscle:5 } },
+        { t:'I want to age well',    s:'Longevity, cellular, skin',      i:'ph-infinity',     w:{ glynac:4, antiox:3, gluta:3 } },
+    ]},
+    { ask:'Any seasonal allergies or a diagnosed condition?', hint:'This changes how carefully she coordinates, never whether you are welcome.', opts:[
+        { t:'Seasonal allergies',    s:'Pollen, dust, environmental',    i:'ph-wind',           w:{ quercetin:6, immuno:2 } },
+        { t:'An inflammatory condition', s:'Crohn’s, RA, psoriasis',     i:'ph-first-aid-kit',  flag:true, w:{ custom:5, antiox:3, curcumin:2 } },
+        { t:'Something else',        s:'Another diagnosis',              i:'ph-clipboard-text', flag:true, w:{ custom:6 } },
+        { t:'None of these',         s:'Generally well',                 i:'ph-check-circle',   w:{} },
+    ]},
+    { ask:'How long can you sit?', hint:'Her chairs are private — the long ones are the unhurried ones.', opts:[
+        { t:'Twenty minutes',   s:'A lunch break',        i:'ph-timer',     w:{ gluta:5 } },
+        { t:'About an hour',    s:'A proper sit',         i:'ph-clock',     w:{ glynac:3, curcumin:3, quercetin:3, muscle:3 } },
+        { t:'Ninety minutes',   s:'Time to switch off',   i:'ph-armchair',  w:{ brain:4, antiox:3 } },
+        { t:'A full afternoon', s:'The complete ones',    i:'ph-hourglass', w:{ revive:5, immuno:5 } },
+    ]},
+    { ask:'What feels comfortable per session?', hint:'Every figure here is her real published rate.', opts:[
+        { t:'Under $350',   s:'Single-compound infusions', i:'ph-coins',    w:{ gluta:4, curcumin:3, quercetin:3 } },
+        { t:'$350 – $550',  s:'The mid-length protocols',  i:'ph-wallet',   w:{ glynac:4, antiox:3, muscle:3 } },
+        { t:'$550 and up',  s:'The long, complete ones',   i:'ph-diamond',  w:{ immuno:4, revive:4, brain:4 } },
+        { t:'Let her decide', s:'Whatever is right',       i:'ph-pen-nib',  w:{ custom:3 } },
+    ]},
+];
+
+const THINKING = ['Reading your answers', 'Weighing ten protocols', 'Checking time and budget', 'Preparing your starting point'];
+
+class Quiz {
+    constructor() {
+        this.el    = $('#quiz');
+        this.stage = $('#quizStage');
+        this.prog  = $('#quizProg');
+        this.back  = $('#quizBack');
+        this.again = $('#quizAgain');
+        this.step  = 0;
+        this.answers = [];
+        this.lastFocus = null;
+    }
+
+    init() {
+        if (!this.el || !this.stage) return;
+
+        this.prog.innerHTML = ASKS.map(() => '<i></i>').join('');
+
+        $$('[data-open-quiz]').forEach((b) => b.addEventListener('click', () => this.show()));
+        $$('[data-close-quiz]', this.el).forEach((b) => b.addEventListener('click', () => this.hide()));
+
+        this.back.addEventListener('click', () => {
+            if (!this.step) return;
+            this.step -= 1; this.answers.length = this.step; this.render();
+        });
+        this.again.addEventListener('click', () => { this.step = 0; this.answers = []; this.render(); });
+
+        document.addEventListener('keydown', (e) => {
+            if (!this.el.classList.contains('is-open')) return;
+            if (e.key === 'Escape') { this.hide(); return; }
+            if (e.key === 'Tab') this.trap(e);
+        });
+    }
+
+    /** Keep tabbing inside the dialog while it is open. */
+    trap(e) {
+        const f = $$('button, [href], input, select, textarea', this.el)
+            .filter((el) => !el.hasAttribute('hidden') && el.offsetParent !== null);
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+
+    show() {
+        this.lastFocus = document.activeElement;
+        this.el.classList.add('is-open');
+        this.el.setAttribute('aria-hidden', 'false');
+        document.documentElement.classList.add('is-locked');
+        this.step = 0; this.answers = [];
+        this.render();
+        setTimeout(() => $('.modal__x', this.el)?.focus(), 60);
+    }
+
+    hide() {
+        this.el.classList.remove('is-open');
+        this.el.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('is-locked');
+        this.lastFocus?.focus();
+    }
+
+    swap(html) {
+        $$('.q', this.stage).forEach((old) => {
+            old.classList.remove('is-live');
+            old.setAttribute('inert', '');
+            setTimeout(() => old.remove(), 420);
+        });
+        const p = document.createElement('div');
+        p.className = 'q';
+        p.innerHTML = html;
+        this.stage.appendChild(p);
+        requestAnimationFrame(() => p.classList.add('is-live'));
+        this.stage.scrollTop = 0;
+        return p;
+    }
+
+    chrome() {
+        $$('i', this.prog).forEach((t, i) => t.classList.toggle('is-done', i < this.step));
+        this.back.hidden  = this.step === 0 || this.step >= ASKS.length;
+        this.again.hidden = this.step === 0;
+    }
+
+    render() {
+        this.chrome();
+        if (this.step >= ASKS.length) { this.think(); return; }
+
+        const q = ASKS[this.step];
+        const panel = this.swap(`
+            <h3 class="q__ask">${q.ask}</h3>
+            <p class="q__hint">${q.hint}</p>
+            <div class="q__opts">
+                ${q.opts.map((o, i) => `
+                    <button class="q__opt" type="button" data-pick="${i}">
+                        <i class="ph ${o.i}" aria-hidden="true"></i>
+                        <span><b>${o.t}</b><span>${o.s}</span></span>
+                    </button>`).join('')}
+            </div>`);
+
+        $$('[data-pick]', panel).forEach((b) => {
+            b.addEventListener('click', () => {
+                if (panel.dataset.locked) return;
+                panel.dataset.locked = '1';
+                this.answers[this.step] = q.opts[Number(b.dataset.pick)];
+                setTimeout(() => { this.step += 1; this.render(); }, 160);
+            });
+        });
+    }
+
+    score() {
+        const totals = Object.fromEntries(DRIPS.map((d) => [d.id, 0]));
+        let flag = false;
+        this.answers.forEach((a) => {
+            if (!a) return;
+            if (a.flag) flag = true;
+            Object.entries(a.w || {}).forEach(([k, v]) => { totals[k] += v; });
+        });
+        const rank = Object.entries(totals).sort((x, y) => y[1] - x[1]);
+        const by = Object.fromEntries(DRIPS.map((d) => [d.id, d]));
+        return { top: by[rank[0][0]], alt: by[rank[1][0]], flag };
+    }
+
+    async think() {
+        const p = this.swap(`
+            <div class="q__think">
+                <div class="q__ring" aria-hidden="true"></div>
+                <p class="q__log" id="qLog">${THINKING[0]}</p>
+            </div>`);
+        const log = $('#qLog', p);
+        for (const line of THINKING) {
+            if (log) log.textContent = line;
+            await wait(REDUCED ? 40 : 340);
+        }
+        this.result();
+    }
+
+    result() {
+        const { top, alt, flag } = this.score();
+        const note = flag
+            ? `<p class="rx__why"><b>Because you are under a specialist’s care</b>, Dr.&nbsp;Aronov will review your medications and want your treating physician in the loop before anything is scheduled. Nothing here replaces your prescribed treatment.</p>`
+            : '';
+
+        this.swap(`
+            <div class="rx">
+                <div class="rx__top">
+                    <img class="rx__bag" src="assets/drips/${top.img}.png" alt="${top.name}"
+                         onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null">
+                    <div>
+                        <p class="rx__kick">Your starting point</p>
+                        <h3 class="rx__name">${top.name}</h3>
+                        <p class="rx__why">${top.why}</p>
+                    </div>
+                </div>
+                ${note}
+                <dl class="rx__facts">
+                    <div class="rx__fact"><dt>Chair time</dt><dd>${top.time}</dd></div>
+                    <div class="rx__fact"><dt>Per session</dt><dd>${top.price}</dd></div>
+                    <div class="rx__fact"><dt>In a programme</dt><dd>${top.prog}</dd></div>
+                </dl>
+                <div class="rx__alt">
+                    <span>Also worth asking about <b>${alt.name}</b></span>
+                    <a href="${alt.slug}">View&nbsp;→</a>
+                </div>
+                <div class="rx__cta">
+                    <a class="rx__btn rx__btn--solid" href="${top.slug}">
+                        <span>Read the protocol</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+                    </a>
+                    <a class="rx__btn" href="tel:+19292010740">
+                        <span>929 · 201 · 0740</span><i class="ph ph-phone" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>`);
+        this.chrome();
+    }
+}
+
 /* =============================================================================
    REVEAL — generic scroll reveal for the sections still to come
    Mark anything with [data-reveal]; siblings cascade automatically.
@@ -732,6 +1022,8 @@ const modules = {
     magnetic:  new Magnetic(),
     shelf:     new Shelf(),
     route:     new Route(),
+    dock:      new Dock(),
+    quiz:      new Quiz(),
     physician: new Physician(),
     reveal:    new Reveal(),
 };
