@@ -12,15 +12,18 @@
      WordLoop    the living word in the headline
      HeroVideo   autoplay kick for iOS, poster fallback if the file is absent
      Magnetic    primary buttons lean toward the pointer (fine pointers only)
-     Shelf       the services rail — pinned horizontal scrub, compound colour
+     Shelf       the services rail — pinned horizontally, swipeable on phones
      Route       the two-lane oral-vs-IV explainer, scrubbed on scroll
+     Dock        back to top (left) and the action dial (right)
+     Quiz        the modal matcher — four questions across ten protocols
+     Conditions  the chronic-condition switcher and its compounds
+     Social      the Instagram band
      Physician   sticky portrait, beats that pop, the chain of custody
-     Reveal      generic scroll reveal for the sections still to come
+     Reveal      generic scroll reveal for anything marked [data-reveal]
      Boot
 
-   REQUIRES for Shelf only: GSAP + ScrollTrigger loaded from CDN in index.html
-   BEFORE this file. If they are missing, Shelf falls back to a stacked grid
-   and everything else runs untouched.
+   REQUIRES GSAP + ScrollTrigger from CDN in index.html BEFORE this file.
+   Without them every module degrades to a static, readable layout.
 ============================================================================= */
 
 
@@ -268,54 +271,6 @@ class WordLoop {
 
 
 /* =============================================================================
-   VIMEO BACKDROP — dormant on this page, ready for the About page.
-   Give any element the class "hero__media" (or restyle the selector) plus
-   data-vimeo="VIDEO_ID" and this covers it with that footage, object-fit
-   style. The practice's clip of Dr. Aronov speaking is Vimeo 1206022178.
-   Without a data-vimeo element on the page, this does nothing.
-============================================================================= */
-class VimeoBackdrop {
-    constructor() {
-        this.media = $('.hero__media[data-vimeo]');
-        this.id    = this.media?.dataset.vimeo ?? '';
-        this.frame = null;
-        this.RATIO = 16 / 9;
-    }
-
-    init() {
-        if (!this.media || !this.id || REDUCED) return;
-
-        this.frame = document.createElement('iframe');
-        this.frame.className = 'hero__vimeo';
-        this.frame.src =
-            `https://player.vimeo.com/video/${this.id}` +
-            `?background=1&autoplay=1&muted=1&loop=1&autopause=0&controls=0&playsinline=1&dnt=1`;
-        this.frame.allow = 'autoplay; fullscreen';
-        this.frame.setAttribute('aria-hidden', 'true');
-        this.frame.tabIndex = -1;
-
-        this.frame.addEventListener('load', () => this.media.classList.add('has-vimeo'), { once: true });
-
-        this.size();
-        this.media.appendChild(this.frame);
-        window.addEventListener('resize', debounce(() => this.size(), 150));
-    }
-
-    /** Cover-fit a fixed 16:9 iframe inside whatever box the hero is. */
-    size() {
-        if (!this.frame) return;
-        const { width, height } = this.media.getBoundingClientRect();
-        const w = Math.ceil(Math.max(width, height * this.RATIO));
-        const h = Math.ceil(Math.max(height, width / this.RATIO));
-        this.frame.width  = w;
-        this.frame.height = h;
-        this.frame.style.width  = `${w}px`;
-        this.frame.style.height = `${h}px`;
-    }
-}
-
-
-/* =============================================================================
    HERO VIDEO
 ============================================================================= */
 class HeroVideo {
@@ -468,19 +423,15 @@ class Shelf {
             });
 
             /* the photograph lags its own frame; the numeral counter-scrolls */
+            /* the roman numeral counter-scrolls against its own plate */
             $$('.plate', this.track).forEach((plate) => {
-                const shot = $('.plate__img', plate);
-                const no   = $('.plate__no', plate);
-                const link = {
-                    trigger: plate,
-                    containerAnimation: drag,
-                    start: 'left right',
-                    end: 'right left',
-                    scrub: true,
-                };
-
-                if (shot) gsap.fromTo(shot, { xPercent: -6 }, { xPercent: 6, ease: 'none', scrollTrigger: link });
-                if (no)   gsap.fromTo(no, { x: 30, opacity: 0.25 }, { x: -30, opacity: 0.85, ease: 'none', scrollTrigger: link });
+                const no = $('.plate__no', plate);
+                if (!no) return;
+                gsap.fromTo(no,
+                    { x: 30, opacity: .25 },
+                    { x: -30, opacity: .85, ease: 'none',
+                      scrollTrigger: { trigger: plate, containerAnimation: drag,
+                                       start: 'left right', end: 'right left', scrub: true } });
             });
 
             popIn($$('.plate', this.track), { y: 60, stagger: .06, duration: 1, ease: 'expo.out' }, this.pin, 'top 70%');
@@ -1125,7 +1076,6 @@ const modules = {
     header:    new Header(),
     menu:      new Menu(),
     wordLoop:  new WordLoop(),
-    vimeo:     new VimeoBackdrop(),
     heroVideo: new HeroVideo(),
     magnetic:  new Magnetic(),
     shelf:     new Shelf(),
@@ -1133,7 +1083,7 @@ const modules = {
     dock:      new Dock(),
     quiz:      new Quiz(),
     conditions: new Conditions(),
-    social:     new Social(),
+    social:    new Social(),
     physician: new Physician(),
     reveal:    new Reveal(),
 };
