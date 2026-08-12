@@ -49,6 +49,7 @@
 <!-- ICONS — Phosphor web font. Every icon on the shelf is a linked glyph.
      Regular needs the base class: <i class="ph ph-clock">. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
 
 <link rel="icon" type="image/png" href="logo.png">
@@ -811,32 +812,122 @@
   </aside>
 </section>
 
-</main>
+<!-- ==============================================================
+     THE PRACTICE, LIVE (#instagram)
+     Elfsight feed. The widget renders itself into the div — the
+     heading and frame are ours so it does not land naked.
+     ============================================================== -->
+<section class="social" id="instagram" aria-labelledby="socialTitle">
+  <div class="social__wrap">
+    <header class="social__head">
+      <div>
+        <p class="social__eyebrow"><i class="ph-duotone ph-instagram-logo" aria-hidden="true"></i> The practice, day to day</p>
+        <h2 class="social__title" id="socialTitle">See the room<br><em>before you call.</em></h2>
+        <p class="social__sub">
+          The chair, the line, the people who sit in it. If you want to know what an afternoon
+          here actually looks like, it is all there.
+        </p>
+      </div>
+      <a class="social__cta" href="https://www.instagram.com/YOUR_HANDLE" target="_blank" rel="noopener">
+        <i class="ph ph-instagram-logo" aria-hidden="true"></i>
+        <span>Follow the practice</span>
+      </a>
+    </header>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "Signature IV Infusions — Alpha Vital Elite IV",
-  "itemListElement": [
-    {"@type":"ListItem","position":1,"url":"https://precisionmedicaliv.com/drips/immuno-boost/","name":"Immun-O-Boost IV Support"},
-    {"@type":"ListItem","position":2,"url":"https://precisionmedicaliv.com/drips/muscle-support/","name":"LIQUIXO Muscle Recovery IV"},
-    {"@type":"ListItem","position":3,"url":"https://precisionmedicaliv.com/drips/antioxidant-reset/","name":"Antioxidant ×3 Reset IV"},
-    {"@type":"ListItem","position":4,"url":"https://precisionmedicaliv.com/drips/glynac-longevity/","name":"GLyNAC Longevity Restoration IV"},
-    {"@type":"ListItem","position":5,"url":"https://precisionmedicaliv.com/drips/mental-recovery-brain-wellness/","name":"Stress, Mental Burnout & Brain Wellness IV"},
-    {"@type":"ListItem","position":6,"url":"https://precisionmedicaliv.com/drips/curcumin/","name":"Curcumin IV Infusion"},
-    {"@type":"ListItem","position":7,"url":"https://precisionmedicaliv.com/drips/glutathione/","name":"Glutathione IV Injection"},
-    {"@type":"ListItem","position":8,"url":"https://precisionmedicaliv.com/drips/quercetin/","name":"Quercetin Seasonal Allergy Support IV"},
-    {"@type":"ListItem","position":9,"url":"https://precisionmedicaliv.com/drips/revive/","name":"Revive IV Support"},
-    {"@type":"ListItem","position":10,"url":"https://precisionmedicaliv.com/drips/customized-drip/","name":"Customized Drip"}
-  ]
-}
-</script>
+    <!-- Elfsight Instagram Feed -->
+    <div class="social__feed">
+      <div class="elfsight-app-9abab905-4c43-48b4-8c49-46a114dba96e" data-elfsight-app-lazy></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<!-- ==============================================================
+     THE DOCK
+     Back to top bottom-left. Actions bottom-right: the quiz, phone,
+     email, Instagram. Both appear once you are past the hero.
+     ============================================================== -->
+<button class="totop" id="toTop" type="button" aria-label="Back to top">
+  <i class="ph ph-arrow-up" aria-hidden="true"></i>
+  <span>Top</span>
+</button>
+
+<div class="fab" id="fab">
+  <ul class="fab__list" id="fabList">
+    <li>
+      <button class="fab__act fab__act--quiz" type="button" data-open-quiz>
+        <span class="fab__label">Which infusion suits me?</span>
+        <span class="fab__ico"><i class="ph-fill ph-sparkle" aria-hidden="true"></i></span>
+      </button>
+    </li>
+    <li>
+      <a class="fab__act" href="tel:+19292010740">
+        <span class="fab__label">929 · 201 · 0740</span>
+        <span class="fab__ico"><i class="ph-fill ph-phone" aria-hidden="true"></i></span>
+      </a>
+    </li>
+    <li>
+      <a class="fab__act" href="mailto:contact@precisionmedicaliv.com">
+        <span class="fab__label">Email the practice</span>
+        <span class="fab__ico"><i class="ph-fill ph-envelope-simple" aria-hidden="true"></i></span>
+      </a>
+    </li>
+    <li>
+      <a class="fab__act" href="https://www.instagram.com/YOUR_HANDLE" target="_blank" rel="noopener">
+        <span class="fab__label">Instagram</span>
+        <span class="fab__ico"><i class="ph-fill ph-instagram-logo" aria-hidden="true"></i></span>
+      </a>
+    </li>
+  </ul>
+
+  <button class="fab__toggle" id="fabToggle" type="button" aria-expanded="false" aria-controls="fabList" aria-label="Open contact options">
+    <i class="ph ph-chat-circle-dots fab__i fab__i--open" aria-hidden="true"></i>
+    <i class="ph ph-x fab__i fab__i--close" aria-hidden="true"></i>
+  </button>
+</div>
+
+
+<!-- ==============================================================
+     THE QUIZ MODAL
+     Four questions, weighted across all ten protocols. Panels are
+     rendered by script.js. Not a diagnosis — the copy says so.
+     ============================================================== -->
+<div class="modal" id="quiz" aria-hidden="true">
+  <div class="modal__veil" data-close-quiz></div>
+
+  <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+    <header class="modal__head">
+      <div>
+        <p class="modal__eyebrow"><i class="ph-fill ph-sparkle" aria-hidden="true"></i> Guided by AI</p>
+        <h2 class="modal__title" id="quizTitle">Which infusion suits you?</h2>
+      </div>
+      <button class="modal__x" type="button" data-close-quiz aria-label="Close">
+        <i class="ph ph-x" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <div class="modal__prog" id="quizProg" aria-hidden="true"></div>
+
+    <div class="modal__stage" id="quizStage" aria-live="polite"></div>
+
+    <footer class="modal__foot">
+      <button class="modal__nav" id="quizBack" type="button" hidden>
+        <i class="ph ph-arrow-left" aria-hidden="true"></i> Back
+      </button>
+      <p class="modal__legal">A starting point, not a medical opinion. Dr.&nbsp;Aronov reviews every request.</p>
+      <button class="modal__nav" id="quizAgain" type="button" hidden>
+        Start over <i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i>
+      </button>
+    </footer>
+  </div>
+</div>
+
 
 <!-- GSAP must be on window before the deferred module runs -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
+<script src="https://elfsightcdn.com/platform.js" async></script>
 <script src="script.js" type="module"></script>
 </body>
 </html>
