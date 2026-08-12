@@ -41,80 +41,13 @@
 <link rel="preload" as="image" href="logo.png" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero-poster.jpg" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="stylesheet" href="styles.css">
 
-<!-- If scripting is off, the preloader must not become a wall -->
-<noscript><style>
-  .pre { display: none !important; }
-  html.is-preloading { overflow: auto !important; }
-  [data-rise], .hero__title .word > span { opacity: 1 !important; transform: none !important; }
-  .loop__stack { display: none !important; }
-  .loop__fallback { display: inline !important; }
-</style></noscript>
-
-<!-- ============================================================
-     STRUCTURED DATA
-     ============================================================ -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": ["MedicalBusiness", "MedicalClinic", "LocalBusiness"],
-      "@id": "https://precisionmedicaliv.com/#practice",
-      "name": "Alpha Vital Elite Precision Medical IV",
-      "alternateName": ["Precision Medical IV by Dr. Aronov", "Alpha Vital Elite"],
-      "url": "https://precisionmedicaliv.com/",
-      "telephone": "+1-929-201-0740",
-      "email": "contact@precisionmedicaliv.com",
-      "priceRange": "$$$",
-      "description": "Physician-directed IV wellness practice in Middle Village, Queens. Every patient is individually reviewed by a board-certified anesthesiologist before any infusion is approved, and every infusion is continuously monitored.",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "79-01 Metropolitan Avenue",
-        "addressLocality": "Middle Village",
-        "addressRegion": "NY",
-        "postalCode": "11379",
-        "addressCountry": "US"
-      },
-      "geo": { "@type": "GeoCoordinates", "latitude": 40.7156, "longitude": -73.8779 },
-      "areaServed": [
-        { "@type": "Place", "name": "Queens" },
-        { "@type": "Place", "name": "Brooklyn" },
-        { "@type": "Place", "name": "Long Island" },
-        { "@type": "Place", "name": "New York metropolitan area" }
-      ],
-      "founder": { "@id": "https://precisionmedicaliv.com/#physician" },
-      "employee": { "@id": "https://precisionmedicaliv.com/#physician" },
-      "medicalSpecialty": ["Anesthesiology", "Preventive Medicine"],
-      "availableService": {
-        "@type": "MedicalTherapy",
-        "name": "Physician-directed IV infusion therapy",
-        "description": "Supportive, adjunctive wellness infusions selected after individual physician review of medical history, medications, allergies and health status."
-      }
-    },
-    {
-      "@type": ["Physician", "Person"],
-      "@id": "https://precisionmedicaliv.com/#physician",
-      "name": "Dr. Violeta Aronov",
-      "honorificPrefix": "Dr.",
-      "honorificSuffix": "DO",
-      "jobTitle": "Board-Certified Anesthesiologist, Founder",
-      "worksFor": { "@id": "https://precisionmedicaliv.com/#practice" },
-      "medicalSpecialty": "Anesthesiology",
-      "alumniOf": [
-        { "@type": "CollegeOrUniversity", "name": "NYIT College of Osteopathic Medicine" },
-        { "@type": "CollegeOrUniversity", "name": "SUNY Stony Brook" }
-      ],
-      "knowsAbout": ["IV infusion therapy", "Anesthesiology", "Glutathione", "N-acetylcysteine", "Electrolyte balance", "Antioxidant pathways"]
-    }
-  ]
-}
-</script>
 </head>
-
 <body>
 
 <!-- ==============================================================
@@ -134,10 +67,7 @@
 
 
 <!-- ==============================================================
-     HEADER — a slim, borderless bar, transparent over the bright
-     film; cream glass with one gold hairline once you scroll. The
-     mark rides larger than the type. Retreats going down, returns
-     going up.
+     HEADER
      ============================================================== -->
 <header class="head" id="head">
   <div class="head__rail">
@@ -187,10 +117,7 @@
 <main id="main">
 
 <!-- ==============================================================
-     HERO — the film, bright. Full-bleed footage with no darkening:
-     a cream reading-light pools on the left where the type sits and
-     the footage runs free on the right. One oversized Prata headline
-     whose middle word is alive. The credential ticker closes the frame.
+     HERO 
      ============================================================== -->
 <section class="hero" id="hero">
 
@@ -275,240 +202,304 @@
 
 </section>
 
+<!-- =============================================================================
+     SERVICES
+     ============================================================================= -->
+<section class="shelf" id="infusions" aria-labelledby="shelfTitle">
+  <span class="shelf__wash" aria-hidden="true"></span>
+  <span class="shelf__mesh" aria-hidden="true"></span>
 
-<!-- ==============================================================
-     THE INFUSION LIBRARY (#infusions)
-     A catalogue raisonné: ten protocols set like chapters, roman
-     numerals, engraved metadata. On fine pointers a parchment
-     apothecary label trails the cursor with the formula's contents.
-     Every entry keeps her existing /drips/ slugs.
-     ============================================================== -->
-<section class="lib" id="infusions" aria-labelledby="libTitle">
-  <div class="lib__wrap">
+  <header class="shelf__head">
 
-    <header class="lib__rubric" data-reveal>
-      <span class="lib__rubric-no">Chapter I</span>
-      <span class="lib__rubric-name">The Infusion Library</span>
-      <span class="lib__rubric-rule"></span>
-      <!-- TODO: paste her real handle once (see README) -->
-      <a class="lib__ig" href="https://www.instagram.com/YOUR_HANDLE" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="17.3" cy="6.7" r="1.25" fill="currentColor"/></svg>
+    <div class="shelf__rubric" data-reveal>
+      <span class="shelf__rubric-no">Chapter I</span>
+      <span class="shelf__rubric-name">Signature IV Infusions</span>
+      <span class="shelf__rubric-rule"></span>
+      <!-- TODO: her real handle -->
+      <a class="shelf__ig" href="https://www.instagram.com/YOUR_HANDLE" target="_blank" rel="noopener">
+        <i class="ph-duotone ph-instagram-logo" aria-hidden="true"></i>
         <span>Follow the practice</span>
       </a>
-    </header>
+    </div>
 
-    <div class="lib__head" data-reveal>
-      <h2 class="lib__title" id="libTitle">Nine signature formulas.<br><em>One physician's judgment.</em></h2>
-      <p class="lib__dek">
-        Each protocol below is a starting point, never a promise — reviewed against your
-        history, adjusted to your physiology, and administered by Dr.&nbsp;Aronov herself.
+    <h2 class="shelf__title" id="shelfTitle" data-reveal>
+      Nine formulas.<br><em>One physician&rsquo;s judgment.</em>
+    </h2>
+
+    <div class="shelf__deck">
+      <p class="shelf__lede" data-reveal>
+        Every protocol below is a <strong>starting point, never a promise</strong>. Dr.&nbsp;Aronov
+        reads your history, your medication list and your allergies before anything is mixed —
+        then adjusts the formula, sets the rate, and stays in the room from the first drop to the
+        last. If nothing here fits you, she writes something that does.
       </p>
+
+      <div class="shelf__stats" data-reveal>
+        <div class="shelf__stat"><b>10</b><span>Protocols on the shelf</span></div>
+        <div class="shelf__stat"><b>19<sup>+</sup></b><span>Years in the operating room</span></div>
+        <div class="shelf__stat"><b>100<sup>%</sup></b><span>Screened before scheduling</span></div>
+      </div>
     </div>
+  </header>
 
-    <div class="lib__filters" role="tablist" aria-label="Filter infusions" data-reveal>
-      <button class="lib__pill is-on" data-filter="all" role="tab" aria-selected="true">All<sup>x</sup></button>
-      <button class="lib__pill" data-filter="immunity" role="tab" aria-selected="false">Immunity<sup>ii</sup></button>
-      <button class="lib__pill" data-filter="recovery" role="tab" aria-selected="false">Recovery<sup>iii</sup></button>
-      <button class="lib__pill" data-filter="longevity" role="tab" aria-selected="false">Longevity<sup>ii</sup></button>
-      <button class="lib__pill" data-filter="mind" role="tab" aria-selected="false">Mind &amp; Focus<sup>i</sup></button>
-      <button class="lib__pill" data-filter="radiance" role="tab" aria-selected="false">Radiance<sup>i</sup></button>
-    </div>
-
-    <ol class="lib__list" id="libList">
-
-      <li><a class="lib__row" href="/drips/immuno-boost/" data-cat="immunity" data-reveal
-             data-ing="B-Complex &amp; Minerals|Vitamin C · Zinc|Glutathione · Aminos" data-cad="A monthly ritual">
-        <span class="lib__no">I.</span>
-        <span class="lib__main">
-          <span class="lib__name">Immun-O-Boost</span>
-          <span class="lib__tag">Immune support, hydration and recovery — the deep seasonal replenishment.</span>
-        </span>
-        <span class="lib__meta"><b>2 h 30</b><i>Monthly ritual</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row" href="/drips/muscle-support/" data-cat="recovery" data-reveal
-             data-ing="All 20 amino acids|Recovery nutrients|Exosome support" data-cad="Weekly · six weeks">
-        <span class="lib__no">II.</span>
-        <span class="lib__main">
-          <span class="lib__name">LIQUIXO Muscle Recovery</span>
-          <span class="lib__tag">Lean-muscle support through GLP-1 and weight-loss programs — the full amino profile.</span>
-        </span>
-        <span class="lib__meta"><b>45 min</b><i>Weekly · 6 wks</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row" href="/drips/antioxidant-reset/" data-cat="longevity" data-reveal
-             data-ing="Triple antioxidant blend|Oxidative-stress support|Cellular wellness" data-cad="As advised">
-        <span class="lib__no">III.</span>
-        <span class="lib__main">
-          <span class="lib__name">Antioxidant &times;3 Reset</span>
-          <span class="lib__tag">A threefold antioxidant reset for oxidative-stress recovery and cellular wellness.</span>
-        </span>
-        <span class="lib__meta"><b>75 min</b><i>As advised</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row" href="/drips/glynac-longevity/" data-cat="longevity" data-reveal
-             data-ing="Glycine|N-acetylcysteine (NAC)|Glutathione pathway" data-cad="Weekly · six weeks">
-        <span class="lib__no">IV.</span>
-        <span class="lib__main">
-          <span class="lib__name">GLyNAC Longevity Restoration</span>
-          <span class="lib__tag">Glycine and NAC — the two components your body uses to make its own glutathione.</span>
-        </span>
-        <span class="lib__meta"><b>60 min</b><i>Weekly · 6 wks</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row" href="/drips/mental-recovery-brain-wellness/" data-cat="mind" data-reveal
-             data-ing="Hydration base|Focus &amp; stress support|Recovery nutrients" data-cad="As advised">
-        <span class="lib__no">V.</span>
-        <span class="lib__main">
-          <span class="lib__name">Stress, Burnout &amp; Brain Wellness</span>
-          <span class="lib__tag">Mental recovery for the overworked — hydration, stress support and focus.</span>
-        </span>
-        <span class="lib__meta"><b>90 min</b><i>As advised</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row" href="/drips/curcumin/" data-cat="recovery" data-reveal
-             data-ing="Curcumin|Inflammatory-response support|Joint comfort" data-cad="As advised">
-        <span class="lib__no">VI.</span>
-        <span class="lib__main">
-          <span class="lib__name">Curcumin Infusion</span>
-          <span class="lib__tag">One golden compound, precisely delivered — joint comfort and healthy response.</span>
-        </span>
-        <span class="lib__meta"><b>45 min</b><i>As advised</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row" href="/drips/glutathione/" data-cat="radiance" data-reveal
-             data-ing="Glutathione|Skin wellness|Healthy aging" data-cad="Quick visit">
-        <span class="lib__no">VII.</span>
-        <span class="lib__main">
-          <span class="lib__name">Glutathione Injection</span>
-          <span class="lib__tag">Brighter from the inside out — the master antioxidant, in and out in minutes.</span>
-        </span>
-        <span class="lib__meta"><b>10&ndash;20 min</b><i>Quick visit</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row" href="/drips/quercetin/" data-cat="immunity" data-reveal
-             data-ing="Quercetin|Seasonal wellness|Immune function" data-cad="Seasonal">
-        <span class="lib__no">VIII.</span>
-        <span class="lib__main">
-          <span class="lib__name">Quercetin Seasonal Support</span>
-          <span class="lib__tag">For the sneezing season — breathe easier through environmental challenges.</span>
-        </span>
-        <span class="lib__meta"><b>45 min</b><i>Seasonal</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row" href="/drips/revive/" data-cat="recovery" data-reveal
-             data-ing="Fluids &amp; electrolytes|Nutritional replenishment|Full recovery base" data-cad="When depleted">
-        <span class="lib__no">IX.</span>
-        <span class="lib__main">
-          <span class="lib__name">Revive</span>
-          <span class="lib__tag">Replenish, recharge, revive — the unhurried full restoration.</span>
-        </span>
-        <span class="lib__meta"><b>2 h 30</b><i>When depleted</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-      <li><a class="lib__row lib__row--custom" href="/drips/customized-drip/" data-cat="all" data-reveal
-             data-ing="Designed from your history|Private consultation|Physician-composed" data-cad="By consultation">
-        <span class="lib__no">X.</span>
-        <span class="lib__main">
-          <span class="lib__name">The Customized Drip</span>
-          <span class="lib__tag">Nothing on the shelf fits everyone — a protocol composed for you alone.</span>
-        </span>
-        <span class="lib__meta"><b>Bespoke</b><i>By consultation</i></span>
-        <span class="lib__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a></li>
-
-    </ol>
-
-    <p class="lib__note" data-reveal>
-      Supportive, adjunctive wellness care — not a diagnosis or treatment. Final ingredients are
-      selected by Dr.&nbsp;Aronov at screening. <a href="/add-ons/">Infusion enhancements&nbsp;&rarr;</a>
-    </p>
+  <div class="shelf__filters" role="tablist" aria-label="Filter infusions" data-reveal>
+    <button class="shelf__pill is-on" type="button" data-filter="all" role="tab" aria-selected="true"><i class="ph ph-squares-four" aria-hidden="true"></i> Everything <sup>10</sup></button>
+    <button class="shelf__pill" type="button" data-filter="immunity" role="tab" aria-selected="false"><i class="ph ph-shield-check" aria-hidden="true"></i> Immunity <sup>4</sup></button>
+    <button class="shelf__pill" type="button" data-filter="recovery" role="tab" aria-selected="false"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i> Recovery <sup>4</sup></button>
+    <button class="shelf__pill" type="button" data-filter="longevity" role="tab" aria-selected="false"><i class="ph ph-infinity" aria-hidden="true"></i> Longevity <sup>4</sup></button>
+    <button class="shelf__pill" type="button" data-filter="inflammatory" role="tab" aria-selected="false"><i class="ph ph-first-aid-kit" aria-hidden="true"></i> Inflammatory support <sup>4</sup></button>
+    <button class="shelf__pill" type="button" data-filter="mind" role="tab" aria-selected="false"><i class="ph ph-brain" aria-hidden="true"></i> Mind &amp; focus <sup>2</sup></button>
+    <button class="shelf__pill" type="button" data-filter="radiance" role="tab" aria-selected="false"><i class="ph ph-sparkle" aria-hidden="true"></i> Radiance <sup>2</sup></button>
   </div>
 
-  <!-- the apothecary label that trails the cursor -->
-  <aside class="lib__card" id="libCard" aria-hidden="true">
-    <span class="lib__card-no" id="libCardNo">I.</span>
-    <h3 class="lib__card-name" id="libCardName"></h3>
-    <p class="lib__card-cad" id="libCardCad"></p>
-    <ul class="lib__card-ing" id="libCardIng"></ul>
-    <p class="lib__card-foot">Formulated &amp; administered by Dr.&nbsp;Aronov</p>
-  </aside>
-</section>
+  <div class="shelf__pin" id="shelfPin">
+    <div class="shelf__viewport" id="shelfViewport">
+      <ol class="shelf__track" id="shelfTrack">
 
+        <li class="plate" data-tags="immunity recovery" data-tone="var(--t-immuno)" style="--tone:var(--t-immuno)">
+          <a class="plate__frame" href="/drips/immuno-boost/" aria-label="Immun-O-Boost IV Support">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/immuno-boost.webp"
+                 alt="Immun-O-Boost IV Support" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/immuno/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">I</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 2 h 30</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-shield-check" aria-hidden="true"></i> Immunity</p>
+            <h3 class="plate__name"><a href="/drips/immuno-boost/">Immun-O-Boost IV Support</a></h3>
+            <p class="plate__note">Immune support, hydration and recovery — the deep seasonal replenishment, run once a month.</p>
+            <ul class="plate__ing"><li>B-Complex &amp; Minerals</li><li>Amino Acids</li><li>Glutathione</li><li>Zinc</li><li>Vitamin&nbsp;C</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$650</b><span>per session &middot; <em>programme $585</em></span></p>
+              <a class="plate__go" href="/drips/immuno-boost/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
 
-<!-- ==============================================================
-     THE MINIATURE CONSULTATION (#quiz)
-     Three questions on a parchment intake card, set in a deep
-     forest vitrine. A weighted matcher proposes a starting point;
-     the copy makes clear the physician has the final say.
-     ============================================================== -->
-<section class="quiz" id="quiz" aria-labelledby="quizTitle">
-  <div class="quiz__wrap">
+        <li class="plate" data-tags="recovery" data-tone="var(--t-muscle)" style="--tone:var(--t-muscle)">
+          <a class="plate__frame" href="/drips/muscle-support/" aria-label="LIQUIXO Muscle Recovery IV">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/muscle-support.webp"
+                 alt="LIQUIXO Muscle Recovery IV" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/muscle/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">II</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 45 min</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i><i></i><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-barbell" aria-hidden="true"></i> Recovery</p>
+            <h3 class="plate__name"><a href="/drips/muscle-support/">LIQUIXO Muscle Recovery IV</a></h3>
+            <p class="plate__note">Lean-muscle support through GLP-1 and weight-loss programmes — the full twenty amino acid profile, with exosomes.</p>
+            <ul class="plate__ing"><li>20 Amino Acids</li><li>Exosomes</li><li>Recovery Nutrients</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$495</b><span>per session &middot; <em>programme $445.50</em></span></p>
+              <a class="plate__go" href="/drips/muscle-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
 
-    <header class="quiz__head" data-reveal>
-      <p class="quiz__badge"><span class="quiz__badge-star" aria-hidden="true">&#10022;</span> Powered by AI</p>
-      <h2 class="quiz__title" id="quizTitle">Which infusion is <em>yours?</em></h2>
-      <p class="quiz__dek">Three questions. Our concierge proposes a starting point — Dr.&nbsp;Aronov always has the final say.</p>
-    </header>
+        <li class="plate" data-tags="longevity inflammatory" data-tone="var(--t-antiox)" style="--tone:var(--t-antiox)">
+          <a class="plate__frame" href="/drips/antioxidant-reset/" aria-label="Antioxidant &times;3 Reset IV">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/antioxidant-reset.webp"
+                 alt="Antioxidant &times;3 Reset IV" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/antiox/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">III</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 75 min</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-atom" aria-hidden="true"></i> Longevity</p>
+            <h3 class="plate__name"><a href="/drips/antioxidant-reset/">Antioxidant &times;3 Reset IV</a></h3>
+            <p class="plate__note">Vitamin C, glutathione and alpha-lipoic acid — three antioxidants that recharge one another rather than working alone.</p>
+            <ul class="plate__ing"><li>Vitamin C</li><li>Glutathione</li><li>Alpha-Lipoic Acid</li><li>Hydration Fluid</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$500</b><span>per session &middot; <em>programme $450</em></span></p>
+              <a class="plate__go" href="/drips/antioxidant-reset/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
 
-    <div class="quiz__card" id="quizCard" data-reveal>
+        <li class="plate" data-tags="longevity" data-tone="var(--t-glynac)" style="--tone:var(--t-glynac)">
+          <a class="plate__frame" href="/drips/glynac-longevity/" aria-label="GLyNAC Longevity Restoration IV">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/glynac-longevity.webp"
+                 alt="GLyNAC Longevity Restoration IV" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/glynac/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">IV</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 60 min</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i><i></i><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-infinity" aria-hidden="true"></i> Longevity</p>
+            <h3 class="plate__name"><a href="/drips/glynac-longevity/">GLyNAC Longevity Restoration IV</a></h3>
+            <p class="plate__note">Glycine and N-acetylcysteine — the two components your body uses to make its own glutathione, which falls with age.</p>
+            <ul class="plate__ing"><li>Glycine</li><li>N-Acetylcysteine</li><li>Glutathione Pathway</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$450</b><span>per session &middot; <em>programme $405</em></span></p>
+              <a class="plate__go" href="/drips/glynac-longevity/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
 
-      <div class="quiz__progress" aria-hidden="true">
-        <span class="quiz__step is-here" data-step="0">I</span>
-        <span class="quiz__bar"><i id="quizBar"></i></span>
-        <span class="quiz__step" data-step="1">II</span>
-        <span class="quiz__bar"><i></i></span>
-        <span class="quiz__step" data-step="2">III</span>
-      </div>
+        <li class="plate" data-tags="mind" data-tone="var(--t-brain)" style="--tone:var(--t-brain)">
+          <a class="plate__frame" href="/drips/mental-recovery-brain-wellness/" aria-label="Stress, Burnout &amp; Brain Wellness IV">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/mental-recovery-brain-wellness.webp"
+                 alt="Stress, Burnout &amp; Brain Wellness IV" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/brain/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">V</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 1 h 30</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-brain" aria-hidden="true"></i> Mind &amp; Focus</p>
+            <h3 class="plate__name"><a href="/drips/mental-recovery-brain-wellness/">Stress, Burnout &amp; Brain Wellness IV</a></h3>
+            <p class="plate__note">Brain fuel for stress, mental burnout and demanding schedules — including an antioxidant that crosses into brain tissue.</p>
+            <ul class="plate__ing"><li>Neuro B-Vitamins</li><li>Calming Amino Acid</li><li>Brain-Permeable Antioxidant</li><li>Electrolytes</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$700</b><span>per session &middot; <em>programme $630</em></span></p>
+              <a class="plate__go" href="/drips/mental-recovery-brain-wellness/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
 
-      <div class="quiz__stage" id="quizStage" aria-live="polite">
-        <!-- panels rendered by Quiz -->
-      </div>
+        <li class="plate" data-tags="recovery inflammatory" data-tone="var(--t-curcumin)" style="--tone:var(--t-curcumin)">
+          <a class="plate__frame" href="/drips/curcumin/" aria-label="Curcumin IV Infusion">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/curcumincurcumin.webp"
+                 alt="Curcumin IV Infusion" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/curcumin/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">VI</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 45 min</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-flower-lotus" aria-hidden="true"></i> Recovery</p>
+            <h3 class="plate__name"><a href="/drips/curcumin/">Curcumin IV Infusion</a></h3>
+            <p class="plate__note">Turmeric&rsquo;s active compound absorbs poorly by mouth. Delivered by line it bypasses the gut entirely — joint comfort and healthy inflammatory response.</p>
+            <ul class="plate__ing"><li>Curcumin</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$325</b><span>per session &middot; <em>programme $292.50</em></span></p>
+              <a class="plate__go" href="/drips/curcumin/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
 
-      <div class="quiz__foot">
-        <button class="quiz__back" id="quizBack" type="button" hidden>&larr; Back</button>
-        <button class="quiz__again" id="quizAgain" type="button" hidden>Start over</button>
+        <li class="plate" data-tags="radiance longevity" data-tone="var(--t-gluta)" style="--tone:var(--t-gluta)">
+          <a class="plate__frame" href="/drips/glutathione/" aria-label="Glutathione IV Injection">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/glutathione.webp"
+                 alt="Glutathione IV Injection" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/gluta/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">VII</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 10&ndash;20 min</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-sparkle" aria-hidden="true"></i> Radiance</p>
+            <h3 class="plate__name"><a href="/drips/glutathione/">Glutathione IV Injection</a></h3>
+            <p class="plate__note">The master antioxidant, in and out inside twenty minutes. Gradual by design — the results hold while the course continues.</p>
+            <ul class="plate__ing"><li>Glutathione</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$125</b><span>per session &middot; <em>programme $112.50</em></span></p>
+              <a class="plate__go" href="/drips/glutathione/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
+
+        <li class="plate" data-tags="immunity inflammatory" data-tone="var(--t-quercetin)" style="--tone:var(--t-quercetin)">
+          <a class="plate__frame" href="/drips/quercetin/" aria-label="Quercetin Seasonal Allergy Support IV">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/quercetinquercetin.webp"
+                 alt="Quercetin Seasonal Allergy Support IV" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/quercetin/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">VIII</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 45 min</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-wind" aria-hidden="true"></i> Immunity</p>
+            <h3 class="plate__name"><a href="/drips/quercetin/">Quercetin Seasonal Allergy Support IV</a></h3>
+            <p class="plate__note">If inflammation is the fire, mast cells are the match. A plant flavonoid for pollen season — twice weekly for three weeks, because one visit will not hold a season.</p>
+            <ul class="plate__ing"><li>Quercetin</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$300</b><span>per session &middot; <em>programme $270</em></span></p>
+              <a class="plate__go" href="/drips/quercetin/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
+
+        <li class="plate" data-tags="recovery immunity" data-tone="var(--t-revive)" style="--tone:var(--t-revive)">
+          <a class="plate__frame" href="/drips/revive/" aria-label="Revive IV Support">
+            <img class="plate__img" src="https://precisionmedicaliv.com/wp-content/uploads/2026/06/reviverevive.webp"
+                 alt="Revive IV Support" loading="lazy" decoding="async"
+                 onerror="this.src='https://picsum.photos/seed/revive/1200/900';this.onerror=null">
+            <span class="plate__tint" aria-hidden="true"></span>
+            <span class="plate__no" aria-hidden="true">IX</span>
+            <span class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 2 h 30</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-drop-half" aria-hidden="true"></i> Recovery</p>
+            <h3 class="plate__name"><a href="/drips/revive/">Revive IV Support</a></h3>
+            <p class="plate__note">Replenish, recharge, revive. The unhurried full restoration — taken as needed rather than on a schedule.</p>
+            <ul class="plate__ing"><li>3 Antioxidants</li><li>Electrolytes</li><li>Trace Minerals</li><li>Amino Acids</li><li>B-Complex</li><li>Hydration Fluid</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$625</b><span>per session &middot; <em>programme $562.50</em></span></p>
+              <a class="plate__go" href="/drips/revive/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
+
+        <li class="plate plate--bespoke" data-tags="bespoke immunity recovery longevity inflammatory mind radiance"
+            data-tone="var(--t-custom)" style="--tone:var(--t-custom)">
+          <a class="plate__frame" href="/drips/customized-drip/" aria-label="The Customized Drip">
+            <span class="plate__seal">
+              <i class="ph-duotone ph-pen-nib" aria-hidden="true"></i>
+              <p>Composed<br>for one patient</p>
+            </span>
+            <span class="plate__no" aria-hidden="true">X</span>
+            <span class="plate__spectrum" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          </a>
+          <div class="plate__body">
+            <p class="plate__cat"><i class="ph ph-pen-nib" aria-hidden="true"></i> Bespoke</p>
+            <h3 class="plate__name"><a href="/drips/customized-drip/">The Customized Drip</a></h3>
+            <p class="plate__note">Nothing on the shelf fits everyone. After a private consultation she writes a protocol for you alone — and if the honest answer is that an infusion is not the right call, she will tell you that instead.</p>
+            <ul class="plate__ing"><li>Composed from your history</li><li>Private consultation</li></ul>
+            <div class="plate__foot">
+              <p class="plate__price"><b>By consultation</b><span>quoted after screening</span></p>
+              <a class="plate__go" href="/drips/customized-drip/">Enquire <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
+
+      </ol>
+
+      <!-- rail furniture — lives inside the pinned element so it stays on
+           screen for the whole horizontal run -->
+      <div class="shelf__rail">
+        <p class="shelf__counter"><b id="shelfNow">01</b> / <span id="shelfTotal">10</span></p>
+        <span class="shelf__meter"><i id="shelfMeter"></i></span>
+        <span class="shelf__hint">Scroll to move along the shelf <i class="ph ph-arrow-right" aria-hidden="true"></i></span>
       </div>
     </div>
-
-    <p class="quiz__legal" data-reveal>
-      A suggestion, not a medical determination. Every infusion still requires screening
-      and Dr.&nbsp;Aronov's individual review before it can be scheduled.
-    </p>
   </div>
+
+  <p class="shelf__note" data-reveal>
+    Supportive, adjunctive wellness care — not a diagnosis or treatment, and not a substitute for
+    your specialist&rsquo;s plan. Final ingredients are selected by Dr.&nbsp;Aronov at screening, and
+    physician approval is required before any infusion can be scheduled.
+    <a href="/add-ons/">Infusion enhancements&nbsp;&rarr;</a>
+  </p>
 </section>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "Signature IV Infusions — Precision Medical IV by Dr. Aronov",
-  "itemListElement": [
-    {"@type":"ListItem","position":1,"url":"https://precisionmedicaliv.com/drips/immuno-boost/","name":"Immun-O-Boost IV Support"},
-    {"@type":"ListItem","position":2,"url":"https://precisionmedicaliv.com/drips/muscle-support/","name":"LIQUIXO Muscle Recovery IV"},
-    {"@type":"ListItem","position":3,"url":"https://precisionmedicaliv.com/drips/antioxidant-reset/","name":"Antioxidant ×3 Reset IV"},
-    {"@type":"ListItem","position":4,"url":"https://precisionmedicaliv.com/drips/glynac-longevity/","name":"GLyNAC Longevity Restoration IV"},
-    {"@type":"ListItem","position":5,"url":"https://precisionmedicaliv.com/drips/mental-recovery-brain-wellness/","name":"Stress, Mental Burnout & Brain Wellness IV"},
-    {"@type":"ListItem","position":6,"url":"https://precisionmedicaliv.com/drips/curcumin/","name":"Curcumin IV Infusion"},
-    {"@type":"ListItem","position":7,"url":"https://precisionmedicaliv.com/drips/glutathione/","name":"Glutathione IV Injection"},
-    {"@type":"ListItem","position":8,"url":"https://precisionmedicaliv.com/drips/quercetin/","name":"Quercetin Seasonal Allergy Support IV"},
-    {"@type":"ListItem","position":9,"url":"https://precisionmedicaliv.com/drips/revive/","name":"Revive IV Support"},
-    {"@type":"ListItem","position":10,"url":"https://precisionmedicaliv.com/drips/customized-drip/","name":"Customized Drip"}
-  ]
-}
-</script>
-
+     
 </main>
 
 <script src="script.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 </body>
 </html>
