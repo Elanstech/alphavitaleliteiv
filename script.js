@@ -13,6 +13,7 @@
      HeroVideo   autoplay kick for iOS, poster fallback if the file is absent
      Magnetic    primary buttons lean toward the pointer (fine pointers only)
      Shelf       the services rail — pinned horizontal scrub, compound colour
+     Physician   sticky portrait, beats that pop, the chain of custody
      Reveal      generic scroll reveal for the sections still to come
      Boot
 
@@ -552,6 +553,100 @@ class Shelf {
 
 
 /* =============================================================================
+   THE PHYSICIAN — the pop
+   Beats snap in on overshoot easing rather than fading, the chain links land
+   one at a time, and the rule under the portrait fills as you move through the
+   story. Short durations and back.out are what make it read staccato instead
+   of soft. No pin here on purpose: the shelf already owns that gesture.
+============================================================================= */
+class Physician {
+    constructor() {
+        this.scene = $('.doc');
+        this.beats = $$('.beat', this.scene ?? document);
+        this.links = $$('.link', this.scene ?? document);
+        this.shot  = $('.doc__shot');
+        this.done  = 0;
+    }
+
+    init() {
+        if (!this.scene) return;
+
+        // No GSAP or reduced motion -> everything visible, nothing animated.
+        if (typeof window.gsap === 'undefined' || REDUCED) {
+            this.beats.forEach((b) => b.classList.add('is-on'));
+            this.shot?.style.setProperty('--doc-progress', '1');
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+        this.popBeats();
+        this.popChain();
+        this.tally();
+    }
+
+    /** Each beat overshoots into place and lights its own dot. */
+    popBeats() {
+        this.beats.forEach((beat, i) => {
+            gsap.set(beat, { opacity: 0, y: 44, scale: 0.965 });
+
+            ScrollTrigger.create({
+                trigger: beat,
+                start: 'top 82%',
+                once: true,
+                onEnter: () => {
+                    gsap.to(beat, {
+                        opacity: 1, y: 0, scale: 1,
+                        duration: 0.55,
+                        ease: 'back.out(1.7)',      // the pop
+                    });
+                    beat.classList.add('is-on');
+
+                    // fill the rule under the portrait as the story advances
+                    this.done = Math.max(this.done, (i + 1) / this.beats.length);
+                    this.shot?.style.setProperty('--doc-progress', this.done.toFixed(3));
+                },
+            });
+        });
+    }
+
+    /** The six steps land in sequence, not together. */
+    popChain() {
+        if (!this.links.length) return;
+        gsap.set(this.links, { opacity: 0, y: 30, scale: 0.96 });
+
+        ScrollTrigger.create({
+            trigger: '#chainGrid',
+            start: 'top 85%',
+            once: true,
+            onEnter: () => {
+                gsap.to(this.links, {
+                    opacity: 1, y: 0, scale: 1,
+                    duration: 0.5,
+                    ease: 'back.out(2)',
+                    stagger: 0.085,             // pop · pop · pop
+                });
+            },
+        });
+    }
+
+    /** Count the figures up once they are on screen. */
+    tally() {
+        $$('[data-tally]', this.scene).forEach((el) => {
+            const end = parseFloat(el.dataset.tally);
+            const obj = { v: 0 };
+            ScrollTrigger.create({
+                trigger: el, start: 'top 92%', once: true,
+                onEnter: () => gsap.to(obj, {
+                    v: end, duration: 1.3, ease: 'power2.out',
+                    onUpdate: () => { el.textContent = Math.round(obj.v); },
+                    onComplete: () => { el.textContent = end; },
+                }),
+            });
+        });
+    }
+}
+
+/* =============================================================================
    REVEAL — generic scroll reveal for the sections still to come
    Mark anything with [data-reveal]; siblings cascade automatically.
 ============================================================================= */
@@ -596,6 +691,7 @@ const modules = {
     heroVideo: new HeroVideo(),
     magnetic:  new Magnetic(),
     shelf:     new Shelf(),
+    physician: new Physician(),
     reveal:    new Reveal(),
 };
 
