@@ -594,19 +594,17 @@ if (document.readyState === 'loading') {
 } else {
     boot();
 }
-
-/* -----------------------------------------------------------------------------
    CONSOLE HELPERS
    Try wood textures live, no reload:
 
-     PMIV.wood('https://images.unsplash.com/photo-XXXX?auto=format&w=2400')
+     PMIV.wood('https://cdn.prod.website-files.com/66eb09067bdc5d86694dd29f/6a3305810895fb06243fbf4a_GSG_WWP_ProductShot-004.png')
      PMIV.wood()                     // back to the stylesheet default
      PMIV.woodShow(0.55)             // 0 = flat cream, 1 = full strength photo
      PMIV.plank('140px')             // width of one plank
 
    When you settle on one, copy the values into --wood-img / --wood-show /
    --plank at the top of section 06 in styles.css.
------------------------------------------------------------------------------ */
+
 const shelfEl = () => $('.shelf');
 
 const wood = (url) => {
