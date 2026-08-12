@@ -515,8 +515,7 @@ class Shelf {
         });
 
         /* fonts land after first paint and change every measurement */
-        if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
-        window.addEventListener('resize', debounce(() => ScrollTrigger.refresh(), 260));
+        /* global refresh lives in boot() — see the note there */
     }
 
     filters() {
@@ -667,6 +666,18 @@ class Route {
             const stops = $$('.stop', lane);
             if (!fill || !stops.length) return;
 
+            // the lane card arrives with the same pop as the physician beats
+            if (!REDUCED) {
+                gsap.from(lane, {
+                    y: 40, opacity: 0, scale: .975, duration: .6, ease: 'back.out(1.7)',
+                    scrollTrigger: { trigger: lane, start: 'top 86%', once: true },
+                });
+                gsap.from($$('.stop', lane), {
+                    y: 20, opacity: 0, duration: .45, ease: 'back.out(1.5)', stagger: .07,
+                    scrollTrigger: { trigger: lane, start: 'top 80%', once: true },
+                });
+            }
+
             ScrollTrigger.create({
                 trigger: lane,
                 start: 'top 72%',
@@ -692,6 +703,19 @@ class Route {
    Both surface once you are past the hero. The dial closes on Escape, on an
    outside click, and whenever one of its actions is taken.
 ============================================================================= */
+class Social {
+    constructor() { this.el = $('.social'); }
+    init() {
+        if (!this.el || typeof window.gsap === 'undefined' || REDUCED) return;
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from($$('.social__head > *, .social__cta', this.el), {
+            y: 28, opacity: 0, duration: .6, ease: 'back.out(1.6)', stagger: .08,
+            scrollTrigger: { trigger: this.el, start: 'top 84%', once: true },
+        });
+    }
+}
+
+
 class Dock {
     constructor() {
         this.top    = $('#toTop');
@@ -988,56 +1012,81 @@ class Quiz {
 
 
 /* =============================================================================
-   CONDITIONS — the sticky index on conditions.html
-   Each condition claims the index and its own accent as it takes the screen.
-   No-ops on every other page.
+   CONDITIONS — a switcher, not a stack
+   Five long cards end to end made this the tallest block on the page, and
+   nobody reads a condition they do not have. So the index is a control now:
+   one card on screen, swapped on click, with the same overshoot pop the
+   physician beats use. No-ops when the section is absent.
 ============================================================================= */
 class Conditions {
     constructor() {
         this.rail  = $('#condRail');
         this.cards = $$('.cond');
+        this.items = this.rail ? $$('.rail__item', this.rail) : [];
+        this.at    = -1;
     }
 
     init() {
         if (!this.rail || !this.cards.length) return;
 
-        const items = $$('.rail__item', this.rail);
-
-        // clicking the index jumps to the card
-        items.forEach((b) => b.addEventListener('click', () => {
-            const t = $('#' + b.dataset.goto);
-            t?.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
-        }));
-
-        const mark = (i) => {
-            items.forEach((b, n) => b.classList.toggle('is-here', n === i));
-            this.cards.forEach((c, n) => c.classList.toggle('is-here', n === i));
-        };
-        mark(0);
-
-        if (typeof window.gsap === 'undefined') { this.cards.forEach((c) => c.classList.add('is-here')); return; }
-        gsap.registerPlugin(ScrollTrigger);
-
-        this.cards.forEach((card, i) => {
-            ScrollTrigger.create({
-                trigger: card, start: 'top 55%', end: 'bottom 45%',
-                onToggle: (self) => { if (self.isActive) mark(i); },
-            });
-            if (REDUCED) return;
-            gsap.from(card, {
-                y: 46, opacity: 0, duration: .9, ease: 'expo.out',
-                scrollTrigger: { trigger: card, start: 'top 88%', once: true },
-            });
+        this.items.forEach((b, i) => {
+            b.setAttribute('aria-controls', b.dataset.goto);
+            b.addEventListener('click', () => this.show(i, true));
         });
 
-        // the one rule lands a line at a time
-        const gate = $('[data-gate]');
-        if (gate && !REDUCED) {
-            gsap.from(gate, { y: 30, opacity: 0, duration: 1, ease: 'expo.out',
-                scrollTrigger: { trigger: gate, start: 'top 85%', once: true } });
-            gsap.from($$('.gate__cell'), { y: 26, opacity: 0, duration: .8, ease: 'expo.out', stagger: .08,
-                scrollTrigger: { trigger: '.gate__grid', start: 'top 88%', once: true } });
+        // arrow keys walk the list, like any real tab set
+        this.rail.addEventListener('keydown', (e) => {
+            if (!['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+            e.preventDefault();
+            const dir = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : -1;
+            const next = (this.at + dir + this.items.length) % this.items.length;
+            this.show(next, true);
+            this.items[next].focus();
+        });
+
+        this.show(0, false);
+
+        // the whole block still arrives with a pop the first time it is seen
+        if (typeof window.gsap !== 'undefined' && !REDUCED) {
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.from(this.items, {
+                x: -18, opacity: 0, duration: .55, ease: 'back.out(1.6)', stagger: .05,
+                scrollTrigger: { trigger: this.rail, start: 'top 86%', once: true },
+            });
+            const gate = $('[data-gate]');
+            if (gate) {
+                gsap.from(gate, { y: 30, opacity: 0, duration: .8, ease: 'back.out(1.4)',
+                    scrollTrigger: { trigger: gate, start: 'top 88%', once: true } });
+                gsap.from($$('.gate__cell'), {
+                    y: 26, opacity: 0, scale: .96, duration: .55, ease: 'back.out(1.7)', stagger: .07,
+                    scrollTrigger: { trigger: '.gate__grid', start: 'top 90%', once: true } });
+            }
         }
+    }
+
+    show(i, animate) {
+        if (i === this.at) return;
+        this.at = i;
+
+        this.items.forEach((b, n) => {
+            b.classList.toggle('is-here', n === i);
+            b.setAttribute('aria-expanded', String(n === i));
+        });
+        this.cards.forEach((c, n) => {
+            c.classList.toggle('is-live', n === i);
+            c.setAttribute('aria-hidden', String(n !== i));
+        });
+
+        const card = this.cards[i];
+        if (!animate || typeof window.gsap === 'undefined' || REDUCED) return;
+
+        // the pop: overshoot in, and let the blocks inside land behind it
+        gsap.fromTo(card,
+            { opacity: 0, y: 26, scale: .975 },
+            { opacity: 1, y: 0, scale: 1, duration: .5, ease: 'back.out(1.7)' });
+        gsap.fromTo($$('.cond__block', card),
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: .45, ease: 'back.out(1.5)', stagger: .06, delay: .08 });
     }
 }
 
@@ -1090,6 +1139,7 @@ const modules = {
     dock:      new Dock(),
     quiz:      new Quiz(),
     conditions: new Conditions(),
+    social:     new Social(),
     physician: new Physician(),
     reveal:    new Reveal(),
 };
@@ -1110,6 +1160,25 @@ const boot = () => {
     });
 
     if ('ontouchstart' in window) document.documentElement.classList.add('is-touch');
+
+    /* Fonts and the bag images land AFTER first paint and change the height of
+       the document. Any trigger measured before that is measured against a
+       shorter page — which is exactly why sections further down stop firing,
+       or fire at the wrong moment, as the page grows. Refresh when fonts land,
+       when every image is in, and again once a resize settles. */
+    if (typeof window.gsap !== 'undefined') {
+        const refresh = debounce(() => ScrollTrigger.refresh(), 120);
+
+        if (document.fonts) document.fonts.ready.then(refresh);
+        window.addEventListener('load', refresh);
+        window.addEventListener('resize', debounce(() => ScrollTrigger.refresh(), 280));
+
+        $$('img').forEach((img) => {
+            if (img.complete) return;
+            img.addEventListener('load',  refresh, { once: true });
+            img.addEventListener('error', refresh, { once: true });
+        });
+    }
 };
 
 if (document.readyState === 'loading') {
