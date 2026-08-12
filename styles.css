@@ -1990,40 +1990,50 @@ body.is-ready .hero__title .word .loop {
 }
 .cond__block--never .cond__label { color: var(--gold-deep); }
 
-/* ---------- NAC ---------- */
-.nac {
-    position: relative; z-index: 2;
-    max-width: var(--maxw); margin: clamp(2.5rem, 5vw, 4rem) auto 0;
-    padding: clamp(1.75rem, 3.5vw, 2.75rem);
-    border: 1px solid var(--rule-gold); border-radius: 3px;
-    background: var(--cream);
-}
-.nac__wrap {
+/* ---------- the compound, one per condition ----------
+   Lives inside each card, so clicking through the index changes the compound
+   with it. Same two-column shape the standalone NAC block had. */
+.compound {
     display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1fr);
-    gap: clamp(1.75rem, 4vw, 3.5rem); align-items: start;
+    gap: clamp(1.5rem, 3.5vw, 2.75rem);
+    align-items: start;
+    margin-top: .5rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
 }
-.nac__eyebrow {
-    display: inline-flex; align-items: center; gap: .6rem;
-    font-family: var(--caps); font-size: .68rem; letter-spacing: .28em;
-    text-transform: uppercase; color: var(--gold-deep); margin-bottom: .9rem;
+.compound__eyebrow {
+    display: inline-flex; align-items: center; gap: .55rem;
+    font-family: var(--caps); font-size: .64rem; letter-spacing: .26em;
+    text-transform: uppercase; color: var(--cond); margin-bottom: .7rem;
 }
-.nac__eyebrow i { font-size: 1.3em; }
-.nac__title { font-family: var(--display); font-weight: 400; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1; color: var(--forest); margin-bottom: .5rem; }
-.nac__sub { font-family: var(--accent); font-style: italic; font-size: 1.05rem; color: var(--ink-soft); margin-bottom: 1.5rem; }
-.nac__sub a { color: var(--gold-deep); border-bottom: 1px solid var(--rule-gold); }
-.nac__facts { display: grid; gap: 0; border-top: 1px solid var(--rule); }
-.nac__facts > div { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--rule); }
-.nac__facts dt { font-family: var(--micro); font-size: .56rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--mist); }
-.nac__facts dd { font-family: var(--data); font-weight: 600; font-variant-numeric: tabular-nums lining-nums; font-size: 1.02rem; color: var(--forest); }
-.nac__p { font-size: .96rem; line-height: 1.78; color: var(--ink-soft); margin-bottom: 1rem; }
-.nac__p b { color: var(--forest); font-weight: 600; }
-.nac__p--flag {
-    display: grid; grid-template-columns: auto 1fr; gap: .8rem; align-items: start;
-    padding: 1rem 1.15rem; margin-bottom: 0;
+.compound__eyebrow i { font-size: 1.3em; }
+.compound__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+    line-height: 1.08; color: var(--forest); margin-bottom: .4rem;
+}
+.compound__drip { font-family: var(--accent); font-style: italic; font-size: .98rem; color: var(--ink-soft); margin-bottom: 1.25rem; }
+.compound__drip a { color: var(--gold-deep); border-bottom: 1px solid var(--rule-gold); }
+.compound__drip a:hover { color: var(--forest); }
+.compound__facts { display: grid; border-top: 1px solid var(--rule); }
+.compound__facts > div {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+    padding: .6rem 0; border-bottom: 1px solid var(--rule);
+}
+.compound__facts dt { font-family: var(--micro); font-size: .54rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--mist); }
+.compound__facts dd { font-family: var(--data); font-weight: 600; font-variant-numeric: tabular-nums lining-nums; font-size: .98rem; color: var(--forest); }
+.compound__p { font-size: .94rem; line-height: 1.75; color: var(--ink-soft); margin-bottom: .9rem; }
+.compound__p b { color: var(--forest); font-weight: 600; }
+.compound__p em { font-style: italic; }
+.compound__flag {
+    display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: start;
+    padding: .85rem 1rem; margin: 0;
     border: 1px solid var(--rule-gold); border-left: 3px solid var(--gold-deep);
     background: rgba(193,150,63,.08);
+    font-size: .88rem; line-height: 1.6; color: var(--ink-soft);
 }
-.nac__p--flag i { color: var(--gold-deep); font-size: 1.3rem; }
+.compound__flag i { color: var(--gold-deep); font-size: 1.2rem; }
+
+@media (max-width: 900px) { .compound { grid-template-columns: 1fr; } }
 
 .conds__legal {
     position: relative; z-index: 2;
@@ -2040,7 +2050,6 @@ body.is-ready .hero__title .word .loop {
     .rail__item.is-here { border-color: var(--cond); padding-left: .9rem; }
     .rail__name { font-size: .86rem; }
     .rail__no { min-width: 0; }
-    .nac__wrap { grid-template-columns: 1fr; }
     .gate__grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 620px) {
