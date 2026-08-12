@@ -1058,6 +1058,245 @@ body.is-ready .hero__title .word .loop {
 }
 
 /* =============================================================================
+   07 · THE PHYSICIAN  (#physician)
+   Parchment, not forest. This is the warmest, most human section on the page —
+   it should feel like light through a window, not a clinic at night. Forest
+   type, gold accents, white mounts, a lot of air.
+ 
+   Motion grammar stays different from the shelf: no pin, no scrub. A sticky
+   portrait holds while the story beats POP past it on overshoot easing.
+ 
+   NOTE: no `overflow` on .doc — any clipping ancestor silently breaks
+   position: sticky on the portrait.
+============================================================================= */
+.doc {
+    --data:  'Archivo', 'Instrument Sans', sans-serif;
+    --micro: 'Syne', 'Instrument Sans', sans-serif;
+    position: relative;
+    background: var(--parchment);
+    color: var(--ink-soft);
+    padding: clamp(4.5rem, 10vh, 8rem) var(--gut) clamp(5rem, 10vh, 8rem);
+}
+.doc::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+        radial-gradient(70% 55% at 88% 4%,  rgba(231,203,134,.30), transparent 62%),
+        radial-gradient(60% 45% at 2% 92%,  rgba(143,190,155,.14), transparent 60%),
+        radial-gradient(120% 60% at 50% 0%, rgba(255,255,255,.7),  transparent 55%);
+}
+.doc__wrap { position: relative; max-width: var(--maxw); margin: 0 auto; }
+ 
+/* ---------- masthead ---------- */
+.doc__rubric {
+    display: flex; align-items: center; gap: 1.25rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--forest);
+    margin-bottom: clamp(2rem, 5vh, 3.5rem);
+}
+.doc__rubric-no { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
+.doc__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
+.doc__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
+ 
+.doc__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2.2rem, 6vw, 5rem);
+    line-height: 1.03; letter-spacing: -.02em; color: var(--forest);
+    max-width: 18ch; margin-bottom: 1.25rem;
+}
+.doc__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-deep); }
+.doc__sub {
+    font-family: var(--caps); font-size: clamp(.7rem, .95vw, .82rem);
+    letter-spacing: .24em; text-transform: uppercase; color: var(--gold-deep);
+    margin-bottom: clamp(2.5rem, 6vh, 4rem);
+}
+ 
+/* ---------- the split: sticky portrait, beats scrolling past ---------- */
+.doc__split {
+    display: grid; grid-template-columns: minmax(0, .6fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+}
+ 
+.doc__portrait { position: sticky; top: calc(var(--head-h) + 2rem); }
+/* a white mount, the way a print is framed */
+.doc__shot {
+    position: relative; overflow: hidden; border-radius: 2px;
+    aspect-ratio: 3 / 4;
+    background: var(--cream);
+    padding: 0;
+    border: 1px solid var(--rule-gold);
+    box-shadow: 0 1px 0 rgba(255,255,255,.8), 0 34px 60px -28px rgba(32,52,33,.34);
+}
+.doc__shot img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center 22%;
+    filter: grayscale(.2) contrast(1.02) brightness(1.02);
+    transform: scale(1.03);
+    transition: filter .9s var(--ease), transform 1.2s var(--ease);
+}
+.doc__portrait:hover .doc__shot img { filter: grayscale(0); transform: scale(1.07); }
+/* gold rule that fills as the beats advance */
+.doc__shot::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+    background: var(--gold);
+    transform: scaleX(var(--doc-progress, 0)); transform-origin: left;
+    transition: transform .5s var(--ease);
+}
+ 
+.doc__plate {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+    margin-top: 1.1rem; padding-top: .9rem;
+    border-top: 1px solid var(--rule);
+}
+.doc__plate b { font-family: var(--display); font-weight: 400; font-size: 1.15rem; color: var(--forest); }
+.doc__plate span {
+    font-family: var(--micro); font-size: .58rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--gold-deep);
+}
+ 
+/* ---------- the beats ---------- */
+.doc__beats { display: grid; gap: clamp(3.5rem, 11vh, 7.5rem); padding-bottom: clamp(2rem, 6vh, 4rem); }
+.beat { position: relative; padding-left: clamp(2.75rem, 5vw, 4rem); }
+.beat::before {
+    content: ''; position: absolute; left: .55rem; top: .55rem; bottom: calc(clamp(3.5rem, 11vh, 7.5rem) * -1);
+    width: 1px; background: var(--rule);
+}
+.beat:last-child::before { display: none; }
+.beat__dot {
+    position: absolute; left: 0; top: .2rem;
+    width: 19px; height: 19px; border-radius: 50%;
+    border: 1px solid var(--gold); background: var(--parchment);
+    display: grid; place-items: center;
+}
+.beat__dot::after {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); transform: scale(0);
+    transition: transform .45s cubic-bezier(.34,1.56,.64,1);
+}
+.beat.is-on .beat__dot::after { transform: scale(1); }
+ 
+.beat__when {
+    font-family: var(--data); font-size: .68rem; font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold-deep); margin-bottom: .5rem;
+}
+.beat__what {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.35rem, 2.5vw, 2.1rem);
+    line-height: 1.12; letter-spacing: -.015em; color: var(--forest);
+    margin-bottom: .6rem;
+}
+.beat__body { font-size: clamp(.95rem, 1.1vw, 1.05rem); line-height: 1.72; color: var(--ink-soft); max-width: 44ch; }
+.beat__body em { font-family: var(--accent); font-style: italic; font-size: 1.12em; color: var(--gold-deep); }
+ 
+/* ---------- the chain of custody ---------- */
+.chain { margin-top: clamp(4rem, 10vh, 7rem); }
+.chain__lead {
+    font-family: var(--caps); font-size: .72rem;
+    letter-spacing: .3em; text-transform: uppercase; color: var(--gold-deep);
+    margin-bottom: 1.25rem;
+}
+.chain__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.8rem, 4vw, 3.2rem);
+    line-height: 1.08; letter-spacing: -.02em; color: var(--forest);
+    max-width: 22ch; margin-bottom: clamp(2rem, 5vh, 3rem);
+}
+.chain__title em { font-family: var(--accent); font-style: italic; font-size: 1.06em; color: var(--gold-deep); }
+ 
+/* white cards floating on the parchment, not a dark grid */
+.chain__grid {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: clamp(.6rem, 1.2vw, 1rem);
+}
+.link {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--gold);
+    border-radius: 2px;
+    padding: clamp(1.1rem, 2vw, 1.5rem) clamp(.9rem, 1.5vw, 1.2rem) clamp(1.3rem, 2.2vw, 1.7rem);
+    display: flex; flex-direction: column; gap: .7rem;
+    box-shadow: 0 12px 26px -18px rgba(32,52,33,.28);
+    transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.link:hover { transform: translateY(-4px); box-shadow: 0 22px 40px -20px rgba(32,52,33,.34); }
+.link__no {
+    font-family: var(--data); font-size: .62rem; font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: .2em; color: var(--gold-deep);
+}
+.link i { font-size: 1.6rem; color: var(--gold-deep); line-height: 1; display: block; }
+.link__txt {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(.95rem, 1.15vw, 1.1rem); line-height: 1.22; color: var(--forest);
+}
+.link__sub { font-size: .78rem; line-height: 1.6; color: var(--mist); }
+ 
+.chain__quote {
+    margin-top: clamp(2rem, 4vh, 3rem);
+    padding-left: clamp(1rem, 2vw, 1.75rem);
+    border-left: 2px solid var(--gold);
+    font-family: var(--accent); font-style: italic;
+    font-size: clamp(1.15rem, 1.9vw, 1.6rem); line-height: 1.5;
+    color: var(--forest); max-width: 58ch;
+}
+.chain__quote cite {
+    display: block; margin-top: .85rem;
+    font-family: var(--micro); font-style: normal; font-size: .6rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep);
+}
+ 
+/* ---------- counters ---------- */
+.doc__tally {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1rem, 3vw, 2.5rem);
+    margin-top: clamp(3rem, 7vh, 5rem);
+    padding-top: clamp(1.5rem, 3vh, 2.25rem);
+    border-top: 1px solid var(--rule);
+}
+.doc__tally div b {
+    display: block; font-family: var(--data); font-weight: 500;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: clamp(1.9rem, 4vw, 3.2rem); line-height: 1; color: var(--forest); margin-bottom: .5rem;
+}
+.doc__tally div b sup { font-size: .42em; color: var(--gold-deep); vertical-align: super; }
+.doc__tally div > span {
+    display: block;
+    font-family: var(--micro); font-size: .58rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+}
+ 
+.doc__cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: clamp(2rem, 4vh, 3rem); }
+.doc .btn--forest, .doc .btn--line { border-radius: 2px; }
+.doc__note {
+    margin-top: clamp(1.5rem, 3vh, 2.25rem);
+    font-size: .82rem; line-height: 1.7; color: var(--mist); max-width: 68ch;
+}
+ 
+/* ---------- physician · responsive ---------- */
+@media (max-width: 1180px) { .chain__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px) {
+    .doc__split { grid-template-columns: 1fr; gap: 2.5rem; }
+    .doc__portrait { position: static; }
+    .doc__shot { aspect-ratio: 3 / 2; }
+    .doc__tally { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+    .chain__grid { grid-template-columns: 1fr; }
+    .doc__tally { grid-template-columns: 1fr; }
+    .doc__tally div { display: flex; align-items: baseline; gap: .9rem; }
+    .doc__tally div b { margin-bottom: 0; font-size: 1.8rem; }
+    .doc__cta .btn { width: 100%; }
+    .beat { padding-left: 2.25rem; }
+}
+ 
+/* ---------- physician · reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .beat, .link { opacity: 1 !important; transform: none !important; }
+    .beat__dot::after { transform: scale(1) !important; }
+}
+ 
+/* =============================================================================
    07 · MOTION & FOCUS
 ============================================================================= */
 :focus-visible {
