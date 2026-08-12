@@ -1,5 +1,5 @@
 /* =============================================================================
-   PRECISION MEDICAL IV — SCRIPT.JS  (ES6 module)
+   ALPHA VITAL ELITE IV — SCRIPT.JS  (ES6 module)
    -----------------------------------------------------------------------------
    Loaded with <script type="module">: module scope, strict mode, deferred.
    Every class feature-detects and no-ops when its elements are absent, so new
@@ -13,6 +13,7 @@
      HeroVideo   autoplay kick for iOS, poster fallback if the file is absent
      Magnetic    primary buttons lean toward the pointer (fine pointers only)
      Shelf       the services rail — pinned horizontal scrub, compound colour
+     Route       the two-lane oral-vs-IV explainer, scrubbed on scroll
      Physician   sticky portrait, beats that pop, the chain of custody
      Reveal      generic scroll reveal for the sections still to come
      Boot
@@ -646,6 +647,45 @@ class Physician {
     }
 }
 
+
+/* =============================================================================
+   THE ROUTE — the two lanes in #advantage
+   Each lane's gold rule fills as the section scrolls past, and each stop lights
+   the moment the fill reaches it. Feature-detects GSAP; without it the CSS
+   already shows every stop lit, so nothing is lost.
+============================================================================= */
+class Route {
+    constructor() {
+        this.el = $('#advantage');
+    }
+
+    init() {
+        if (!this.el || REDUCED || typeof window.gsap === 'undefined') return;
+
+        $$('.lane', this.el).forEach((lane) => {
+            const fill  = $('.lane__fill', lane);
+            const stops = $$('.stop', lane);
+            if (!fill || !stops.length) return;
+
+            ScrollTrigger.create({
+                trigger: lane,
+                start: 'top 72%',
+                end: 'bottom 78%',
+                scrub: 0.6,
+                invalidateOnRefresh: true,
+                onUpdate: (self) => {
+                    const p = self.progress;
+                    fill.style.height = (p * 100).toFixed(1) + '%';
+                    // a stop lights once the fill has run past its own pin
+                    stops.forEach((s, i) => {
+                        s.classList.toggle('is-passed', p >= (i + 0.6) / stops.length);
+                    });
+                },
+            });
+        });
+    }
+}
+
 /* =============================================================================
    REVEAL — generic scroll reveal for the sections still to come
    Mark anything with [data-reveal]; siblings cascade automatically.
@@ -691,6 +731,7 @@ const modules = {
     heroVideo: new HeroVideo(),
     magnetic:  new Magnetic(),
     shelf:     new Shelf(),
+    route:     new Route(),
     physician: new Physician(),
     reveal:    new Reveal(),
 };
@@ -707,7 +748,7 @@ const boot = () => {
 
     Object.values(modules).forEach((m) => {
         try { m.init(); }
-        catch (err) { console.error(`[PMIV] ${m.constructor.name} failed to start`, err); release(); }
+        catch (err) { console.error(`[AVE] ${m.constructor.name} failed to start`, err); release(); }
     });
 
     if ('ontouchstart' in window) document.documentElement.classList.add('is-touch');
