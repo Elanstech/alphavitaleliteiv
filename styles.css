@@ -1,5 +1,5 @@
 /* =============================================================================
-   PRECISION MEDICAL IV — STYLES.CSS
+   ALPHA VITAL ELITE IV — STYLES.CSS
    Direction: cinematic editorial hero over full-bleed film, opening onto a
    cream wood panel where the ten protocols hang as framed plates.
    Cream is the field, forest green is the type, gold is the accent.
@@ -11,7 +11,9 @@
      04 · HEADER & MENU    + mobile
      05 · HERO             + mobile
      06 · THE SHELF        the services rail  + mobile
-     07 · MOTION & FOCUS
+     07 · THE PHYSICIAN    the sticky portrait + beats
+     08 · THE ROUTE        oral vs IV, two lanes
+     09 · MOTION & FOCUS
 ============================================================================= */
 
 
@@ -81,7 +83,9 @@ body {
     line-height: 1.7;
     color: var(--ink-soft);
     background: var(--forest-deep);
-    overflow-x: hidden;
+    /* clip, not hidden: `hidden` makes body a scroll container, which silently
+       breaks every position: sticky on the page */
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -1062,10 +1066,10 @@ body.is-ready .hero__title .word .loop {
    Parchment, not forest. This is the warmest, most human section on the page —
    it should feel like light through a window, not a clinic at night. Forest
    type, gold accents, white mounts, a lot of air.
- 
+
    Motion grammar stays different from the shelf: no pin, no scrub. A sticky
    portrait holds while the story beats POP past it on overshoot easing.
- 
+
    NOTE: no `overflow` on .doc — any clipping ancestor silently breaks
    position: sticky on the portrait.
 ============================================================================= */
@@ -1085,7 +1089,7 @@ body.is-ready .hero__title .word .loop {
         radial-gradient(120% 60% at 50% 0%, rgba(255,255,255,.7),  transparent 55%);
 }
 .doc__wrap { position: relative; max-width: var(--maxw); margin: 0 auto; }
- 
+
 /* ---------- masthead ---------- */
 .doc__rubric {
     display: flex; align-items: center; gap: 1.25rem;
@@ -1096,7 +1100,7 @@ body.is-ready .hero__title .word .loop {
 .doc__rubric-no { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
 .doc__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
 .doc__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
- 
+
 .doc__title {
     font-family: var(--display); font-weight: 400;
     font-size: clamp(2.2rem, 6vw, 5rem);
@@ -1109,14 +1113,14 @@ body.is-ready .hero__title .word .loop {
     letter-spacing: .24em; text-transform: uppercase; color: var(--gold-deep);
     margin-bottom: clamp(2.5rem, 6vh, 4rem);
 }
- 
+
 /* ---------- the split: sticky portrait, beats scrolling past ---------- */
 .doc__split {
     display: grid; grid-template-columns: minmax(0, .6fr) minmax(0, 1fr);
     gap: clamp(2rem, 6vw, 6rem);
     align-items: start;
 }
- 
+
 .doc__portrait { position: sticky; top: calc(var(--head-h) + 2rem); }
 /* a white mount, the way a print is framed */
 .doc__shot {
@@ -1141,7 +1145,7 @@ body.is-ready .hero__title .word .loop {
     transform: scaleX(var(--doc-progress, 0)); transform-origin: left;
     transition: transform .5s var(--ease);
 }
- 
+
 .doc__plate {
     display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
     margin-top: 1.1rem; padding-top: .9rem;
@@ -1152,7 +1156,7 @@ body.is-ready .hero__title .word .loop {
     font-family: var(--micro); font-size: .58rem; font-weight: 600;
     letter-spacing: .18em; text-transform: uppercase; color: var(--gold-deep);
 }
- 
+
 /* ---------- the beats ---------- */
 .doc__beats { display: grid; gap: clamp(3.5rem, 11vh, 7.5rem); padding-bottom: clamp(2rem, 6vh, 4rem); }
 .beat { position: relative; padding-left: clamp(2.75rem, 5vw, 4rem); }
@@ -1173,7 +1177,7 @@ body.is-ready .hero__title .word .loop {
     transition: transform .45s cubic-bezier(.34,1.56,.64,1);
 }
 .beat.is-on .beat__dot::after { transform: scale(1); }
- 
+
 .beat__when {
     font-family: var(--data); font-size: .68rem; font-weight: 600;
     font-variant-numeric: tabular-nums lining-nums;
@@ -1188,7 +1192,7 @@ body.is-ready .hero__title .word .loop {
 }
 .beat__body { font-size: clamp(.95rem, 1.1vw, 1.05rem); line-height: 1.72; color: var(--ink-soft); max-width: 44ch; }
 .beat__body em { font-family: var(--accent); font-style: italic; font-size: 1.12em; color: var(--gold-deep); }
- 
+
 /* ---------- the chain of custody ---------- */
 .chain { margin-top: clamp(4rem, 10vh, 7rem); }
 .chain__lead {
@@ -1203,7 +1207,7 @@ body.is-ready .hero__title .word .loop {
     max-width: 22ch; margin-bottom: clamp(2rem, 5vh, 3rem);
 }
 .chain__title em { font-family: var(--accent); font-style: italic; font-size: 1.06em; color: var(--gold-deep); }
- 
+
 /* white cards floating on the parchment, not a dark grid */
 .chain__grid {
     display: grid; grid-template-columns: repeat(6, 1fr);
@@ -1231,7 +1235,7 @@ body.is-ready .hero__title .word .loop {
     font-size: clamp(.95rem, 1.15vw, 1.1rem); line-height: 1.22; color: var(--forest);
 }
 .link__sub { font-size: .78rem; line-height: 1.6; color: var(--mist); }
- 
+
 .chain__quote {
     margin-top: clamp(2rem, 4vh, 3rem);
     padding-left: clamp(1rem, 2vw, 1.75rem);
@@ -1245,7 +1249,7 @@ body.is-ready .hero__title .word .loop {
     font-family: var(--micro); font-style: normal; font-size: .6rem; font-weight: 600;
     letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep);
 }
- 
+
 /* ---------- counters ---------- */
 .doc__tally {
     display: grid; grid-template-columns: repeat(4, 1fr);
@@ -1265,14 +1269,14 @@ body.is-ready .hero__title .word .loop {
     font-family: var(--micro); font-size: .58rem; font-weight: 600;
     letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
 }
- 
+
 .doc__cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: clamp(2rem, 4vh, 3rem); }
 .doc .btn--forest, .doc .btn--line { border-radius: 2px; }
 .doc__note {
     margin-top: clamp(1.5rem, 3vh, 2.25rem);
     font-size: .82rem; line-height: 1.7; color: var(--mist); max-width: 68ch;
 }
- 
+
 /* ---------- physician · responsive ---------- */
 @media (max-width: 1180px) { .chain__grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 900px) {
@@ -1289,15 +1293,195 @@ body.is-ready .hero__title .word .loop {
     .doc__cta .btn { width: 100%; }
     .beat { padding-left: 2.25rem; }
 }
- 
+
 /* ---------- physician · reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
     .beat, .link { opacity: 1 !important; transform: none !important; }
     .beat__dot::after { transform: scale(1) !important; }
 }
- 
+
+
+
 /* =============================================================================
-   07 · MOTION & FOCUS
+   08 · THE ROUTE  (#advantage)
+   Cream, like the rest of the page — the shelf and the physician already set
+   that rule. Forest type, gold accent, white lane cards floating on the field.
+
+   Two lanes raced down the page. The oral lane is dashed and gated at four
+   stops; the IV lane is one unbroken gold rule. A fill runs each lane on
+   scroll and the stops light as it passes. No image: it is all type and rules,
+   so it reads on a phone and Google can read it too.
+============================================================================= */
+.route {
+    --data:  'Archivo', 'Instrument Sans', sans-serif;
+    --micro: 'Syne', 'Instrument Sans', sans-serif;
+    position: relative;
+    padding: clamp(5rem, 11vw, 9rem) var(--gut);
+    background: var(--cream);
+    color: var(--ink-soft);
+    overflow: hidden;
+}
+.route__glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+        radial-gradient(70% 50% at 82% 2%, rgba(231,203,134,.28), transparent 62%),
+        radial-gradient(60% 45% at 4% 98%, rgba(143,190,155,.13), transparent 60%);
+}
+
+.route__head { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto clamp(2.5rem, 5vw, 4rem); }
+.route__eyebrow {
+    display: inline-flex; align-items: center; gap: .7rem;
+    font-family: var(--caps); font-size: .74rem;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold-deep); margin-bottom: 1.25rem;
+}
+.route__eyebrow i { font-size: 1.3em; }
+.route__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2.2rem, 6vw, 4.8rem);
+    line-height: 1.03; letter-spacing: -.02em;
+    color: var(--forest); margin-bottom: 1.5rem;
+}
+.route__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-deep); }
+.route__lede {
+    font-size: clamp(1rem, 1.25vw, 1.18rem); line-height: 1.75;
+    color: var(--ink-soft); max-width: 58ch;
+}
+
+/* ---------- the two lanes ---------- */
+.route__lanes {
+    position: relative; z-index: 2;
+    max-width: var(--maxw); margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+}
+
+.lane {
+    --lane: var(--mist);
+    position: relative;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, .5);
+}
+.lane--iv {
+    --lane: var(--gold-deep);
+    border-color: var(--rule-gold);
+    background: #fff;
+    box-shadow: 0 26px 60px -34px rgba(32, 52, 33, .3);
+}
+
+.lane__head {
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: .9rem;
+    padding-bottom: 1.1rem; margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+}
+.lane__badge {
+    display: grid; place-items: center;
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid color-mix(in oklab, var(--lane) 50%, transparent);
+    color: var(--lane); font-size: 1.25rem;
+}
+.lane__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+    line-height: 1.1; color: var(--forest);
+}
+.lane__sub { font-family: var(--accent); font-style: italic; font-size: .95rem; color: var(--mist); margin-top: .15rem; }
+.lane__count { text-align: right; }
+.lane__count b {
+    display: block; font-family: var(--data); font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1; color: var(--lane);
+}
+.lane__count i {
+    font-family: var(--micro); font-style: normal; font-size: .55rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+}
+
+/* ---------- the track ---------- */
+.lane__track { position: relative; list-style: none; padding-left: 2.75rem; }
+.lane__line {
+    position: absolute; left: .85rem; top: .5rem; bottom: 1.5rem; width: 2px;
+    background: repeating-linear-gradient(180deg,
+        color-mix(in oklab, var(--lane) 40%, transparent) 0 6px,
+        transparent 6px 13px);
+}
+.lane--iv .lane__line { background: color-mix(in oklab, var(--lane) 25%, transparent); }
+.lane__fill {
+    position: absolute; left: 0; top: 0; width: 100%; height: 0%;
+    background: var(--lane);
+}
+.lane--iv .lane__fill { box-shadow: 0 0 12px color-mix(in oklab, var(--gold) 60%, transparent); }
+
+.stop { position: relative; padding-bottom: clamp(1.5rem, 3vw, 2.25rem); }
+.stop:last-child { padding-bottom: 0; }
+.stop__pin {
+    position: absolute; left: -2.75rem; top: -.15rem;
+    display: grid; place-items: center;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--cream);
+    border: 1px solid color-mix(in oklab, var(--lane) 40%, transparent);
+    font-family: var(--data); font-weight: 600; font-size: .78rem; color: var(--mist);
+    transition: color .5s var(--ease), border-color .5s var(--ease),
+                background .5s var(--ease), transform .5s var(--ease);
+}
+.lane--iv .stop__pin { background: #fff; }
+.stop.is-passed .stop__pin {
+    color: var(--cream); background: var(--lane);
+    border-color: var(--lane); transform: scale(1.1);
+}
+.stop__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.05rem, 1.6vw, 1.28rem);
+    color: var(--forest); margin-bottom: .35rem;
+    transition: color .5s var(--ease);
+}
+.stop.is-passed .stop__name { color: var(--lane); }
+.stop__what { font-size: .93rem; line-height: 1.65; color: var(--ink-soft); max-width: 42ch; }
+
+.lane__foot {
+    margin-top: 1.5rem; padding-top: 1.1rem; border-top: 1px solid var(--rule);
+    font-size: .9rem; line-height: 1.6; color: var(--ink-soft);
+}
+.lane__foot b { color: var(--lane); font-weight: 600; }
+
+/* ---------- the caveat ---------- */
+.route__note {
+    position: relative; z-index: 2;
+    max-width: var(--maxw); margin: clamp(2rem, 4vw, 3rem) auto 0;
+    display: grid; grid-template-columns: auto 1fr; gap: clamp(1rem, 2.5vw, 1.75rem);
+    align-items: start;
+    padding: clamp(1.35rem, 3vw, 2rem);
+    border: 1px solid var(--rule-gold);
+    border-left: 3px solid var(--gold);
+    background: rgba(193, 150, 63, .07);
+}
+.route__note > i { font-size: 1.9rem; color: var(--gold-deep); line-height: 1; }
+.route__note p { font-size: .96rem; line-height: 1.75; color: var(--ink-soft); }
+.route__note b { color: var(--forest); font-weight: 600; }
+
+/* ---------- route · mobile ---------- */
+@media (max-width: 900px) { .route__lanes { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+    .lane { padding: 1.25rem 1.1rem; }
+    .lane__track { padding-left: 2.4rem; }
+    .lane__line { left: .7rem; }
+    .stop__pin { left: -2.4rem; width: 26px; height: 26px; font-size: .7rem; }
+    .lane__head { grid-template-columns: auto 1fr; row-gap: .5rem; }
+    .lane__count { grid-column: 2; text-align: left; }
+    .lane__count b { display: inline; font-size: 1.3rem; margin-right: .4rem; }
+    .route__note { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .lane__fill { height: 100% !important; }
+    .stop .stop__pin { color: var(--cream); background: var(--lane); border-color: var(--lane); }
+}
+
+/* =============================================================================
+   09 · MOTION & FOCUS
 ============================================================================= */
 :focus-visible {
     outline: 2px solid var(--gold);
