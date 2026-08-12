@@ -681,7 +681,7 @@ body.is-ready .hero__title .word .loop {
     --tone: var(--gold);
 
     /* the panel image — change this one line to try another */
-    --wood-img: url('https://cdn.prod.website-files.com/66eb09067bdc5d86694dd29f/6a3305810895fb06243fbf4a_GSG_WWP_ProductShot-004.png');
+    --wood-img: url('https://cdn.msisurfaces.com/images/lvt/acoustic-natural-wood-slat-tile.jpg');
 
     /* how far the photo is pushed toward cream. Lower --wood-show = paler
        panel and more contrast for the green type. */
