@@ -31,29 +31,107 @@
 
 <!-- ============================================================
      PERFORMANCE + FONTS
-     Prata           display serif — Didone contrast, cuts hard on video
-     Cormorant       italic accent — the living word, pull-quotes
-     Marcellus       engraved caps — labels, matches the wordmark
-     Instrument Sans body + UI
+     Prata            display serif — Didone contrast, cuts hard on video
+     Cormorant        italic accent — the living word, pull-quotes, plate notes
+     Marcellus        engraved caps — labels, matches the wordmark
+     Instrument Sans  body + UI
+     Syne             micro-labels on the shelf — chips, category, actions
+     Archivo          tabular figures — prices, durations, the counter
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preload" as="image" href="logo.png" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero-poster.jpg" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- ICONS — Phosphor web font. Every icon on the shelf is a linked glyph.
+     Regular needs the base class: <i class="ph ph-clock">. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="stylesheet" href="styles.css">
 
+<!-- If scripting is off, the preloader must not become a wall -->
+<noscript><style>
+  .pre { display: none !important; }
+  html.is-preloading { overflow: auto !important; }
+  [data-rise], .hero__title .word > span { opacity: 1 !important; transform: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .loop__stack { display: none !important; }
+  .loop__fallback { display: inline !important; }
+  .shelf__viewport { height: auto !important; display: block !important; overflow: visible !important; padding-bottom: 0 !important; }
+  .shelf__track { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important; gap: 3rem !important; transform: none !important; }
+  .plate { width: 100% !important; }
+</style></noscript>
+
+<!-- ============================================================
+     STRUCTURED DATA
+     ============================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["MedicalBusiness", "MedicalClinic", "LocalBusiness"],
+      "@id": "https://precisionmedicaliv.com/#practice",
+      "name": "Alpha Vital Elite Precision Medical IV",
+      "alternateName": ["Precision Medical IV by Dr. Aronov", "Alpha Vital Elite"],
+      "url": "https://precisionmedicaliv.com/",
+      "telephone": "+1-929-201-0740",
+      "email": "contact@precisionmedicaliv.com",
+      "priceRange": "$$$",
+      "description": "Physician-directed IV wellness practice in Middle Village, Queens. Every patient is individually reviewed by a board-certified anesthesiologist before any infusion is approved, and every infusion is continuously monitored.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "79-01 Metropolitan Avenue",
+        "addressLocality": "Middle Village",
+        "addressRegion": "NY",
+        "postalCode": "11379",
+        "addressCountry": "US"
+      },
+      "geo": { "@type": "GeoCoordinates", "latitude": 40.7156, "longitude": -73.8779 },
+      "areaServed": [
+        { "@type": "Place", "name": "Queens" },
+        { "@type": "Place", "name": "Brooklyn" },
+        { "@type": "Place", "name": "Long Island" },
+        { "@type": "Place", "name": "New York metropolitan area" }
+      ],
+      "founder": { "@id": "https://precisionmedicaliv.com/#physician" },
+      "employee": { "@id": "https://precisionmedicaliv.com/#physician" },
+      "medicalSpecialty": ["Anesthesiology", "Preventive Medicine"],
+      "availableService": {
+        "@type": "MedicalTherapy",
+        "name": "Physician-directed IV infusion therapy",
+        "description": "Supportive, adjunctive wellness infusions selected after individual physician review of medical history, medications, allergies and health status."
+      }
+    },
+    {
+      "@type": ["Physician", "Person"],
+      "@id": "https://precisionmedicaliv.com/#physician",
+      "name": "Dr. Violeta Aronov",
+      "honorificPrefix": "Dr.",
+      "honorificSuffix": "DO",
+      "jobTitle": "Board-Certified Anesthesiologist, Founder",
+      "worksFor": { "@id": "https://precisionmedicaliv.com/#practice" },
+      "medicalSpecialty": "Anesthesiology",
+      "alumniOf": [
+        { "@type": "CollegeOrUniversity", "name": "NYIT College of Osteopathic Medicine" },
+        { "@type": "CollegeOrUniversity", "name": "SUNY Stony Brook" }
+      ],
+      "knowsAbout": ["IV infusion therapy", "Anesthesiology", "Glutathione", "N-acetylcysteine", "Electrolyte balance", "Antioxidant pathways"]
+    }
+  ]
+}
+</script>
 </head>
+
 <body>
 
 <!-- ==============================================================
-     PRELOADER — one cream panel. The mark, a hairline that draws
-     itself with the load, the count. Then the panel lifts like a
-     curtain onto the film. Three seconds, no theatre.
+     PRELOADER
      ============================================================== -->
 <div class="pre" id="pre" role="status" aria-label="Loading">
   <div class="pre__core">
@@ -95,7 +173,7 @@
   </div>
 </header>
 
-<!-- Mobile menu — a parchment page, not a panel -->
+<!-- Mobile menu -->
 <div class="menu" id="menu" aria-hidden="true">
   <div class="menu__inner">
     <nav class="menu__nav" aria-label="Mobile">
@@ -117,11 +195,10 @@
 <main id="main">
 
 <!-- ==============================================================
-     HERO 
+     HERO
      ============================================================== -->
 <section class="hero" id="hero">
 
-  <!-- film -->
   <div class="hero__media" aria-hidden="true">
     <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata"
            poster="assets/images/hero-poster.jpg">
@@ -131,7 +208,6 @@
     <span class="hero__grain"></span>
   </div>
 
-  <!-- folio line under the header, like a masthead rule -->
   <div class="hero__folio" data-rise style="--i:1">
     <span>Est. Middle Village · Queens, NY</span>
     <span class="hero__folio-mid">A Physician-Directed Practice</span>
@@ -179,10 +255,9 @@
 
   <div class="hero__foot" data-rise style="--i:7">
     <p class="hero__cred">Dr. Violeta Aronov, DO — <em>she performs every infusion herself</em></p>
-    <a class="hero__scroll" href="#practice"><span>Scroll</span><i aria-hidden="true"></i></a>
+    <a class="hero__scroll" href="#infusions"><span>Scroll</span><i aria-hidden="true"></i></a>
   </div>
 
-  <!-- ticker -->
   <div class="hero__wire" aria-label="Credentials">
     <div class="hero__wire-track">
       <span>Board-Certified Anesthesiologist</span><b>&#10022;</b>
@@ -202,9 +277,6 @@
 
 </section>
 
-<!-- =============================================================================
-     SERVICES
-     ============================================================================= -->
 <section class="shelf" id="infusions" aria-labelledby="shelfTitle">
   <span class="shelf__wash" aria-hidden="true"></span>
   <span class="shelf__mesh" aria-hidden="true"></span>
@@ -495,11 +567,33 @@
     <a href="/add-ons/">Infusion enhancements&nbsp;&rarr;</a>
   </p>
 </section>
-     
+
 </main>
 
-<script src="script.js" type="module"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Signature IV Infusions — Precision Medical IV by Dr. Aronov",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"url":"https://precisionmedicaliv.com/drips/immuno-boost/","name":"Immun-O-Boost IV Support"},
+    {"@type":"ListItem","position":2,"url":"https://precisionmedicaliv.com/drips/muscle-support/","name":"LIQUIXO Muscle Recovery IV"},
+    {"@type":"ListItem","position":3,"url":"https://precisionmedicaliv.com/drips/antioxidant-reset/","name":"Antioxidant ×3 Reset IV"},
+    {"@type":"ListItem","position":4,"url":"https://precisionmedicaliv.com/drips/glynac-longevity/","name":"GLyNAC Longevity Restoration IV"},
+    {"@type":"ListItem","position":5,"url":"https://precisionmedicaliv.com/drips/mental-recovery-brain-wellness/","name":"Stress, Mental Burnout & Brain Wellness IV"},
+    {"@type":"ListItem","position":6,"url":"https://precisionmedicaliv.com/drips/curcumin/","name":"Curcumin IV Infusion"},
+    {"@type":"ListItem","position":7,"url":"https://precisionmedicaliv.com/drips/glutathione/","name":"Glutathione IV Injection"},
+    {"@type":"ListItem","position":8,"url":"https://precisionmedicaliv.com/drips/quercetin/","name":"Quercetin Seasonal Allergy Support IV"},
+    {"@type":"ListItem","position":9,"url":"https://precisionmedicaliv.com/drips/revive/","name":"Revive IV Support"},
+    {"@type":"ListItem","position":10,"url":"https://precisionmedicaliv.com/drips/customized-drip/","name":"Customized Drip"}
+  ]
+}
+</script>
+
+<!-- GSAP must be on window before the deferred module runs -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script src="script.js" type="module"></script>
 </body>
 </html>
