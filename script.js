@@ -354,10 +354,9 @@ class Magnetic {
 
 /* =============================================================================
    THE SHELF — the services rail (#infusions)
-   Pinned horizontally on desktop and dragged by the scrollbar; stacked on
-   phones. As each plate reaches the centre, the section takes that compound's
-   colour — the value goes into --tone, which is registered with @property in
-   styles.css so the browser interpolates it instead of snapping.
+   Framed plates hung on a cream wood panel. Pinned horizontally on desktop and
+   dragged by the scrollbar; stacked on phones. The counter and meter track
+   whichever plate is centred.
 
    Found by CLASS, not id: the section keeps id="infusions" so the header nav
    and the hero's "View infusions" button still land on it.
@@ -407,7 +406,9 @@ class Shelf {
         return $$('.plate', this.track).filter((p) => !p.classList.contains('is-out'));
     }
 
-    /** Take the colour of the plate at `index` and hand it to the whole scene. */
+    /** Move the counter and the meter to the plate at `index`.
+        The panel itself stays cream — each formula's compound colour lives
+        only in the spectrum strip under its own photograph. */
     paint(index) {
         const list = this.live();
         if (!list.length) return;
@@ -415,8 +416,6 @@ class Shelf {
         const i = clamp(index, 0, list.length - 1);
         if (i === this.last) return;
         this.last = i;
-
-        this.scene.style.setProperty('--tone', list[i].dataset.tone || 'var(--gold)');
 
         if (this.now)   this.now.textContent = String(i + 1).padStart(2, '0');
         if (this.meter) this.meter.style.width = ((i + 1) / list.length) * 100 + '%';
@@ -596,5 +595,36 @@ if (document.readyState === 'loading') {
     boot();
 }
 
+/* -----------------------------------------------------------------------------
+   CONSOLE HELPERS
+   Try wood textures live, no reload:
+
+     PMIV.wood('https://images.unsplash.com/photo-XXXX?auto=format&w=2400')
+     PMIV.wood()                     // back to the stylesheet default
+     PMIV.woodShow(0.55)             // 0 = flat cream, 1 = full strength photo
+     PMIV.plank('140px')             // width of one plank
+
+   When you settle on one, copy the values into --wood-img / --wood-show /
+   --plank at the top of section 06 in styles.css.
+----------------------------------------------------------------------------- */
+const shelfEl = () => $('.shelf');
+
+const wood = (url) => {
+    const el = shelfEl(); if (!el) return 'no .shelf on this page';
+    if (!url) { el.style.removeProperty('--wood-img'); return 'reset to the stylesheet default'; }
+    el.style.setProperty('--wood-img', `url('${url}')`);
+    return url;
+};
+const woodShow = (v) => {
+    const el = shelfEl(); if (!el) return;
+    el.style.setProperty('--wood-show', String(v));
+    return v;
+};
+const plank = (w) => {
+    const el = shelfEl(); if (!el) return;
+    el.style.setProperty('--plank', w);
+    return w;
+};
+
 // handy in the console while the rest of the pages get built
-window.PMIV = { modules, boot, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
+window.PMIV = { modules, boot, wood, woodShow, plank, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
