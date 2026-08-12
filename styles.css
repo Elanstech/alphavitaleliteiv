@@ -668,6 +668,11 @@ body.is-ready .hero__title .word .loop {
 }
 
 
+/* =============================================================================
+   06 · THE SHELF  (#infusions)
+   Framed plates hung on a wood panel.
+     PRIMARY    cream · SECONDARY forest green · ACCENT gold
+
    NOTE: your --accent token is the Cormorant *font*, so the compound colour is
    called --tone here. Nothing below overwrites your existing tokens.
 ============================================================================= */
