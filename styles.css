@@ -123,13 +123,14 @@ ul { list-style: none; }
 }
 .btn > span { position: relative; z-index: 2; }
 .btn svg { position: relative; z-index: 2; width: 17px; height: 17px; transition: transform .45s var(--ease); }
+.btn i { position: relative; z-index: 2; font-size: 1.15em; transition: transform .45s var(--ease); }
 .btn::before {
     content: ''; position: absolute; inset: 0; z-index: 1;
     transform: translateY(101%);
     transition: transform .55s var(--ease);
 }
 .btn:hover::before { transform: translateY(0); }
-.btn:hover svg { transform: translateX(4px); }
+.btn:hover svg, .btn:hover i { transform: translateX(4px); }
 .btn--lg { padding: 1.25rem 2.4rem; font-size: 0.76rem; }
 
 .btn--gold { background: var(--gold); color: var(--forest-deep); border-color: var(--gold); }
@@ -703,16 +704,12 @@ body.is-ready .hero__title .word .loop {
 }
 
 /* ---------- the ground ----------
-   Continuous-line artwork, drawn inline so there is no file to go missing.
-   Deliberately faint: the bags are the subject, this is the wall behind them. */
+   Plain cream with a little light pooling. No pattern: the bags are the
+   artwork, and anything behind them competed with the labels. */
 .shelf__wash {
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    opacity: 0.4;
-    background-repeat: repeat;
-    background-size: clamp(560px, 52vw, 880px) auto;
-    background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='880'%20height='760'%20viewBox='0%200%20880%20760'%3E%3Cpath%20d='M96%20604c-58-96-46-212%2034-286%2074-68%20190-72%20262-8%2044%2039%2062%20100%2046%20156-14%2050-58%2088-110%2096-46%207-96-14-118-56-20-38-12-90%2022-118%2030-25%2076-26%20106-2%2026%2021%2034%2060%2018%2090-14%2026-48%2038-74%2024'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3Cpath%20d='M470%20128c62%2022%20108%2078%20120%20142%2012%2066-14%20136-66%20178-46%2038-110%2050-166%2032'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3Cpath%20d='M636%20690c40-52%2044-128%2010-184-30-50-92-76-148-62'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3Cpath%20d='M212%2096c34-40%2092-54%20140-34%2044%2018%2074%2062%2074%20110'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3Cpath%20d='M746%20302c-44%206-82%2040-94%2082-12%2044%206%2094%2044%20120'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3Ccircle%20cx='566'%20cy='452'%20r='46'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3Ccircle%20cx='170'%20cy='236'%20r='22'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3Cpath%20d='M28%20402c48-16%20102-8%20142%2022'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3Cpath%20d='M804%20596c-30%2034-78%2048-122%2036'%20fill='none'%20stroke='%23B98F3C'%20stroke-width='1.8'%20stroke-linecap='round'/%3E%3C/svg%3E");
+    background: radial-gradient(140% 90% at 50% -10%, #FBF8F1, transparent 60%);
 }
-/* light pooling, so the field is not a flat block of cream */
 .shelf__mesh {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
@@ -811,7 +808,7 @@ body.is-ready .hero__title .word .loop {
     position: relative; flex: 0 0 auto;
     width: clamp(380px, 44vw, 700px);
     display: grid;
-    grid-template-columns: minmax(120px, .46fr) minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
     gap: clamp(1.25rem, 2.5vw, 2.25rem);
     align-items: center;
 }
@@ -820,7 +817,10 @@ body.is-ready .hero__title .word .loop {
 .plate__bag { position: relative; display: block; text-align: center; }
 .plate__bag img {
     position: relative; z-index: 2;
-    height: var(--bag-h); width: auto; margin: 0 auto;
+    height: var(--bag-h);
+    width: auto;
+    max-width: none;        /* the reset clamps to 100% and squashes the bag */
+    margin: 0 auto;
     transition: transform .8s var(--ease), filter .8s var(--ease);
     will-change: transform;
     filter: drop-shadow(0 26px 34px rgba(32,52,33,.22));
