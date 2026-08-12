@@ -947,6 +947,8 @@ body.is-ready .hero__title .word .loop {
 .shelf__meter i { position: absolute; inset: 0 auto 0 0; width: 0%; background: linear-gradient(90deg, transparent, var(--gold)); transition: width .4s var(--ease); }
 .shelf__hint { display: inline-flex; align-items: center; gap: .6rem; font-family: var(--micro); font-size: .6rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--mist); white-space: nowrap; }
 .shelf__hint i { font-size: 1.3em; color: var(--gold-deep); animation: shelf-nudge 2.4s ease-in-out infinite; }
+.shelf__hint b { font-weight: inherit; }
+.shelf__hint-sm { display: none; }
 @keyframes shelf-nudge {
     0%, 100% { transform: translateX(0); opacity: .5; }
     50%      { transform: translateX(7px); opacity: 1; }
@@ -966,31 +968,74 @@ body.is-ready .hero__title .word .loop {
     .plate__note { height: 3em; }
 }
 
-/* ---------- shelf · mobile ---------- */
+/* ---------- shelf · mobile ----------
+   The shelf stays horizontal, but the mechanism changes. A pinned GSAP scrub
+   fights the touch scroller, so on phones the track becomes a real horizontal
+   scroller with snap points — swipe left and right, the way a phone expects.
+   The rail furniture sits below it as a normal block. */
 @media (max-width: 1024px) { .shelf__deck { grid-template-columns: 1fr; gap: 1.75rem; } }
+
 @media (max-width: 900px) {
-    .shelf__viewport { height: auto; display: block; overflow: visible; padding-bottom: 0; }
-    .shelf__track {
-        display: grid; grid-template-columns: 1fr;
-        gap: clamp(2.5rem,7vw,4rem); transform: none !important;
-        padding: 0 var(--gut) clamp(2.5rem,6vw,4rem);
+    .shelf__viewport {
+        height: auto; display: block; overflow: visible; padding-bottom: 0;
     }
-    .plate { width: 100%; --bag-h: 300px; }
-    .plate__name, .plate__note, .plate__ing { height: auto; }
-    .plate__foot { height: auto; }
-    .shelf__rail { position: static; padding: 0 var(--gut) 2rem; }
-    .shelf__hint { display: none; }
+    /* the TRACK is the scroller now, not the viewport — that keeps the rail
+       below at page width instead of stretching to the full run of plates */
+    .shelf__track {
+        display: flex; align-items: stretch;
+        transform: none !important;
+        gap: clamp(1rem, 3vw, 1.75rem);
+        padding: .5rem var(--gut) 1.75rem;
+        overflow-x: auto; overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: var(--gut);
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+    }
+    .shelf__track::-webkit-scrollbar { display: none; }
+
+    .plate {
+        width: min(78vw, 360px);
+        --bag-h: 250px;
+        grid-template-columns: 1fr;
+        gap: .75rem;
+        align-items: start;
+        scroll-snap-align: center;
+    }
+    /* let the copy run its natural length, then push every price line to the
+       bottom of an equal-height card — no truncation, no air gap */
+    .plate { align-self: stretch; }
+    .plate__body { display: flex; flex-direction: column; }
+    .plate__name { font-size: 1.3rem; height: auto; }
+    .plate__note { height: auto; margin-bottom: 1rem; }
+    .plate__ing  { height: auto; }
+    .plate__no   { display: none; }        /* collided with the title at this width */
+    .plate__foot {
+        height: auto; min-height: 0; margin-top: auto;
+        flex-direction: column; align-items: flex-start; gap: .7rem;
+    }
+    .plate__bag img { transition: none; }
+    .plate__pole { top: -10%; height: 12%; }
+
+    .shelf__rail {
+        position: static; width: auto;
+        padding: 0 var(--gut) 1.5rem;
+    }
+    .shelf__hint { display: inline-flex; }
+    .shelf__hint-lg { display: none; }
+    .shelf__hint-sm { display: inline; }
+    .shelf__hint i { animation: shelf-nudge 2.4s ease-in-out infinite; }
 }
+
 @media (max-width: 560px) {
-    .plate { grid-template-columns: 1fr; gap: 1.25rem; justify-items: center; }
-    .plate__body { width: 100%; }
-    .plate__bag { width: 100%; }
     .shelf__stats { grid-template-columns: 1fr; }
     .shelf__stat { display: flex; align-items: baseline; gap: .9rem; }
     .shelf__stat b { margin-bottom: 0; font-size: 1.5rem; }
     .shelf__rubric { flex-wrap: wrap; row-gap: .6rem; }
     .shelf__rubric-rule { flex-basis: 100%; order: 3; }
     .shelf__ig { order: 4; }
+    .shelf__hint { font-size: .55rem; letter-spacing: .16em; }
 }
 
 /* ---------- shelf · reduced motion ---------- */
