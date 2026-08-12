@@ -551,8 +551,11 @@
   </p>
 </section>
 
+
 <!-- ==============================================================
-     ABOUT
+     THE PHYSICIAN (#physician)
+     A sticky portrait while the story beats pop past it, then her
+     chain of custody — her own quote, broken into six steps.
      ============================================================== -->
 <section class="doc" id="physician" aria-labelledby="docTitle">
   <div class="doc__wrap">
@@ -697,8 +700,118 @@
     </p>
   </div>
 </section>
-     
-</main>     
+
+
+<!-- ==============================================================
+     THE ROUTE (#advantage)
+     Two lanes raced side by side. The oral lane stops at four gates;
+     the IV lane runs unbroken. Built from type and rules, not an
+     image — so it reads on a phone, scales, and Google can read it.
+     ============================================================== -->
+<section class="route" id="advantage" aria-labelledby="routeTitle">
+  <span class="route__glow" aria-hidden="true"></span>
+
+  <div class="route__head">
+    <p class="route__eyebrow"><i class="ph-duotone ph-path" aria-hidden="true"></i> The IV Advantage</p>
+    <h2 class="route__title" id="routeTitle" data-reveal>
+      Same destination.<br><em>Very different roads.</em>
+    </h2>
+    <p class="route__lede" data-reveal>
+      A vitamin only works once it reaches your bloodstream. Swallow it and it has to
+      survive the trip. Put it in a vein and it is simply already there. That is the whole
+      difference — and it is why some things are worth giving by line.
+    </p>
+  </div>
+
+  <div class="route__lanes">
+
+    <!-- ---------- by mouth ---------- -->
+    <article class="lane lane--oral" data-reveal>
+      <header class="lane__head">
+        <span class="lane__badge"><i class="ph ph-pill" aria-hidden="true"></i></span>
+        <div>
+          <h3 class="lane__name">By mouth</h3>
+          <p class="lane__sub">Four stops before it counts</p>
+        </div>
+        <span class="lane__count"><b>4</b><i>stops</i></span>
+      </header>
+
+      <ol class="lane__track">
+        <span class="lane__line" aria-hidden="true"><i class="lane__fill"></i></span>
+
+        <li class="stop">
+          <span class="stop__pin" aria-hidden="true">1</span>
+          <h4 class="stop__name">Your stomach</h4>
+          <p class="stop__what">Acid and enzymes start breaking the tablet apart. Some of what you swallowed does not survive this room.</p>
+        </li>
+        <li class="stop">
+          <span class="stop__pin" aria-hidden="true">2</span>
+          <h4 class="stop__name">Your gut wall</h4>
+          <p class="stop__what">Whatever is left has to cross into the blood. How much crosses depends on the nutrient, your gut, and what else you ate.</p>
+        </li>
+        <li class="stop">
+          <span class="stop__pin" aria-hidden="true">3</span>
+          <h4 class="stop__name">Your liver</h4>
+          <p class="stop__what">Everything absorbed from the gut is routed through the liver first, and the liver takes its cut before passing the rest on.</p>
+        </li>
+        <li class="stop">
+          <span class="stop__pin" aria-hidden="true">4</span>
+          <h4 class="stop__name">Your bloodstream</h4>
+          <p class="stop__what">What finally arrives is some fraction of the dose on the label — and it gets there over hours, not minutes.</p>
+        </li>
+      </ol>
+
+      <footer class="lane__foot">
+        <p><b>The catch:</b> you never quite know how much made it. So the label dose is a guess dressed up as a number.</p>
+      </footer>
+    </article>
+
+    <!-- ---------- by line ---------- -->
+    <article class="lane lane--iv" data-reveal>
+      <header class="lane__head">
+        <span class="lane__badge"><i class="ph ph-drop" aria-hidden="true"></i></span>
+        <div>
+          <h3 class="lane__name">By line</h3>
+          <p class="lane__sub">Straight in, no stops</p>
+        </div>
+        <span class="lane__count"><b>0</b><i>stops</i></span>
+      </header>
+
+      <ol class="lane__track">
+        <span class="lane__line" aria-hidden="true"><i class="lane__fill"></i></span>
+
+        <li class="stop">
+          <span class="stop__pin" aria-hidden="true"><i class="ph-fill ph-arrow-down" aria-hidden="true"></i></span>
+          <h4 class="stop__name">Into the vein</h4>
+          <p class="stop__what">The infusion goes directly into circulation. There is no stomach to survive and no gut wall to cross.</p>
+        </li>
+        <li class="stop">
+          <span class="stop__pin" aria-hidden="true"><i class="ph-fill ph-check" aria-hidden="true"></i></span>
+          <h4 class="stop__name">Your bloodstream</h4>
+          <p class="stop__what">The full dose is in circulation within minutes, and Dr.&nbsp;Aronov controls how fast it goes in the entire time.</p>
+        </li>
+      </ol>
+
+      <footer class="lane__foot">
+        <p><b>The point:</b> she knows exactly what went in, because she calculated it, mixed it and watched it go.</p>
+      </footer>
+    </article>
+  </div>
+
+  <!-- the honest caveat, which is the brand -->
+  <aside class="route__note" data-reveal>
+    <i class="ph-duotone ph-stethoscope" aria-hidden="true"></i>
+    <p>
+      This is not an argument against swallowing your vitamins. For most people, most of the
+      time, by mouth is exactly right — it is cheaper, easier, and it works. The line matters
+      when absorption is unreliable, when the dose has to be certain, or when someone is too
+      depleted to wait. <b>Which of those applies to you is a question for the screening, not for a
+      website.</b>
+    </p>
+  </aside>
+</section>
+
+</main>
 
 <!-- GSAP must be on window before the deferred module runs -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
