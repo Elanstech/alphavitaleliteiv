@@ -470,18 +470,46 @@ class Shelf {
             return () => { this.drag = null; };
         });
 
-        /* -- phone: stacked, each plate paints the scene as it passes -- */
+        /* -- phone: a real horizontal scroller with snap points --
+           No pin, no scrub. The track scrolls natively under the thumb and the
+           counter reads off its scrollLeft, which is what a phone expects and
+           what survives an address bar resizing mid-gesture. -- */
         mm.add(`(max-width: ${this.BREAK}px)`, () => {
-            $$('.plate', this.track).forEach((plate, i) => {
-                gsap.from(plate, {
-                    y: 48, opacity: 0, duration: 0.9, ease: 'expo.out',
-                    scrollTrigger: { trigger: plate, start: 'top 86%', once: true },
+            const track = this.track;
+
+            const sync = () => {
+                const list = this.live();
+                if (!list.length) return;
+                const mid = track.scrollLeft + track.clientWidth / 2;
+                let best = 0, bestD = Infinity;
+                list.forEach((p, i) => {
+                    const c = p.offsetLeft + p.offsetWidth / 2;
+                    const d = Math.abs(c - mid);
+                    if (d < bestD) { bestD = d; best = i; }
                 });
-                ScrollTrigger.create({
-                    trigger: plate, start: 'top 55%', end: 'bottom 45%',
-                    onToggle: (self) => { if (self.isActive) this.paint(i); },
-                });
+                this.paint(best);
+            };
+
+            let ticking = false;
+            const onScroll = () => {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(() => { sync(); ticking = false; });
+            };
+            track.addEventListener('scroll', onScroll, { passive: true });
+            sync();
+
+            /* the plates fade up once, as the shelf comes into view */
+            const intro = gsap.from($$('.plate', track), {
+                y: 34, opacity: 0, duration: .8, ease: 'expo.out', stagger: .05,
+                scrollTrigger: { trigger: this.pin, start: 'top 82%', once: true },
             });
+
+            return () => {
+                track.removeEventListener('scroll', onScroll);
+                intro.scrollTrigger?.kill();
+                intro.kill();
+            };
         });
 
         /* fonts land after first paint and change every measurement */
