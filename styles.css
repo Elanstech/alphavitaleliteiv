@@ -16,6 +16,7 @@
      09 · THE PRACTICE, LIVE   Instagram feed
      10 · THE DOCK           back to top · actions · quiz modal
      12 · CHRONIC CONDITIONS   living with a condition (#conditions)
+     13 · FOOTER
      11 · MOTION & FOCUS
 ============================================================================= */
 
@@ -2059,6 +2060,172 @@ body.is-ready .hero__title .word .loop {
 @media (prefers-reduced-motion: reduce) {
     .cond::before { transform: scaleY(1) !important; }
     .cond.is-live { opacity: 1 !important; }
+}
+
+
+/* =============================================================================
+   13 · FOOTER
+   Deep forest, gold hairlines, and the wordmark set enormous along the bottom
+   edge as an outline — it reads as an engraved plate rather than a sitemap.
+   The build credit sits on the right of the closing bar.
+============================================================================= */
+.foot {
+    --data:  'Archivo', 'Instrument Sans', sans-serif;
+    --micro: 'Syne', 'Instrument Sans', sans-serif;
+    position: relative;
+    background: var(--forest-deep);
+    color: var(--cream);
+    padding: clamp(4rem, 9vw, 7rem) var(--gut) 0;
+    overflow: hidden;
+}
+.foot__glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+        radial-gradient(60% 50% at 82% 0%,  rgba(193,150,63,.22), transparent 62%),
+        radial-gradient(50% 45% at 4% 100%, rgba(143,190,155,.10), transparent 60%);
+}
+.foot__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
+
+/* ---------- closing call ---------- */
+.foot__call {
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--rule-light);
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.foot__eyebrow {
+    display: inline-flex; align-items: center; gap: .7rem;
+    font-family: var(--caps); font-size: .72rem; letter-spacing: .3em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem;
+}
+.foot__eyebrow i { font-size: 1.3em; }
+.foot__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2rem, 5.4vw, 4.2rem);
+    line-height: 1.04; letter-spacing: -.022em; color: var(--cream);
+    margin-bottom: 1.25rem;
+}
+.foot__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-lite); }
+.foot__lede { font-size: clamp(.98rem, 1.15vw, 1.1rem); line-height: 1.75; color: var(--cream-dim); max-width: 52ch; margin-bottom: 1.75rem; }
+.foot__acts { display: flex; flex-wrap: wrap; gap: .7rem; }
+.foot .rx__btn { border-color: var(--gold); color: var(--gold-lite); }
+.foot .rx__btn--solid { background: var(--gold); color: var(--forest-deep); border-color: var(--gold); }
+.foot .rx__btn:hover { background: var(--cream); border-color: var(--cream); color: var(--forest-deep); }
+
+/* ---------- the plate ---------- */
+.foot__grid {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: clamp(1.75rem, 4vw, 3.5rem);
+    padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
+}
+.foot__h {
+    font-family: var(--micro); font-size: .58rem; font-weight: 700;
+    letter-spacing: .24em; text-transform: uppercase; color: var(--gold);
+    padding-bottom: .8rem; margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--rule-light);
+}
+.foot__addr {
+    font-style: normal; font-family: var(--accent);
+    font-size: 1.12rem; line-height: 1.7; color: var(--cream); margin-bottom: 1.1rem;
+}
+.foot__line {
+    display: flex; align-items: center; gap: .6rem;
+    font-family: var(--data); font-size: .88rem; color: var(--cream-dim);
+    padding: .3rem 0; transition: color .35s var(--ease), gap .35s var(--ease);
+}
+.foot__line i { color: var(--gold); font-size: 1.15em; }
+.foot__line:hover { color: var(--gold-lite); gap: .85rem; }
+.foot__served {
+    margin-top: 1.1rem; font-family: var(--micro); font-size: .58rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist); line-height: 1.9;
+}
+
+.foot__list { list-style: none; display: grid; gap: .1rem; }
+.foot__list a {
+    display: block; padding: .34rem 0;
+    font-size: .92rem; color: var(--cream-dim);
+    transition: color .35s var(--ease), padding-left .35s var(--ease);
+}
+.foot__list a:hover { color: var(--gold-lite); padding-left: .35rem; }
+
+/* ---------- legal ---------- */
+.foot__legal {
+    display: grid; grid-template-columns: minmax(0,1fr) auto;
+    gap: clamp(1.25rem, 3vw, 3rem); align-items: start;
+    padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+    border-top: 1px solid var(--rule-light);
+}
+.foot__legal p { font-size: .78rem; line-height: 1.75; color: rgba(246,241,231,.45); max-width: 78ch; }
+.foot__mini { list-style: none; display: flex; flex-wrap: wrap; gap: .35rem 1.25rem; }
+.foot__mini a {
+    font-family: var(--micro); font-size: .58rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+    white-space: nowrap; transition: color .35s var(--ease);
+}
+.foot__mini a:hover { color: var(--gold-lite); }
+
+/* ---------- the oversized wordmark ---------- */
+.foot__mark {
+    font-family: var(--display); font-weight: 400;
+    /* sized so the full wordmark fits the measure — any larger and it clips
+       mid-letter at the right edge */
+    font-size: clamp(1.7rem, 9vw, 9.5rem);
+    line-height: .9; letter-spacing: -.03em;
+    text-align: center; white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(193, 150, 63, .22);
+    margin: clamp(1rem, 3vw, 2.25rem) 0 .35rem;
+    pointer-events: none; user-select: none;
+}
+
+/* ---------- bar ---------- */
+.foot__bar {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    padding: 1.25rem 0 1.5rem;
+    border-top: 1px solid var(--rule-light);
+}
+.foot__copy {
+    font-family: var(--micro); font-size: .6rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+}
+
+/* the build credit */
+.credit {
+    display: inline-flex; align-items: center; gap: .8rem;
+    padding: .5rem .9rem .5rem 1.1rem;
+    border: 1px solid var(--rule-light); border-radius: 999px;
+    background: rgba(246, 241, 231, .04);
+    transition: border-color .4s var(--ease), background .4s var(--ease), transform .4s var(--ease);
+}
+.credit__by {
+    font-family: var(--micro); font-size: .55rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+    white-space: nowrap; transition: color .4s var(--ease);
+}
+.credit__logo {
+    width: auto; height: 30px;
+    filter: grayscale(1) brightness(1.35) opacity(.75);
+    transition: filter .45s var(--ease), transform .45s var(--ease);
+}
+.credit:hover { border-color: var(--rule-gold); background: rgba(193,150,63,.09); transform: translateY(-2px); }
+.credit:hover .credit__by { color: var(--gold-lite); }
+.credit:hover .credit__logo { filter: none; transform: scale(1.04); }
+
+/* ---------- footer · mobile ---------- */
+@media (max-width: 1080px) {
+    .foot__grid { grid-template-columns: 1fr 1fr; }
+    .foot__col--wide { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+    .foot__legal { grid-template-columns: 1fr; }
+    .foot__bar { flex-direction: column-reverse; align-items: flex-start; gap: 1.25rem; }
+    .foot__acts .rx__btn { width: 100%; justify-content: center; }
+}
+@media (max-width: 560px) {
+    .foot__grid { grid-template-columns: 1fr; gap: 1.75rem; }
+    /* the dock sits bottom-left and bottom-right — keep the wordmark clear of it */
+    .foot__mark { margin-bottom: 3.5rem; }
+    .foot__bar { padding-bottom: 4.5rem; }
 }
 
 /* =============================================================================
