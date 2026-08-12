@@ -277,95 +277,10 @@
 
 </section>
 
-<section class="shelf shelf--line" id="infusions" aria-labelledby="shelfTitle">
-  <!-- ================= BACKGROUND ARTWORK =================
-       Inline SVG, so there is no file to go missing. Two sets:
-       .shelf--line  continuous-line forms   (default)
-       .shelf--mol   skeletal molecules
-       Switch by changing the class on <section class="shelf ...">
-       ====================================================== -->
-  <div class="shelf__art" aria-hidden="true">
-
-    <!-- ---------- continuous-line forms ---------- -->
-    <svg class="art art--line" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
-      <g class="art__ink">
-        <!-- profile, drawn as one unbroken contour -->
-        <path class="art__f1" d="M300 780 C258 690 246 600 268 512 C288 430 336 362 402 318
-                 C438 294 452 262 440 226 C430 196 444 168 474 158 C506 148 538 166 546 198
-                 C556 236 590 250 620 236 C660 218 700 236 712 276 C724 316 700 356 660 366
-                 C628 374 612 400 620 430 C630 468 612 502 578 516 C548 528 536 556 546 586
-                 C558 622 540 660 504 672 C470 684 456 712 466 744"/>
-        <!-- the eye -->
-        <path class="art__f1" d="M486 236 C500 222 524 224 534 240"/>
-        <!-- open vessel / drop, right -->
-        <path class="art__f2" d="M1180 200 C1268 258 1320 348 1318 452 C1316 566 1240 656 1136 678
-                 C1040 698 950 652 916 566 C884 486 916 396 986 350 C1044 312 1120 326 1152 380
-                 C1180 428 1160 490 1110 508"/>
-        <!-- a long single stroke tying the two together -->
-        <path class="art__f3" d="M120 620 C360 560 520 700 760 660 C980 624 1080 760 1400 700"/>
-        <path class="art__f3" d="M180 300 C420 210 600 360 900 268"/>
-      </g>
-      <g class="art__flat">
-        <circle cx="1290" cy="250" r="120"/>
-        <path d="M240 880 A200 200 0 0 1 640 880 Z"/>
-        <rect x="820" y="60" width="150" height="150" transform="rotate(14 895 135)"/>
-      </g>
-      <g class="art__marks">
-        <path d="M760 150 v44 M738 172 h44"/>
-        <path d="M1420 560 v34 M1403 577 h34"/>
-        <path d="M420 120 v30 M405 135 h30"/>
-        <circle cx="1050" cy="820" r="9"/>
-        <circle cx="150" cy="470" r="7"/>
-        <circle cx="1500" cy="380" r="7"/>
-      </g>
-    </svg>
-
-    <!-- ---------- skeletal molecules ---------- -->
-    <svg class="art art--mol" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
-      <g class="art__ink">
-        <!-- curcumin: two phenol rings bridged by a long conjugated chain -->
-        <g transform="translate(120 330) scale(1.5)">
-          <path d="M0 40 L35 20 L70 40 L70 80 L35 100 L0 80 Z"/>
-          <path d="M6 46 L35 29 L64 46 M64 74 L35 91"/>
-          <path d="M70 40 L105 20 L140 40 L175 20 L210 40 L245 20 L280 40"/>
-          <path d="M105 20 L105 -14 M210 40 L210 6"/>
-          <path d="M280 40 L315 20 L350 40 L350 80 L315 100 L280 80 Z"/>
-          <path d="M286 46 L315 29 L344 46"/>
-          <path d="M0 40 L-34 20 M350 40 L384 20"/>
-        </g>
-        <!-- quercetin: fused ring system -->
-        <g transform="translate(1010 470) scale(1.45)">
-          <path d="M0 0 L34 -20 L68 0 L68 40 L34 60 L0 40 Z"/>
-          <path d="M6 4 L34 -12 L62 4 M62 36 L34 52"/>
-          <path d="M68 0 L102 -20 L136 0 L136 40 L102 60 L68 40"/>
-          <path d="M136 0 L170 -20 L204 0 L204 40 L170 60 L136 40 Z"/>
-          <path d="M142 4 L170 -12 L198 4"/>
-          <path d="M0 0 L-30 -18 M0 40 L-30 58 M102 60 L102 94 M204 0 L234 -18"/>
-        </g>
-        <!-- glutathione: tripeptide backbone -->
-        <g transform="translate(360 700) scale(1.3)">
-          <path d="M0 0 L40 24 L80 0 L120 24 L160 0 L200 24 L240 0 L280 24 L320 0"/>
-          <path d="M40 24 L40 66 M120 24 L120 66 M200 24 L200 66 M280 24 L280 66"/>
-          <path d="M80 0 L80 -40 M160 0 L160 -40 M240 0 L240 -40"/>
-          <path d="M320 0 L360 24"/>
-        </g>
-        <!-- a lone ring, top right -->
-        <g transform="translate(1240 120) scale(1.2)">
-          <path d="M0 0 L36 -21 L72 0 L72 42 L36 63 L0 42 Z"/>
-          <path d="M7 5 L36 -12 L65 5 M65 37 L36 54"/>
-        </g>
-      </g>
-      <g class="art__flat">
-        <circle cx="1330" cy="700" r="130"/>
-        <circle cx="210" cy="140" r="86"/>
-      </g>
-      <g class="art__marks">
-        <circle cx="880" cy="180" r="8"/>
-        <circle cx="700" cy="820" r="8"/>
-        <circle cx="1480" cy="430" r="6"/>
-      </g>
-    </svg>
-  </div>
+<section class="shelf" id="infusions" aria-labelledby="shelfTitle">
+  <span class="shelf__wash" aria-hidden="true"></span>
+  <span class="shelf__mesh" aria-hidden="true"></span>
+  
 
   <span class="shelf__veil" aria-hidden="true"></span>
 
