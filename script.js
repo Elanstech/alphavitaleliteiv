@@ -1155,6 +1155,10 @@ const boot = () => {
 
     if ('ontouchstart' in window) document.documentElement.classList.add('is-touch');
 
+    /* the footer year should never go stale */
+    const yr = $('#footYear');
+    if (yr) yr.textContent = new Date().getFullYear();
+
     /* Fonts and the bag images land AFTER first paint and change the height of
        the document. Any trigger measured before that is measured against a
        shorter page — which is exactly why sections further down stop firing,
