@@ -53,6 +53,26 @@ const debounce = (fn, ms = 150) => {
 
 const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
+/** Pop something into place the first time it is seen.
+ *  gsap.from() rewrites its START values every time ScrollTrigger refreshes,
+ *  which strands elements at opacity 0 — that is what broke the lanes. Setting
+ *  the start state once and tweening TO the end state is immune to that, and a
+ *  trigger-owned `to` tween still fires if the page is jumped past the section
+ *  rather than scrolled to it. */
+const popIn = (targets, opts = {}, trigger, start = 'top 86%') => {
+    const { y = 32, scale = 1, stagger = 0, ease = 'back.out(1.7)', duration = 0.6 } = opts;
+    const els = Array.isArray(targets) ? targets : [targets];
+    if (!els.length || typeof window.gsap === 'undefined') return;
+    if (REDUCED) { gsap.set(els, { opacity: 1, y: 0, scale: 1 }); return; }
+
+    gsap.set(els, { opacity: 0, y, scale });
+    gsap.to(els, {
+        opacity: 1, y: 0, scale: 1, duration, ease, stagger,
+        scrollTrigger: { trigger: trigger || els[0], start, once: true },
+    });
+};
+
+
 
 /* =============================================================================
    PRELOADER
@@ -463,10 +483,7 @@ class Shelf {
                 if (no)   gsap.fromTo(no, { x: 30, opacity: 0.25 }, { x: -30, opacity: 0.85, ease: 'none', scrollTrigger: link });
             });
 
-            gsap.from($$('.plate', this.track), {
-                y: 60, opacity: 0, duration: 1, ease: 'expo.out', stagger: 0.06,
-                scrollTrigger: { trigger: this.pin, start: 'top 70%', once: true },
-            });
+            popIn($$('.plate', this.track), { y: 60, stagger: .06, duration: 1, ease: 'expo.out' }, this.pin, 'top 70%');
 
             this.drag = drag;
             return () => { this.drag = null; };
@@ -502,16 +519,9 @@ class Shelf {
             sync();
 
             /* the plates fade up once, as the shelf comes into view */
-            const intro = gsap.from($$('.plate', track), {
-                y: 34, opacity: 0, duration: .8, ease: 'expo.out', stagger: .05,
-                scrollTrigger: { trigger: this.pin, start: 'top 82%', once: true },
-            });
+            popIn($$('.plate', track), { y: 34, stagger: .05, duration: .8, ease: 'expo.out' }, this.pin, 'top 82%');
 
-            return () => {
-                track.removeEventListener('scroll', onScroll);
-                intro.scrollTrigger?.kill();
-                intro.kill();
-            };
+            return () => { track.removeEventListener('scroll', onScroll); };
         });
 
         /* fonts land after first paint and change every measurement */
@@ -667,16 +677,8 @@ class Route {
             if (!fill || !stops.length) return;
 
             // the lane card arrives with the same pop as the physician beats
-            if (!REDUCED) {
-                gsap.from(lane, {
-                    y: 40, opacity: 0, scale: .975, duration: .6, ease: 'back.out(1.7)',
-                    scrollTrigger: { trigger: lane, start: 'top 86%', once: true },
-                });
-                gsap.from($$('.stop', lane), {
-                    y: 20, opacity: 0, duration: .45, ease: 'back.out(1.5)', stagger: .07,
-                    scrollTrigger: { trigger: lane, start: 'top 80%', once: true },
-                });
-            }
+            popIn(lane, { y: 40, scale: .975 }, lane, 'top 86%');
+            popIn($$('.stop', lane), { y: 20, stagger: .07, duration: .45, ease: 'back.out(1.5)' }, lane, 'top 80%');
 
             ScrollTrigger.create({
                 trigger: lane,
@@ -708,10 +710,8 @@ class Social {
     init() {
         if (!this.el || typeof window.gsap === 'undefined' || REDUCED) return;
         gsap.registerPlugin(ScrollTrigger);
-        gsap.from($$('.social__head > *, .social__cta', this.el), {
-            y: 28, opacity: 0, duration: .6, ease: 'back.out(1.6)', stagger: .08,
-            scrollTrigger: { trigger: this.el, start: 'top 84%', once: true },
-        });
+        popIn($$('.social__head > *, .social__cta', this.el),
+              { y: 28, stagger: .08, duration: .6, ease: 'back.out(1.6)' }, this.el, 'top 84%');
     }
 }
 
@@ -1049,17 +1049,11 @@ class Conditions {
         // the whole block still arrives with a pop the first time it is seen
         if (typeof window.gsap !== 'undefined' && !REDUCED) {
             gsap.registerPlugin(ScrollTrigger);
-            gsap.from(this.items, {
-                x: -18, opacity: 0, duration: .55, ease: 'back.out(1.6)', stagger: .05,
-                scrollTrigger: { trigger: this.rail, start: 'top 86%', once: true },
-            });
+            popIn(this.items, { y: 0, stagger: .05, duration: .55, ease: 'back.out(1.6)' }, this.rail, 'top 86%');
             const gate = $('[data-gate]');
             if (gate) {
-                gsap.from(gate, { y: 30, opacity: 0, duration: .8, ease: 'back.out(1.4)',
-                    scrollTrigger: { trigger: gate, start: 'top 88%', once: true } });
-                gsap.from($$('.gate__cell'), {
-                    y: 26, opacity: 0, scale: .96, duration: .55, ease: 'back.out(1.7)', stagger: .07,
-                    scrollTrigger: { trigger: '.gate__grid', start: 'top 90%', once: true } });
+                popIn(gate, { y: 30, duration: .8, ease: 'back.out(1.4)' }, gate, 'top 88%');
+                popIn($$('.gate__cell'), { y: 26, scale: .96, stagger: .07, duration: .55 }, '.gate__grid', 'top 90%');
             }
         }
     }
@@ -1084,7 +1078,7 @@ class Conditions {
         gsap.fromTo(card,
             { opacity: 0, y: 26, scale: .975 },
             { opacity: 1, y: 0, scale: 1, duration: .5, ease: 'back.out(1.7)' });
-        gsap.fromTo($$('.cond__block', card),
+        gsap.fromTo($$('.cond__block, .compound', card),
             { opacity: 0, y: 16 },
             { opacity: 1, y: 0, duration: .45, ease: 'back.out(1.5)', stagger: .06, delay: .08 });
     }
