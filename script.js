@@ -380,6 +380,299 @@ class Reveal {
 }
 
 
+
+
+/* =============================================================================
+   LIBRARY FILTER — chapter pills toggle rows; the "x" count fills itself in
+============================================================================= */
+class LibraryFilter {
+    constructor() {
+        this.pills = $$('.lib__pill');
+        this.rows  = $$('.lib__row[data-cat]');
+    }
+
+    init() {
+        if (!this.pills.length || !this.rows.length) return;
+
+        // the "All" pill advertises the true count in lowercase roman
+        const all = this.pills.find((p) => p.dataset.filter === 'all');
+        const sup = all?.querySelector('sup');
+        if (sup) sup.textContent = this.roman(this.rows.length);
+
+        this.pills.forEach((pill) =>
+            pill.addEventListener('click', () => this.apply(pill))
+        );
+    }
+
+    apply(active) {
+        const cat = active.dataset.filter;
+        this.pills.forEach((p) => {
+            const on = p === active;
+            p.classList.toggle('is-on', on);
+            p.setAttribute('aria-selected', String(on));
+        });
+        this.rows.forEach((row) => {
+            const show = cat === 'all' || row.dataset.cat === cat || row.dataset.cat === 'all';
+            row.classList.toggle('is-hidden', !show);
+            if (show) {
+                row.classList.remove('is-visible');
+                requestAnimationFrame(() =>
+                    requestAnimationFrame(() => row.classList.add('is-visible'))
+                );
+            }
+        });
+    }
+
+    roman(n) {
+        const map = [[10, 'x'], [9, 'ix'], [5, 'v'], [4, 'iv'], [1, 'i']];
+        let out = '';
+        map.forEach(([v, sym]) => { while (n >= v) { out += sym; n -= v; } });
+        return out;
+    }
+}
+
+
+/* =============================================================================
+   LIBRARY PREVIEW — the apothecary label that trails the cursor
+   Built from each row's data-ing / data-cad, so adding a drip to the HTML
+   is all it takes. Fine pointers only.
+============================================================================= */
+class LibraryPreview {
+    constructor() {
+        this.list = $('#libList');
+        this.card = $('#libCard');
+        this.x = 0;  this.y = 0;
+        this.cx = 0; this.cy = 0;
+        this.raf = null;
+        this.active = false;
+    }
+
+    init() {
+        if (!this.list || !this.card) return;
+        if (REDUCED || !FINE_POINTER) return;
+
+        $$('.lib__row', this.list).forEach((row) => {
+            row.addEventListener('mouseenter', () => this.fill(row));
+        });
+
+        this.list.addEventListener('mousemove', (e) => {
+            // sit up and to the right of the cursor so the drip name stays readable,
+            // and never let the card leave the viewport
+            this.x = clamp(e.clientX + 190, 170, window.innerWidth - 170);
+            this.y = clamp(e.clientY - 24, 210, window.innerHeight - 60);
+        });
+        this.list.addEventListener('mouseleave', () => this.hide());
+    }
+
+    fill(row) {
+        $('#libCardNo').textContent   = $('.lib__no', row)?.textContent ?? '';
+        $('#libCardName').textContent = $('.lib__name', row)?.textContent ?? '';
+        $('#libCardCad').textContent  = row.dataset.cad ?? '';
+
+        const ul = $('#libCardIng');
+        ul.innerHTML = '';
+        (row.dataset.ing ?? '').split('|').filter(Boolean).forEach((item) => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            ul.appendChild(li);
+        });
+
+        this.show();
+    }
+
+    show() {
+        if (this.active) return;
+        this.active = true;
+        this.cx = this.x; this.cy = this.y;   // snap so it doesn't fly in
+        this.card.classList.add('is-on');
+        this.loop();
+    }
+
+    hide() {
+        this.active = false;
+        this.card.classList.remove('is-on');
+        if (this.raf) { cancelAnimationFrame(this.raf); this.raf = null; }
+    }
+
+    loop() {
+        if (!this.active) return;
+        this.cx = lerp(this.cx, this.x, 0.16);
+        this.cy = lerp(this.cy, this.y, 0.16);
+        this.card.style.left = `${this.cx.toFixed(1)}px`;
+        this.card.style.top  = `${this.cy.toFixed(1)}px`;
+        this.raf = requestAnimationFrame(() => this.loop());
+    }
+}
+
+
+/* =============================================================================
+   QUIZ — the miniature consultation
+   A weighted matcher: every answer adds points across the ten formulas, the
+   highest total is proposed, the runner-up is offered as a second opinion.
+   The result is a starting point by design — the physician decides.
+============================================================================= */
+class Quiz {
+    constructor() {
+        this.stage = $('#quizStage');
+        this.card  = $('#quizCard');
+        this.back  = $('#quizBack');
+        this.again = $('#quizAgain');
+        this.bars  = $$('.quiz__bar', this.card ?? document);
+        this.steps = $$('.quiz__step', this.card ?? document);
+
+        this.DRIPS = {
+            immuno:   { name: 'Immun-O-Boost',                url: '/drips/immuno-boost/',                  dur: '2 h 30',    cad: 'A monthly ritual',   why: 'deep, broad replenishment for a run-down season' },
+            liquixo:  { name: 'LIQUIXO Muscle Recovery',      url: '/drips/muscle-support/',                dur: '45 min',    cad: 'Weekly · 6 weeks',   why: 'the full amino profile for muscle through weight loss and training' },
+            antiox:   { name: 'Antioxidant \u00d73 Reset',    url: '/drips/antioxidant-reset/',             dur: '75 min',    cad: 'As advised',         why: 'a threefold antioxidant reset for cellular wellness' },
+            glynac:   { name: 'GLyNAC Longevity Restoration', url: '/drips/glynac-longevity/',              dur: '60 min',    cad: 'Weekly · 6 weeks',   why: 'glycine and NAC — the components of your own glutathione' },
+            brain:    { name: 'Stress, Burnout & Brain Wellness', url: '/drips/mental-recovery-brain-wellness/', dur: '90 min', cad: 'As advised',        why: 'mental recovery, hydration and focus for the overworked' },
+            curcumin: { name: 'Curcumin Infusion',            url: '/drips/curcumin/',                      dur: '45 min',    cad: 'As advised',         why: 'one golden compound for joint comfort and healthy response' },
+            gluta:    { name: 'Glutathione Injection',        url: '/drips/glutathione/',                   dur: '10\u201320 min', cad: 'Quick visit',   why: 'the master antioxidant for skin wellness, in minutes' },
+            quercetin:{ name: 'Quercetin Seasonal Support',   url: '/drips/quercetin/',                     dur: '45 min',    cad: 'Seasonal',           why: 'seasonal wellness support, to breathe easier' },
+            revive:   { name: 'Revive',                       url: '/drips/revive/',                        dur: '2 h 30',    cad: 'When depleted',      why: 'the unhurried full restoration — fluids, nutrients, recovery' },
+            custom:   { name: 'The Customized Drip',          url: '/drips/customized-drip/',               dur: 'Bespoke',   cad: 'By consultation',    why: 'a protocol composed for you alone, from your history' },
+        };
+
+        this.QUESTIONS = [
+            {
+                q: 'What brings you in?',
+                opts: [
+                    { t: 'Run-down, catching everything',      w: { immuno: 4, quercetin: 1, revive: 1 } },
+                    { t: 'Training, recovering, or on a GLP-1', w: { liquixo: 4, revive: 1, curcumin: 1 } },
+                    { t: 'Aging well, on purpose',             w: { glynac: 4, antiox: 2 } },
+                    { t: 'Burnt out, foggy, overworked',       w: { brain: 4, revive: 1 } },
+                    { t: 'Skin, glow, radiance',               w: { gluta: 4, antiox: 1 } },
+                    { t: 'Seasonal sniffles and sneezes',      w: { quercetin: 4, immuno: 1 } },
+                ],
+            },
+            {
+                q: 'How much time can you give an appointment?',
+                opts: [
+                    { t: 'In and out — under an hour',   w: { gluta: 2, liquixo: 2, curcumin: 2, quercetin: 2, glynac: 2, immuno: -2, revive: -2 } },
+                    { t: 'An hour or so',                w: { glynac: 2, antiox: 2, brain: 1 } },
+                    { t: 'Unhurried — the full ritual',  w: { immuno: 2, revive: 2, brain: 1 } },
+                ],
+            },
+            {
+                q: 'Which sounds most like you?',
+                opts: [
+                    { t: 'Cover my bases — broad replenishment',    w: { immuno: 2, revive: 2, brain: 1 } },
+                    { t: 'One targeted ingredient, done precisely', w: { gluta: 2, curcumin: 2, quercetin: 2, glynac: 1 } },
+                    { t: 'Compose something for me alone',          w: { custom: 5 } },
+                ],
+            },
+        ];
+
+        this.step = 0;
+        this.picks = [];
+    }
+
+    init() {
+        if (!this.stage || !this.card) return;
+
+        this.back.addEventListener('click', () => this.go(this.step - 1));
+        this.again.addEventListener('click', () => { this.picks = []; this.go(0); });
+
+        this.render();
+        this.go(0, true);
+    }
+
+    /* Build all panels once; movement is class toggling only. */
+    render() {
+        this.stage.innerHTML = '';
+        this.QUESTIONS.forEach((question, qi) => {
+            const panel = document.createElement('div');
+            panel.className = 'quiz__panel';
+            panel.dataset.panel = qi;
+
+            const h = document.createElement('h3');
+            h.className = 'quiz__q';
+            h.textContent = question.q;
+            panel.appendChild(h);
+
+            const grid = document.createElement('div');
+            grid.className = 'quiz__opts';
+            question.opts.forEach((opt, oi) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'quiz__opt';
+                btn.innerHTML = `<i>${'abcdef'[oi]}.</i><span>${opt.t}</span>`;
+                btn.addEventListener('click', () => this.answer(qi, oi));
+                grid.appendChild(btn);
+            });
+            panel.appendChild(grid);
+            this.stage.appendChild(panel);
+        });
+
+        const verdict = document.createElement('div');
+        verdict.className = 'quiz__panel';
+        verdict.dataset.panel = 'verdict';
+        this.stage.appendChild(verdict);
+    }
+
+    answer(qi, oi) {
+        this.picks[qi] = oi;
+        if (qi + 1 < this.QUESTIONS.length) this.go(qi + 1);
+        else this.verdict();
+    }
+
+    go(step, instant = false) {
+        this.step = Math.max(0, step);
+        $$('.quiz__panel', this.stage).forEach((p) =>
+            p.classList.toggle('is-in', String(p.dataset.panel) === String(this.step))
+        );
+        this.back.hidden  = this.step === 0;
+        this.again.hidden = true;
+        this.paint(this.step, instant);
+    }
+
+    paint(step, instant = false) {
+        this.steps.forEach((el, i) => {
+            el.classList.toggle('is-here', i === step);
+            el.classList.toggle('is-done', i < step);
+        });
+        this.bars.forEach((bar, i) => bar.classList.toggle('is-full', i < step));
+        if (instant) return;
+    }
+
+    score() {
+        const totals = Object.fromEntries(Object.keys(this.DRIPS).map((k) => [k, 0]));
+        this.picks.forEach((oi, qi) => {
+            const weights = this.QUESTIONS[qi].opts[oi]?.w ?? {};
+            Object.entries(weights).forEach(([k, v]) => { totals[k] += v; });
+        });
+        return Object.entries(totals).sort((a, b) => b[1] - a[1]);
+    }
+
+    verdict() {
+        const ranked = this.score();
+        const first  = this.DRIPS[ranked[0][0]];
+        const second = this.DRIPS[ranked[1][0]];
+
+        const panel = $('[data-panel="verdict"]', this.stage);
+        panel.innerHTML = `
+            <p class="quiz__verdict-kicker">The concierge suggests</p>
+            <h3 class="quiz__verdict-name">${first.name}</h3>
+            <p class="quiz__verdict-why">Because you asked for ${first.why}.</p>
+            <p class="quiz__verdict-meta"><span>${first.dur}</span><span>${first.cad}</span><span>Subject to physician review</span></p>
+            <div class="quiz__verdict-actions">
+                <a class="btn btn--forest" href="${first.url}"><span>Read about this infusion</span></a>
+                <a class="btn btn--gold" href="#screening"><span>Begin screening</span></a>
+            </div>
+            <p class="quiz__runner">A close second: <a href="${second.url}">${second.name}</a> — worth raising with Dr.&nbsp;Aronov at screening.</p>
+        `;
+
+        this.step = this.QUESTIONS.length;
+        $$('.quiz__panel', this.stage).forEach((p) =>
+            p.classList.toggle('is-in', p.dataset.panel === 'verdict')
+        );
+        this.steps.forEach((el) => { el.classList.add('is-done'); el.classList.remove('is-here'); });
+        this.bars.forEach((bar) => bar.classList.add('is-full'));
+        this.back.hidden = true;
+        this.again.hidden = false;
+    }
+}
+
 /* =============================================================================
    BOOT
 ============================================================================= */
@@ -391,6 +684,9 @@ const modules = {
     vimeo:     new VimeoBackdrop(),
     heroVideo: new HeroVideo(),
     magnetic:  new Magnetic(),
+    libFilter: new LibraryFilter(),
+    libCard:   new LibraryPreview(),
+    quiz:      new Quiz(),
     reveal:    new Reveal(),
 };
 
