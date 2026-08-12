@@ -675,22 +675,8 @@ body.is-ready .hero__title .word .loop {
 .shelf {
     --tone: var(--gold);
 
-    /* ------------------------------------------------------------------
-       THE PANEL — swap the photograph here and nowhere else.
-
-       Shipping with a light wood grain by Colin Watts on Unsplash, free for
-       commercial use, no attribution required:
-       https://unsplash.com/photos/a-close-up-of-a-light-brown-wood-grain-texture-0yfG1HXRN5U
-
-       For production, download it and serve it from her own media library —
-       hotlinking a third party on a medical site is a dependency you do not
-       want. Then this becomes:
-           --wood-img: url('assets/images/wood-panel.jpg');
-
-       If the image fails or is removed entirely, drawn planks render
-       underneath it, so the section never falls back to a flat colour.
-       ------------------------------------------------------------------ */
-    --wood-img: url('https://images.unsplash.com/photo-1762978902169-e5789f7b56b8?auto=format&fit=crop&q=70&w=2400');
+    /* the panel image — change this one line to try another */
+    --wood-img: url('https://cdn.prod.website-files.com/66eb09067bdc5d86694dd29f/6a3305810895fb06243fbf4a_GSG_WWP_ProductShot-004.png');
 
     /* how far the photo is pushed toward cream. Lower --wood-show = paler
        panel and more contrast for the green type. */
@@ -760,20 +746,10 @@ body.is-ready .hero__title .word .loop {
 .shelf__mesh {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background:
-        /* the joins, cut over the real grain */
-        repeating-linear-gradient(90deg,
-            transparent 0 calc(var(--plank) - 3px),
-            rgba(255, 255, 255, 0.55) calc(var(--plank) - 3px) calc(var(--plank) - 1px),
-            rgba(60, 44, 18, 0.20)    calc(var(--plank) - 1px) calc(var(--plank) + 1px),
-            rgba(255, 255, 255, 0.42) calc(var(--plank) + 1px) calc(var(--plank) + 3px),
-            transparent calc(var(--plank) + 3px) var(--plank)),
-        /* plank-to-plank tonal drift */
-        repeating-linear-gradient(90deg,
-            rgba(255,255,255,.10) 0 var(--plank),
-            rgba(60,44,18,.045) var(--plank) calc(var(--plank) * 2)),
-        /* the veil that keeps green type legible whatever photo goes in */
-        linear-gradient(0deg, rgba(239, 232, 216, 0.34), rgba(239, 232, 216, 0.34)),
-        radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.42), transparent 62%),
+        /* the veil — this is what keeps green type legible over any texture.
+           If a darker wood washes the words out, lower --wood-show first. */
+        linear-gradient(0deg, rgba(239, 232, 216, 0.30), rgba(239, 232, 216, 0.30)),
+        radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.40), transparent 62%),
         radial-gradient(100% 60% at 50% 100%, rgba(32, 52, 33, 0.10), transparent 60%);
 }
 
@@ -1129,12 +1105,7 @@ body.is-ready .hero__title .word .loop {
     .plate__foot { min-height: 0; }
     .shelf__rail { position: static; padding: 0 var(--gut) 2rem; }
     .shelf__hint { display: none; }
-    /* iOS handles background-attachment: fixed badly — tile it instead */
-    .shelf__wash {
-        background-attachment: scroll;
-        background-size: 900px auto;
-        background-repeat: repeat;
-    }
+    .shelf__wash { background-attachment: scroll; }
 }
 @media (max-width: 640px) {
     .shelf__stats { grid-template-columns: 1fr; }
