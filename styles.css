@@ -1,7 +1,7 @@
 /* =============================================================================
    ALPHA VITAL ELITE IV — STYLES.CSS
    Direction: cinematic editorial hero over full-bleed film, opening onto a
-   cream wood panel where the ten protocols hang as framed plates.
+   cream field where the ten infusions hang as framed plates.
    Cream is the field, forest green is the type, gold is the accent.
 
      00 · TOKENS
@@ -410,6 +410,9 @@ html.is-locked .head { transform: none; }
 
 /* =============================================================================
    05 · HERO
+   Copy is Dr. Aronov's approved Edit #2 wording. The word-loop rules below are
+   kept but currently unused — the headline is now a fixed two-line statement.
+   Restoring the loop is a markup change only.
 ============================================================================= */
 .hero {
     position: relative;
@@ -505,7 +508,7 @@ html.is-locked .head { transform: none; }
     color: var(--gold-deep);
     margin-bottom: clamp(1.5rem, 3.5vh, 2.5rem);
 }
-.hero__rule { width: clamp(2.5rem, 5vw, 4.5rem); height: 1px; background: var(--gold); }
+.hero__rule { width: clamp(2.5rem, 5vw, 4.5rem); height: 1px; background: var(--gold); flex: 0 0 auto; }
 
 .hero__title {
     font-family: var(--display);
@@ -520,6 +523,7 @@ html.is-locked .head { transform: none; }
 .hero__title .word { display: block; overflow: hidden; padding-bottom: 0.04em; margin-bottom: -0.04em; }
 .hero__title .word > span, .hero__title .loop { display: block; }
 
+/* --- word-loop: retained for a future restore, unused by the current markup --- */
 .word--loop .loop {
     position: relative;
     font-family: var(--accent);
@@ -549,7 +553,7 @@ html.is-locked .head { transform: none; }
     gap: clamp(1.5rem, 4vw, 4rem);
 }
 .hero__dek {
-    max-width: 30rem;
+    max-width: 34rem;
     font-size: clamp(0.98rem, 1.15vw, 1.1rem);
     line-height: 1.75;
     color: var(--ink-soft);
@@ -557,6 +561,18 @@ html.is-locked .head { transform: none; }
     border-left: 1px solid var(--rule-gold);
 }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 0.85rem; }
+
+/* the required eligibility / supportive-care disclaimer.
+   Quiet, measured, sits under the CTA row — not a banner. */
+.hero__legal {
+    margin-top: clamp(1.25rem, 3vh, 2rem);
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--rule);
+    max-width: 62ch;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: var(--mist);
+}
 
 .hero__foot {
     position: relative; z-index: 2;
@@ -649,11 +665,13 @@ body.is-ready .hero__title .word .loop {
     .hero__stage { padding: 1.25rem 0; }
     .hero__title { font-size: clamp(2.6rem, 6vw, 5rem); margin-bottom: 1.7rem; }
     .hero__kicker { margin-bottom: 1.2rem; }
+    .hero__legal { margin-top: 1rem; font-size: .74rem; }
     .hero__foot { padding-top: 1rem; }
 }
 @media (min-width: 981px) and (max-height: 840px) {
     .hero__title { font-size: clamp(2.4rem, 5.4vw, 4.3rem); margin-bottom: 1.4rem; }
     .hero__dek { font-size: 0.95rem; }
+    .hero__legal { font-size: .72rem; line-height: 1.6; }
 }
 
 /* ---------- hero · mobile ---------- */
@@ -663,15 +681,19 @@ body.is-ready .hero__title .word .loop {
     .hero__folio-mid { display: none; }
     .hero__row { flex-direction: column; align-items: flex-start; }
     .hero__title { max-width: none; }
+    .hero__kicker { align-items: flex-start; line-height: 1.5; }
+    .hero__rule { margin-top: .6em; }
 }
 @media (max-width: 640px) {
     .hero { padding-top: calc(var(--head-h) + 1.25rem); }
-    .hero__title { font-size: clamp(2.7rem, 12.5vw, 3.6rem); }
-    .hero__kicker { font-size: 0.66rem; letter-spacing: 0.24em; }
+    .hero__title { font-size: clamp(2.5rem, 11.5vw, 3.4rem); }
+    .hero__kicker { font-size: 0.62rem; letter-spacing: 0.2em; }
     .hero__dek { padding-left: 1rem; font-size: 0.96rem; }
+    .hero__legal { padding-left: 1rem; font-size: 0.74rem; }
     .hero__actions { width: 100%; }
     .hero__actions .btn { flex: 1 1 100%; }
     .hero__foot { flex-direction: column; align-items: flex-start; gap: 0.9rem; padding-bottom: 1rem; }
+    .hero__cred { font-size: 0.6rem; letter-spacing: 0.14em; line-height: 1.6; }
     .hero__wire-track span { font-size: 0.62rem; letter-spacing: 0.2em; }
     .hero__grain { display: none; }
 }
@@ -679,18 +701,21 @@ body.is-ready .hero__title .word .loop {
 
 /* =============================================================================
    06 · THE SHELF  (#infusions)
-   Ten branded IV bags hung on a cream field with faint line artwork behind.
-   Cream is the ground, forest green is the type, gold is the accent.
-   The bag is the picture — no frames, no stock photography.
+   Ten branded IV bags hung on a cream field. Cream is the ground, forest green
+   is the type, gold is the accent. The bag is the picture — no frames, no stock
+   photography.
 
    NOTE: your --accent token is the Cormorant *font*, so the compound colour is
-   called --tone here. Nothing below overwrites your existing tokens.
+   called --tone here.
 ============================================================================= */
 
 .shelf {
     --tone: var(--gold);
 
-    /* compound colours — the numeral, the strip and hover only */
+    /* compound colours — the numeral, the strip and hover only.
+       Token names kept as-is so nothing else has to change; the two formerly
+       named for removed infusions are now reused by Joint Support (curcumin)
+       and Skin Health (quercetin). */
     --t-immuno:    #D9982A;
     --t-muscle:    #B34E37;
     --t-antiox:    #4F7D5E;
@@ -762,7 +787,7 @@ body.is-ready .hero__title .word .loop {
 .shelf__deck { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.8fr); gap: clamp(1.5rem,5vw,4.5rem); align-items: end; }
 .shelf__lede {
     font-size: clamp(.98rem,1.2vw,1.12rem); line-height: 1.75; color: var(--ink-soft);
-    max-width: 46ch; padding-left: 1.3rem; border-left: 1px solid var(--rule-gold);
+    max-width: 52ch; padding-left: 1.3rem; border-left: 1px solid var(--rule-gold);
 }
 .shelf__lede strong { color: var(--forest); font-weight: 600; }
 
@@ -774,7 +799,16 @@ body.is-ready .hero__title .word .loop {
     font-size: clamp(1.6rem,3vw,2.4rem); line-height: 1; color: var(--forest); margin-bottom: .4rem;
 }
 .shelf__stat b sup { font-size: .46em; color: var(--gold-deep); vertical-align: super; }
-.shelf__stat > span { display: block; font-family: var(--micro); font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mist); }
+.shelf__stat > span { display: block; font-family: var(--micro); font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mist); line-height: 1.55; }
+
+/* the third stat is words, not a figure — set it in the display face so the
+   three-up rhythm survives */
+.shelf__stat--word b {
+    font-family: var(--display);
+    font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+    line-height: 1.15;
+    letter-spacing: -.01em;
+}
 
 /* ---------- filters ---------- */
 .shelf__filters {
@@ -915,6 +949,7 @@ body.is-ready .hero__title .word .loop {
     font-family: var(--data); font-size: .68rem; font-weight: 500;
     font-variant-numeric: tabular-nums lining-nums;
     color: var(--mist); margin-bottom: .85rem;
+    white-space: nowrap;
 }
 .plate__clock i { color: var(--tone); font-size: 1.2em; }
 
@@ -925,7 +960,7 @@ body.is-ready .hero__title .word .loop {
 .plate__price b {
     display: block; font-family: var(--data); font-weight: 600;
     font-variant-numeric: tabular-nums lining-nums;
-    font-size: clamp(1.1rem,1.7vw,1.4rem); color: var(--forest); line-height: 1;
+    font-size: clamp(1.1rem,1.7vw,1.4rem); color: var(--forest); line-height: 1.1;
 }
 .plate__price span {
     display: block; margin-top: .3rem;
@@ -944,6 +979,7 @@ body.is-ready .hero__title .word .loop {
     letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft);
     padding-bottom: .15rem; border-bottom: 1px solid var(--rule);
     transition: color .4s var(--ease), border-color .4s var(--ease), gap .4s var(--ease);
+    white-space: nowrap;
 }
 .plate__go i { font-size: 1.25em; }
 .plate:hover .plate__go { color: var(--gold-deep); border-color: var(--gold); gap: .85rem; }
@@ -969,7 +1005,7 @@ body.is-ready .hero__title .word .loop {
 }
 
 .shelf__note {
-    max-width: min(var(--maxw), 68ch); margin: 0 auto;
+    max-width: min(var(--maxw), 72ch); margin: 0 auto;
     padding: clamp(1.5rem,3vh,2.25rem) var(--gut) clamp(4rem,8vh,6rem);
     font-size: .86rem; line-height: 1.7; color: var(--ink-soft);
 }
@@ -1046,10 +1082,13 @@ body.is-ready .hero__title .word .loop {
     .shelf__stats { grid-template-columns: 1fr; }
     .shelf__stat { display: flex; align-items: baseline; gap: .9rem; }
     .shelf__stat b { margin-bottom: 0; font-size: 1.5rem; }
+    .shelf__stat--word b { font-size: 1.15rem; }
     .shelf__rubric { flex-wrap: wrap; row-gap: .6rem; }
     .shelf__rubric-rule { flex-basis: 100%; order: 3; }
     .shelf__ig { order: 4; }
     .shelf__hint { font-size: .55rem; letter-spacing: .16em; }
+    /* eleven filters is a lot on a phone — tighten them so they read as a set */
+    .shelf__pill { padding: .5rem .85rem; font-size: .58rem; letter-spacing: .12em; gap: .4rem; }
 }
 
 /* ---------- shelf · reduced motion ---------- */
@@ -1064,6 +1103,7 @@ body.is-ready .hero__title .word .loop {
     .shelf__rail { position: static; }
     .shelf__hint i { animation: none !important; }
 }
+
 
 /* =============================================================================
    07 · THE PHYSICIAN  (#physician)
@@ -1271,7 +1311,7 @@ body.is-ready .hero__title .word .loop {
 .doc__tally div > span {
     display: block;
     font-family: var(--micro); font-size: .58rem; font-weight: 600;
-    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist); line-height: 1.55;
 }
 
 .doc__cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: clamp(2rem, 4vh, 3rem); }
@@ -1303,7 +1343,6 @@ body.is-ready .hero__title .word .loop {
     .beat, .link { opacity: 1 !important; transform: none !important; }
     .beat__dot::after { transform: scale(1) !important; }
 }
-
 
 
 /* =============================================================================
@@ -1834,9 +1873,9 @@ body.is-ready .hero__title .word .loop {
 /* =============================================================================
    12 · LIVING WITH A CHRONIC CONDITION  (#conditions)
    One homepage section in three parts: the rule (a forest band), the
-   conditions themselves (sticky index against a scrolling flow), and NAC.
-   Motion grammar is its own again — no pin, no scrub; the index hands off as
-   each condition takes the screen.
+   conditions themselves (sticky index against a scrolling flow), and the
+   compound behind each. Motion grammar is its own again — no pin, no scrub;
+   the index hands off as each condition takes the screen.
 ============================================================================= */
 .conds {
     --data:  'Archivo', 'Instrument Sans', sans-serif;
@@ -1993,7 +2032,7 @@ body.is-ready .hero__title .word .loop {
 
 /* ---------- the compound, one per condition ----------
    Lives inside each card, so clicking through the index changes the compound
-   with it. Same two-column shape the standalone NAC block had. */
+   with it. */
 .compound {
     display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1fr);
     gap: clamp(1.5rem, 3.5vw, 2.75rem);
@@ -2021,7 +2060,7 @@ body.is-ready .hero__title .word .loop {
     padding: .6rem 0; border-bottom: 1px solid var(--rule);
 }
 .compound__facts dt { font-family: var(--micro); font-size: .54rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--mist); }
-.compound__facts dd { font-family: var(--data); font-weight: 600; font-variant-numeric: tabular-nums lining-nums; font-size: .98rem; color: var(--forest); }
+.compound__facts dd { font-family: var(--data); font-weight: 600; font-variant-numeric: tabular-nums lining-nums; font-size: .98rem; color: var(--forest); text-align: right; }
 .compound__p { font-size: .94rem; line-height: 1.75; color: var(--ink-soft); margin-bottom: .9rem; }
 .compound__p b { color: var(--forest); font-weight: 600; }
 .compound__p em { font-style: italic; }
@@ -2051,6 +2090,7 @@ body.is-ready .hero__title .word .loop {
     .rail__item.is-here { border-color: var(--cond); padding-left: .9rem; }
     .rail__name { font-size: .86rem; }
     .rail__no { min-width: 0; }
+    .rail__item::after { margin-left: .4rem; }
     .gate__grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 620px) {
@@ -2105,7 +2145,7 @@ body.is-ready .hero__title .word .loop {
     margin-bottom: 1.25rem;
 }
 .foot__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-lite); }
-.foot__lede { font-size: clamp(.98rem, 1.15vw, 1.1rem); line-height: 1.75; color: var(--cream-dim); max-width: 52ch; margin-bottom: 1.75rem; }
+.foot__lede { font-size: clamp(.98rem, 1.15vw, 1.1rem); line-height: 1.75; color: var(--cream-dim); max-width: 56ch; margin-bottom: 1.75rem; }
 .foot__acts { display: flex; flex-wrap: wrap; gap: .7rem; }
 .foot .rx__btn { border-color: var(--gold); color: var(--gold-lite); }
 .foot .rx__btn--solid { background: var(--gold); color: var(--forest-deep); border-color: var(--gold); }
@@ -2227,6 +2267,7 @@ body.is-ready .hero__title .word .loop {
     .foot__mark { margin-bottom: 3.5rem; }
     .foot__bar { padding-bottom: 4.5rem; }
 }
+
 
 /* =============================================================================
    11 · MOTION & FOCUS
