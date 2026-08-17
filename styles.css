@@ -523,7 +523,7 @@ html.is-locked .head { transform: none; }
 .hero__title .word { display: block; overflow: hidden; padding-bottom: 0.04em; margin-bottom: -0.04em; }
 .hero__title .word > span, .hero__title .loop { display: block; }
 
-/* --- word-loop: retained for a future restore, unused by the current markup --- */
+/* --- word-loop: drives the "Infusions for ..." line under the headline --- */
 .word--loop .loop {
     position: relative;
     font-family: var(--accent);
@@ -547,6 +547,27 @@ html.is-locked .head { transform: none; }
 .loop__stack span:first-child { position: relative; }
 .loop__stack span.is-on  { opacity: 1; transform: translateY(0); transition: transform .5s var(--ease); }
 .loop__stack span.is-out { opacity: 1; transform: translateY(-112%); transition: transform .45s var(--ease-in); }
+
+/* the rotating category line. Sits under the headline as a descriptor, so the
+   approved hero wording above it is never part of the moving text. */
+.hero__for {
+    display: flex; align-items: baseline; flex-wrap: wrap;
+    gap: .2rem .8rem;
+    margin: calc(clamp(2rem, 5vh, 3.25rem) * -.55) 0 clamp(1.75rem, 4vh, 2.75rem);
+}
+.hero__for-lead {
+    font-family: var(--caps);
+    font-size: .72rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--ink-soft); white-space: nowrap;
+}
+.hero__for .loop {
+    position: relative; display: inline-block;
+    min-width: 13em;                       /* holds the longest category */
+    font-family: var(--accent); font-style: italic; font-weight: 500;
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    line-height: 1.15;
+    color: var(--gold-deep);
+}
 
 .hero__row {
     display: flex; align-items: flex-end; justify-content: space-between;
@@ -665,6 +686,7 @@ body.is-ready .hero__title .word .loop {
     .hero__stage { padding: 1.25rem 0; }
     .hero__title { font-size: clamp(2.6rem, 6vw, 5rem); margin-bottom: 1.7rem; }
     .hero__kicker { margin-bottom: 1.2rem; }
+    .hero__for { margin-bottom: 1.2rem; }
     .hero__legal { margin-top: 1rem; font-size: .74rem; }
     .hero__foot { padding-top: 1rem; }
 }
@@ -680,6 +702,9 @@ body.is-ready .hero__title .word .loop {
     .hero__folio span { white-space: nowrap; }
     .hero__folio-mid { display: none; }
     .hero__row { flex-direction: column; align-items: flex-start; }
+    .hero__for { gap: .1rem; }
+    .hero__for-lead { flex: 0 0 100%; }
+    .hero__for .loop { min-width: 100%; }
     .hero__title { max-width: none; }
     .hero__kicker { align-items: flex-start; line-height: 1.5; }
     .hero__rule { margin-top: .6em; }
@@ -688,6 +713,8 @@ body.is-ready .hero__title .word .loop {
     .hero { padding-top: calc(var(--head-h) + 1.25rem); }
     .hero__title { font-size: clamp(2.5rem, 11.5vw, 3.4rem); }
     .hero__kicker { font-size: 0.62rem; letter-spacing: 0.2em; }
+    .hero__for { margin-top: -.5rem; margin-bottom: 1.5rem; }
+    .hero__for .loop { font-size: 1.35rem; }
     .hero__dek { padding-left: 1rem; font-size: 0.96rem; }
     .hero__legal { padding-left: 1rem; font-size: 0.74rem; }
     .hero__actions { width: 100%; }
@@ -712,20 +739,18 @@ body.is-ready .hero__title .word .loop {
 .shelf {
     --tone: var(--gold);
 
-    /* compound colours — the numeral, the strip and hover only.
-       Token names kept as-is so nothing else has to change; the two formerly
-       named for removed infusions are now reused by Joint Support (curcumin)
-       and Skin Health (quercetin). */
-    --t-immuno:    #D9982A;
-    --t-muscle:    #B34E37;
-    --t-antiox:    #4F7D5E;
-    --t-glynac:    #5B7098;
-    --t-brain:     #7A5F98;
-    --t-curcumin:  #CE8318;
-    --t-gluta:     #7FA08C;
-    --t-quercetin: #9C4A6B;
-    --t-revive:    #35707F;
-    --t-custom:    #C1963F;
+    /* compound colours — the numeral, the chips and hover only.
+       One per category, named for the category, in Dr. Aronov's order. */
+    --t-aging:     #5B7098;   /* Healthy Aging          */
+    --t-immune:    #D9982A;   /* Immune Support         */
+    --t-muscle:    #B34E37;   /* Muscle Recovery        */
+    --t-antiox:    #4F7D5E;   /* Antioxidant Support    */
+    --t-gluta:     #7FA08C;   /* Glutathione IV Therapy */
+    --t-joint:     #8C6239;   /* Joint Support          */
+    --t-liver:     #7A5F98;   /* Liver Support          */
+    --t-skin:      #9C4A6B;   /* Skin Health            */
+    --t-recovery:  #35707F;   /* Recovery Support       */
+    --t-custom:    #C1963F;   /* Customized IV Infusion */
 
     --data:  'Archivo', 'Instrument Sans', sans-serif;
     --micro: 'Syne', 'Instrument Sans', sans-serif;
@@ -930,7 +955,7 @@ body.is-ready .hero__title .word .loop {
 }
 .plate__ing {
     display: flex; flex-wrap: wrap; gap: .38rem;
-    height: 3.9rem; overflow: hidden;      /* two rows, always */
+    height: 5.9rem; overflow: hidden;      /* three rows — Immun-O-Boost carries nine */
     margin-bottom: .85rem; list-style: none;
 }
 .plate__ing li {
