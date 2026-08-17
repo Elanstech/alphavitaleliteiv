@@ -9,6 +9,7 @@
      Preloader   hairline draws with the load, curtain lifts onto the film
      Header      condense · retreat on the way down · return on the way up
      Menu        parchment page, circular reveal, scroll lock, escape
+     WordLoop    the rotating category in the "Infusions for ..." line
      HeroVideo   autoplay kick for iOS, poster fallback if the file is absent
      Magnetic    primary buttons lean toward the pointer (fine pointers only)
      Shelf       the services rail — pinned horizontally, swipeable on phones
@@ -24,9 +25,9 @@
    REQUIRES GSAP + ScrollTrigger from CDN in index.html BEFORE this file.
    Without them every module degrades to a static, readable layout.
 
-   NOTE — WordLoop was removed with the hero headline rewrite (Edit #2). The
-   markup no longer contains #wordLoop. The CSS for it is still in styles.css
-   if the loop is ever restored.
+   NOTE — the loop no longer sits inside the headline. It drives the
+   "Infusions for ..." descriptor line beneath it, so the approved hero wording
+   is never part of the moving text. Nine categories, Dr. Aronov's order.
 ============================================================================= */
 
 
@@ -223,6 +224,53 @@ class Menu {
         this.burger.setAttribute('aria-expanded', String(open));
         this.burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
         document.documentElement.classList.toggle('is-locked', open);
+    }
+}
+
+
+/* =============================================================================
+   WORD LOOP — the rotating category in "Infusions for ..."
+   The first child holds the layout width and height; the rest sit on top of it.
+   Each category rises through the mask, holds, and exits upward. Only one is
+   ever legible at a time.
+============================================================================= */
+class WordLoop {
+    constructor() {
+        this.el    = $('#wordLoop');
+        this.words = this.el ? $$('.loop__stack span', this.el) : [];
+        this.index = 0;
+        this.HOLD  = 2600;
+        this.timer = null;
+    }
+
+    init() {
+        if (!this.el || this.words.length < 2 || REDUCED) return;
+
+        // Wait for the entrance to land before the first swap
+        const begin = () => { this.timer = setInterval(() => this.next(), this.HOLD); };
+        setTimeout(begin, 2400);
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) { clearInterval(this.timer); this.timer = null; }
+            else if (!this.timer) this.timer = setInterval(() => this.next(), this.HOLD);
+        });
+    }
+
+    next() {
+        const current = this.words[this.index];
+        this.index = (this.index + 1) % this.words.length;
+        const incoming = this.words[this.index];
+
+        // Roll out through the top of the mask...
+        current.classList.remove('is-on');
+        current.classList.add('is-out');
+
+        // ...and only then bring the next category up through the bottom,
+        // so two are never legible at once.
+        setTimeout(() => {
+            current.classList.remove('is-out');
+            incoming.classList.add('is-on');
+        }, 220);
     }
 }
 
@@ -688,82 +736,84 @@ class Dock {
 /* =============================================================================
    THE QUIZ — modal, four questions, weighted across the ten infusions
    -----------------------------------------------------------------------------
-   Menu as approved by Dr. Aronov: nine signature infusions + one customized
-   option. Quercetin and Curcumin have been removed entirely.
+   Menu, names and order per Dr. Aronov's 17 Aug email: nine signature
+   infusions + one customized option. Quercetin and Curcumin removed.
 
-   ⚠ TWO ENTRIES ARE INCOMPLETE. Joint Support and Skin Health share one
-   formulation and their ingredients, chair time and pricing have not been
-   supplied yet. They are marked below and their `price`/`prog` read
-   "To be confirmed" so nothing false is ever displayed. They are deliberately
-   left OUT of the budget question's weighting until real figures exist —
-   see ASKS[3].
+   Copy rule for every `why` below: "supports" and "designed to complement".
+   Never treats, cures, repairs, or guaranteed-outcome language.
+
+   ⚠ THREE ENTRIES STILL LACK TIME AND PRICING — Joint Support, Liver Support
+   and Skin Health. Their `price`/`prog` read "To be confirmed" so nothing
+   false is ever displayed, and they are deliberately left OUT of the budget
+   question's weighting until real figures exist — see ASKS[3].
 ============================================================================= */
 const DRIPS = [
-    { id:'immune',      name:'Immun-O-Boost IV Support',                slug:'/drips/immune-support/',        img:'immuneoboost',  time:'2 h 30',                   price:'$650', prog:'$585',    tag:'Immune Support',
-      why:'Hydration, immune and recovery support — the deep seasonal replenishment.' },
+    { id:'healthyaging', name:'GLyNAC Longevity Restoration IV',        slug:'/drips/healthy-aging/',          img:'glynac',        time:'1 h 15',                     price:'$450', prog:'$405',    tag:'Healthy Aging',
+      why:'Two of the building blocks the body uses to produce its own glutathione.' },
 
-    { id:'postillness', name:'Revive IV Support Infusion',              slug:'/drips/post-illness-recovery/', img:'revive',        time:'2 h 15',                   price:'$625', prog:'$562.50', tag:'Post-Illness Recovery',
-      why:'Replenish, recharge, revive — the unhurried full restoration.' },
+    { id:'immune',       name:'Immun-O-Boost IV Support',               slug:'/drips/immune-support/',         img:'immuneoboost',  time:'2 h 30',                     price:'$650', prog:'$585',    tag:'Immune Support',
+      why:'Trace minerals, B-complex, amino acids and antioxidants supporting normal immune defenses.' },
 
-    { id:'antioxidant', name:'Antioxidant ×3 Reset IV Infusion',        slug:'/drips/antioxidant-support/',   img:'antioxidant',   time:'1 h 15',                   price:'$500', prog:'$450',    tag:'Antioxidant Support',
-      why:'Three antioxidants that recharge one another rather than working alone.' },
+    { id:'muscle',       name:'LIQUIXO Muscle Support IV Infusion',     slug:'/drips/muscle-recovery/',        img:'liquixo',       time:'45 min',                     price:'$495', prog:'$445.50', tag:'Muscle Recovery',
+      why:'A broad twenty amino acid formula, designed to supply what muscles draw on during recovery.' },
 
-    { id:'glutathione', name:'Glutathione IV Injection',                slug:'/drips/glutathione-iv-therapy/',img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
-      why:'A slow physician-administered push of the body’s major antioxidant.' },
+    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV Infusion',       slug:'/drips/antioxidant-support/',    img:'antioxidant',   time:'1 h 15',                     price:'$500', prog:'$450',    tag:'Antioxidant Support',
+      why:'Three antioxidants that work within the same network rather than alone.' },
 
-    { id:'muscle',      name:'LIQUIXO Muscle Support IV Infusion',      slug:'/drips/muscle-recovery/',       img:'liquixo',       time:'45 min',                   price:'$495', prog:'$445.50', tag:'Muscle Recovery',
-      why:'Lean-muscle support through GLP-1 and weight-loss programmes — the full amino profile.' },
+    { id:'glutathione',  name:'Glutathione IV Injection',               slug:'/drips/glutathione-iv-therapy/', img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
+      why:'A slow physician-administered push for focused antioxidant support.' },
 
-    /* ⚠ awaiting formulation + pricing */
-    { id:'joint',       name:'Joint Support IV Infusion',               slug:'/drips/joint-support/',         img:'jointsupport',  time:'To be confirmed',           price:'To be confirmed', prog:'To be confirmed', tag:'Joint Support',
-      why:'Supportive care for joint comfort and a healthy inflammatory response.' },
+    /* ! awaiting time + pricing */
+    { id:'joint',        name:'Joint Support IV Infusion',              slug:'/drips/joint-support/',          img:'jointsupport',  time:'To be confirmed',            price:'To be confirmed', prog:'To be confirmed', tag:'Joint Support',
+      why:'Nutrients involved in collagen production, designed to complement rheumatology care.' },
 
-    /* ⚠ same formulation as Joint Support — awaiting formulation + pricing */
-    { id:'skin',        name:'Skin Health IV Infusion',                 slug:'/drips/skin-health/',           img:'skinhealth',    time:'To be confirmed',           price:'To be confirmed', prog:'To be confirmed', tag:'Skin Health',
-      why:'The same formulation as Joint Support, selected for skin wellness goals.' },
+    /* ! awaiting time + pricing */
+    { id:'liver',        name:'Liver Support IV Infusion',              slug:'/drips/liver-support/',          img:'liversupport',  time:'To be confirmed',            price:'To be confirmed', prog:'To be confirmed', tag:'Liver Support',
+      why:'Supports antioxidant and metabolic pathways relevant to liver health.' },
 
-    { id:'liver',       name:'GLyNAC Longevity Restoration IV',         slug:'/drips/liver-support/',         img:'glynac',        time:'1 h 15',                   price:'$450', prog:'$405',    tag:'Liver Support',
-      why:'The two components your body uses to make its own glutathione.' },
+    /* ! awaiting time + pricing — shares the Joint Support foundation */
+    { id:'skin',         name:'Skin Health IV Infusion',                slug:'/drips/skin-health/',            img:'skinhealth',    time:'To be confirmed',            price:'To be confirmed', prog:'To be confirmed', tag:'Skin Health',
+      why:'The same collagen-supporting foundation, for the skin’s nutritional and antioxidant needs.' },
 
-    { id:'mind',        name:'Stress, Mental Burnout & Brain Wellness IV', slug:'/drips/mind-focus-support/', img:'brainwellness', time:'1 h 30',                   price:'$700', prog:'$630',    tag:'Mind & Focus Support',
-      why:'Nutritional support for stress, mental fatigue and demanding schedules.' },
+    { id:'recovery',     name:'Revive IV Support Infusion',             slug:'/drips/recovery-support/',       img:'revive',        time:'2 h 15',                     price:'$625', prog:'$562.50', tag:'Recovery Support',
+      why:'Hydration, vitamins, amino acids and antioxidant support after illness, travel or stress.' },
 
-    { id:'custom',      name:'Customized IV Infusion',                  slug:'/drips/customized-infusion/',   img:'customized',    time:'Individually determined',   price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
+    { id:'custom',       name:'Customized IV Infusion',                 slug:'/drips/customized-infusion/',    img:'customized',    time:'Individually determined',    price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
       why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
 ];
 
 const ASKS = [
     { ask:'What brought you here?', hint:'Pick whichever is loudest right now.', opts:[
-        { t:'I keep getting sick',    s:'Run-down, seasonal',              i:'ph-shield-check',  w:{ immune:5, postillness:2 } },
-        { t:'I am still run down',    s:'Recovering after an illness',     i:'ph-arrows-clockwise', w:{ postillness:5, immune:2 } },
-        { t:'My head is foggy',       s:'Stress, burnout, poor sleep',     i:'ph-brain',         w:{ mind:5, postillness:2 } },
-        { t:'My joints ache',         s:'Stiffness, inflammatory stress',  i:'ph-bone',          w:{ joint:5, antioxidant:2 } },
-        { t:'I am thinking about my skin', s:'Tone, texture, skin wellness', i:'ph-sparkle',     w:{ skin:5, glutathione:3 } },
-        { t:'I am losing muscle',     s:'On a GLP-1 or weight-loss plan',  i:'ph-barbell',       w:{ muscle:6 } },
-        { t:'I want to age well',     s:'Longevity, cellular, liver',      i:'ph-infinity',      w:{ liver:4, antioxidant:4, glutathione:2 } },
+        { t:'I keep getting sick',       s:'Run-down, seasonal',             i:'ph-shield-check',     w:{ immune:6, recovery:2 } },
+        { t:'I am still run down',       s:'After illness, travel or stress',i:'ph-arrows-clockwise', w:{ recovery:6, immune:2 } },
+        { t:'My joints ache',            s:'Stiffness, arthritis, wear',     i:'ph-bone',             w:{ joint:6, antioxidant:2 } },
+        { t:'I am thinking about my skin', s:'Tone, texture, skin wellness', i:'ph-sparkle',          w:{ skin:6, glutathione:3 } },
+        { t:'I am losing muscle',        s:'On a GLP-1 or weight-loss plan', i:'ph-barbell',          w:{ muscle:7 } },
+        { t:'My liver markers came back off', s:'Metabolic or liver concern',i:'ph-leaf',             w:{ liver:6, antioxidant:2 } },
+        { t:'I want to age well',        s:'Longevity, cellular defenses',   i:'ph-infinity',         w:{ healthyaging:6, antioxidant:3 } },
     ]},
 
     { ask:'Are you under a specialist’s care for anything?', hint:'This changes how carefully she coordinates, never whether you are welcome.', opts:[
-        { t:'Yes — a gut condition',  s:'Crohn’s, colitis, coeliac',       i:'ph-first-aid-kit',  flag:true, w:{ custom:5, immune:2 } },
-        { t:'Yes — joints or skin',   s:'RA, psoriasis, related',          i:'ph-hand-heart',     flag:true, w:{ custom:4, joint:2, skin:2 } },
-        { t:'Yes — liver or metabolic', s:'Fatty liver, related',          i:'ph-heartbeat',      flag:true, w:{ custom:4, liver:3 } },
-        { t:'No — generally well',    s:'No diagnosis, no specialist',     i:'ph-check-circle',   w:{} },
+        { t:'Yes — a gut condition',    s:'Crohn’s, colitis, coeliac',      i:'ph-first-aid-kit',  flag:true, w:{ custom:5, immune:2 } },
+        { t:'Yes — joints or skin',     s:'RA, osteoarthritis, psoriasis',  i:'ph-hand-heart',     flag:true, w:{ custom:4, joint:2, skin:2 } },
+        { t:'Yes — liver or metabolic', s:'Fatty liver, related',           i:'ph-heartbeat',      flag:true, w:{ custom:4, liver:3 } },
+        { t:'No — generally well',      s:'No diagnosis, no specialist',    i:'ph-check-circle',   w:{} },
     ]},
 
     { ask:'How long can you sit?', hint:'Her chairs are private — the long ones are the unhurried ones.', opts:[
         { t:'About half an hour', s:'A lunch break',      i:'ph-timer',     w:{ glutathione:6 } },
-        { t:'About an hour',      s:'A proper sit',       i:'ph-clock',     w:{ liver:4, antioxidant:3, muscle:3 } },
-        { t:'Ninety minutes',     s:'Time to switch off', i:'ph-armchair',  w:{ mind:5, antioxidant:2 } },
-        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ postillness:5, immune:5 } },
+        { t:'About an hour',      s:'A proper sit',       i:'ph-clock',     w:{ healthyaging:4, antioxidant:4, muscle:3 } },
+        { t:'Ninety minutes',     s:'Time to switch off', i:'ph-armchair',  w:{ antioxidant:3, healthyaging:2 } },
+        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ recovery:5, immune:5 } },
     ]},
 
-    /* Joint Support and Skin Health carry no weight here on purpose — their
-       pricing is not confirmed, so they must not be steered to on budget.
-       Add them once Dr. Aronov supplies the figures. */
+    /* Joint Support, Liver Support and Skin Health carry no weight here on
+       purpose — their pricing is not confirmed, so the quiz must not steer
+       anyone to them on cost. Add them once Dr. Aronov supplies the figures. */
     { ask:'What feels comfortable per session?', hint:'Every figure here is her real published rate.', opts:[
         { t:'Under $350',     s:'Single-compound infusions', i:'ph-coins',   w:{ glutathione:5 } },
-        { t:'$350 – $550',    s:'The mid-length protocols',  i:'ph-wallet',  w:{ liver:4, antioxidant:4, muscle:3 } },
-        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, postillness:4, mind:4 } },
+        { t:'$350 – $550',    s:'The mid-length protocols',  i:'ph-wallet',  w:{ healthyaging:4, antioxidant:4, muscle:3 } },
+        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, recovery:4 } },
         { t:'Let her decide', s:'Whatever is right',         i:'ph-pen-nib', w:{ custom:4 } },
     ]},
 ];
@@ -1076,6 +1126,7 @@ const modules = {
     preloader:  new Preloader(),
     header:     new Header(),
     menu:       new Menu(),
+    wordLoop:   new WordLoop(),
     heroVideo:  new HeroVideo(),
     magnetic:   new Magnetic(),
     shelf:      new Shelf(),
