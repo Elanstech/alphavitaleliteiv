@@ -61,6 +61,8 @@
   html.is-preloading { overflow: auto !important; }
   [data-rise], .hero__title .word > span { opacity: 1 !important; transform: none !important; }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .loop__stack { display: none !important; }
+  .loop__fallback { display: inline !important; }
   .shelf__viewport { height: auto !important; display: block !important; overflow: visible !important; padding-bottom: 0 !important; }
   .shelf__track { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important; gap: 3rem !important; transform: none !important; }
   .plate { width: 100% !important; }
@@ -227,7 +229,25 @@
       <span class="word" data-rise style="--i:4"><span>IV Care.</span></span>
     </h1>
 
-    <div class="hero__row" data-rise style="--i:5">
+    <p class="hero__for" data-rise style="--i:5">
+      <span class="hero__for-lead">Infusions for</span>
+      <span class="loop" id="wordLoop">
+        <span class="loop__fallback">Healthy Aging</span>
+        <span class="loop__stack" aria-hidden="true">
+          <span class="is-on">Healthy Aging</span>
+          <span>Immune Support</span>
+          <span>Muscle Recovery</span>
+          <span>Antioxidant Support</span>
+          <span>Glutathione IV Therapy</span>
+          <span>Joint Support</span>
+          <span>Liver Support</span>
+          <span>Skin Health</span>
+          <span>Recovery Support</span>
+        </span>
+      </span>
+    </p>
+
+    <div class="hero__row" data-rise style="--i:6">
       <p class="hero__dek">
         Dr. Violeta Aronov, DO, a board-certified anesthesiologist with nearly two decades of
         experience, reviews the health information provided by each patient, determines whether
@@ -243,14 +263,14 @@
       </div>
     </div>
 
-    <p class="hero__legal" data-rise style="--i:6">
+    <p class="hero__legal" data-rise style="--i:7">
       IV services are intended as supportive care and are designed to complement&mdash;not
       replace&mdash;appropriate primary or specialty medical treatment. Not every patient is
       eligible. Individual results vary, and no outcome is guaranteed.
     </p>
   </div>
 
-  <div class="hero__foot" data-rise style="--i:7">
+  <div class="hero__foot" data-rise style="--i:8">
     <p class="hero__cred">Appointments only &bull; Physician review and eligibility determination required</p>
     <a class="hero__scroll" href="#infusions"><span>Scroll</span><i aria-hidden="true"></i></a>
   </div>
@@ -278,8 +298,9 @@
 <!-- ==============================================================
      THE SHELF  (#infusions)
      Nine signature infusions + one customized option = ten plates.
-     Quercetin and Curcumin removed at Dr. Aronov's request.
-     Filter order is hers, exactly.
+     Category names, order and formulations per Dr. Aronov's 17 Aug email.
+     Quercetin and Curcumin removed. Language rule: "supports" and
+     "designed to complement" — never treats, cures, repairs, or guarantees.
      ============================================================== -->
 <section class="shelf" id="infusions" aria-labelledby="shelfTitle">
   <span class="shelf__wash" aria-hidden="true"></span>
@@ -324,15 +345,15 @@
 
   <div class="shelf__filters" role="tablist" aria-label="Filter infusions" data-reveal>
     <button class="shelf__pill is-on" type="button" data-filter="all" role="tab" aria-selected="true"><i class="ph ph-squares-four" aria-hidden="true"></i> Everything <sup>10</sup></button>
+    <button class="shelf__pill" type="button" data-filter="healthyaging" role="tab" aria-selected="false"><i class="ph ph-infinity" aria-hidden="true"></i> Healthy Aging</button>
     <button class="shelf__pill" type="button" data-filter="immune" role="tab" aria-selected="false"><i class="ph ph-shield-check" aria-hidden="true"></i> Immune Support</button>
-    <button class="shelf__pill" type="button" data-filter="postillness" role="tab" aria-selected="false"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i> Post-Illness Recovery</button>
+    <button class="shelf__pill" type="button" data-filter="muscle" role="tab" aria-selected="false"><i class="ph ph-barbell" aria-hidden="true"></i> Muscle Recovery</button>
     <button class="shelf__pill" type="button" data-filter="antioxidant" role="tab" aria-selected="false"><i class="ph ph-atom" aria-hidden="true"></i> Antioxidant Support</button>
     <button class="shelf__pill" type="button" data-filter="glutathione" role="tab" aria-selected="false"><i class="ph ph-drop" aria-hidden="true"></i> Glutathione IV Therapy</button>
-    <button class="shelf__pill" type="button" data-filter="muscle" role="tab" aria-selected="false"><i class="ph ph-barbell" aria-hidden="true"></i> Muscle Recovery</button>
     <button class="shelf__pill" type="button" data-filter="joint" role="tab" aria-selected="false"><i class="ph ph-bone" aria-hidden="true"></i> Joint Support</button>
-    <button class="shelf__pill" type="button" data-filter="skin" role="tab" aria-selected="false"><i class="ph ph-sparkle" aria-hidden="true"></i> Skin Health</button>
     <button class="shelf__pill" type="button" data-filter="liver" role="tab" aria-selected="false"><i class="ph ph-leaf" aria-hidden="true"></i> Liver Support</button>
-    <button class="shelf__pill" type="button" data-filter="mind" role="tab" aria-selected="false"><i class="ph ph-brain" aria-hidden="true"></i> Mind &amp; Focus Support</button>
+    <button class="shelf__pill" type="button" data-filter="skin" role="tab" aria-selected="false"><i class="ph ph-sparkle" aria-hidden="true"></i> Skin Health</button>
+    <button class="shelf__pill" type="button" data-filter="recovery" role="tab" aria-selected="false"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i> Recovery Support</button>
     <button class="shelf__pill" type="button" data-filter="custom" role="tab" aria-selected="false"><i class="ph ph-pen-nib" aria-hidden="true"></i> Customized IV Infusion</button>
   </div>
 
@@ -340,19 +361,38 @@
     <div class="shelf__viewport" id="shelfViewport">
       <ol class="shelf__track" id="shelfTrack">
 
-        <!-- 1 · IMMUNE SUPPORT -->
-        <li class="plate" data-tags="immune" data-tone="var(--t-immuno)" style="--tone:var(--t-immuno)">
+        <li class="plate" data-tags="healthyaging" data-tone="var(--t-aging)" style="--tone:var(--t-aging)">
+          <a class="plate__bag" href="/drips/healthy-aging/" aria-label="GLyNAC Longevity Restoration IV">
+            <span class="plate__pole" aria-hidden="true"></span>
+            <img src="assets/drips/glynac.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="GLyNAC Longevity Restoration IV" loading="lazy" decoding="async" width="524" height="1478">
+            <span class="plate__cast" aria-hidden="true"></span>
+          </a>
+          <div class="plate__body">
+            <span class="plate__no" aria-hidden="true">I</span>
+            <p class="plate__cat"><i class="ph ph-infinity" aria-hidden="true"></i> Healthy Aging</p>
+            <h3 class="plate__name"><a href="/drips/healthy-aging/">GLyNAC Longevity Restoration IV</a></h3>
+            <p class="plate__note">Glycine and N-acetylcysteine supply two of the building blocks the body uses to produce its own glutathione.</p>
+            <ul class="plate__ing"><li>Hydration Fluid</li><li>Glycine</li><li>N-Acetylcysteine</li></ul>
+            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 1 h 15</p>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$450</b><span>per session</span><em>programme $405</em></p>
+              <a class="plate__go" href="/drips/healthy-aging/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
+
+        <li class="plate" data-tags="immune" data-tone="var(--t-immune)" style="--tone:var(--t-immune)">
           <a class="plate__bag" href="/drips/immune-support/" aria-label="Immun-O-Boost IV Support">
             <span class="plate__pole" aria-hidden="true"></span>
             <img src="assets/drips/immuneoboost.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Immun-O-Boost IV Support" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast" aria-hidden="true"></span>
           </a>
           <div class="plate__body">
-            <span class="plate__no" aria-hidden="true">I</span>
+            <span class="plate__no" aria-hidden="true">II</span>
             <p class="plate__cat"><i class="ph ph-shield-check" aria-hidden="true"></i> Immune Support</p>
             <h3 class="plate__name"><a href="/drips/immune-support/">Immun-O-Boost IV Support</a></h3>
-            <p class="plate__note">Hydration, immune and recovery support — the deep seasonal replenishment.</p>
-            <ul class="plate__ing"><li>Hydration Fluid</li><li>B-Complex</li><li>Calcium &amp; Magnesium</li><li>Amino Acids</li><li>Vitamin&nbsp;C</li><li>Glutathione</li><li>Zinc</li></ul>
+            <p class="plate__note">Trace minerals, B-complex, amino acids and antioxidants that support normal immune and nutritional defenses. A vitamin&nbsp;D injection is added when appropriate.</p>
+            <ul class="plate__ing"><li>Zinc</li><li>Copper</li><li>Selenium</li><li>Manganese</li><li>B-Complex</li><li>Amino Acids</li><li>Vitamin&nbsp;C</li><li>Alpha-Lipoic Acid</li><li>Glutathione</li></ul>
             <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 2 h 30</p>
             <div class="plate__foot">
               <p class="plate__price"><b>$650</b><span>per session</span><em>programme $585</em></p>
@@ -361,70 +401,6 @@
           </div>
         </li>
 
-        <!-- 2 · POST-ILLNESS RECOVERY -->
-        <li class="plate" data-tags="postillness" data-tone="var(--t-revive)" style="--tone:var(--t-revive)">
-          <a class="plate__bag" href="/drips/post-illness-recovery/" aria-label="Revive IV Support Infusion">
-            <span class="plate__pole" aria-hidden="true"></span>
-            <img src="assets/drips/revive.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Revive IV Support Infusion" loading="lazy" decoding="async" width="524" height="1478">
-            <span class="plate__cast" aria-hidden="true"></span>
-          </a>
-          <div class="plate__body">
-            <span class="plate__no" aria-hidden="true">II</span>
-            <p class="plate__cat"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i> Post-Illness Recovery</p>
-            <h3 class="plate__name"><a href="/drips/post-illness-recovery/">Revive IV Support Infusion</a></h3>
-            <p class="plate__note">Replenish, recharge, revive. The unhurried full restoration — scheduled as needed through the year.</p>
-            <ul class="plate__ing"><li>Hydration Fluid</li><li>Vitamin Blend</li><li>AminoPlex</li><li>Alpha-Lipoic Acid</li><li>Vitamin&nbsp;C</li><li>Glutathione</li></ul>
-            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 2 h 15</p>
-            <div class="plate__foot">
-              <p class="plate__price"><b>$625</b><span>per session</span><em>programme $562.50</em></p>
-              <a class="plate__go" href="/drips/post-illness-recovery/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
-            </div>
-          </div>
-        </li>
-
-        <!-- 3 · ANTIOXIDANT SUPPORT -->
-        <li class="plate" data-tags="antioxidant" data-tone="var(--t-antiox)" style="--tone:var(--t-antiox)">
-          <a class="plate__bag" href="/drips/antioxidant-support/" aria-label="Antioxidant &times;3 Reset IV Infusion">
-            <span class="plate__pole" aria-hidden="true"></span>
-            <img src="assets/drips/antioxidant.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Antioxidant &times;3 Reset IV Infusion" loading="lazy" decoding="async" width="524" height="1478">
-            <span class="plate__cast" aria-hidden="true"></span>
-          </a>
-          <div class="plate__body">
-            <span class="plate__no" aria-hidden="true">III</span>
-            <p class="plate__cat"><i class="ph ph-atom" aria-hidden="true"></i> Antioxidant Support</p>
-            <h3 class="plate__name"><a href="/drips/antioxidant-support/">Antioxidant &times;3 Reset IV Infusion</a></h3>
-            <p class="plate__note">Vitamin C, glutathione and alpha-lipoic acid — three antioxidants that recharge one another.</p>
-            <ul class="plate__ing"><li>Hydration Fluid</li><li>Alpha-Lipoic Acid</li><li>Vitamin&nbsp;C</li><li>Glutathione</li></ul>
-            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 1 h 15</p>
-            <div class="plate__foot">
-              <p class="plate__price"><b>$500</b><span>per session</span><em>programme $450</em></p>
-              <a class="plate__go" href="/drips/antioxidant-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
-            </div>
-          </div>
-        </li>
-
-        <!-- 4 · GLUTATHIONE IV THERAPY -->
-        <li class="plate" data-tags="glutathione" data-tone="var(--t-gluta)" style="--tone:var(--t-gluta)">
-          <a class="plate__bag" href="/drips/glutathione-iv-therapy/" aria-label="Glutathione IV Injection">
-            <span class="plate__pole" aria-hidden="true"></span>
-            <img src="assets/drips/glutathione.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Glutathione IV Injection" loading="lazy" decoding="async" width="524" height="1478">
-            <span class="plate__cast" aria-hidden="true"></span>
-          </a>
-          <div class="plate__body">
-            <span class="plate__no" aria-hidden="true">IV</span>
-            <p class="plate__cat"><i class="ph ph-drop" aria-hidden="true"></i> Glutathione IV Therapy</p>
-            <h3 class="plate__name"><a href="/drips/glutathione-iv-therapy/">Glutathione IV Injection</a></h3>
-            <p class="plate__note">A slow physician-administered push of the body&rsquo;s major antioxidant. Gradual by design.</p>
-            <ul class="plate__ing"><li>Glutathione</li></ul>
-            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 15 min push &middot; 30 min visit</p>
-            <div class="plate__foot">
-              <p class="plate__price"><b>$125</b><span>per session</span><em>programme $112.50</em></p>
-              <a class="plate__go" href="/drips/glutathione-iv-therapy/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
-            </div>
-          </div>
-        </li>
-
-        <!-- 5 · MUSCLE RECOVERY -->
         <li class="plate" data-tags="muscle" data-tone="var(--t-muscle)" style="--tone:var(--t-muscle)">
           <a class="plate__bag" href="/drips/muscle-recovery/" aria-label="LIQUIXO Muscle Support IV Infusion">
             <span class="plate__pole" aria-hidden="true"></span>
@@ -432,10 +408,10 @@
             <span class="plate__cast" aria-hidden="true"></span>
           </a>
           <div class="plate__body">
-            <span class="plate__no" aria-hidden="true">V</span>
+            <span class="plate__no" aria-hidden="true">III</span>
             <p class="plate__cat"><i class="ph ph-barbell" aria-hidden="true"></i> Muscle Recovery</p>
             <h3 class="plate__name"><a href="/drips/muscle-recovery/">LIQUIXO Muscle Support IV Infusion</a></h3>
-            <p class="plate__note">Lean-muscle support through GLP-1 and weight-loss programmes — the full twenty amino acid profile.</p>
+            <p class="plate__note">A broad twenty amino acid formula, designed to supply building blocks muscles draw on during recovery.</p>
             <ul class="plate__ing"><li>Hydration Fluid</li><li>20 Amino Acids</li><li>10 Billion Exosome Nano-Vesicles</li></ul>
             <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 45 min</p>
             <div class="plate__foot">
@@ -445,11 +421,48 @@
           </div>
         </li>
 
-        <!-- 6 · JOINT SUPPORT
-             ⚠ DATA NEEDED FROM DR. ARONOV: ingredients, infusion time, single-session
-             price and programme price. Curcumin was removed, so this card has no
-             source data yet. Placeholders below are marked "To be confirmed". -->
-        <li class="plate" data-tags="joint" data-tone="var(--t-curcumin)" style="--tone:var(--t-curcumin)">
+        <li class="plate" data-tags="antioxidant" data-tone="var(--t-antiox)" style="--tone:var(--t-antiox)">
+          <a class="plate__bag" href="/drips/antioxidant-support/" aria-label="Antioxidant &times;3 Reset IV Infusion">
+            <span class="plate__pole" aria-hidden="true"></span>
+            <img src="assets/drips/antioxidant.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Antioxidant &times;3 Reset IV Infusion" loading="lazy" decoding="async" width="524" height="1478">
+            <span class="plate__cast" aria-hidden="true"></span>
+          </a>
+          <div class="plate__body">
+            <span class="plate__no" aria-hidden="true">IV</span>
+            <p class="plate__cat"><i class="ph ph-atom" aria-hidden="true"></i> Antioxidant Support</p>
+            <h3 class="plate__name"><a href="/drips/antioxidant-support/">Antioxidant &times;3 Reset IV Infusion</a></h3>
+            <p class="plate__note">Three antioxidants that work within the same network, supporting antioxidant defenses when stress or illness raises oxidative demand.</p>
+            <ul class="plate__ing"><li>Hydration Fluid</li><li>Vitamin&nbsp;C</li><li>Alpha-Lipoic Acid</li><li>Glutathione</li></ul>
+            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 1 h 15</p>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$500</b><span>per session</span><em>programme $450</em></p>
+              <a class="plate__go" href="/drips/antioxidant-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
+
+        <li class="plate" data-tags="glutathione" data-tone="var(--t-gluta)" style="--tone:var(--t-gluta)">
+          <a class="plate__bag" href="/drips/glutathione-iv-therapy/" aria-label="Glutathione IV Injection">
+            <span class="plate__pole" aria-hidden="true"></span>
+            <img src="assets/drips/glutathione.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Glutathione IV Injection" loading="lazy" decoding="async" width="524" height="1478">
+            <span class="plate__cast" aria-hidden="true"></span>
+          </a>
+          <div class="plate__body">
+            <span class="plate__no" aria-hidden="true">V</span>
+            <p class="plate__cat"><i class="ph ph-drop" aria-hidden="true"></i> Glutathione IV Therapy</p>
+            <h3 class="plate__name"><a href="/drips/glutathione-iv-therapy/">Glutathione IV Injection</a></h3>
+            <p class="plate__note">A slow physician-administered push for focused antioxidant support. Gradual by design.</p>
+            <ul class="plate__ing"><li>Glutathione</li></ul>
+            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 15 min push &middot; 30 min visit</p>
+            <div class="plate__foot">
+              <p class="plate__price"><b>$125</b><span>per session</span><em>programme $112.50</em></p>
+              <a class="plate__go" href="/drips/glutathione-iv-therapy/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
+
+        <!-- ! AWAITING FROM DR. ARONOV: infusion time, single-session price, programme price -->
+        <li class="plate" data-tags="joint" data-tone="var(--t-joint)" style="--tone:var(--t-joint)">
           <a class="plate__bag" href="/drips/joint-support/" aria-label="Joint Support IV Infusion">
             <span class="plate__pole" aria-hidden="true"></span>
             <img src="assets/drips/jointsupport.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Joint Support IV Infusion" loading="lazy" decoding="async" width="524" height="1478">
@@ -459,8 +472,8 @@
             <span class="plate__no" aria-hidden="true">VI</span>
             <p class="plate__cat"><i class="ph ph-bone" aria-hidden="true"></i> Joint Support</p>
             <h3 class="plate__name"><a href="/drips/joint-support/">Joint Support IV Infusion</a></h3>
-            <p class="plate__note">Supportive care for joint comfort and a healthy inflammatory response, shares its formulation with Skin Health.</p>
-            <ul class="plate__ing"><li>Ingredients to be confirmed</li></ul>
+            <p class="plate__note">Nutrients involved in collagen production, offered as supportive care designed to complement rheumatology treatment, never to replace it.</p>
+            <ul class="plate__ing"><li>Glycine</li><li>Proline</li><li>Lysine</li><li>Vitamin&nbsp;C</li></ul>
             <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> To be confirmed</p>
             <div class="plate__foot">
               <p class="plate__price"><b>To be confirmed</b><span>per session</span></p>
@@ -469,20 +482,40 @@
           </div>
         </li>
 
-        <!-- 7 · SKIN HEALTH
-             ⚠ Same formulation as Joint Support per Dr. Aronov. Same data gap. -->
-        <li class="plate" data-tags="skin" data-tone="var(--t-quercetin)" style="--tone:var(--t-quercetin)">
+        <!-- ! AWAITING FROM DR. ARONOV: infusion time, single-session price, programme price -->
+        <li class="plate" data-tags="liver" data-tone="var(--t-liver)" style="--tone:var(--t-liver)">
+          <a class="plate__bag" href="/drips/liver-support/" aria-label="Liver Support IV Infusion">
+            <span class="plate__pole" aria-hidden="true"></span>
+            <img src="assets/drips/liversupport.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Liver Support IV Infusion" loading="lazy" decoding="async" width="524" height="1478">
+            <span class="plate__cast" aria-hidden="true"></span>
+          </a>
+          <div class="plate__body">
+            <span class="plate__no" aria-hidden="true">VII</span>
+            <p class="plate__cat"><i class="ph ph-leaf" aria-hidden="true"></i> Liver Support</p>
+            <h3 class="plate__name"><a href="/drips/liver-support/">Liver Support IV Infusion</a></h3>
+            <p class="plate__note">Supports antioxidant and metabolic pathways relevant to liver health, alongside the care your own physician directs.</p>
+            <ul class="plate__ing"><li>Glycine</li><li>N-Acetylcysteine</li><li>Alpha-Lipoic Acid</li><li>Glutathione</li></ul>
+            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> To be confirmed</p>
+            <div class="plate__foot">
+              <p class="plate__price"><b>To be confirmed</b><span>per session</span></p>
+              <a class="plate__go" href="/drips/liver-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </li>
+
+        <!-- ! AWAITING FROM DR. ARONOV: infusion time, single-session price, programme price -->
+        <li class="plate" data-tags="skin" data-tone="var(--t-skin)" style="--tone:var(--t-skin)">
           <a class="plate__bag" href="/drips/skin-health/" aria-label="Skin Health IV Infusion">
             <span class="plate__pole" aria-hidden="true"></span>
             <img src="assets/drips/skinhealth.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Skin Health IV Infusion" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast" aria-hidden="true"></span>
           </a>
           <div class="plate__body">
-            <span class="plate__no" aria-hidden="true">VII</span>
+            <span class="plate__no" aria-hidden="true">VIII</span>
             <p class="plate__cat"><i class="ph ph-sparkle" aria-hidden="true"></i> Skin Health</p>
             <h3 class="plate__name"><a href="/drips/skin-health/">Skin Health IV Infusion</a></h3>
-            <p class="plate__note">The same formulation as Joint Support, selected here for skin wellness goals rather than joint comfort.</p>
-            <ul class="plate__ing"><li>Ingredients to be confirmed</li></ul>
+            <p class="plate__note">The same collagen-supporting foundation as Joint Support — the skin&rsquo;s structural layer depends on collagen too. Supports nutritional and antioxidant needs.</p>
+            <ul class="plate__ing"><li>Glycine</li><li>Proline</li><li>Lysine</li><li>Vitamin&nbsp;C</li></ul>
             <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> To be confirmed</p>
             <div class="plate__foot">
               <p class="plate__price"><b>To be confirmed</b><span>per session</span></p>
@@ -491,52 +524,26 @@
           </div>
         </li>
 
-        <!-- 8 · LIVER SUPPORT
-             ⚠ Mapped to GLyNAC Longevity Restoration IV (glycine + NAC) because that is
-             the only liver-facing formula in the brochure. CONFIRM with Dr. Aronov that
-             "Liver Support" is this infusion and not a separate one. -->
-        <li class="plate" data-tags="liver" data-tone="var(--t-glynac)" style="--tone:var(--t-glynac)">
-          <a class="plate__bag" href="/drips/liver-support/" aria-label="GLyNAC Longevity Restoration IV">
+        <li class="plate" data-tags="recovery" data-tone="var(--t-recovery)" style="--tone:var(--t-recovery)">
+          <a class="plate__bag" href="/drips/recovery-support/" aria-label="Revive IV Support Infusion">
             <span class="plate__pole" aria-hidden="true"></span>
-            <img src="assets/drips/glynac.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="GLyNAC Longevity Restoration IV" loading="lazy" decoding="async" width="524" height="1478">
-            <span class="plate__cast" aria-hidden="true"></span>
-          </a>
-          <div class="plate__body">
-            <span class="plate__no" aria-hidden="true">VIII</span>
-            <p class="plate__cat"><i class="ph ph-leaf" aria-hidden="true"></i> Liver Support</p>
-            <h3 class="plate__name"><a href="/drips/liver-support/">GLyNAC Longevity Restoration IV</a></h3>
-            <p class="plate__note">Glycine and N-acetylcysteine — the two components your body uses to make its own glutathione.</p>
-            <ul class="plate__ing"><li>Hydration Fluid</li><li>Glycine</li><li>N-Acetylcysteine</li></ul>
-            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 1 h 15</p>
-            <div class="plate__foot">
-              <p class="plate__price"><b>$450</b><span>per session</span><em>programme $405</em></p>
-              <a class="plate__go" href="/drips/liver-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
-            </div>
-          </div>
-        </li>
-
-        <!-- 9 · MIND & FOCUS SUPPORT -->
-        <li class="plate" data-tags="mind" data-tone="var(--t-brain)" style="--tone:var(--t-brain)">
-          <a class="plate__bag" href="/drips/mind-focus-support/" aria-label="Stress, Mental Burnout &amp; Brain Wellness IV Supportive Infusion">
-            <span class="plate__pole" aria-hidden="true"></span>
-            <img src="assets/drips/brainwellness.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Stress, Mental Burnout &amp; Brain Wellness IV" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="assets/drips/revive.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="Revive IV Support Infusion" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast" aria-hidden="true"></span>
           </a>
           <div class="plate__body">
             <span class="plate__no" aria-hidden="true">IX</span>
-            <p class="plate__cat"><i class="ph ph-brain" aria-hidden="true"></i> Mind &amp; Focus Support</p>
-            <h3 class="plate__name"><a href="/drips/mind-focus-support/">Stress, Mental Burnout &amp; Brain Wellness IV</a></h3>
-            <p class="plate__note">Nutritional support for stress, mental fatigue and demanding schedules.</p>
-            <ul class="plate__ing"><li>Hydration Fluid</li><li>Vitamin B1</li><li>Vitamin B6</li><li>Vitamin B12</li><li>Alpha-Lipoic Acid</li><li>Taurine</li></ul>
-            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 1 h 30</p>
+            <p class="plate__cat"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i> Recovery Support</p>
+            <h3 class="plate__name"><a href="/drips/recovery-support/">Revive IV Support Infusion</a></h3>
+            <p class="plate__note">Hydration, vitamins, amino acids and antioxidant support after illness, travel, cleared surgery or a long stretch of physical stress.</p>
+            <ul class="plate__ing"><li>Hydration Fluid</li><li>Vitamin Blend</li><li>Amino Acids</li><li>Alpha-Lipoic Acid</li><li>Vitamin&nbsp;C</li><li>Glutathione</li></ul>
+            <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 2 h 15</p>
             <div class="plate__foot">
-              <p class="plate__price"><b>$700</b><span>per session</span><em>programme $630</em></p>
-              <a class="plate__go" href="/drips/mind-focus-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+              <p class="plate__price"><b>$625</b><span>per session</span><em>programme $562.50</em></p>
+              <a class="plate__go" href="/drips/recovery-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
             </div>
           </div>
         </li>
 
-        <!-- 10 · CUSTOMIZED IV INFUSION -->
         <li class="plate" data-tags="custom" data-tone="var(--t-custom)" style="--tone:var(--t-custom)">
           <a class="plate__bag" href="/drips/customized-infusion/" aria-label="Customized IV Infusion">
             <span class="plate__pole" aria-hidden="true"></span>
@@ -963,7 +970,7 @@
             <div class="compound__l">
               <p class="compound__eyebrow"><i class="ph-duotone ph-flask" aria-hidden="true"></i> The compound behind it</p>
               <h4 class="compound__name">Hydration Fluid &amp; Vitamin Blend</h4>
-              <p class="compound__drip">Given here in <a href="/drips/post-illness-recovery/">Revive IV Support Infusion</a></p>
+              <p class="compound__drip">Given here in <a href="/drips/recovery-support/">Revive IV Support Infusion</a></p>
               <dl class="compound__facts">
                 <div><dt>Chair time</dt><dd>2 h 15</dd></div>
                 <div><dt>Per session</dt><dd>$625</dd></div>
@@ -1003,12 +1010,12 @@
             <p>It does not replace DMARDs or biologics, and it does not slow joint damage. Your rheumatologist owns the disease; this sits beside their plan or not at all.</p>
           </section>
 
-          <!-- ⚠ Curcumin removed from the menu. This block now points at Joint Support.
-               Ingredient name, chair time and pricing all need Dr. Aronov's confirmation. -->
+          <!-- Joint Support: formulation confirmed 17 Aug. Chair time and pricing
+               still needed from Dr. Aronov. -->
           <section class="compound">
             <div class="compound__l">
               <p class="compound__eyebrow"><i class="ph-duotone ph-flask" aria-hidden="true"></i> The compound behind it</p>
-              <h4 class="compound__name">Joint Support formulation</h4>
+              <h4 class="compound__name">Glycine, Proline, Lysine &amp; Vitamin&nbsp;C</h4>
               <p class="compound__drip">Given here in <a href="/drips/joint-support/">Joint Support IV Infusion</a></p>
               <dl class="compound__facts">
                 <div><dt>Chair time</dt><dd>To be confirmed</dd></div>
@@ -1016,8 +1023,8 @@
               </dl>
             </div>
             <div class="compound__r">
-              <p class="compound__p"><b>Nutritional support delivered past the gut.</b> Where absorption by mouth is unreliable, the line removes that variable — that is the route rationale, and it is the only rationale being claimed.</p>
-              <p class="compound__p"><b>Where the evidence actually stands.</b> Research interest in inflammatory conditions is real and ongoing; the trials are small and mixed. This is not a DMARD, it does not slow joint damage, and it is scheduled only once your rheumatologist has signed off.</p>
+              <p class="compound__p"><b>The nutrients collagen production draws on.</b> Glycine, proline and lysine are amino acids the body uses to build collagen; vitamin&nbsp;C is required for the step that stabilises it. Delivered by line, absorption is not the variable.</p>
+              <p class="compound__p"><b>What this is and is not.</b> Supportive care for eligible people living with rheumatoid or osteoarthritis, designed to complement rheumatology treatment. It is not a DMARD, it does not slow joint damage, and it is scheduled only once your rheumatologist has signed off.</p>
               <p class="compound__flag"><i class="ph-fill ph-warning-octagon" aria-hidden="true"></i> Not scheduled without your specialist’s written approval — including for patients who have had it before.</p>
             </div>
           </section>
@@ -1060,7 +1067,7 @@
               </dl>
             </div>
             <div class="compound__r">
-              <p class="compound__p"><b>Your body’s major antioxidant.</b> Every cell makes it, production falls with age and under sustained inflammatory load, and it sits at the centre of how the body handles oxidative stress.</p>
+              <p class="compound__p"><b>Your body’s major antioxidant.</b> Every cell makes it, production falls with age and under sustained inflammatory load, and it sits at the centre of how the body handles oxidative stress. It is offered here for antioxidant support — not for brightening, whitening, or any cosmetic result.</p>
               <p class="compound__p"><b>Where the evidence actually stands.</b> Antioxidant status in inflammatory skin disease is an active research area and nothing more than that yet. It is not a treatment for psoriasis and will not be described as one here.</p>
               <p class="compound__flag"><i class="ph-fill ph-warning-octagon" aria-hidden="true"></i> Not scheduled without your specialist’s written approval — including for patients who have had it before.</p>
             </div>
@@ -1085,7 +1092,7 @@
           </section>
           <section class="cond__block cond__block--may">
             <h4 class="cond__label"><i class="ph ph-drop-half" aria-hidden="true"></i> Where a line may support you</h4>
-            <p>N-acetylcysteine and glycine have produced early, encouraging signals in small trials on oxidative stress and liver enzymes. Encouraging is not proven, and Dr. Aronov will describe it to you as exactly that.</p>
+            <p>Glycine, N-acetylcysteine, alpha-lipoic acid and glutathione support antioxidant and metabolic pathways relevant to liver health. That is a statement about pathways, not about outcomes, and Dr. Aronov will describe it to you as exactly that.</p>
           </section>
           <section class="cond__block cond__block--never">
             <h4 class="cond__label"><i class="ph-fill ph-warning-octagon" aria-hidden="true"></i> What it will never be</h4>
@@ -1095,17 +1102,16 @@
           <section class="compound">
             <div class="compound__l">
               <p class="compound__eyebrow"><i class="ph-duotone ph-flask" aria-hidden="true"></i> The compound behind it</p>
-              <h4 class="compound__name">N-acetylcysteine &amp; Glycine</h4>
-              <p class="compound__drip">Given here in <a href="/drips/liver-support/">GLyNAC Longevity Restoration IV</a></p>
+              <h4 class="compound__name">Glycine, NAC, Alpha-Lipoic Acid &amp; Glutathione</h4>
+              <p class="compound__drip">Given here in <a href="/drips/liver-support/">Liver Support IV Infusion</a></p>
               <dl class="compound__facts">
-                <div><dt>Chair time</dt><dd>1 h 15</dd></div>
-                <div><dt>Per session</dt><dd>$450</dd></div>
-                <div><dt>In a programme</dt><dd>$405</dd></div>
+                <div><dt>Chair time</dt><dd>To be confirmed</dd></div>
+                <div><dt>Per session</dt><dd>To be confirmed</dd></div>
               </dl>
             </div>
             <div class="compound__r">
               <p class="compound__p"><b>NAC is a real drug, not a supplement.</b> Hospitals have used it for decades as the antidote for paracetamol overdose and as a mucolytic. It supplies cysteine — the rate-limiting building block for glutathione. Glycine supplies the second.</p>
-              <p class="compound__p"><b>Where the evidence actually stands.</b> Small trials have produced early, encouraging signals on oxidative stress and liver enzymes. Encouraging is not proven. The intervention with real evidence behind fatty liver remains metabolic, and Dr.&nbsp;Aronov will say so plainly.</p>
+              <p class="compound__p"><b>What is being claimed, and what is not.</b> These compounds support antioxidant and metabolic pathways relevant to liver health. Your hepatologist may monitor ALT, GGT and lipid markers as part of your own care — nothing here promises that an infusion will move them. The intervention with real evidence behind fatty liver remains metabolic, and Dr.&nbsp;Aronov will say so plainly.</p>
               <p class="compound__flag"><i class="ph-fill ph-warning-octagon" aria-hidden="true"></i> Not scheduled without your specialist’s written approval — including for patients who have had it before.</p>
             </div>
           </section>
@@ -1196,11 +1202,11 @@
       <div class="foot__col">
         <h3 class="foot__h">Infusions</h3>
         <ul class="foot__list">
+          <li><a href="/drips/healthy-aging/">Healthy Aging</a></li>
           <li><a href="/drips/immune-support/">Immune Support</a></li>
-          <li><a href="/drips/post-illness-recovery/">Post-Illness Recovery</a></li>
+          <li><a href="/drips/muscle-recovery/">Muscle Recovery</a></li>
           <li><a href="/drips/antioxidant-support/">Antioxidant Support</a></li>
           <li><a href="/drips/glutathione-iv-therapy/">Glutathione IV Therapy</a></li>
-          <li><a href="/drips/muscle-recovery/">Muscle Recovery</a></li>
         </ul>
       </div>
 
@@ -1208,9 +1214,9 @@
         <h3 class="foot__h" aria-hidden="true">&nbsp;</h3>
         <ul class="foot__list">
           <li><a href="/drips/joint-support/">Joint Support</a></li>
-          <li><a href="/drips/skin-health/">Skin Health</a></li>
           <li><a href="/drips/liver-support/">Liver Support</a></li>
-          <li><a href="/drips/mind-focus-support/">Mind &amp; Focus Support</a></li>
+          <li><a href="/drips/skin-health/">Skin Health</a></li>
+          <li><a href="/drips/recovery-support/">Recovery Support</a></li>
           <li><a href="/drips/customized-infusion/">Customized IV Infusion</a></li>
         </ul>
       </div>
@@ -1308,8 +1314,7 @@
 <!-- ==============================================================
      THE QUIZ MODAL
      ⚠ The question set and the ten protocols live in script.js
-     (DRIPS + ASKS). Those arrays still contain Curcumin and
-     Quercetin and must be updated to match this menu.
+     (DRIPS + ASKS) and now match this menu exactly.
      ============================================================== -->
 <div class="modal" id="quiz" aria-hidden="true">
   <div class="modal__veil" data-close-quiz></div>
