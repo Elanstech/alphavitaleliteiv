@@ -9,13 +9,12 @@
      Preloader   hairline draws with the load, curtain lifts onto the film
      Header      condense · retreat on the way down · return on the way up
      Menu        parchment page, circular reveal, scroll lock, escape
-     WordLoop    the living word in the headline
      HeroVideo   autoplay kick for iOS, poster fallback if the file is absent
      Magnetic    primary buttons lean toward the pointer (fine pointers only)
      Shelf       the services rail — pinned horizontally, swipeable on phones
      Route       the two-lane oral-vs-IV explainer, scrubbed on scroll
      Dock        back to top (left) and the action dial (right)
-     Quiz        the modal matcher — four questions across ten protocols
+     Quiz        the modal matcher — four questions across ten infusions
      Conditions  the chronic-condition switcher and its compounds
      Social      the Instagram band
      Physician   sticky portrait, beats that pop, the chain of custody
@@ -24,6 +23,10 @@
 
    REQUIRES GSAP + ScrollTrigger from CDN in index.html BEFORE this file.
    Without them every module degrades to a static, readable layout.
+
+   NOTE — WordLoop was removed with the hero headline rewrite (Edit #2). The
+   markup no longer contains #wordLoop. The CSS for it is still in styles.css
+   if the loop is ever restored.
 ============================================================================= */
 
 
@@ -225,52 +228,6 @@ class Menu {
 
 
 /* =============================================================================
-   WORD LOOP — the living word in the headline
-   The first child holds the layout height; the rest sit on top of it.
-   Each word rises through the mask, holds, and exits upward.
-============================================================================= */
-class WordLoop {
-    constructor() {
-        this.el    = $('#wordLoop');
-        this.words = this.el ? $$('.loop__stack span', this.el) : [];
-        this.index = 0;
-        this.HOLD  = 2600;
-        this.timer = null;
-    }
-
-    init() {
-        if (!this.el || this.words.length < 2 || REDUCED) return;
-
-        // Wait for the entrance to land before the first swap
-        const begin = () => { this.timer = setInterval(() => this.next(), this.HOLD); };
-        setTimeout(begin, 2400);
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) { clearInterval(this.timer); this.timer = null; }
-            else if (!this.timer) this.timer = setInterval(() => this.next(), this.HOLD);
-        });
-    }
-
-    next() {
-        const current = this.words[this.index];
-        this.index = (this.index + 1) % this.words.length;
-        const incoming = this.words[this.index];
-
-        // Roll out through the top of the mask…
-        current.classList.remove('is-on');
-        current.classList.add('is-out');
-
-        // …and only then bring the next word up through the bottom,
-        // so two words are never legible at once.
-        setTimeout(() => {
-            current.classList.remove('is-out');
-            incoming.classList.add('is-on');
-        }, 220);
-    }
-}
-
-
-/* =============================================================================
    HERO VIDEO
 ============================================================================= */
 class HeroVideo {
@@ -331,12 +288,15 @@ class Magnetic {
 
 /* =============================================================================
    THE SHELF — the services rail (#infusions)
-   Framed plates hung on a cream wood panel. Pinned horizontally on desktop and
-   dragged by the scrollbar; stacked on phones. The counter and meter track
-   whichever plate is centred.
+   Ten plates: nine signature infusions and one customized option. Pinned
+   horizontally on desktop and dragged by the scrollbar; a native snap scroller
+   on phones. The counter and meter track whichever plate is centred.
 
    Found by CLASS, not id: the section keeps id="infusions" so the header nav
    and the hero's "View infusions" button still land on it.
+
+   The filters are generic — a pill's data-filter is matched against a plate's
+   data-tags, so Dr. Aronov's eleven-button order needs no code change here.
 ============================================================================= */
 class Shelf {
     constructor() {
@@ -348,7 +308,7 @@ class Shelf {
         this.now      = $('#shelfNow');
         this.total    = $('#shelfTotal');
         this.last     = -1;
-        this.BREAK    = 900;   // below this the rail stacks
+        this.BREAK    = 900;   // below this the rail becomes a snap scroller
     }
 
     init() {
@@ -384,8 +344,8 @@ class Shelf {
     }
 
     /** Move the counter and the meter to the plate at `index`.
-        The panel itself stays cream — each formula's compound colour lives
-        only in the spectrum strip under its own photograph. */
+        The field itself stays cream — each formula's compound colour lives
+        only in its own numeral, chips and hover. */
     paint(index) {
         const list = this.live();
         if (!list.length) return;
@@ -395,6 +355,7 @@ class Shelf {
         this.last = i;
 
         if (this.now)   this.now.textContent = String(i + 1).padStart(2, '0');
+        if (this.total) this.total.textContent = String(list.length).padStart(2, '0');
         if (this.meter) this.meter.style.width = ((i + 1) / list.length) * 100 + '%';
     }
 
@@ -422,7 +383,6 @@ class Shelf {
                 },
             });
 
-            /* the photograph lags its own frame; the numeral counter-scrolls */
             /* the roman numeral counter-scrolls against its own plate */
             $$('.plate', this.track).forEach((plate) => {
                 const no = $('.plate__no', plate);
@@ -475,8 +435,8 @@ class Shelf {
             return () => { track.removeEventListener('scroll', onScroll); };
         });
 
-        /* fonts land after first paint and change every measurement */
-        /* global refresh lives in boot() — see the note there */
+        /* fonts land after first paint and change every measurement —
+           global refresh lives in boot() */
     }
 
     filters() {
@@ -500,6 +460,10 @@ class Shelf {
 
                 this.last = -1;
                 this.paint(0);
+
+                // a single-result filter has nothing to scroll through — send
+                // the phone scroller back to the start so the one card is on screen
+                this.track.scrollLeft = 0;
 
                 if (typeof window.gsap !== 'undefined') {
                     gsap.fromTo(this.live(),
@@ -652,9 +616,7 @@ class Route {
 
 
 /* =============================================================================
-   THE DOCK — back to top (left) and the action dial (right)
-   Both surface once you are past the hero. The dial closes on Escape, on an
-   outside click, and whenever one of its actions is taken.
+   THE PRACTICE, LIVE
 ============================================================================= */
 class Social {
     constructor() { this.el = $('.social'); }
@@ -667,6 +629,11 @@ class Social {
 }
 
 
+/* =============================================================================
+   THE DOCK — back to top (left) and the action dial (right)
+   Both surface once you are past the hero. The dial closes on Escape, on an
+   outside click, and whenever one of its actions is taken.
+============================================================================= */
 class Dock {
     constructor() {
         this.top    = $('#toTop');
@@ -719,63 +686,89 @@ class Dock {
 
 
 /* =============================================================================
-   THE QUIZ — modal, four questions, weighted across all ten protocols
-   Every price below is her published figure. The engine proposes a starting
-   point and says plainly that it is not a medical opinion.
+   THE QUIZ — modal, four questions, weighted across the ten infusions
+   -----------------------------------------------------------------------------
+   Menu as approved by Dr. Aronov: nine signature infusions + one customized
+   option. Quercetin and Curcumin have been removed entirely.
+
+   ⚠ TWO ENTRIES ARE INCOMPLETE. Joint Support and Skin Health share one
+   formulation and their ingredients, chair time and pricing have not been
+   supplied yet. They are marked below and their `price`/`prog` read
+   "To be confirmed" so nothing false is ever displayed. They are deliberately
+   left OUT of the budget question's weighting until real figures exist —
+   see ASKS[3].
 ============================================================================= */
 const DRIPS = [
-    { id:'immuno',    name:'Immun-O-Boost IV Support',            slug:'/drips/immuno-boost/',                    img:'immuneoboost',  time:'2 h 30',    price:'$650', prog:'$585',    tag:'Immunity',
-      why:'Immune support, hydration and recovery — the deep seasonal replenishment.' },
-    { id:'muscle',    name:'LIQUIXO Muscle Recovery IV',          slug:'/drips/muscle-support/',                  img:'liquixo',       time:'45 min',    price:'$495', prog:'$445.50', tag:'Recovery',
-      why:'Lean-muscle support through GLP-1 and weight-loss programmes — the full amino profile.' },
-    { id:'antiox',    name:'Antioxidant ×3 Reset IV',             slug:'/drips/antioxidant-reset/',               img:'antioxidant',   time:'75 min',    price:'$500', prog:'$450',    tag:'Longevity',
-      why:'Three antioxidants that recharge one another rather than working alone.' },
-    { id:'glynac',    name:'GLyNAC Longevity Restoration IV',     slug:'/drips/glynac-longevity/',                img:'glynac',        time:'60 min',    price:'$450', prog:'$405',    tag:'Longevity',
-      why:'The two components your body uses to make its own glutathione.' },
-    { id:'brain',     name:'Stress, Burnout & Brain Wellness IV', slug:'/drips/mental-recovery-brain-wellness/',  img:'brainwellness', time:'1 h 30',    price:'$700', prog:'$630',    tag:'Mind',
-      why:'Brain fuel for stress, mental burnout and demanding schedules.' },
-    { id:'curcumin',  name:'Curcumin IV Infusion',                slug:'/drips/curcumin/',                        img:'curcumin',      time:'45 min',    price:'$325', prog:'$292.50', tag:'Recovery',
-      why:'Turmeric’s active compound, delivered past the gut — joint comfort.' },
-    { id:'gluta',     name:'Glutathione IV Injection',            slug:'/drips/glutathione/',                     img:'glutathione',   time:'10–20 min', price:'$125', prog:'$112.50', tag:'Radiance',
-      why:'The master antioxidant, in and out inside twenty minutes.' },
-    { id:'quercetin', name:'Quercetin Seasonal Allergy Support IV',slug:'/drips/quercetin/',                      img:'quercetin',     time:'45 min',    price:'$300', prog:'$270',    tag:'Immunity',
-      why:'A plant flavonoid for pollen season, delivered past digestion.' },
-    { id:'revive',    name:'Revive IV Support',                   slug:'/drips/revive/',                          img:'revive',        time:'2 h 30',    price:'$625', prog:'$562.50', tag:'Recovery',
+    { id:'immune',      name:'Immun-O-Boost IV Support',                slug:'/drips/immune-support/',        img:'immuneoboost',  time:'2 h 30',                   price:'$650', prog:'$585',    tag:'Immune Support',
+      why:'Hydration, immune and recovery support — the deep seasonal replenishment.' },
+
+    { id:'postillness', name:'Revive IV Support Infusion',              slug:'/drips/post-illness-recovery/', img:'revive',        time:'2 h 15',                   price:'$625', prog:'$562.50', tag:'Post-Illness Recovery',
       why:'Replenish, recharge, revive — the unhurried full restoration.' },
-    { id:'custom',    name:'The Customized Drip',                 slug:'/drips/customized-drip/',                 img:'customized',    time:'Bespoke',   price:'By consultation', prog:'Quoted', tag:'Bespoke',
-      why:'Composed for you alone after a private consultation.' },
+
+    { id:'antioxidant', name:'Antioxidant ×3 Reset IV Infusion',        slug:'/drips/antioxidant-support/',   img:'antioxidant',   time:'1 h 15',                   price:'$500', prog:'$450',    tag:'Antioxidant Support',
+      why:'Three antioxidants that recharge one another rather than working alone.' },
+
+    { id:'glutathione', name:'Glutathione IV Injection',                slug:'/drips/glutathione-iv-therapy/',img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
+      why:'A slow physician-administered push of the body’s major antioxidant.' },
+
+    { id:'muscle',      name:'LIQUIXO Muscle Support IV Infusion',      slug:'/drips/muscle-recovery/',       img:'liquixo',       time:'45 min',                   price:'$495', prog:'$445.50', tag:'Muscle Recovery',
+      why:'Lean-muscle support through GLP-1 and weight-loss programmes — the full amino profile.' },
+
+    /* ⚠ awaiting formulation + pricing */
+    { id:'joint',       name:'Joint Support IV Infusion',               slug:'/drips/joint-support/',         img:'jointsupport',  time:'To be confirmed',           price:'To be confirmed', prog:'To be confirmed', tag:'Joint Support',
+      why:'Supportive care for joint comfort and a healthy inflammatory response.' },
+
+    /* ⚠ same formulation as Joint Support — awaiting formulation + pricing */
+    { id:'skin',        name:'Skin Health IV Infusion',                 slug:'/drips/skin-health/',           img:'skinhealth',    time:'To be confirmed',           price:'To be confirmed', prog:'To be confirmed', tag:'Skin Health',
+      why:'The same formulation as Joint Support, selected for skin wellness goals.' },
+
+    { id:'liver',       name:'GLyNAC Longevity Restoration IV',         slug:'/drips/liver-support/',         img:'glynac',        time:'1 h 15',                   price:'$450', prog:'$405',    tag:'Liver Support',
+      why:'The two components your body uses to make its own glutathione.' },
+
+    { id:'mind',        name:'Stress, Mental Burnout & Brain Wellness IV', slug:'/drips/mind-focus-support/', img:'brainwellness', time:'1 h 30',                   price:'$700', prog:'$630',    tag:'Mind & Focus Support',
+      why:'Nutritional support for stress, mental fatigue and demanding schedules.' },
+
+    { id:'custom',      name:'Customized IV Infusion',                  slug:'/drips/customized-infusion/',   img:'customized',    time:'Individually determined',   price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
+      why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
 ];
 
 const ASKS = [
     { ask:'What brought you here?', hint:'Pick whichever is loudest right now.', opts:[
-        { t:'I keep getting sick',   s:'Run-down, seasonal',             i:'ph-shield-check', w:{ immuno:5, quercetin:2, revive:2 } },
-        { t:'I am exhausted',        s:'Depleted, dehydrated',           i:'ph-battery-low',  w:{ revive:5, immuno:2, brain:2 } },
-        { t:'My head is foggy',      s:'Burnout, stress, poor sleep',    i:'ph-brain',        w:{ brain:5, revive:2 } },
-        { t:'My joints ache',        s:'Stiffness, inflammatory stress', i:'ph-bone',         w:{ curcumin:5, antiox:3 } },
-        { t:'I am losing muscle',    s:'On a GLP-1 or weight-loss plan', i:'ph-barbell',      w:{ muscle:5 } },
-        { t:'I want to age well',    s:'Longevity, cellular, skin',      i:'ph-infinity',     w:{ glynac:4, antiox:3, gluta:3 } },
+        { t:'I keep getting sick',    s:'Run-down, seasonal',              i:'ph-shield-check',  w:{ immune:5, postillness:2 } },
+        { t:'I am still run down',    s:'Recovering after an illness',     i:'ph-arrows-clockwise', w:{ postillness:5, immune:2 } },
+        { t:'My head is foggy',       s:'Stress, burnout, poor sleep',     i:'ph-brain',         w:{ mind:5, postillness:2 } },
+        { t:'My joints ache',         s:'Stiffness, inflammatory stress',  i:'ph-bone',          w:{ joint:5, antioxidant:2 } },
+        { t:'I am thinking about my skin', s:'Tone, texture, skin wellness', i:'ph-sparkle',     w:{ skin:5, glutathione:3 } },
+        { t:'I am losing muscle',     s:'On a GLP-1 or weight-loss plan',  i:'ph-barbell',       w:{ muscle:6 } },
+        { t:'I want to age well',     s:'Longevity, cellular, liver',      i:'ph-infinity',      w:{ liver:4, antioxidant:4, glutathione:2 } },
     ]},
-    { ask:'Any seasonal allergies or a diagnosed condition?', hint:'This changes how carefully she coordinates, never whether you are welcome.', opts:[
-        { t:'Seasonal allergies',    s:'Pollen, dust, environmental',    i:'ph-wind',           w:{ quercetin:6, immuno:2 } },
-        { t:'An inflammatory condition', s:'Crohn’s, RA, psoriasis',     i:'ph-first-aid-kit',  flag:true, w:{ custom:5, antiox:3, curcumin:2 } },
-        { t:'Something else',        s:'Another diagnosis',              i:'ph-clipboard-text', flag:true, w:{ custom:6 } },
-        { t:'None of these',         s:'Generally well',                 i:'ph-check-circle',   w:{} },
+
+    { ask:'Are you under a specialist’s care for anything?', hint:'This changes how carefully she coordinates, never whether you are welcome.', opts:[
+        { t:'Yes — a gut condition',  s:'Crohn’s, colitis, coeliac',       i:'ph-first-aid-kit',  flag:true, w:{ custom:5, immune:2 } },
+        { t:'Yes — joints or skin',   s:'RA, psoriasis, related',          i:'ph-hand-heart',     flag:true, w:{ custom:4, joint:2, skin:2 } },
+        { t:'Yes — liver or metabolic', s:'Fatty liver, related',          i:'ph-heartbeat',      flag:true, w:{ custom:4, liver:3 } },
+        { t:'No — generally well',    s:'No diagnosis, no specialist',     i:'ph-check-circle',   w:{} },
     ]},
+
     { ask:'How long can you sit?', hint:'Her chairs are private — the long ones are the unhurried ones.', opts:[
-        { t:'Twenty minutes',   s:'A lunch break',        i:'ph-timer',     w:{ gluta:5 } },
-        { t:'About an hour',    s:'A proper sit',         i:'ph-clock',     w:{ glynac:3, curcumin:3, quercetin:3, muscle:3 } },
-        { t:'Ninety minutes',   s:'Time to switch off',   i:'ph-armchair',  w:{ brain:4, antiox:3 } },
-        { t:'A full afternoon', s:'The complete ones',    i:'ph-hourglass', w:{ revive:5, immuno:5 } },
+        { t:'About half an hour', s:'A lunch break',      i:'ph-timer',     w:{ glutathione:6 } },
+        { t:'About an hour',      s:'A proper sit',       i:'ph-clock',     w:{ liver:4, antioxidant:3, muscle:3 } },
+        { t:'Ninety minutes',     s:'Time to switch off', i:'ph-armchair',  w:{ mind:5, antioxidant:2 } },
+        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ postillness:5, immune:5 } },
     ]},
+
+    /* Joint Support and Skin Health carry no weight here on purpose — their
+       pricing is not confirmed, so they must not be steered to on budget.
+       Add them once Dr. Aronov supplies the figures. */
     { ask:'What feels comfortable per session?', hint:'Every figure here is her real published rate.', opts:[
-        { t:'Under $350',   s:'Single-compound infusions', i:'ph-coins',    w:{ gluta:4, curcumin:3, quercetin:3 } },
-        { t:'$350 – $550',  s:'The mid-length protocols',  i:'ph-wallet',   w:{ glynac:4, antiox:3, muscle:3 } },
-        { t:'$550 and up',  s:'The long, complete ones',   i:'ph-diamond',  w:{ immuno:4, revive:4, brain:4 } },
-        { t:'Let her decide', s:'Whatever is right',       i:'ph-pen-nib',  w:{ custom:3 } },
+        { t:'Under $350',     s:'Single-compound infusions', i:'ph-coins',   w:{ glutathione:5 } },
+        { t:'$350 – $550',    s:'The mid-length protocols',  i:'ph-wallet',  w:{ liver:4, antioxidant:4, muscle:3 } },
+        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, postillness:4, mind:4 } },
+        { t:'Let her decide', s:'Whatever is right',         i:'ph-pen-nib', w:{ custom:4 } },
     ]},
 ];
 
-const THINKING = ['Reading your answers', 'Weighing ten protocols', 'Checking time and budget', 'Preparing your starting point'];
+const THINKING = ['Reading your answers', 'Weighing ten infusions', 'Checking time and budget', 'Preparing your starting point'];
 
 class Quiz {
     constructor() {
@@ -900,7 +893,9 @@ class Quiz {
         this.answers.forEach((a) => {
             if (!a) return;
             if (a.flag) flag = true;
-            Object.entries(a.w || {}).forEach(([k, v]) => { totals[k] += v; });
+            Object.entries(a.w || {}).forEach(([k, v]) => {
+                if (k in totals) totals[k] += v;
+            });
         });
         const rank = Object.entries(totals).sort((x, y) => y[1] - x[1]);
         const by = Object.fromEntries(DRIPS.map((d) => [d.id, d]));
@@ -924,7 +919,12 @@ class Quiz {
     result() {
         const { top, alt, flag } = this.score();
         const note = flag
-            ? `<p class="rx__why"><b>Because you are under a specialist’s care</b>, Dr.&nbsp;Aronov will review your medications and want your treating physician in the loop before anything is scheduled. Nothing here replaces your prescribed treatment.</p>`
+            ? `<p class="rx__why"><b>Because you are under a specialist’s care</b>, Dr.&nbsp;Aronov will review your medications and requires your treating physician’s written approval before anything is scheduled. Nothing here replaces your prescribed treatment.</p>`
+            : '';
+
+        // the programme row is only shown when there is a real figure for it
+        const progRow = /^\$/.test(top.prog)
+            ? `<div class="rx__fact"><dt>In a programme</dt><dd>${top.prog}</dd></div>`
             : '';
 
         this.swap(`
@@ -942,7 +942,7 @@ class Quiz {
                 <dl class="rx__facts">
                     <div class="rx__fact"><dt>Chair time</dt><dd>${top.time}</dd></div>
                     <div class="rx__fact"><dt>Per session</dt><dd>${top.price}</dd></div>
-                    <div class="rx__fact"><dt>In a programme</dt><dd>${top.prog}</dd></div>
+                    ${progRow}
                 </dl>
                 <div class="rx__alt">
                     <span>Also worth asking about <b>${alt.name}</b></span>
@@ -1035,6 +1035,7 @@ class Conditions {
     }
 }
 
+
 /* =============================================================================
    REVEAL — generic scroll reveal for the sections still to come
    Mark anything with [data-reveal]; siblings cascade automatically.
@@ -1072,20 +1073,19 @@ class Reveal {
    BOOT
 ============================================================================= */
 const modules = {
-    preloader: new Preloader(),
-    header:    new Header(),
-    menu:      new Menu(),
-    wordLoop:  new WordLoop(),
-    heroVideo: new HeroVideo(),
-    magnetic:  new Magnetic(),
-    shelf:     new Shelf(),
-    route:     new Route(),
-    dock:      new Dock(),
-    quiz:      new Quiz(),
+    preloader:  new Preloader(),
+    header:     new Header(),
+    menu:       new Menu(),
+    heroVideo:  new HeroVideo(),
+    magnetic:   new Magnetic(),
+    shelf:      new Shelf(),
+    route:      new Route(),
+    dock:       new Dock(),
+    quiz:       new Quiz(),
     conditions: new Conditions(),
-    social:    new Social(),
-    physician: new Physician(),
-    reveal:    new Reveal(),
+    social:     new Social(),
+    physician:  new Physician(),
+    reveal:     new Reveal(),
 };
 
 /** Nothing here is worth trapping someone behind a cream screen for. */
@@ -1135,36 +1135,5 @@ if (document.readyState === 'loading') {
     boot();
 }
 
-/* -----------------------------------------------------------------------------
-   CONSOLE HELPERS
-   Try wood textures live, no reload:
-
-     PMIV.wood('https://images.unsplash.com/photo-XXXX?auto=format&w=2400')
-     PMIV.wood()                     // back to the stylesheet default
-     PMIV.woodShow(0.55)             // 0 = flat cream, 1 = full strength photo
-     PMIV.plank('140px')             // width of one plank
-
-   When you settle on one, copy the values into --wood-img / --wood-show /
-   --plank at the top of section 06 in styles.css.
------------------------------------------------------------------------------ */
-const shelfEl = () => $('.shelf');
-
-const wood = (url) => {
-    const el = shelfEl(); if (!el) return 'no .shelf on this page';
-    if (!url) { el.style.removeProperty('--wood-img'); return 'reset to the stylesheet default'; }
-    el.style.setProperty('--wood-img', `url('${url}')`);
-    return url;
-};
-const woodShow = (v) => {
-    const el = shelfEl(); if (!el) return;
-    el.style.setProperty('--wood-show', String(v));
-    return v;
-};
-const plank = (w) => {
-    const el = shelfEl(); if (!el) return;
-    el.style.setProperty('--plank', w);
-    return w;
-};
-
 // handy in the console while the rest of the pages get built
-window.PMIV = { modules, boot, wood, woodShow, plank, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
+window.AVE = { modules, boot, DRIPS, ASKS, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
