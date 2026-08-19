@@ -43,14 +43,22 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preload" as="image" href="logo.png" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero-poster.jpg" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- One request, not two, and only the weights the stylesheet actually asks
+     for. Cormorant is used italic everywhere except one roman label, Marcellus
+     and Prata have a single weight each, Archivo never uses 400. -->
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
 
 <!-- ICONS — Phosphor web font. Every icon on the shelf is a linked glyph.
      Regular needs the base class: <i class="ph ph-clock">. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+<!-- fill and duotone are used below the fold only — load them without
+     blocking the first paint -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css" media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+</noscript>
 
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="stylesheet" href="styles.css">
