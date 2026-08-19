@@ -20,6 +20,7 @@
      Chronic     the chronic-condition accordion, its compounds and spotlight
      Social      the Instagram band
      Physician   sticky portrait, beats that pop, the chain of custody
+     Research    the reference rail — snap carousel, arrows, drag, keyboard
      Reveal      generic scroll reveal for anything marked [data-reveal]
      Boot
 
@@ -750,6 +751,162 @@ class Physician {
 
 
 /* =============================================================================
+   THE EVIDENCE — the reference rail (#research)          <- NEW CLASS, ADDED
+   Registered in `modules` at the bottom of this file, directly after the
+   physician. Nothing above or below was changed.
+
+   NO ScrollTrigger PIN HERE, on purpose. The shelf owns the pinned gesture
+   and two pinned sections on one page fight each other every time the
+   document height changes. This is an ordinary scroll-snap track: the browser
+   scrolls it on the compositor, the arrows nudge it, a pointer can drag it,
+   and the counter reads position from scrollLeft rather than from a
+   per-frame layout measurement.
+
+   Degrades cleanly: with GSAP absent the cards are simply visible and the
+   arrows still work. Under prefers-reduced-motion the CSS turns the track
+   into a grid and this class stands down entirely.
+============================================================================= */
+class Research {
+    constructor() {
+        this.scene = $('.rsrch');
+        this.track = $('#rsrchTrack');
+        this.now   = $('#rsrchNow');
+        this.total = $('#rsrchTotal');
+        this.meter = $('#rsrchMeter');
+        this.prev  = $('#rsrchPrev');
+        this.next  = $('#rsrchNext');
+        this.last  = -1;
+        this.DRAG  = 6;                 // px before a press counts as a drag
+    }
+
+    init() {
+        if (!this.scene || !this.track) return;
+
+        const cards = this.cards();
+        if (!cards.length) return;
+        if (this.total) this.total.textContent = String(cards.length).padStart(2, '0');
+
+        // reduced motion: the CSS has already flattened the rail into a grid,
+        // so there is nothing left to drive
+        if (REDUCED) { this.prev?.setAttribute('hidden', ''); this.next?.setAttribute('hidden', ''); return; }
+
+        this.paint(0);
+
+        this.prev?.addEventListener('click', () => this.step(-1));
+        this.next?.addEventListener('click', () => this.step(1));
+
+        this.track.addEventListener('scroll', onFrame(() => this.read()), { passive: true });
+
+        // arrow keys, once the rail has focus
+        this.track.setAttribute('tabindex', '0');
+        this.track.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') { e.preventDefault(); this.step(1); }
+            if (e.key === 'ArrowLeft')  { e.preventDefault(); this.step(-1); }
+        });
+
+        if (FINE_POINTER) this.drag();
+        this.reveal();
+
+        // a late-loading webfont changes every card's height and the track's
+        // scrollWidth with it — re-read once the type has settled
+        if (document.fonts) document.fonts.ready.then(() => this.read());
+    }
+
+    cards() { return $$('.ref', this.track); }
+
+    /** which card is at the left edge, and can we still scroll? */
+    read() {
+        const cards = this.cards();
+        if (!cards.length) return;
+
+        const x = this.track.scrollLeft;
+        let i = 0;
+        for (let n = 0; n < cards.length; n += 1) {
+            if (cards[n].offsetLeft - cards[0].offsetLeft <= x + 8) i = n;
+        }
+        this.paint(i);
+    }
+
+    paint(i) {
+        const cards = this.cards();
+        if (!cards.length) return;
+
+        if (i !== this.last) {
+            this.last = i;
+            if (this.now) this.now.textContent = String(i + 1).padStart(2, '0');
+            if (this.meter) this.meter.style.width = ((i + 1) / cards.length) * 100 + '%';
+        }
+
+        /* Three cards are visible on a laptop, so the last card can never
+           become the leftmost one — index alone would leave "next" enabled
+           forever. Disable against the real scroll extent instead. */
+        const max = this.track.scrollWidth - this.track.clientWidth;
+        if (this.prev) this.prev.disabled = this.track.scrollLeft <= 2;
+        if (this.next) this.next.disabled = this.track.scrollLeft >= max - 2;
+    }
+
+    step(dir) {
+        const cards = this.cards();
+        if (!cards.length) return;
+        const i = clamp((this.last < 0 ? 0 : this.last) + dir, 0, cards.length - 1);
+        this.track.scrollTo({
+            left: cards[i].offsetLeft - cards[0].offsetLeft,
+            behavior: 'smooth',
+        });
+    }
+
+    /** grab and pull, the way you would slide a card across a desk */
+    drag() {
+        const t = this.track;
+        let down = false, moved = false, startX = 0, startLeft = 0;
+
+        t.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch' || e.button !== 0) return;   // touch already scrolls
+            down = true; moved = false;
+            startX = e.clientX;
+            startLeft = t.scrollLeft;
+        });
+
+        t.addEventListener('pointermove', (e) => {
+            if (!down) return;
+            const dx = e.clientX - startX;
+            if (!moved && Math.abs(dx) < this.DRAG) return;
+            if (!moved) { moved = true; t.classList.add('is-dragging'); t.setPointerCapture(e.pointerId); }
+            t.scrollLeft = startLeft - dx;
+        });
+
+        const release = (e) => {
+            if (!down) return;
+            down = false;
+            if (!moved) return;
+            t.classList.remove('is-dragging');
+            if (e?.pointerId != null && t.hasPointerCapture?.(e.pointerId)) t.releasePointerCapture(e.pointerId);
+            // hand the position back to the snap engine, then re-read
+            requestAnimationFrame(() => this.read());
+        };
+
+        t.addEventListener('pointerup', release);
+        t.addEventListener('pointercancel', release);
+        t.addEventListener('pointerleave', release);
+
+        // a drag that ends on a card must not also open the paper
+        t.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+    }
+
+    /** the head, the paper and the cards arrive on the page's own grammar */
+    reveal() {
+        if (typeof window.gsap === 'undefined') return;
+        gsap.registerPlugin(ScrollTrigger);
+
+        popIn($$('.rsrch__intro > *', this.scene),
+              { y: 24, stagger: .08, duration: .55, ease: 'back.out(1.5)' }, this.scene, 'top 84%');
+        popIn($('.paper'), { y: 34, duration: .7, ease: 'expo.out' }, '.paper', 'top 84%');
+        popIn(this.cards(), { y: 26, stagger: .06, duration: .6, ease: 'expo.out' }, '.rail', 'top 88%');
+    }
+}
+
+
+/* =============================================================================
    THE IV ADVANTAGE — one stage, one switch (#advantage)
    Picking a road draws it: the rule fills, the pins light in sequence. The
    first draw is fired by ScrollTrigger so it plays on arrival; every switch
@@ -1418,6 +1575,7 @@ const modules = {
     conditions: new Chronic(),
     social:     new Social(),
     physician:  new Physician(),
+    research:   new Research(),
     reveal:     new Reveal(),
 };
 
