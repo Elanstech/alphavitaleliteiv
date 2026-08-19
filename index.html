@@ -1254,20 +1254,244 @@
 
 
 <!-- ==============================================================
-     RESEARCH CAROUSEL  (#research)   —   PLACEHOLDER, TO BUILD
+     THE EVIDENCE  (#research)
+     Two movements: one featured paper set as a reading plate, then a
+     horizontal reference rail. NO PIN — the shelf owns that gesture and one
+     pinned section per page is the rule. This rail is a native snap scroller
+     on every breakpoint, driven by arrows, drag and the keyboard.
+
+     COPY RULE — every takeaway states what a study LOOKED AT. Never what an
+     infusion will do for you. Three of these six are preclinical or
+     observational and say so on the card face.
+
+     ⚠ OUTBOUND URLS ARE PLACEHOLDERS. Each <a> carries data-needs-url and
+     href="#". Drop the real PubMed / PMC link in and delete the attribute.
+     Nothing false ships in the meantime.
      ============================================================== -->
-<section class="slot slot--parchment" id="research" aria-labelledby="researchTitle">
-  <div class="slot__wrap">
-    <span class="slot__flag">Placeholder</span>
-    <p class="slot__eyebrow"><i class="ph-duotone ph-books" aria-hidden="true"></i> The evidence</p>
-    <h2 class="slot__title" id="researchTitle">Research carousel</h2>
-    <p class="slot__lede">A horizontal rail of the papers she cites, each with journal, year and a one-line plain-English takeaway. Links out to PubMed rather than reproducing abstracts.</p>
-    <ul class="slot__todo">
-        <li>Card fields — compound · journal and year · one-line takeaway · outbound link</li>
-        <li>Reuse the shelf snap scroller, not a second pinned rail. One pinned section per page</li>
-        <li>NEEDS — her citation list. The Zinc guide already carries 13 she selected herself</li>
-        <li>Copy rule — describe what a study looked at, never what an infusion will do for you</li>
-    </ul>
+<section class="rsrch" id="research" aria-labelledby="researchTitle">
+  <span class="rsrch__field" aria-hidden="true"></span>
+
+  <div class="rsrch__wrap">
+
+    <header class="rsrch__head">
+      <div class="rsrch__rubric" data-reveal>
+        <span class="rsrch__rubric-no">Chapter IV</span>
+        <span class="rsrch__rubric-name">The evidence</span>
+        <span class="rsrch__rubric-rule"></span>
+      </div>
+
+      <div class="rsrch__intro">
+        <h2 class="rsrch__title" id="researchTitle" data-reveal>
+          What she reads<br><em>before she recommends.</em>
+        </h2>
+        <p class="rsrch__lede" data-reveal>
+          Every signature infusion is accompanied by published literature on its principal
+          compounds and the pathways they work in. The papers are listed so you can read them
+          yourself &mdash; not summarised into a claim. Some are randomised trials in people. Some
+          are reviews. Some are animal work. Each card says which, because the difference matters
+          more than the finding.
+        </p>
+      </div>
+    </header>
+
+    <!-- ---------- the featured paper ---------- -->
+    <article class="paper" data-reveal>
+      <span class="paper__flag">Featured paper</span>
+
+      <div class="paper__l">
+        <p class="paper__kick"><i class="ph-duotone ph-book-open-text" aria-hidden="true"></i> Recommended reading</p>
+        <h3 class="paper__name">What is homocysteine &mdash; and why does it matter?</h3>
+
+        <p class="paper__body">
+          A researcher report from the Alzheimer&rsquo;s Drug Discovery Foundation reviewing the
+          published literature on B6, B12, folate, homocysteine biology and cognitive aging. It is
+          honest about what the evidence shows and what it does not &mdash; the kind of document
+          Dr.&nbsp;Aronov recommends reading before any wellness conversation about B vitamins.
+        </p>
+
+        <p class="paper__lab">The report notes that high homocysteine may be associated with</p>
+        <ul class="paper__points">
+          <li>Cognitive decline</li>
+          <li>Brain aging</li>
+          <li>Vascular stress</li>
+          <li>Increased neurological risk</li>
+        </ul>
+
+        <p class="paper__body">
+          B6, B12 and folate are the B vitamins the body uses to metabolise and lower homocysteine.
+          The report goes further than that, though &mdash; it walks through meta-analyses,
+          randomised trials, and the limits of B-vitamin supplementation in healthy individuals
+          versus people with a deficiency. It is a careful read, not a marketing summary.
+        </p>
+
+        <a class="paper__link" href="/drips/mind-focus-support/">
+          <span>Related infusion &mdash; Stress &amp; Brain Wellness IV</span>
+          <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <aside class="paper__r">
+        <dl class="paper__meta">
+          <div class="paper__row">
+            <dt>Published by</dt>
+            <dd>Alzheimer&rsquo;s Drug Discovery Foundation<span>CognitiveVitality.org</span></dd>
+          </div>
+          <div class="paper__row">
+            <dt>Last updated</dt>
+            <dd>13 July 2016</dd>
+          </div>
+          <div class="paper__row">
+            <dt>Format</dt>
+            <dd>PDF <span>Researcher report</span></dd>
+          </div>
+        </dl>
+
+        <a class="paper__dl"
+           href="https://precisionmedicaliv.com/wp-content/themes/alphavital/assets/research/vitamin-b6-b12-folate-cognitive-vitality.pdf"
+           target="_blank" rel="noopener">
+          <i class="ph ph-download-simple" aria-hidden="true"></i>
+          <span>Download the PDF</span>
+        </a>
+
+        <p class="paper__note">
+          This document is published by a third party and is hosted here for patient convenience.
+          Alpha Vital did not author it, does not own it, and does not represent any specific
+          clinical claim on the basis of it. Educational reading only.
+        </p>
+      </aside>
+    </article>
+
+    <!-- ---------- the reference rail ---------- -->
+    <div class="rail__top" data-reveal>
+      <p class="rail__lab"><i class="ph ph-flask" aria-hidden="true"></i> From the reference library</p>
+      <a class="rail__all" href="/research/">
+        <span>All references</span><i class="ph ph-arrow-right" aria-hidden="true"></i>
+      </a>
+    </div>
+
+    <div class="rail" data-reveal>
+      <ol class="rail__track" id="rsrchTrack">
+
+        <li class="ref" style="--tone:#D9982A">
+          <a class="ref__in" href="#" data-needs-url>
+            <header class="ref__head">
+              <p class="ref__cat"><i class="ph ph-shield-check" aria-hidden="true"></i> Immune Support</p>
+              <span class="ref__no" aria-hidden="true">01</span>
+            </header>
+            <p class="ref__type">Peer-reviewed review</p>
+            <h4 class="ref__name">The nutritional roles of zinc for immune system and COVID-19 patients</h4>
+            <p class="ref__take">Reviews what is known about zinc&rsquo;s part in normal immune-cell function, and where that evidence is strongest.</p>
+            <footer class="ref__foot">
+              <span class="ref__src">Frontiers in Nutrition<i>&middot;</i>2024</span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+            </footer>
+          </a>
+        </li>
+
+        <li class="ref" style="--tone:#5B7098">
+          <a class="ref__in" href="#" data-needs-url>
+            <header class="ref__head">
+              <p class="ref__cat"><i class="ph ph-infinity" aria-hidden="true"></i> Healthy Aging</p>
+              <span class="ref__no" aria-hidden="true">02</span>
+            </header>
+            <p class="ref__type ref__type--flag">Preclinical &mdash; animal study</p>
+            <h4 class="ref__name">GlyNAC supplementation in mice increases length of life by correcting glutathione deficiency</h4>
+            <p class="ref__take">Conducted in mice, not people. What it examined was glycine and NAC together against glutathione deficiency and mitochondrial function.</p>
+            <footer class="ref__foot">
+              <span class="ref__src">PubMed</span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+            </footer>
+          </a>
+        </li>
+
+        <li class="ref" style="--tone:#4F7D5E">
+          <a class="ref__in" href="#" data-needs-url>
+            <header class="ref__head">
+              <p class="ref__cat"><i class="ph ph-atom" aria-hidden="true"></i> Antioxidant Support</p>
+              <span class="ref__no" aria-hidden="true">03</span>
+            </header>
+            <p class="ref__type ref__type--flag">Observational &mdash; cross-sectional</p>
+            <h4 class="ref__name">Serum vitamin C concentrations are inversely related to biological aging</h4>
+            <p class="ref__take">A population study describing an association between measured vitamin&nbsp;C and markers of biological aging. Association, not cause.</p>
+            <footer class="ref__foot">
+              <span class="ref__src">PMC / NIH</span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+            </footer>
+          </a>
+        </li>
+
+        <li class="ref" style="--tone:#7FA08C">
+          <a class="ref__in" href="#" data-needs-url>
+            <header class="ref__head">
+              <p class="ref__cat"><i class="ph ph-drop" aria-hidden="true"></i> Glutathione IV Therapy</p>
+              <span class="ref__no" aria-hidden="true">04</span>
+            </header>
+            <p class="ref__type">Systematic review</p>
+            <h4 class="ref__name">Glutathione in skin aging and tissue regeneration: molecular mechanisms and redox modulation</h4>
+            <p class="ref__take">Gathers the mechanistic literature on glutathione and redox balance in skin, and sets out where the questions remain open.</p>
+            <footer class="ref__foot">
+              <span class="ref__src">PMC / NIH</span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+            </footer>
+          </a>
+        </li>
+
+        <li class="ref" style="--tone:#7A5F98">
+          <a class="ref__in" href="#" data-needs-url>
+            <header class="ref__head">
+              <p class="ref__cat"><i class="ph ph-brain" aria-hidden="true"></i> Mind &amp; Focus Support</p>
+              <span class="ref__no" aria-hidden="true">05</span>
+            </header>
+            <p class="ref__type">Clinical study</p>
+            <h4 class="ref__name">Preventing Alzheimer&rsquo;s disease-related gray matter atrophy by B-vitamin treatment</h4>
+            <p class="ref__take">A trial in people, studying B-vitamin treatment against imaged rates of gray matter change. Sits directly beside the featured report above.</p>
+            <footer class="ref__foot">
+              <span class="ref__src">PubMed</span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+            </footer>
+          </a>
+        </li>
+
+        <li class="ref" style="--tone:#B34E37">
+          <a class="ref__in" href="#" data-needs-url>
+            <header class="ref__head">
+              <p class="ref__cat"><i class="ph ph-barbell" aria-hidden="true"></i> Muscle Recovery</p>
+              <span class="ref__no" aria-hidden="true">06</span>
+            </header>
+            <p class="ref__type">Systematic review &amp; meta-analysis</p>
+            <h4 class="ref__name">Signatures and clinical significance of amino acid flux in sarcopenia</h4>
+            <p class="ref__take">Pools the published studies on amino acid movement in age-related muscle loss &mdash; the highest evidence tier in this library.</p>
+            <footer class="ref__foot">
+              <span class="ref__src">PMC / NIH</span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+            </footer>
+          </a>
+        </li>
+
+      </ol>
+    </div>
+
+    <div class="rail__bar">
+      <p class="rail__count"><b id="rsrchNow">01</b> <span>/</span> <span id="rsrchTotal">06</span></p>
+      <span class="rail__meter"><i id="rsrchMeter"></i></span>
+      <div class="rail__arrows">
+        <button class="rail__arrow" id="rsrchPrev" type="button" aria-label="Previous reference" aria-controls="rsrchTrack" disabled>
+          <i class="ph ph-arrow-left" aria-hidden="true"></i>
+        </button>
+        <button class="rail__arrow" id="rsrchNext" type="button" aria-label="Next reference" aria-controls="rsrchTrack">
+          <i class="ph ph-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <p class="rsrch__legal">
+      These references are provided as educational reading only. They describe research into
+      individual compounds and pathways; they are not evidence for any specific outcome from an
+      infusion, and they do not constitute medical advice. Published research should be
+      interpreted within the context of your own medical history and under physician guidance.
+      Alpha Vital Elite IV did not author the linked material and does not own it.
+    </p>
+
   </div>
 </section>
 
