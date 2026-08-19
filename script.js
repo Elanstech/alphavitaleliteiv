@@ -94,8 +94,15 @@ class Preloader {
         this.bar = $('#preBar');
         this.pct = $('#prePct');
 
-        this.MIN_MS = 1200;
-        this.MAX_MS = 5000;
+        /* Was 1.2s minimum and a 5s ceiling, and it waited on `window.load` —
+           which does not fire until every lazy image, the hero video and three
+           icon webfonts are in. On a phone that read as a wall.
+
+           Now: it waits only on the things that are actually on screen (the
+           mark, the hero poster) and on fonts, with a hard 900ms cap on the
+           font wait so a slow Google Fonts response can never hold the page. */
+        this.MIN_MS = 320;
+        this.MAX_MS = 2000;
         this.start  = performance.now();
         this.shown  = 0;
         this.target = 0;
@@ -110,24 +117,32 @@ class Preloader {
     }
 
     watchAssets() {
-        const images = $$('img').filter((img) => img.getAttribute('src'));
-        const total  = images.length + 1; // +1 for the font set
-        let done     = 0;
+        // only what is painted before the first scroll — lazy images are not
+        // part of "ready", and waiting on them was most of the old delay
+        const critical = $$('img').filter((img) =>
+            img.getAttribute('src') && img.loading !== 'lazy');
+        const total = critical.length + 1;   // +1 for the font set
+        let done = 0;
 
         const step = () => {
             done += 1;
             this.target = Math.max(this.target, (done / total) * 100);
         };
 
-        (document.fonts ? document.fonts.ready : Promise.resolve()).then(step);
+        // fonts, but never wait longer than 900ms for them
+        const fonts = document.fonts
+            ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))])
+            : Promise.resolve();
+        fonts.then(step);
 
-        images.forEach((img) => {
+        critical.forEach((img) => {
             if (img.complete) { step(); return; }
             img.addEventListener('load',  step, { once: true });
             img.addEventListener('error', step, { once: true });
         });
 
-        window.addEventListener('load', () => { this.target = 100; this.loaded = true; }, { once: true });
+        // if the critical set is already cached there is nothing to wait for
+        if (!critical.length) this.target = 100;
     }
 
     tick() {
@@ -135,22 +150,22 @@ class Preloader {
         const paced   = clamp((elapsed / this.MIN_MS) * 96, 0, 96);
         const goal    = this.loaded ? 100 : Math.max(this.target, paced);
 
-        this.shown = lerp(this.shown, goal, 0.1);
-        if (goal - this.shown < 0.4) this.shown = goal;
+        this.shown = lerp(this.shown, goal, 0.22);      // was .1 — this is the visible speed
+        if (goal - this.shown < 0.6) this.shown = goal;
 
         if (this.bar) this.bar.style.width = `${this.shown.toFixed(1)}%`;
         const v = String(Math.round(this.shown));
         if (this.pct && this.pct.textContent !== v) this.pct.textContent = v;
 
-        if (this.shown >= 99.6 && elapsed >= this.MIN_MS) { this.lift(); return; }
+        if (this.shown >= 99.4 && elapsed >= this.MIN_MS) { this.lift(); return; }
         requestAnimationFrame(() => this.tick());
     }
 
     async lift() {
-        await wait(240);
+        await wait(80);                 // was 240
         this.el.classList.add('is-lifting');
-        this.release();
-        await wait(1050);
+        this.release();                 // the page is interactive during the curtain
+        await wait(760);
         this.el.remove();
     }
 
@@ -173,20 +188,45 @@ class Header {
 
     init() {
         if (!this.el) return;
-        const onScroll = onFrame(() => {
-            const y = window.scrollY;
+        // driven by the single shared scroll loop in boot() — see Scroll
+        Scroll.add((y) => {
             this.el.classList.toggle('is-stuck', y > 40);
-
             const goingDown = y > this.lastY && y > 320;
             const menuOpen  = document.documentElement.classList.contains('is-locked');
             this.el.classList.toggle('is-hidden', goingDown && !menuOpen);
-
             this.lastY = y;
         });
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
     }
 }
+
+
+/* =============================================================================
+   SCROLL — one listener, one rAF, every subscriber
+   Header and Dock each had their own scroll listener and their own rAF. Two
+   listeners means two layout reads per frame for the same number. One loop
+   reads scrollY once and hands it to everyone.
+============================================================================= */
+const Scroll = {
+    subs: [],
+    queued: false,
+    add(fn) {
+        this.subs.push(fn);
+        fn(window.scrollY);
+        if (this.subs.length === 1) this.listen();
+    },
+    listen() {
+        const run = () => {
+            const y = window.scrollY;
+            for (const fn of this.subs) fn(y);
+            this.queued = false;
+        };
+        window.addEventListener('scroll', () => {
+            if (this.queued) return;
+            this.queued = true;
+            requestAnimationFrame(run);
+        }, { passive: true });
+    },
+};
 
 
 /* =============================================================================
@@ -306,6 +346,17 @@ class HeroVideo {
             if (document.hidden) this.video.pause();
             else play();
         });
+
+        /* And when the hero is scrolled past. The video decode and the grain
+           keyframes were both still running for the whole page — on a phone
+           that is a constant tax for something nobody can see. */
+        if ('IntersectionObserver' in window && !REDUCED) {
+            const grain = $('.hero__grain');
+            new IntersectionObserver(([e]) => {
+                if (e.isIntersecting) { play(); if (grain) grain.style.animationPlayState = 'running'; }
+                else { this.video.pause(); if (grain) grain.style.animationPlayState = 'paused'; }
+            }, { threshold: 0.01 }).observe(this.media ?? this.video);
+        }
     }
 }
 
@@ -321,15 +372,33 @@ class Magnetic {
     init() {
         if (!this.items.length || REDUCED || !FINE_POINTER) return;
 
+        /* mousemove fires far faster than the display refreshes, and each event
+           was writing a transform and caching a getBoundingClientRect. Now the
+           box is measured on enter, and the write is a gsap quickTo — one
+           interpolated set per frame, which also makes the lean feel smoother. */
         this.items.forEach((el) => {
             const strength = 0.26;
-            el.addEventListener('mousemove', (e) => {
-                const box = el.getBoundingClientRect();
+            let box = null;
+
+            const hasGsap = typeof window.gsap !== 'undefined';
+            const setX = hasGsap ? gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3' }) : null;
+            const setY = hasGsap ? gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3' }) : null;
+
+            el.addEventListener('pointerenter', () => { box = el.getBoundingClientRect(); });
+
+            el.addEventListener('pointermove', (e) => {
+                if (!box) box = el.getBoundingClientRect();
                 const x = (e.clientX - (box.left + box.width  / 2)) * strength;
                 const y = (e.clientY - (box.top  + box.height / 2)) * strength;
-                el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+                if (setX) { setX(x); setY(y); }
+                else el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
             });
-            el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+
+            el.addEventListener('pointerleave', () => {
+                box = null;
+                if (setX) { setX(0); setY(0); }
+                else el.style.transform = '';
+            });
         });
     }
 }
@@ -782,14 +851,12 @@ class Dock {
     init() {
         if (!this.top && !this.fab) return;
 
-        const onScroll = onFrame(() => {
-            const past = window.scrollY > window.innerHeight * 0.6;
+        Scroll.add((y) => {
+            const past = y > window.innerHeight * 0.6;
             this.top?.classList.toggle('is-up', past);
             this.fab?.classList.toggle('is-up', past);
             if (!past && this.open) this.set(false);
         });
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
 
         this.top?.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' });
@@ -1314,7 +1381,7 @@ const release = () => {
 };
 
 const boot = () => {
-    setTimeout(release, 7000); // failsafe, whatever else happens
+    setTimeout(release, 3500); // failsafe, whatever else happens
 
     Object.values(modules).forEach((m) => {
         try { m.init(); }
