@@ -1765,6 +1765,7 @@ body.is-ready .hero__title .word .loop {
 .visit__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
 
 /* ---------- masthead: title and lede sit side by side, so it stays short ---------- */
+.visit__head { position: relative; }
 .visit__rubric {
     display: flex; align-items: center; gap: 1.25rem;
     padding-bottom: 1.1rem; margin-bottom: clamp(1.5rem, 3.5vh, 2.25rem);
@@ -2167,6 +2168,7 @@ body.is-ready .hero__title .word .loop {
     background: var(--cream);
     color: var(--ink-soft);
 }
+.slot--cream     { background: var(--cream); }
 .slot--parchment { background: var(--parchment); }
 
 .slot__wrap {
