@@ -428,41 +428,37 @@ class Shelf {
         this.now      = $('#shelfNow');
         this.total    = $('#shelfTotal');
         this.skip     = $('#shelfSkip');
+        this.prev     = $('#shelfPrev');
+        this.next     = $('#shelfNext');
         this.last     = -1;
         this.st       = null;
+        this.BREAK    = 900;
     }
 
     init() {
         if (!this.scene || !this.track) return;
 
         this.filters();
-        this.paint(0);
         this.skipButton();
+        this.paint(0);
 
-        // No GSAP or reduced motion -> the CSS already lays this out as a grid
         if (typeof window.gsap === 'undefined' || REDUCED) {
             $$('.plate', this.track).forEach((p) => p.classList.add('is-active'));
+            this.arrows(false);
             return;
         }
 
         gsap.registerPlugin(ScrollTrigger);
 
-        /* normalizeScroll takes the browser's own scrolling out of the loop on
-           touch, which is what stops the address-bar collapse from fighting a
-           pinned section mid-gesture. It is the single biggest difference
-           between this feeling smooth and feeling like it snags. */
-        if ('ontouchstart' in window) {
-            try { ScrollTrigger.normalizeScroll(true); } catch { /* older builds */ }
-        }
-
-        this.rail();
+        const mm = gsap.matchMedia();
+        mm.add(`(min-width: ${this.BREAK + 1}px)`, () => this.desktopRail());
+        mm.add(`(max-width: ${this.BREAK}px)`,     () => this.mobileRail());
     }
 
     live() {
         return $$('.plate', this.track).filter((p) => !p.classList.contains('is-out'));
     }
 
-    /** counter, meter, and which card is lit */
     paint(index) {
         const list = this.live();
         if (!list.length) return;
@@ -474,29 +470,22 @@ class Shelf {
 
         if (this.now)   this.now.textContent = String(i + 1).padStart(2, '0');
         if (this.meter) this.meter.style.width = ((i + 1) / list.length) * 100 + '%';
-
-        // only the card you are actually looking at is at full strength
         list.forEach((p, n) => p.classList.toggle('is-active', n === i));
+
+        if (this.prev) this.prev.disabled = i === 0;
+        if (this.next) this.next.disabled = i === list.length - 1;
     }
 
     /* =====================================================================
-       ONE MECHANIC, EVERY DEVICE
-       The old build pinned and scrubbed on desktop but handed phones a native
-       snap scroller. Two mechanics meant two sets of bugs, and the counter
-       could disagree with the screen mid-momentum. Now vertical scroll drives
-       the rail sideways everywhere; only the measurements change.
+       DESKTOP — the section pins and vertical scroll drives the rail sideways
        ===================================================================== */
-    rail() {
-        const plates = () => $$('.plate', this.track);
-
-        // how far the track has to travel for its last card to sit on screen
+    desktopRail() {
         const distance = () => {
             const list = this.live();
             if (!list.length) return 0;
             const lastEl = list[list.length - 1];
-            const trackW = lastEl.offsetLeft + lastEl.offsetWidth;
             const pad = parseFloat(getComputedStyle(this.track).paddingRight) || 0;
-            return Math.max(0, Math.round(trackW + pad - window.innerWidth));
+            return Math.max(0, Math.round(lastEl.offsetLeft + lastEl.offsetWidth + pad - window.innerWidth));
         };
 
         const setX = gsap.quickSetter(this.track, 'x', 'px');
@@ -514,19 +503,13 @@ class Shelf {
             onToggle: (self) => {
                 Shelf.pinned = self.isActive;
                 this.track.style.willChange = self.isActive ? 'transform' : 'auto';
-                this.scene.classList.toggle('is-running', self.isActive);
             },
             onUpdate: (self) => {
-                const d = distance();
-                // whole pixels: fractional transforms make the type shimmer
-                setX(-Math.round(self.progress * d));
-
+                setX(-Math.round(self.progress * distance()));
                 const list = this.live();
                 this.paint(Math.round(self.progress * (list.length - 1)));
 
-                /* the numerals counter-scroll against their own card. One pass
-                   here rather than a ScrollTrigger per plate — eleven scrubbed
-                   triggers on the same frame was most of the old stutter. */
+                // numerals counter-scroll — one pass, not a trigger per card
                 const vw = window.innerWidth;
                 for (const p of list) {
                     const no = p.__no || (p.__no = $('.plate__no', p));
@@ -538,16 +521,100 @@ class Shelf {
             },
         });
 
-        // the cards arrive once, as the shelf comes into view
-        popIn(plates(), { y: 46, stagger: .05, duration: .9, ease: 'expo.out' }, this.pin, 'top 72%');
+        popIn($$('.plate', this.track), { y: 46, stagger: .05, duration: .9, ease: 'expo.out' }, this.pin, 'top 72%');
+        this.arrows(false);
+
+        return () => {
+            this.st?.kill(true);
+            this.st = null;
+            Shelf.pinned = false;
+            gsap.set(this.track, { x: 0, clearProps: 'willChange' });
+        };
     }
 
-    /** jump past the pinned run for anyone who does not want the tour */
+    /* =====================================================================
+       PHONE + TABLET — no pin, no scrub, no scroll-jacking.
+
+       Hijacking vertical scroll to drive a transform is what was dropping
+       frames: every touchmove had to be intercepted, re-projected and then
+       re-measured against a viewport that resizes as the address bar
+       collapses. Here the track is an ordinary snap scroller, so the browser
+       scrolls it on the compositor for free, and the arrows drive it. The
+       counter reads position from an IntersectionObserver rather than from a
+       scroll handler, so there is no per-frame work at all.
+       ===================================================================== */
+    mobileRail() {
+        const track = this.track;
+        gsap.set(track, { x: 0 });
+
+        const step = (dir) => {
+            const list = this.live();
+            if (!list.length) return;
+            const i = clamp((this.last < 0 ? 0 : this.last) + dir, 0, list.length - 1);
+            const el = list[i];
+            const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+            track.scrollTo({
+                left: el.offsetLeft - pad,
+                behavior: REDUCED ? 'auto' : 'smooth',
+            });
+            this.paint(i);
+        };
+
+        const onPrev = () => step(-1);
+        const onNext = () => step(1);
+        this.prev?.addEventListener('click', onPrev);
+        this.next?.addEventListener('click', onNext);
+
+        // arrow keys work too, once the rail has focus
+        const onKey = (e) => {
+            if (e.key === 'ArrowRight') { e.preventDefault(); onNext(); }
+            if (e.key === 'ArrowLeft')  { e.preventDefault(); onPrev(); }
+        };
+        track.setAttribute('tabindex', '0');
+        track.addEventListener('keydown', onKey);
+
+        let io = null;
+        if ('IntersectionObserver' in window) {
+            io = new IntersectionObserver((entries) => {
+                let best = null;
+                for (const en of entries) {
+                    if (!en.isIntersecting) continue;
+                    if (!best || en.intersectionRatio > best.intersectionRatio) best = en;
+                }
+                if (!best) return;
+                const i = this.live().indexOf(best.target);
+                if (i >= 0) this.paint(i);
+            }, { root: track, threshold: [0.5, 0.7, 0.9] });
+            $$('.plate', track).forEach((p) => io.observe(p));
+        }
+
+        this.arrows(true);
+        popIn($$('.plate', track), { y: 26, stagger: .05, duration: .7, ease: 'expo.out' }, this.scene, 'top 78%');
+
+        return () => {
+            io?.disconnect();
+            this.prev?.removeEventListener('click', onPrev);
+            this.next?.removeEventListener('click', onNext);
+            track.removeEventListener('keydown', onKey);
+            track.removeAttribute('tabindex');
+        };
+    }
+
+    arrows(on) {
+        const box = $('.shelf__arrows');
+        if (box) box.style.display = on ? 'flex' : '';
+        [this.prev, this.next].forEach((b) => b && (b.hidden = !on));
+    }
+
     skipButton() {
         if (!this.skip) return;
         this.skip.addEventListener('click', () => {
-            // land just past the end of the pin, wherever that currently is
-            const end = this.st ? this.st.end : (this.scene.offsetTop + this.scene.offsetHeight);
+            const after = $('#conditions') || this.scene.nextElementSibling;
+            if (after) {
+                after.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+                return;
+            }
+            const end = this.st ? this.st.end : this.scene.offsetTop + this.scene.offsetHeight;
             window.scrollTo({ top: end + 4, behavior: REDUCED ? 'auto' : 'smooth' });
         });
     }
@@ -572,18 +639,14 @@ class Shelf {
                 });
 
                 this.last = -1;
+                this.track.scrollLeft = 0;
                 this.paint(0);
 
                 if (typeof window.gsap === 'undefined' || REDUCED) return;
-
                 gsap.set(this.track, { x: 0 });
                 gsap.fromTo(this.live(),
                     { opacity: 0, y: 24 },
-                    { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04,
-                      onComplete: () => this.paint(0) });
-
-                // hiding cards changes the travel distance, so the pin length
-                // is now wrong — remeasure once layout has settled
+                    { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04 });
                 requestAnimationFrame(() => ScrollTrigger.refresh());
             });
         });
@@ -1205,6 +1268,10 @@ class Chronic {
         this.scene = $('.chron');
         this.tabs  = $$('.cnav__tab');
         this.cards = $$('.cd');
+        this.prev  = $('#condPrev');
+        this.next  = $('#condNext');
+        this.now   = $('#condNow');
+        this.total = $('#condTotal');
         this.at    = 0;
     }
 
@@ -1224,6 +1291,13 @@ class Chronic {
             });
         });
 
+        /* On a phone the pill rail scrolls sideways and the other six
+           conditions are off screen with nothing to say they exist. These
+           step through them and the counter states the total outright. */
+        if (this.total) this.total.textContent = String(this.cards.length).padStart(2, '0');
+        this.prev?.addEventListener('click', () => this.step(-1));
+        this.next?.addEventListener('click', () => this.step(1));
+
         const fromHash = this.cards.findIndex((c) => '#' + c.id === window.location.hash);
         this.show(fromHash >= 0 ? fromHash : 0, false);
         if (fromHash >= 0) setTimeout(() => this.scene.scrollIntoView({ block: 'start' }), 60);
@@ -1237,9 +1311,16 @@ class Chronic {
         }
     }
 
+    /** wrap around, so the arrows never dead-end */
+    step(dir) {
+        const n = (this.at + dir + this.cards.length) % this.cards.length;
+        this.show(n, true);
+    }
+
     show(i, animate) {
         if (i === this.at && animate) return;
         this.at = i;
+        if (this.now) this.now.textContent = String(i + 1).padStart(2, '0');
 
         this.tabs.forEach((t, n) => {
             const on = n === i;
