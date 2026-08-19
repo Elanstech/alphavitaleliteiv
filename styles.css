@@ -2152,6 +2152,432 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
+   11 · THE EVIDENCE  (#research)          <- NEW BLOCK, ADDED
+   Sits here because the page does: after #physician, before the placeholders.
+   Nothing above or below this block was touched — the placeholder block that
+   follows still carries its original "11" heading, which is cosmetic only.
+
+   Cream, because #physician above it is parchment and the two must separate.
+
+   Type register is its own again: Marcellus for the paper name and the study
+   type, Prata for the reference titles, Cormorant for the takeaways, Archivo
+   for the counter and the dates, Syne for every micro-label.
+
+   The rail is a native scroll-snap carousel at EVERY breakpoint. No pin, no
+   scrub — the shelf owns that gesture and two pinned sections on one page
+   fight each other on refresh. Three cards visible on a laptop, one on a
+   phone, and the browser does the scrolling on the compositor for free.
+============================================================================= */
+.rsrch {
+    --data:  'Archivo', 'Instrument Sans', sans-serif;
+    --micro: 'Syne', 'Instrument Sans', sans-serif;
+    --tone:  var(--gold);
+    position: relative;
+    padding: clamp(4rem, 9vw, 7rem) 0 clamp(4rem, 9vw, 7rem);
+    background: var(--cream);
+    color: var(--ink-soft);
+    overflow: clip;
+}
+.rsrch__field {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        radial-gradient(65% 45% at 6% 2%,   rgba(231,203,134,.26), transparent 62%),
+        radial-gradient(55% 40% at 96% 96%, rgba(143,190,155,.13), transparent 60%),
+        radial-gradient(120% 55% at 50% 0%, rgba(255,255,255,.72), transparent 56%);
+}
+/* the wrap is padded, the rail is not — it has to run to the viewport edge */
+.rsrch__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gut); }
+
+/* ---------- masthead ---------- */
+.rsrch__rubric {
+    display: flex; align-items: center; gap: 1.25rem;
+    padding-bottom: 1.1rem; margin-bottom: clamp(1.75rem, 4vh, 3rem);
+    border-bottom: 1px solid var(--forest);
+}
+.rsrch__rubric-no   { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
+.rsrch__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
+.rsrch__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
+
+.rsrch__intro {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .92fr);
+    gap: clamp(1.5rem, 4vw, 4rem); align-items: end;
+    margin-bottom: clamp(2rem, 4.5vw, 3.25rem);
+}
+.rsrch__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2.1rem, 5.4vw, 4.3rem);
+    line-height: 1.03; letter-spacing: -.022em; color: var(--forest);
+}
+.rsrch__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-deep); }
+.rsrch__lede {
+    font-size: clamp(.96rem, 1.15vw, 1.08rem); line-height: 1.76; max-width: 52ch;
+    padding-left: 1.3rem; border-left: 1px solid var(--rule-gold);
+}
+
+/* =========================================================================
+   THE FEATURED PAPER
+   A reading plate: the argument on the left, the catalogue card on the right.
+   White mount on cream so it reads as a document laid on the field.
+   ========================================================================= */
+.paper {
+    position: relative;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .58fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
+    background: rgba(255,255,255,.72);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--gold);
+    border-radius: 3px;
+    box-shadow: 0 40px 80px -56px rgba(32,52,33,.45);
+}
+.paper__flag {
+    position: absolute; top: -.72rem; left: clamp(1.5rem, 3vw, 2.5rem);
+    padding: .28rem .75rem;
+    background: var(--forest); color: var(--cream);
+    font-family: var(--micro); font-size: .55rem; font-weight: 700;
+    letter-spacing: .22em; text-transform: uppercase;
+}
+
+.paper__kick {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-family: var(--micro); font-size: .58rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep);
+    margin-bottom: .85rem;
+}
+.paper__kick i { font-size: 1.5em; }
+.paper__name {
+    /* Marcellus — a document title, not a headline */
+    font-family: var(--caps); font-weight: 400;
+    font-size: clamp(1.4rem, 2.8vw, 2.1rem);
+    line-height: 1.14; letter-spacing: .008em;
+    color: var(--forest); margin-bottom: 1rem;
+}
+.paper__body { font-size: .95rem; line-height: 1.78; color: var(--ink-soft); max-width: 60ch; }
+.paper__body + .paper__body { margin-top: 1rem; }
+
+.paper__lab {
+    font-family: var(--micro); font-size: .56rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+    margin: 1.35rem 0 .7rem;
+}
+.paper__points {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .45rem .85rem; list-style: none; margin-bottom: .35rem;
+}
+.paper__points li {
+    position: relative; padding: .5rem .75rem .5rem 1.6rem;
+    border: 1px solid var(--rule); border-radius: 2px;
+    background: rgba(246,241,231,.6);
+    font-family: var(--display); font-weight: 400;
+    font-size: .88rem; line-height: 1.3; color: var(--forest);
+}
+.paper__points li::before {
+    content: ''; position: absolute; left: .7rem; top: 50%;
+    width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%;
+    background: var(--gold);
+}
+
+.paper__link {
+    display: inline-flex; align-items: center; gap: .6rem;
+    margin-top: 1.4rem; padding-bottom: .3rem;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--micro); font-size: .58rem; font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
+    transition: color .4s var(--ease), border-color .4s var(--ease), gap .4s var(--ease);
+}
+.paper__link i { font-size: 1.3em; }
+.paper__link:hover { color: var(--gold-deep); border-color: var(--gold); gap: .95rem; }
+
+/* ---------- the catalogue card ---------- */
+.paper__r {
+    align-self: start;
+    padding: clamp(1.1rem, 2.2vw, 1.6rem);
+    background: var(--parchment);
+    border: 1px solid var(--rule-gold);
+    border-radius: 2px;
+}
+.paper__meta { display: grid; }
+.paper__row {
+    display: grid; gap: .3rem;
+    padding: .85rem 0;
+    border-bottom: 1px solid var(--rule);
+}
+.paper__row:first-child { padding-top: 0; }
+.paper__row dt {
+    font-family: var(--micro); font-size: .52rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+}
+.paper__row dd {
+    font-family: var(--data); font-weight: 500; font-size: .92rem;
+    font-variant-numeric: tabular-nums lining-nums;
+    line-height: 1.4; color: var(--forest);
+}
+.paper__row dd span {
+    display: block; margin-top: .15rem;
+    font-family: var(--accent); font-style: italic; font-weight: 500;
+    font-size: .95rem; color: var(--gold-deep);
+}
+
+.paper__dl {
+    display: flex; align-items: center; justify-content: center; gap: .65rem;
+    width: 100%; margin-top: 1.2rem;
+    padding: 1rem 1.25rem; min-height: 48px;
+    background: var(--forest); color: var(--cream);
+    border: 1px solid var(--forest); border-radius: 2px;
+    font-family: var(--ui); font-size: .66rem; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    transition: background .45s var(--ease), color .45s var(--ease), border-color .45s var(--ease);
+}
+.paper__dl i { font-size: 1.3em; transition: transform .4s var(--ease); }
+.paper__dl:hover { background: var(--gold); color: var(--forest-deep); border-color: var(--gold); }
+.paper__dl:hover i { transform: translateY(3px); }
+
+.paper__note {
+    margin-top: 1rem;
+    font-size: .74rem; line-height: 1.65; color: var(--mist);
+}
+
+/* =========================================================================
+   THE REFERENCE RAIL
+   ========================================================================= */
+.rail__top {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    padding-bottom: 1rem; margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+    border-bottom: 1px solid var(--rule);
+}
+.rail__lab {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-family: var(--caps); font-size: .72rem;
+    letter-spacing: .26em; text-transform: uppercase; color: var(--forest);
+}
+.rail__lab i { font-size: 1.25em; color: var(--gold-deep); }
+.rail__all {
+    display: inline-flex; align-items: center; gap: .6rem;
+    font-family: var(--micro); font-size: .6rem; font-weight: 700;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--gold-deep);
+    white-space: nowrap;
+    transition: color .35s var(--ease), gap .35s var(--ease);
+}
+.rail__all i { font-size: 1.25em; }
+.rail__all:hover { color: var(--forest); gap: .95rem; }
+
+/* the track breaks the wrap's gutter so cards run off both edges — a card
+   sliced by the viewport edge is the affordance that says "there is more" */
+.rail {
+    margin-inline: calc(var(--gut) * -1);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 94%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 3%, #000 94%, transparent);
+}
+.rail__track {
+    display: flex; align-items: stretch;
+    gap: clamp(.9rem, 1.8vw, 1.5rem);
+    padding: .5rem var(--gut) 1.5rem;
+    list-style: none;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gut);
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+}
+.rail__track::-webkit-scrollbar { display: none; }
+.rail__track.is-dragging { scroll-snap-type: none; cursor: grabbing; }
+.rail__track.is-dragging .ref__in { pointer-events: none; }
+
+/* ---------- the card ---------- */
+.ref {
+    --tone: var(--gold);
+    flex: 0 0 auto;
+    width: clamp(268px, 27vw, 348px);
+    scroll-snap-align: start;
+    display: flex;
+}
+.ref__in {
+    position: relative; isolation: isolate;
+    display: flex; flex-direction: column;
+    width: 100%; padding: 1.4rem 1.3rem 1.15rem;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    box-shadow: 0 18px 34px -26px rgba(32,52,33,.3);
+    transition: transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+}
+/* the tone lives on the top edge — the only colour on an otherwise white card */
+.ref__in::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    background: var(--tone);
+    transform: scaleX(.28); transform-origin: left;
+    transition: transform .55s var(--ease);
+}
+.ref__in:hover { transform: translateY(-5px); border-color: color-mix(in oklab, var(--tone) 34%, transparent); box-shadow: 0 30px 52px -28px rgba(32,52,33,.38); }
+.ref__in:hover::before { transform: scaleX(1); }
+
+.ref__head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: .85rem; margin-bottom: .85rem;
+}
+.ref__cat {
+    display: inline-flex; align-items: center; gap: .45rem; min-width: 0;
+    font-family: var(--micro); font-size: .56rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--tone);
+}
+.ref__cat i { font-size: 1.3em; flex: 0 0 auto; }
+.ref__no {
+    flex: 0 0 auto;
+    font-family: var(--accent); font-style: italic; font-weight: 500;
+    font-size: 1.85rem; line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--tone) 34%, transparent);
+}
+
+/* the study type is the point of the card — set it as a stated label, and
+   flag the preclinical and observational ones so nobody has to guess */
+.ref__type {
+    display: inline-block; align-self: flex-start;
+    padding: .3rem .6rem; margin-bottom: .8rem;
+    border: 1px solid var(--rule); border-radius: 999px;
+    background: rgba(246,241,231,.7);
+    font-family: var(--caps); font-size: .58rem;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft);
+}
+.ref__type--flag {
+    border-color: var(--rule-gold);
+    background: rgba(193,150,63,.1);
+    color: var(--gold-deep);
+}
+
+.ref__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: 1.02rem; line-height: 1.28; letter-spacing: -.008em;
+    color: var(--forest); margin-bottom: .6rem;
+    transition: color .45s var(--ease);
+}
+.ref__in:hover .ref__name { color: var(--gold-deep); }
+.ref__take {
+    font-family: var(--accent); font-style: italic;
+    font-size: 1rem; line-height: 1.5; color: var(--ink-soft);
+    margin-bottom: 1.1rem;
+}
+
+/* margin-top:auto keeps every source line on the same baseline no matter how
+   long the title above it runs */
+.ref__foot {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: .85rem; margin-top: auto;
+    padding-top: .8rem; border-top: 1px solid var(--rule);
+}
+.ref__src {
+    font-family: var(--data); font-weight: 500; font-size: .68rem;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: .04em; color: var(--mist); min-width: 0;
+}
+.ref__src i { font-style: normal; color: var(--rule); margin: 0 .4rem; }
+.ref__go {
+    display: inline-flex; align-items: center; gap: .4rem; flex: 0 0 auto;
+    font-family: var(--micro); font-size: .55rem; font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
+    transition: color .4s var(--ease), gap .4s var(--ease);
+}
+.ref__go i { font-size: 1.3em; }
+.ref__in:hover .ref__go { color: var(--gold-deep); gap: .75rem; }
+
+/* ---------- rail furniture: same grammar as the shelf ---------- */
+.rail__bar {
+    display: flex; align-items: center; gap: clamp(.85rem, 2.5vw, 1.75rem);
+    padding-top: .25rem;
+}
+.rail__count {
+    font-family: var(--data); font-weight: 500;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: .76rem; letter-spacing: .08em; color: var(--ink-soft); white-space: nowrap;
+}
+.rail__count b { color: var(--gold-deep); font-size: 1.4rem; }
+.rail__count span { opacity: .45; margin: 0 .1rem; }
+.rail__meter { flex: 1; height: 1px; background: var(--rule); position: relative; }
+.rail__meter i {
+    position: absolute; inset: 0 auto 0 0; width: 0%;
+    background: linear-gradient(90deg, transparent, var(--gold));
+    transition: width .45s var(--ease);
+}
+.rail__arrows { display: flex; gap: .4rem; flex: 0 0 auto; }
+.rail__arrow {
+    display: grid; place-items: center;
+    width: 46px; height: 46px; border-radius: 50%;
+    border: 1px solid var(--rule-gold);
+    background: rgba(255,255,255,.8);
+    color: var(--forest); font-size: 1.1rem;
+    transition: background .3s var(--ease), color .3s var(--ease),
+                border-color .3s var(--ease), opacity .3s var(--ease);
+}
+.rail__arrow:hover { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+.rail__arrow[disabled] { opacity: .3; pointer-events: none; }
+
+.rsrch__legal {
+    max-width: 86ch;
+    margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-size: .76rem; line-height: 1.7; color: var(--mist);
+}
+
+/* ---------- evidence · 1080, landscape tablet ---------- */
+@media (max-width: 1080px) {
+    .rsrch__intro { grid-template-columns: 1fr; align-items: start; }
+    .rsrch__lede { max-width: none; }
+    .paper { grid-template-columns: 1fr; }
+    .paper__r { max-width: 460px; }
+    .paper__body { max-width: none; }
+}
+
+/* ---------- evidence · 900, portrait tablet ---------- */
+@media (max-width: 900px) {
+    .ref { width: min(74vw, 320px); }
+}
+
+/* ---------- evidence · 640, large phone ---------- */
+@media (max-width: 640px) {
+    .rsrch { padding-block: clamp(3rem, 7vw, 4.5rem); }
+    .rsrch__title { font-size: clamp(1.9rem, 8.5vw, 2.7rem); }
+    .rsrch__lede { font-size: .94rem; padding-left: 1rem; }
+    .rsrch__rubric { flex-wrap: wrap; row-gap: .5rem; }
+
+    .paper { padding: 1.35rem 1.15rem; }
+    .paper__name { font-size: clamp(1.25rem, 6.5vw, 1.65rem); }
+    .paper__body { font-size: .92rem; }
+    .paper__points { grid-template-columns: 1fr; }
+    .paper__r { max-width: none; }
+    .paper__note { font-size: .72rem; }
+
+    .ref { width: min(84vw, 330px); }
+    .ref__go { min-height: 40px; }
+    .rail__top { padding-bottom: .85rem; }
+    .rail__count { font-size: .66rem; }
+    .rail__count b { font-size: 1.1rem; }
+    .rsrch__legal { font-size: .72rem; }
+}
+
+/* ---------- evidence · 420, small phone ---------- */
+@media (max-width: 420px) {
+    .ref { width: 88vw; }
+    .ref__no { font-size: 1.5rem; }
+    .rail__arrow { width: 42px; height: 42px; }
+}
+
+/* ---------- evidence · reduced motion ----------
+   The carousel becomes a grid. Nobody who has asked the OS to stop moving
+   things should have to swipe a rail to read a citation list. */
+@media (prefers-reduced-motion: reduce) {
+    .rail { -webkit-mask-image: none; mask-image: none; margin-inline: 0; }
+    .rail__track {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem; padding-inline: 0; overflow: visible;
+    }
+    .ref { width: 100%; }
+    .rail__bar { display: none; }
+}
+
+
+/* =============================================================================
    11 · PLACEHOLDER SLOTS
    Sections that are planned but not built. Deliberately loud — a dashed gold
    frame and a corner flag — so one can never ship by accident. Delete this
