@@ -15,8 +15,8 @@
      Shelf       the services rail — pinned horizontally, swipeable on phones
      Route       the two-lane oral-vs-IV explainer, scrubbed on scroll
      Dock        back to top (left) and the action dial (right)
-     Quiz        the modal matcher — four questions across ten infusions
-     Conditions  the chronic-condition switcher and its compounds
+     Quiz        the modal matcher — four questions across the infusions
+     Chronic     the chronic-condition accordion, its compounds and spotlight
      Social      the Instagram band
      Physician   sticky portrait, beats that pop, the chain of custody
      Reveal      generic scroll reveal for anything marked [data-reveal]
@@ -1013,75 +1013,129 @@ class Quiz {
 
 
 /* =============================================================================
-   CONDITIONS — a switcher, not a stack
-   Five long cards end to end made this the tallest block on the page, and
-   nobody reads a condition they do not have. So the index is a control now:
-   one card on screen, swapped on click, with the same overshoot pop the
-   physician beats use. No-ops when the section is absent.
+   CHRONIC CONDITIONS — the accordion (#conditions)
+   Every word lives in the DOM so crawlers get all of it; the panel is opened by
+   animating a measured height rather than a max-height guess, which is what
+   keeps long panels from snapping. One open at a time, arrow-key navigable,
+   deep-linkable by hash, and it re-measures on resize and on font load.
 ============================================================================= */
-class Conditions {
+class Chronic {
     constructor() {
-        this.rail  = $('#condRail');
-        this.cards = $$('.cond');
-        this.items = this.rail ? $$('.rail__item', this.rail) : [];
-        this.at    = -1;
+        this.scene = $('.chron');
+        this.list  = $('#chronList');
+        this.items = $$('.cx', this.list ?? document);
+        this.tabs  = $$('.chron__tab');
+        this.open  = null;
     }
 
     init() {
-        if (!this.rail || !this.cards.length) return;
+        if (!this.scene || !this.items.length) return;
 
-        this.items.forEach((b, i) => {
-            b.setAttribute('aria-controls', b.dataset.goto);
-            b.addEventListener('click', () => this.show(i, true));
+        this.items.forEach((cx, i) => {
+            const bar   = $('.cx__bar', cx);
+            const panel = $('.cx__panel', cx);
+            if (!bar || !panel) return;
+
+            bar.addEventListener('click', () => this.toggle(i));
+
+            bar.addEventListener('keydown', (e) => {
+                const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+                if (keys[e.key]) {
+                    e.preventDefault();
+                    const n = (i + keys[e.key] + this.items.length) % this.items.length;
+                    $('.cx__bar', this.items[n])?.focus();
+                } else if (e.key === 'Home') {
+                    e.preventDefault(); $('.cx__bar', this.items[0])?.focus();
+                } else if (e.key === 'End') {
+                    e.preventDefault(); $('.cx__bar', this.items.at(-1))?.focus();
+                }
+            });
         });
 
-        // arrow keys walk the list, like any real tab set
-        this.rail.addEventListener('keydown', (e) => {
-            if (!['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
-            e.preventDefault();
-            const dir = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : -1;
-            const next = (this.at + dir + this.items.length) % this.items.length;
-            this.show(next, true);
-            this.items[next].focus();
+        // the pill rail jumps to a condition and opens it
+        this.tabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                const i = this.items.findIndex((cx) => cx.id === tab.dataset.jump);
+                if (i < 0) return;
+                this.set(i, true);
+                this.items[i].scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+            });
         });
 
-        this.show(0, false);
-
-        // the whole block still arrives with a pop the first time it is seen
-        if (typeof window.gsap !== 'undefined' && !REDUCED) {
-            gsap.registerPlugin(ScrollTrigger);
-            popIn(this.items, { y: 0, stagger: .05, duration: .55, ease: 'back.out(1.6)' }, this.rail, 'top 86%');
-            const gate = $('[data-gate]');
-            if (gate) {
-                popIn(gate, { y: 30, duration: .8, ease: 'back.out(1.4)' }, gate, 'top 88%');
-                popIn($$('.gate__cell'), { y: 26, scale: .96, stagger: .07, duration: .55 }, '.gate__grid', 'top 90%');
-            }
+        // /#cond-crohns from an ad, an email or the footer opens that one
+        const fromHash = this.items.findIndex((cx) => '#' + cx.id === window.location.hash);
+        this.set(fromHash >= 0 ? fromHash : 0, false);
+        if (fromHash >= 0) {
+            setTimeout(() => this.items[fromHash].scrollIntoView({ block: 'start' }), 60);
         }
+
+        // an open panel is measured in pixels, so anything that changes text
+        // wrapping has to re-measure it
+        const remeasure = debounce(() => {
+            if (this.open === null) return;
+            const panel = $('.cx__panel', this.items[this.open]);
+            if (panel) panel.style.height = $('.cx__inner', panel).offsetHeight + 'px';
+        }, 140);
+        window.addEventListener('resize', remeasure);
+        if (document.fonts) document.fonts.ready.then(remeasure);
+
+        this.spotlight();
+        this.entrance();
     }
 
-    show(i, animate) {
-        if (i === this.at) return;
-        this.at = i;
+    toggle(i) { this.set(this.open === i ? null : i, true); }
 
-        this.items.forEach((b, n) => {
-            b.classList.toggle('is-here', n === i);
-            b.setAttribute('aria-expanded', String(n === i));
+    set(i, animate) {
+        this.items.forEach((cx, n) => {
+            const on    = n === i;
+            const bar   = $('.cx__bar', cx);
+            const panel = $('.cx__panel', cx);
+            const inner = $('.cx__inner', cx);
+            if (!bar || !panel || !inner) return;
+
+            cx.classList.toggle('is-open', on);
+            bar.setAttribute('aria-expanded', String(on));
+
+            const target = on ? inner.offsetHeight : 0;
+
+            if (!animate || REDUCED || typeof window.gsap === 'undefined') {
+                panel.style.height = on ? target + 'px' : '0px';
+                return;
+            }
+            gsap.to(panel, {
+                height: target,
+                duration: on ? 0.62 : 0.42,
+                ease: on ? 'expo.out' : 'power2.inOut',
+                overwrite: true,
+                onComplete: () => { if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh(); },
+            });
         });
-        this.cards.forEach((c, n) => {
-            c.classList.toggle('is-live', n === i);
-            c.setAttribute('aria-hidden', String(n !== i));
+
+        this.tabs.forEach((tab, n) => tab.classList.toggle('is-here', n === i));
+        this.open = i;
+    }
+
+    /** a warm pool of light that follows the pointer across the section */
+    spotlight() {
+        if (!FINE_POINTER || REDUCED) return;
+        const move = onFrame((e) => {
+            const box = this.scene.getBoundingClientRect();
+            this.scene.style.setProperty('--mx', ((e.clientX - box.left) / box.width  * 100).toFixed(2) + '%');
+            this.scene.style.setProperty('--my', ((e.clientY - box.top)  / box.height * 100).toFixed(2) + '%');
         });
+        this.scene.addEventListener('pointermove', move);
+        this.scene.addEventListener('pointerenter', () => this.scene.classList.add('is-live'));
+        this.scene.addEventListener('pointerleave', () => this.scene.classList.remove('is-live'));
+    }
 
-        const card = this.cards[i];
-        if (!animate || typeof window.gsap === 'undefined' || REDUCED) return;
-
-        // the pop: overshoot in, and let the blocks inside land behind it
-        gsap.fromTo(card,
-            { opacity: 0, y: 26, scale: .975 },
-            { opacity: 1, y: 0, scale: 1, duration: .5, ease: 'back.out(1.7)' });
-        gsap.fromTo($$('.cond__block, .compound', card),
-            { opacity: 0, y: 16 },
-            { opacity: 1, y: 0, duration: .45, ease: 'back.out(1.5)', stagger: .06, delay: .08 });
+    entrance() {
+        if (typeof window.gsap === 'undefined' || REDUCED) return;
+        gsap.registerPlugin(ScrollTrigger);
+        popIn($$('.chron__why-card', this.scene),
+              { y: 30, scale: .97, stagger: .09, duration: .6 }, '.chron__why', 'top 86%');
+        popIn(this.items, { y: 22, stagger: .06, duration: .5, ease: 'back.out(1.4)' }, this.list, 'top 88%');
+        popIn($$('.chron__tab', this.scene),
+              { y: 14, stagger: .035, duration: .4, ease: 'back.out(1.8)' }, '.chron__rail', 'top 92%');
     }
 }
 
@@ -1133,7 +1187,7 @@ const modules = {
     route:      new Route(),
     dock:       new Dock(),
     quiz:       new Quiz(),
-    conditions: new Conditions(),
+    conditions: new Chronic(),
     social:     new Social(),
     physician:  new Physician(),
     reveal:     new Reveal(),
