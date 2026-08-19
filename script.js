@@ -14,6 +14,7 @@
      Magnetic    primary buttons lean toward the pointer (fine pointers only)
      Shelf       the services rail — pinned horizontally, swipeable on phones
      Advantage   the oral-vs-IV switch, drawn on arrival and on every toggle
+     Visit       the four-step ledger and the screening record beside it
      Dock        back to top (left) and the action dial (right)
      Quiz        the modal matcher — four questions across the infusions
      Chronic     the chronic-condition accordion, its compounds and spotlight
@@ -1101,6 +1102,136 @@ class Quiz {
 
 
 /* =============================================================================
+   HOW A VISIT WORKS — the ledger and the record (#visit)
+   Motion grammar is its own: no pin, no toggle, no scrub. Each step claims the
+   sequence as it reaches the middle of the screen, the rail fills behind it,
+   and the screening record beside it changes status and accumulates ticks.
+   The record stamps once, on the last step. Clicking a step jumps to it.
+
+   Step content is read from a JSON island in the markup rather than duplicated
+   here, so the copy lives in one place and stays crawlable.
+============================================================================= */
+class Visit {
+    constructor() {
+        this.el     = $('#visit');
+        this.list   = $('#visitSteps');
+        this.steps  = $$('.vs', this.list ?? document);
+        this.fill   = $('.visit__fill', this.el ?? document);
+        this.status = $('#vfStatus');
+        this.ticks  = $('#vfTicks');
+        this.ref    = $('#vfRef');
+        this.seal   = $('#vfSeal');
+        this.at     = -1;
+        this.data   = [];
+    }
+
+    init() {
+        if (!this.el || !this.steps.length) return;
+
+        try { this.data = JSON.parse($('#visitData')?.textContent || '[]'); }
+        catch { this.data = []; }
+
+        // the folio numeral behind each step comes from its own index
+        this.steps.forEach((s, i) => {
+            s.dataset.folio = String(i + 1).padStart(2, '0');
+            $('.vs__hit', s)?.addEventListener('click', () => {
+                this.set(i);
+                s.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
+            });
+        });
+
+        this.set(0);
+
+        if (typeof window.gsap === 'undefined' || REDUCED) {
+            this.steps.forEach((s) => s.classList.add('is-done'));
+            if (this.fill) this.fill.style.height = '100%';
+            this.set(this.steps.length - 1);
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        /* Each step owns a trigger rather than one scrubbed trigger for the
+           whole list — a scrub here would fight the sticky record beside it,
+           and a step should claim the sequence at a definite moment, not
+           fractionally. */
+        this.steps.forEach((s, i) => {
+            ScrollTrigger.create({
+                trigger: s,
+                start: 'top 62%',
+                end: 'bottom 42%',
+                onEnter:     () => this.set(i),
+                onEnterBack: () => this.set(i),
+            });
+        });
+
+        popIn($$('.vh', this.el), { y: 26, scale: .98, stagger: .1, duration: .6 }, '.visit__honest', 'top 88%');
+        popIn(this.steps, { y: 24, stagger: .08, duration: .55, ease: 'back.out(1.4)' }, this.list, 'top 82%');
+    }
+
+    set(i) {
+        if (i === this.at) return;
+        const first = this.at === -1;
+        this.at = i;
+
+        this.steps.forEach((s, n) => {
+            s.classList.toggle('is-on', n === i);
+            s.classList.toggle('is-done', n < i);
+            $('.vs__hit', s)?.setAttribute('aria-current', String(n === i));
+        });
+
+        if (this.fill) {
+            this.fill.style.height = (((i + 1) / this.steps.length) * 100).toFixed(1) + '%';
+        }
+        if (this.ref) this.ref.textContent = String(i + 1).padStart(2, '0');
+
+        this.paintCard(i, !first);
+    }
+
+    /** status swaps, ticks accumulate — every tick from this step and the ones before it */
+    paintCard(i, animate) {
+        const entry = this.data[i];
+        if (!entry) return;
+
+        if (this.status) {
+            if (animate && typeof window.gsap !== 'undefined' && !REDUCED) {
+                gsap.fromTo(this.status, { opacity: 0, y: 10 },
+                    { opacity: 1, y: 0, duration: .4, ease: 'expo.out' });
+            }
+            this.status.innerHTML = entry.status;
+        }
+
+        if (this.ticks) {
+            const all = this.data.slice(0, i + 1).flatMap((d) => d.ticks);
+            this.ticks.innerHTML = all.map((t) =>
+                `<li class="vf__tick"><i class="ph-fill ph-check" aria-hidden="true"></i><span>${t}</span></li>`
+            ).join('');
+
+            if (animate && typeof window.gsap !== 'undefined' && !REDUCED) {
+                const fresh = $$('.vf__tick', this.ticks).slice(-entry.ticks.length);
+                gsap.fromTo(fresh, { opacity: 0, x: -10 },
+                    { opacity: 1, x: 0, duration: .4, ease: 'back.out(1.6)', stagger: .07 });
+            }
+        }
+
+        // the record is only stamped once the sequence is complete
+        if (this.seal) {
+            const done = i === this.steps.length - 1;
+            if (typeof window.gsap === 'undefined' || REDUCED) {
+                gsap.set?.(this.seal, { opacity: done ? 1 : 0 });
+                this.seal.style.opacity = done ? '1' : '0';
+                this.seal.style.transform = 'none';
+                return;
+            }
+            gsap.to(this.seal, done
+                ? { opacity: 1, scale: 1, rotate: 0, duration: .55, ease: 'back.out(2.2)' }
+                : { opacity: 0, scale: .9, rotate: -4, duration: .3, ease: 'power2.in' });
+        }
+    }
+}
+
+
+/* =============================================================================
    CHRONIC CONDITIONS — a switcher, not a stack (#conditions)
    Seven long cards made this the tallest block on the page and nobody reads a
    condition they do not have. One panel is live at a time; the rest stay in
@@ -1238,6 +1369,7 @@ const modules = {
     magnetic:   new Magnetic(),
     shelf:      new Shelf(),
     advantage:  new Advantage(),
+    visit:      new Visit(),
     dock:       new Dock(),
     quiz:       new Quiz(),
     conditions: new Chronic(),
