@@ -706,30 +706,35 @@ body.is-ready .hero__title .word .loop {
 
 /* =============================================================================
    06 · THE SHELF  (#infusions)
-   Ten branded IV bags hung on a cream field. Cream is the ground, forest green
-   is the type, gold is the accent. The bag is the picture — no frames, no stock
-   photography.
+   Rebuilt. The old version pinned three fixed heights onto the card — the name,
+   the note and the chip block — and clipped the overflow, which is why long
+   names broke mid-word, notes lost their last line, and ten ingredients ran
+   under the clock. Nothing here is clipped.
 
-   NOTE: your --accent token is the Cormorant *font*, so the compound colour is
-   called --tone here.
+   The rule now: the CARD has a fixed height, its contents do not. The body is a
+   flex column and the price block is pushed to the bottom with margin-top:auto,
+   so every card is the same height and every price line sits on the same
+   baseline no matter whether a formula has one ingredient or ten.
+
+   The folio numeral is in flow inside the header row rather than absolutely
+   positioned, so it can never land on top of the category again.
 ============================================================================= */
 
 .shelf {
     --tone: var(--gold);
 
-    /* compound colours — the numeral, the chips and hover only.
-       One per category, named for the category, in Dr. Aronov's order. */
-    --t-aging:     #5B7098;   /* Healthy Aging          */
-    --t-immune:    #D9982A;   /* Immune Support         */
-    --t-muscle:    #B34E37;   /* Muscle Recovery        */
-    --t-antiox:    #4F7D5E;   /* Antioxidant Support    */
-    --t-gluta:     #7FA08C;   /* Glutathione IV Therapy */
-    --t-joint:     #8C6239;   /* Joint Support          */
-    --t-liver:     #5F7A55;   /* Liver Support          */
-    --t-skin:      #9C4A6B;   /* Skin Health            */
-    --t-recovery:  #35707F;   /* Recovery Support       */
-    --t-mind:      #7A5F98;   /* Mind & Focus Support   */
-    --t-custom:    #C1963F;   /* Customized IV Infusion */
+    /* one accent per category, in Dr. Aronov's order */
+    --t-aging:     #5B7098;
+    --t-immune:    #D9982A;
+    --t-muscle:    #B34E37;
+    --t-antiox:    #4F7D5E;
+    --t-gluta:     #7FA08C;
+    --t-joint:     #8C6239;
+    --t-liver:     #5F7A55;
+    --t-skin:      #9C4A6B;
+    --t-recovery:  #35707F;
+    --t-mind:      #7A5F98;
+    --t-custom:    #C1963F;
 
     --data:  'Archivo', 'Instrument Sans', sans-serif;
     --micro: 'Syne', 'Instrument Sans', sans-serif;
@@ -740,9 +745,7 @@ body.is-ready .hero__title .word .loop {
     overflow: clip;
 }
 
-/* ---------- the ground ----------
-   Plain cream with a little light pooling. No pattern: the bags are the
-   artwork, and anything behind them competed with the labels. */
+/* ---------- the ground ---------- */
 .shelf__wash {
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background: radial-gradient(140% 90% at 50% -10%, #FBF8F1, transparent 60%);
@@ -759,13 +762,13 @@ body.is-ready .hero__title .word .loop {
 .shelf__head {
     position: relative; z-index: 3;
     max-width: var(--maxw); margin: 0 auto;
-    padding: clamp(4.5rem, 10vh, 8rem) var(--gut) clamp(2rem, 4vh, 3rem);
+    padding: clamp(4rem, 9vh, 7rem) var(--gut) clamp(1.75rem, 3.5vh, 2.5rem);
 }
 .shelf__rubric {
     display: flex; align-items: center; gap: 1.25rem;
     padding-bottom: 1.1rem;
     border-bottom: 1px solid var(--forest);
-    margin-bottom: clamp(2rem, 5vh, 3.5rem);
+    margin-bottom: clamp(1.75rem, 4vh, 3rem);
 }
 .shelf__rubric-no { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
 .shelf__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
@@ -781,17 +784,17 @@ body.is-ready .hero__title .word .loop {
 
 .shelf__title {
     font-family: var(--display); font-weight: 400;
-    font-size: clamp(2.4rem, 6.4vw, 5.6rem);
+    font-size: clamp(2.2rem, 5.6vw, 4.8rem);
     line-height: 1.02; letter-spacing: -.02em;
-    color: var(--forest); margin-bottom: clamp(1.5rem, 3.5vh, 2.25rem);
+    color: var(--forest); margin-bottom: clamp(1.25rem, 3vh, 2rem);
     max-width: 16ch;
 }
 .shelf__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-deep); }
 
 .shelf__deck { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.8fr); gap: clamp(1.5rem,5vw,4.5rem); align-items: end; }
 .shelf__lede {
-    font-size: clamp(.98rem,1.2vw,1.12rem); line-height: 1.75; color: var(--ink-soft);
-    max-width: 52ch; padding-left: 1.3rem; border-left: 1px solid var(--rule-gold);
+    font-size: clamp(.96rem,1.15vw,1.08rem); line-height: 1.75; color: var(--ink-soft);
+    max-width: 54ch; padding-left: 1.3rem; border-left: 1px solid var(--rule-gold);
 }
 .shelf__lede strong { color: var(--forest); font-weight: 600; }
 
@@ -804,21 +807,13 @@ body.is-ready .hero__title .word .loop {
 }
 .shelf__stat b sup { font-size: .46em; color: var(--gold-deep); vertical-align: super; }
 .shelf__stat > span { display: block; font-family: var(--micro); font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mist); line-height: 1.55; }
-
-/* the third stat is words, not a figure — set it in the display face so the
-   three-up rhythm survives */
-.shelf__stat--word b {
-    font-family: var(--display);
-    font-size: clamp(1.1rem, 1.9vw, 1.5rem);
-    line-height: 1.15;
-    letter-spacing: -.01em;
-}
+.shelf__stat--word b { font-family: var(--display); font-size: clamp(1.1rem, 1.9vw, 1.5rem); line-height: 1.15; letter-spacing: -.01em; }
 
 /* ---------- filters ---------- */
 .shelf__filters {
     position: relative; z-index: 3;
     max-width: var(--maxw); margin: 0 auto;
-    padding: 0 var(--gut) clamp(1.25rem,3vh,2rem);
+    padding: 0 var(--gut) clamp(1.25rem,3vh,1.75rem);
     display: flex; flex-wrap: wrap; gap: .5rem;
 }
 .shelf__pill {
@@ -827,17 +822,16 @@ body.is-ready .hero__title .word .loop {
     background: rgba(255,255,255,.5);
     font-family: var(--micro); font-size: .63rem; font-weight: 600;
     letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
-    transition: color .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+    transition: color .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease), transform .4s var(--ease);
 }
 .shelf__pill i { font-size: 1.15em; }
 .shelf__pill sup { font-family: var(--data); font-size: .62em; font-weight: 500; color: var(--gold-deep); vertical-align: super; }
-.shelf__pill:hover { color: var(--forest); border-color: var(--gold); background: #fff; }
+.shelf__pill:hover { color: var(--forest); border-color: var(--gold); background: #fff; transform: translateY(-2px); }
 .shelf__pill.is-on { background: var(--forest); border-color: var(--forest); color: var(--cream); }
 .shelf__pill.is-on sup { color: var(--gold-lite); }
 
 /* ---------- the rail ---------- */
 .shelf__pin { position: relative; z-index: 2; }
-.shelf__head, .shelf__filters, .shelf__note { position: relative; z-index: 3; }
 .shelf__viewport {
     position: relative;
     height: 100vh; height: 100svh;
@@ -845,49 +839,57 @@ body.is-ready .hero__title .word .loop {
     padding-bottom: clamp(4.5rem,9vh,6.5rem);
     overflow: hidden;
 }
-/* will-change is applied by script.js only while the rail is pinned — leaving
-   it on permanently keeps a compositor layer alive for the whole page */
-.shelf__track { display: flex; align-items: center; gap: clamp(2rem,4vw,4.5rem); padding: 0 var(--gut); }
+.shelf__track {
+    display: flex; align-items: center;
+    gap: clamp(1.5rem,3.5vw,4rem);
+    padding: 0 var(--gut);
+}
 
-/* ---------- a plate: bag on the left, the writing on the right ---------- */
+/* =========================================================================
+   THE PLATE
+   Fixed card height, fluid contents. Nothing is clipped and nothing overlaps.
+   ========================================================================= */
 .plate {
     --tone: var(--gold);
-    --bag-h: min(50vh, 430px);
+    --bag-h: clamp(230px, 40vh, 400px);
+
     position: relative; flex: 0 0 auto;
-    width: clamp(380px, 44vw, 700px);
+    width: clamp(400px, 44vw, 680px);
+    height: clamp(360px, 60vh, 500px);
+
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    gap: clamp(1.25rem, 2.5vw, 2.25rem);
+    gap: clamp(1.1rem, 2.4vw, 2rem);
     align-items: center;
+
+    opacity: .42;
+    transition: opacity .6s var(--ease);
 }
+.plate.is-active { opacity: 1; }
 .plate.is-out { display: none; }
 
-.plate__bag { position: relative; display: block; text-align: center; }
+/* ---------- the bag ---------- */
+.plate__bag { position: relative; display: block; text-align: center; align-self: center; }
 .plate__bag img {
     position: relative; z-index: 2;
-    height: var(--bag-h);
-    width: auto;
-    max-width: none;        /* the reset clamps to 100% and squashes the bag */
+    height: var(--bag-h); width: auto; max-width: none;
     margin: 0 auto;
-    transition: transform .8s var(--ease), filter .8s var(--ease);
-    will-change: transform;
     filter: drop-shadow(0 26px 34px rgba(32,52,33,.22));
+    transition: transform .9s var(--ease), filter .9s var(--ease);
 }
-.plate:hover .plate__bag img { transform: translateY(-10px) rotate(-1deg); filter: drop-shadow(0 40px 46px rgba(32,52,33,.26)); }
+.plate.is-active .plate__bag img { transform: translateY(-6px); filter: drop-shadow(0 38px 44px rgba(32,52,33,.26)); }
+.plate:hover .plate__bag img { transform: translateY(-12px) rotate(-1deg); }
 
-/* the hook line it hangs from */
 .plate__pole {
-    position: absolute; left: 50%; top: -14%; z-index: 1;
-    width: 1px; height: 18%;
+    position: absolute; left: 50%; top: -13%; z-index: 1;
+    width: 1px; height: 16%;
     background: linear-gradient(180deg, transparent, var(--rule-gold));
 }
 .plate__pole::after {
     content: ''; position: absolute; left: 50%; bottom: -4px;
     width: 7px; height: 7px; margin-left: -3.5px;
-    border: 1px solid var(--gold); border-radius: 50%;
-    background: var(--cream);
+    border: 1px solid var(--gold); border-radius: 50%; background: var(--cream);
 }
-/* the cast shadow on the wall */
 .plate__cast {
     position: absolute; left: 50%; bottom: -14px; z-index: 0;
     width: 62%; height: 16px; transform: translateX(-50%);
@@ -897,32 +899,38 @@ body.is-ready .hero__title .word .loop {
 }
 .plate:hover .plate__cast { width: 50%; opacity: .7; }
 
-.plate__no {
-    position: absolute; right: 0; top: -.35em; z-index: 0;
-    font-family: var(--accent); font-style: italic; font-weight: 500;
-    font-size: clamp(2.8rem, 4.4vw, 4rem); line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 1px color-mix(in oklab, var(--tone) 40%, transparent);
-    pointer-events: none; will-change: transform;
+/* ---------- the writing: a flex column, foot pinned to the bottom ---------- */
+.plate__body {
+    display: flex; flex-direction: column;
+    height: 100%; min-width: 0;
+    padding: .25rem 0;
 }
 
-/* ---------- the writing ---------- */
-.plate__body { position: relative; display: grid; align-content: start; grid-template-rows: auto auto auto auto auto auto; }
-.plate__cat {
-    display: inline-flex; align-items: center; gap: .5rem;
-    font-family: var(--micro); font-size: .6rem; font-weight: 700;
-    letter-spacing: .26em; text-transform: uppercase; color: var(--tone);
-    height: 1.15rem; line-height: 1.15rem; overflow: hidden;
-    margin-bottom: .6rem;
+/* the numeral lives in the header row now — it cannot collide with anything */
+.plate__head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; margin-bottom: .55rem;
 }
-.plate__cat i { font-size: 1.3em; }
+.plate__cat {
+    display: inline-flex; align-items: center; gap: .5rem; min-width: 0;
+    font-family: var(--micro); font-size: .6rem; font-weight: 700;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--tone);
+}
+.plate__cat i { font-size: 1.3em; flex: 0 0 auto; }
+.plate__no {
+    flex: 0 0 auto;
+    font-family: var(--accent); font-style: italic; font-weight: 500;
+    font-size: clamp(1.9rem, 3vw, 2.9rem); line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--tone) 38%, transparent);
+    transition: -webkit-text-stroke-color .6s var(--ease);
+}
+.plate.is-active .plate__no { -webkit-text-stroke-color: color-mix(in oklab, var(--tone) 70%, transparent); }
 
 .plate__name {
     font-family: var(--display); font-weight: 400;
-    font-size: clamp(1.3rem, 2.1vw, 1.85rem);
-    line-height: 1.14; letter-spacing: -.012em; color: var(--forest);
-    padding-right: 7rem;                   /* clears the widest folio numeral, VIII */
-    height: 2.28em; overflow: hidden;      /* two lines, always */
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    line-height: 1.16; letter-spacing: -.012em; color: var(--forest);
     margin-bottom: .5rem;
     transition: color .5s var(--ease);
 }
@@ -930,41 +938,40 @@ body.is-ready .hero__title .word .loop {
 
 .plate__note {
     font-family: var(--accent); font-style: italic;
-    font-size: clamp(1rem,1.2vw,1.1rem); line-height: 1.5; color: var(--ink-soft);
-    height: 4.5em; overflow: hidden;       /* three lines, always */
+    font-size: clamp(.98rem,1.15vw,1.08rem); line-height: 1.5; color: var(--ink-soft);
     margin-bottom: .85rem;
 }
+
+/* chips wrap as many rows as they need — never clipped, never overlapped */
 .plate__ing {
-    display: flex; flex-wrap: wrap; gap: .38rem;
-    /* never clamp this. Liver Support carries ten ingredients and Joint & Skin
-       nine — a fixed height silently cut NAC and the antioxidants off the end.
-       min-height keeps the rail's rhythm without ever hiding a compound. */
-    min-height: 3.9rem;
-    margin-bottom: .85rem; list-style: none;
+    display: flex; flex-wrap: wrap; gap: .34rem;
+    list-style: none; margin-bottom: 1rem;
 }
 .plate__ing li {
-    display: inline-flex; align-items: center; gap: .4rem;
-    padding: .32rem .68rem; border: 1px solid var(--rule); border-radius: 2px;
+    display: inline-flex; align-items: center; gap: .38rem;
+    padding: .3rem .6rem; border: 1px solid var(--rule); border-radius: 2px;
     background: rgba(255,255,255,.55);
-    font-family: var(--micro); font-size: .58rem; font-weight: 500;
-    letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft);
-    transition: border-color .5s var(--ease), color .5s var(--ease);
+    font-family: var(--micro); font-size: .55rem; font-weight: 500;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft);
+    white-space: nowrap;
+    transition: border-color .5s var(--ease), color .5s var(--ease), transform .4s var(--ease);
 }
-.plate__ing li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--tone); flex: 0 0 auto; }
+.plate__ing li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--tone); flex: 0 0 auto; }
 .plate:hover .plate__ing li { border-color: var(--rule-gold); color: var(--forest); }
 
+/* margin-top:auto is what makes every price line share a baseline */
+.plate__foot { margin-top: auto; }
 .plate__clock {
     display: inline-flex; align-items: center; gap: .45rem;
     font-family: var(--data); font-size: .68rem; font-weight: 500;
     font-variant-numeric: tabular-nums lining-nums;
-    color: var(--mist); margin-bottom: .85rem;
-    white-space: nowrap;
+    color: var(--mist); margin-bottom: .7rem; white-space: nowrap;
 }
 .plate__clock i { color: var(--tone); font-size: 1.2em; }
 
-.plate__foot {
+.plate__deal {
     display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem;
-    height: 4.9rem; padding-top: .85rem; border-top: 1px solid var(--rule);
+    padding-top: .8rem; border-top: 1px solid var(--rule);
 }
 .plate__price b {
     display: block; font-family: var(--data); font-weight: 600;
@@ -972,20 +979,19 @@ body.is-ready .hero__title .word .loop {
     font-size: clamp(1.1rem,1.7vw,1.4rem); color: var(--forest); line-height: 1.1;
 }
 .plate__price span {
-    display: block; margin-top: .3rem;
-    font-family: var(--micro); font-size: .55rem; font-weight: 600;
+    display: block; margin-top: .28rem;
+    font-family: var(--micro); font-size: .54rem; font-weight: 600;
     letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
 }
 .plate__price em {
-    display: block; margin-top: .2rem;          /* its own line — it was wrapping into PROTOCOL */
+    display: block; margin-top: .18rem;
     font-family: var(--accent); font-style: italic; font-size: .95rem;
-    color: var(--gold-deep); text-transform: none; letter-spacing: 0;
-    white-space: nowrap;
+    color: var(--gold-deep); white-space: nowrap;
 }
 .plate__go {
-    display: inline-flex; align-items: center; gap: .5rem;
-    font-family: var(--micro); font-size: .6rem; font-weight: 700;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft);
+    display: inline-flex; align-items: center; gap: .5rem; flex: 0 0 auto;
+    font-family: var(--micro); font-size: .58rem; font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
     padding-bottom: .15rem; border-bottom: 1px solid var(--rule);
     transition: color .4s var(--ease), border-color .4s var(--ease), gap .4s var(--ease);
     white-space: nowrap;
@@ -996,99 +1002,96 @@ body.is-ready .hero__title .word .loop {
 /* ---------- rail furniture ---------- */
 .shelf__rail {
     position: absolute; left: var(--gut); right: var(--gut);
-    bottom: clamp(1.5rem,4vh,2.5rem); z-index: 5;
-    display: flex; align-items: center; gap: clamp(1rem,3vw,2.5rem);
+    bottom: clamp(1.25rem,3.5vh,2.25rem); z-index: 5;
+    display: flex; align-items: center; gap: clamp(.85rem,2.5vw,2rem);
     pointer-events: none;
 }
-.shelf__counter { font-family: var(--data); font-weight: 500; font-variant-numeric: tabular-nums lining-nums; font-size: .8rem; letter-spacing: .1em; color: var(--ink-soft); white-space: nowrap; }
-.shelf__counter b { color: var(--gold-deep); font-size: 1.5rem; }
+.shelf__counter {
+    font-family: var(--data); font-weight: 500;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: .78rem; letter-spacing: .08em; color: var(--ink-soft); white-space: nowrap;
+}
+.shelf__counter b { color: var(--gold-deep); font-size: 1.45rem; }
+.shelf__counter-sep { opacity: .4; margin: 0 .15rem; }
 .shelf__meter { flex: 1; height: 1px; background: var(--rule); position: relative; }
-.shelf__meter i { position: absolute; inset: 0 auto 0 0; width: 0%; background: linear-gradient(90deg, transparent, var(--gold)); transition: width .4s var(--ease); }
-.shelf__hint { display: inline-flex; align-items: center; gap: .6rem; font-family: var(--micro); font-size: .6rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--mist); white-space: nowrap; }
+.shelf__meter i {
+    position: absolute; inset: 0 auto 0 0; width: 0%;
+    background: linear-gradient(90deg, transparent, var(--gold));
+}
+.shelf__hint {
+    display: inline-flex; align-items: center; gap: .55rem;
+    font-family: var(--micro); font-size: .58rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist); white-space: nowrap;
+}
 .shelf__hint i { font-size: 1.3em; color: var(--gold-deep); animation: shelf-nudge 2.4s ease-in-out infinite; }
-.shelf__hint b { font-weight: inherit; }
-.shelf__hint-sm { display: none; }
 @keyframes shelf-nudge {
     0%, 100% { transform: translateX(0); opacity: .5; }
     50%      { transform: translateX(7px); opacity: 1; }
 }
 
+/* the way out of a pinned section, for anyone who does not want the tour */
+.shelf__skip {
+    pointer-events: auto; flex: 0 0 auto;
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .6rem 1.05rem; min-height: 40px;
+    border: 1px solid var(--rule); border-radius: 999px;
+    background: rgba(251,248,241,.86);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    font-family: var(--micro); font-size: .57rem; font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
+    white-space: nowrap;
+    transition: color .35s var(--ease), border-color .35s var(--ease),
+                background .35s var(--ease), transform .35s var(--ease);
+}
+.shelf__skip i { font-size: 1.2em; transition: transform .35s var(--ease); }
+.shelf__skip:hover {
+    color: var(--cream); background: var(--forest); border-color: var(--forest);
+    transform: translateY(-2px);
+}
+.shelf__skip:hover i { transform: translateY(3px); }
+
 .shelf__note {
     max-width: min(var(--maxw), 72ch); margin: 0 auto;
-    padding: clamp(1.5rem,3vh,2.25rem) var(--gut) clamp(4rem,8vh,6rem);
+    padding: clamp(1.5rem,3vh,2.25rem) var(--gut) clamp(3.5rem,7vh,5.5rem);
     font-size: .86rem; line-height: 1.7; color: var(--ink-soft);
 }
 .shelf__note a { color: var(--gold-deep); border-bottom: 1px solid var(--rule-gold); transition: color .3s var(--ease); }
 .shelf__note a:hover { color: var(--forest); }
 
 /* ---------- shelf · short viewports ---------- */
-@media (min-width: 901px) and (max-height: 860px) {
-    .plate { --bag-h: min(46vh, 360px); width: clamp(340px, 38vw, 600px); }
-    .plate__note { height: 3em; }
+@media (min-width: 901px) and (max-height: 880px) {
+    .plate { --bag-h: clamp(200px, 34vh, 320px); width: clamp(360px, 40vw, 600px); height: clamp(330px, 64vh, 440px); }
+    .plate__note { font-size: .94rem; }
 }
 
-/* ---------- shelf · mobile ----------
-   The shelf stays horizontal, but the mechanism changes. A pinned GSAP scrub
-   fights the touch scroller, so on phones the track becomes a real horizontal
-   scroller with snap points — swipe left and right, the way a phone expects.
-   The rail furniture sits below it as a normal block. */
-@media (max-width: 1024px) { .shelf__deck { grid-template-columns: 1fr; gap: 1.75rem; } }
+/* ---------- shelf · tablet and phone ----------
+   Same mechanic as desktop: the section pins and vertical scroll drives the
+   rail sideways. No native swipe scroller, so the gesture is identical on
+   every device and the counter can never disagree with what is on screen. */
+@media (max-width: 1024px) { .shelf__deck { grid-template-columns: 1fr; gap: 1.5rem; } }
 
 @media (max-width: 900px) {
-    .shelf__viewport {
-        height: auto; display: block; overflow: visible; padding-bottom: 0;
-    }
-    /* the TRACK is the scroller now, not the viewport — that keeps the rail
-       below at page width instead of stretching to the full run of plates */
-    .shelf__track {
-        display: flex; align-items: stretch;
-        transform: none !important;
-        gap: clamp(1rem, 3vw, 1.75rem);
-        padding: .5rem var(--gut) 1.75rem;
-        overflow-x: auto; overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        scroll-padding-left: var(--gut);
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-x: contain;
-        scrollbar-width: none;
-    }
-    .shelf__track::-webkit-scrollbar { display: none; }
-
     .plate {
-        width: min(78vw, 360px);
-        --bag-h: 250px;
+        width: min(86vw, 460px);
+        height: auto; min-height: clamp(420px, 66vh, 560px);
+        --bag-h: clamp(170px, 26vh, 240px);
         grid-template-columns: 1fr;
-        gap: .75rem;
+        grid-template-rows: auto 1fr;
+        gap: 1rem;
         align-items: start;
-        scroll-snap-align: center;
     }
-    /* let the copy run its natural length, then push every price line to the
-       bottom of an equal-height card — no truncation, no air gap */
-    .plate { align-self: stretch; }
-    .plate__body { display: flex; flex-direction: column; }
-    .plate__name { font-size: 1.3rem; height: auto; padding-right: 0; }
-    .plate__note { height: auto; margin-bottom: 1rem; }
-    .plate__ing  { height: auto; }
-    .plate__no   { display: none; }        /* collided with the title at this width */
-    .plate__foot {
-        height: auto; min-height: 0; margin-top: auto;
-        flex-direction: column; align-items: flex-start; gap: .7rem;
-    }
-    .plate__bag img { transition: none; }
-    .plate__pole { top: -10%; height: 12%; }
-
-    .shelf__rail {
-        position: static; width: auto;
-        padding: 0 var(--gut) 1.5rem;
-    }
-    .shelf__hint { display: inline-flex; }
-    .shelf__hint-lg { display: none; }
-    .shelf__hint-sm { display: inline; }
-    .shelf__hint i { animation: shelf-nudge 2.4s ease-in-out infinite; }
+    .plate__body { padding: 0; }
+    .plate__name { font-size: 1.25rem; }
+    .plate__note { font-size: .96rem; margin-bottom: .75rem; }
+    .plate__no { font-size: 1.7rem; }
+    .plate__deal { flex-direction: column; align-items: flex-start; gap: .65rem; }
+    .shelf__viewport { padding-bottom: clamp(5.5rem, 12vh, 7rem); }
+    .shelf__rail { gap: .7rem; }
+    .shelf__hint { display: none; }
+    .shelf__skip { padding: .55rem .9rem; font-size: .54rem; }
 }
 
 @media (max-width: 560px) {
-    /* tap targets: the pills and the protocol link were under the 44px floor */
     .shelf__pill { min-height: 44px; }
     .plate__go   { min-height: 44px; align-items: center; }
     .shelf__stats { grid-template-columns: 1fr; }
@@ -1098,22 +1101,21 @@ body.is-ready .hero__title .word .loop {
     .shelf__rubric { flex-wrap: wrap; row-gap: .6rem; }
     .shelf__rubric-rule { flex-basis: 100%; order: 3; }
     .shelf__ig { order: 4; }
-    .shelf__hint { font-size: .55rem; letter-spacing: .16em; }
-    /* eleven filters is a lot on a phone — tighten them so they read as a set */
-    .shelf__pill { padding: .5rem .85rem; font-size: .58rem; letter-spacing: .12em; gap: .4rem; }
+    .shelf__counter { font-size: .68rem; }
+    .shelf__counter b { font-size: 1.15rem; }
 }
 
-/* ---------- shelf · reduced motion ---------- */
+/* ---------- shelf · reduced motion: a plain grid, everything legible ---------- */
 @media (prefers-reduced-motion: reduce) {
     .shelf__viewport { height: auto; display: block; overflow: visible; padding-bottom: 0; }
     .shelf__track {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
         gap: 3rem; transform: none !important; padding-bottom: 3rem;
     }
-    .plate { width: 100%; --bag-h: 300px; }
-    .plate__name, .plate__note, .plate__ing { height: auto; }
+    .plate { width: 100%; height: auto; opacity: 1; --bag-h: 280px; }
     .shelf__rail { position: static; }
     .shelf__hint i { animation: none !important; }
+    .shelf__skip { display: none; }
 }
 
 
