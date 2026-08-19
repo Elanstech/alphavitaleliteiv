@@ -955,24 +955,128 @@
 </section>
 
 <!-- ==============================================================
-     HOW A VISIT WORKS  (#visit)   —   PLACEHOLDER, TO BUILD
+     HOW A VISIT WORKS  (#visit)
+     The no-walk-ins policy, told as a sequence rather than a rule. Motion
+     grammar is its own again: no pin, no toggle, no scrub — a ledger that
+     advances as you scroll, with a case file beside it that stamps.
+     ⚠ TO CONFIRM with Dr. Aronov — the review turnaround in step 02.
      ============================================================== -->
-<section class="slot slot--cream" id="visit" aria-labelledby="visitTitle">
-  <div class="slot__wrap">
-    <span class="slot__flag">Placeholder</span>
-    <p class="slot__eyebrow"><i class="ph-duotone ph-path" aria-hidden="true"></i> Before you come in</p>
-    <h2 class="slot__title" id="visitTitle">How a visit works</h2>
-    <p class="slot__lede">Four steps from first contact to the chair. Turns the no-walk-ins policy from friction into the reason to choose her, and restates the eligibility rule without reading as a disclaimer.</p>
-    <ul class="slot__todo">
-        <li>Step 01 — You submit the screening form: medical history, medications, allergies</li>
-        <li>Step 02 — Dr. Aronov reviews it herself and decides whether IV therapy is appropriate</li>
-        <li>Step 03 — If a specialist treats you, she writes to them and waits for written approval</li>
-        <li>Step 04 — Your appointment is scheduled, prepared and monitored by her, start to finish</li>
-        <li>NEEDS — her confirmation of the real steps, the turnaround time, and what happens if someone is declined</li>
-    </ul>
-  </div>
-</section>
+<section class="visit" id="visit" aria-labelledby="visitTitle">
+  <span class="visit__field" aria-hidden="true"></span>
 
+  <div class="visit__wrap">
+
+    <header class="visit__head">
+      <div class="visit__rubric" data-reveal>
+        <span class="visit__rubric-no">Chapter III</span>
+        <span class="visit__rubric-name">Before you come in</span>
+        <span class="visit__rubric-rule"></span>
+      </div>
+      <h2 class="visit__title" id="visitTitle" data-reveal>
+        No walk-ins.<br><em>That is the point.</em>
+      </h2>
+      <p class="visit__lede" data-reveal>
+        You cannot book an infusion here from a menu, and that is deliberate. Four steps sit
+        between your first message and the chair &mdash; every one of them performed by the
+        physician who will be in the room with you.
+      </p>
+    </header>
+
+    <div class="visit__body">
+
+      <ol class="visit__steps" id="visitSteps">
+        <span class="visit__rail" aria-hidden="true"><i class="visit__fill"></i></span>
+        <li class="vs is-on" data-step="0">
+          <button class="vs__hit" type="button" aria-controls="visitFile" aria-current="true">
+            <span class="vs__no" aria-hidden="true">01</span>
+            <span class="vs__dot" aria-hidden="true"><i class="ph ph-file-text"></i></span>
+            <span class="vs__body">
+              <span class="vs__title">You send your history</span>
+              <span class="vs__text">The screening form asks for your medical history, current medications, allergies, and what you are hoping to support. It takes a few minutes. Nothing is booked at this stage and nothing is charged.</span>
+              <span class="vs__meta"><i class="ph ph-clock" aria-hidden="true"></i> A few minutes</span>
+            </span>
+          </button>
+        </li>
+        <li class="vs" data-step="1">
+          <button class="vs__hit" type="button" aria-controls="visitFile" aria-current="false">
+            <span class="vs__no" aria-hidden="true">02</span>
+            <span class="vs__dot" aria-hidden="true"><i class="ph ph-eyeglasses"></i></span>
+            <span class="vs__body">
+              <span class="vs__title">Dr. Aronov reads it herself</span>
+              <span class="vs__text">Not an intake coordinator and not a scoring tool. She reviews what you sent, decides whether IV therapy is appropriate for you at all, and which formula fits &mdash; which is sometimes a different one from the infusion you asked about.</span>
+              <span class="vs__meta"><i class="ph ph-clock" aria-hidden="true"></i> Reviewed within one business day</span>
+            </span>
+          </button>
+        </li>
+        <li class="vs" data-step="2">
+          <button class="vs__hit" type="button" aria-controls="visitFile" aria-current="false">
+            <span class="vs__no" aria-hidden="true">03</span>
+            <span class="vs__dot" aria-hidden="true"><i class="ph ph-envelope-simple"></i></span>
+            <span class="vs__body">
+              <span class="vs__title">If a specialist treats you, she writes to them</span>
+              <span class="vs__text">When a gastroenterologist, rheumatologist, dermatologist or hepatologist is managing your condition, she sets out exactly what she proposes to give and at what rate, then waits. No written approval, no infusion &mdash; including for patients who have had one before.</span>
+              <span class="vs__meta"><i class="ph ph-clock" aria-hidden="true"></i> Depends on your specialist</span>
+            </span>
+          </button>
+        </li>
+        <li class="vs" data-step="3">
+          <button class="vs__hit" type="button" aria-controls="visitFile" aria-current="false">
+            <span class="vs__no" aria-hidden="true">04</span>
+            <span class="vs__dot" aria-hidden="true"><i class="ph ph-heartbeat"></i></span>
+            <span class="vs__body">
+              <span class="vs__title">Your appointment, start to finish</span>
+              <span class="vs__text">She calculates the doses, prepares the medications, spikes the bag herself, sets the rate and stays in the room until it is finished. Vital signs are monitored throughout. You are not handed to a technician.</span>
+              <span class="vs__meta"><i class="ph ph-clock" aria-hidden="true"></i> 15 minutes to 3 hours</span>
+            </span>
+          </button>
+        </li>
+      </ol>
+
+      <aside class="visit__file" id="visitFile" aria-live="polite">
+        <div class="visit__card">
+          <header class="vf__head">
+            <span class="vf__tag">Screening record</span>
+            <span class="vf__ref">AVE&thinsp;/&thinsp;<b id="vfRef">01</b>&thinsp;&mdash;&thinsp;04</span>
+          </header>
+
+          <p class="vf__status" id="vfStatus">Screening received</p>
+
+          <ul class="vf__ticks" id="vfTicks"></ul>
+
+          <div class="vf__seal" id="vfSeal" aria-hidden="true">
+            <i class="ph-duotone ph-seal-check"></i>
+            <span>Reviewed by<br><b>V. Aronov, DO</b></span>
+          </div>
+
+          <p class="vf__foot">Physician approval is required before any infusion can be scheduled.</p>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="visit__honest">
+      <div class="vh">
+        <p class="vh__lead"><i class="ph-duotone ph-scales" aria-hidden="true"></i> If the answer is no</p>
+        <p class="vh__text">Not everyone is eligible, and being told so is a real outcome of screening rather than a failure of it. If IV therapy is not appropriate for you, she will say so and tell you why.</p>
+      </div>
+      <div class="vh">
+        <p class="vh__lead"><i class="ph-duotone ph-shield-check" aria-hidden="true"></i> If your specialist says no</p>
+        <p class="vh__text">That is the answer. She will not go looking for a second opinion on your behalf, and she will not schedule around a treating physician who has declined.</p>
+      </div>
+    </div>
+
+    <div class="visit__cta" data-reveal>
+      <a class="btn btn--forest" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener" data-magnetic>
+        <span>Begin screening</span><i class="ph ph-arrow-right" aria-hidden="true"></i>
+      </a>
+      <a class="btn btn--line" href="tel:+19292010740"><span>929 · 201 · 0740</span></a>
+      <p class="visit__cta-note">Appointments only &bull; Physician review and eligibility determination required</p>
+    </div>
+
+  </div>
+
+  <script type="application/json" id="visitData">[{"status": "Screening received", "ticks": ["Form received", "History on file"]}, {"status": "Under physician review", "ticks": ["Medications &amp; allergies checked", "Eligibility determined", "Formula selected"]}, {"status": "Awaiting specialist approval", "ticks": ["Letter sent to your specialist", "Written approval on file"]}, {"status": "Reviewed &amp; scheduled", "ticks": ["Doses calculated for you", "Infusion prepared &amp; monitored"]}]</script>
+</section>
 
 <!-- ==============================================================
      THE PHYSICIAN (#physician)
