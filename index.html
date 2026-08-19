@@ -42,7 +42,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preload" as="image" href="logo.png" fetchpriority="high">
-<link rel="preload" as="image" href="assets/images/hero-poster.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="https://precisionmedicaliv.com/wp-content/themes/alphavital/assets/img/photos/bedside-nurse-iv.webp" fetchpriority="high">
 <!-- One request, not two, and only the weights the stylesheet actually asks
      for. Cormorant is used italic everywhere except one roman label, Marcellus
      and Prata have a single weight each, Archivo never uses 400. -->
@@ -639,6 +639,18 @@
       <div class="shelf__rail">
         <p class="shelf__counter"><b id="shelfNow">01</b> <span class="shelf__counter-sep">/</span> <span id="shelfTotal">10</span></p>
         <span class="shelf__meter"><i id="shelfMeter"></i></span>
+
+        <!-- phones and tablets drive the rail with these, not with a pinned
+             scrub — see the Shelf class in script.js -->
+        <div class="shelf__arrows">
+          <button class="shelf__arrow" id="shelfPrev" type="button" aria-label="Previous infusion" aria-controls="shelfTrack" disabled>
+            <i class="ph ph-arrow-left" aria-hidden="true"></i>
+          </button>
+          <button class="shelf__arrow" id="shelfNext" type="button" aria-label="Next infusion" aria-controls="shelfTrack">
+            <i class="ph ph-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+
         <span class="shelf__hint">Keep scrolling <i class="ph ph-arrow-right" aria-hidden="true"></i></span>
         <button class="shelf__skip" id="shelfSkip" type="button">
           <span>Skip this section</span><i class="ph ph-arrow-down" aria-hidden="true"></i>
@@ -687,6 +699,20 @@
       <button class="cnav__tab" type="button" role="tab" aria-selected="false" aria-controls="cond-psoriasis" data-cond="cond-psoriasis" style="--cond:#8A6FA8"><i class="ph ph-shield-check" aria-hidden="true"></i><span>Psoriasis</span></button>
       <button class="cnav__tab" type="button" role="tab" aria-selected="false" aria-controls="cond-mafld" data-cond="cond-mafld" style="--cond:#5F7A55"><i class="ph ph-leaf" aria-hidden="true"></i><span>Fatty Liver Disease</span></button>
     </nav>
+
+    <!-- the pill rail scrolls out of sight on a phone, so the count and the
+         arrows make it obvious there are seven of these, not one -->
+    <div class="cnav__pager">
+      <p class="cnav__count"><b id="condNow">01</b> <span>/</span> <span id="condTotal">07</span> conditions</p>
+      <div class="cnav__arrows">
+        <button class="cnav__arrow" id="condPrev" type="button" aria-label="Previous condition">
+          <i class="ph ph-arrow-left" aria-hidden="true"></i>
+        </button>
+        <button class="cnav__arrow" id="condNext" type="button" aria-label="Next condition">
+          <i class="ph ph-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
 
     <div class="cstage" id="cstage">
 
@@ -1224,8 +1250,6 @@
       </blockquote>
     </div>
 
-   </div>
-
     <div class="doc__cta" data-reveal>
       <a class="btn btn--forest" href="/about/"><span>Read the full biography</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
       <a class="btn btn--line" href="/research/"><span>The research she cites</span></a>
@@ -1442,7 +1466,7 @@
 
       <a class="credit" href="https://www.elanstechworld.com" target="_blank" rel="noopener">
         <span class="credit__by">Designed &amp; built by</span>
-        <img class="credit__logo" src="https://www.elanstechworld.com/assets/images/Elanslogo.jpeg" onerror="this.src='https://www.elanstechworld.com/assets/images/Elanslogo.jpeg';this.onerror=null"
+        <img class="credit__logo" src="https://www.elanstechworld.com/assets/images/Elanslogo.jpeg" onerror="this.src='assets/elans-tech-world.png';this.onerror=null"
              alt="Elan's Tech World" width="520" height="386" loading="lazy" decoding="async">
       </a>
     </div>
