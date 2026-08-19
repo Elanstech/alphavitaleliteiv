@@ -838,34 +838,32 @@ class Dock {
 ============================================================================= */
 const DRIPS = [
     { id:'healthyaging', name:'GLyNAC Longevity Restoration IV',        slug:'/drips/healthy-aging/',          img:'glynac',        time:'1 h 15',                     price:'$450', prog:'$405',    tag:'Healthy Aging',
-      why:'Two of the building blocks the body uses to produce its own glutathione.' },
+      why:'The two compounds the body uses as building components to produce glutathione.' },
 
     { id:'immune',       name:'Immun-O-Boost IV Support',               slug:'/drips/immune-support/',         img:'immuneoboost',  time:'2 h 30',                     price:'$650', prog:'$585',    tag:'Immune Support',
-      why:'Trace minerals, B-complex, amino acids and antioxidants supporting normal immune defenses.' },
+      why:'Immune system support, hydration, recovery and wellness optimization.' },
 
-    { id:'muscle',       name:'LIQUIXO Muscle Support IV Infusion',     slug:'/drips/muscle-recovery/',        img:'liquixo',       time:'45 min',                     price:'$495', prog:'$445.50', tag:'Muscle Recovery',
-      why:'A broad twenty amino acid formula, designed to supply what muscles draw on during recovery.' },
+    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',             slug:'/drips/muscle-recovery/',        img:'liquixo',       time:'45 min',                     price:'$495', prog:'$445.50', tag:'Muscle Recovery',
+      why:'A full 20 amino acid blend with recovery nutrients, plus exosomes.' },
 
-    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV Infusion',       slug:'/drips/antioxidant-support/',    img:'antioxidant',   time:'1 h 15',                     price:'$500', prog:'$450',    tag:'Antioxidant Support',
-      why:'Three antioxidants that work within the same network rather than alone.' },
+    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',                slug:'/drips/antioxidant-support/',    img:'antioxidant',   time:'75 min',                     price:'$500', prog:'$450',    tag:'Antioxidant Support',
+      why:'Three antioxidants in one network, recharging one another rather than working alone.' },
 
     { id:'glutathione',  name:'Glutathione IV Injection',               slug:'/drips/glutathione-iv-therapy/', img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
-      why:'A slow physician-administered push for focused antioxidant support.' },
+      why:'Concentrated antioxidant support as a slow physician-administered push.' },
 
-    /* ! awaiting time + pricing */
-    { id:'joint',        name:'Joint Support IV Infusion',              slug:'/drips/joint-support/',          img:'jointsupport',  time:'To be confirmed',            price:'To be confirmed', prog:'To be confirmed', tag:'Joint Support',
-      why:'Nutrients involved in collagen production, designed to complement rheumatology care.' },
+    // one infusion, two categories — the quiz can land on it from either route
+    { id:'jointskin',    name:'Joint & Skin Wellness IV',               slug:'/drips/joint-skin-wellness/',    img:'jointsupport',  time:'2 h 30',                     price:'$750', prog:'$675',    tag:'Joint Support & Skin Health',
+      why:'Amino acids involved in normal collagen formation, with antioxidant support around them.' },
 
-    /* ! awaiting time + pricing */
-    { id:'liver',        name:'Liver Support IV Infusion',              slug:'/drips/liver-support/',          img:'liversupport',  time:'To be confirmed',            price:'To be confirmed', prog:'To be confirmed', tag:'Liver Support',
-      why:'Supports antioxidant and metabolic pathways relevant to liver health.' },
+    { id:'liver',        name:'Fatty Liver Support IV',                 slug:'/drips/liver-support/',          img:'liversupport',  time:'3 h',                        price:'$850', prog:'$765',    tag:'Liver Support',
+      why:'Glycine and taurine for the liver’s normal bile work, with NAC for the glutathione pathway.' },
 
-    /* ! awaiting time + pricing — shares the Joint Support foundation */
-    { id:'skin',         name:'Skin Health IV Infusion',                slug:'/drips/skin-health/',            img:'skinhealth',    time:'To be confirmed',            price:'To be confirmed', prog:'To be confirmed', tag:'Skin Health',
-      why:'The same collagen-supporting foundation, for the skin’s nutritional and antioxidant needs.' },
+    { id:'recovery',     name:'Revive IV Support',                      slug:'/drips/recovery-support/',       img:'revive',        time:'2 h 15',                     price:'$625', prog:'$562.50', tag:'Recovery Support',
+      why:'Hydration and nutritional replenishment for flexible, as-needed use.' },
 
-    { id:'recovery',     name:'Revive IV Support Infusion',             slug:'/drips/recovery-support/',       img:'revive',        time:'2 h 15',                     price:'$625', prog:'$562.50', tag:'Recovery Support',
-      why:'Hydration, vitamins, amino acids and antioxidant support after illness, travel or stress.' },
+    { id:'mind',         name:'Stress, Mental Burnout & Brain Wellness IV', slug:'/drips/mind-focus-support/', img:'brainwellness', time:'1 h 30',                     price:'$700', prog:'$630',    tag:'Mind & Focus Support',
+      why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
 
     { id:'custom',       name:'Customized IV Infusion',                 slug:'/drips/customized-infusion/',    img:'customized',    time:'Individually determined',    price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
       why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
@@ -875,8 +873,8 @@ const ASKS = [
     { ask:'What brought you here?', hint:'Pick whichever is loudest right now.', opts:[
         { t:'I keep getting sick',       s:'Run-down, seasonal',             i:'ph-shield-check',     w:{ immune:6, recovery:2 } },
         { t:'I am still run down',       s:'After illness, travel or stress',i:'ph-arrows-clockwise', w:{ recovery:6, immune:2 } },
-        { t:'My joints ache',            s:'Stiffness, arthritis, wear',     i:'ph-bone',             w:{ joint:6, antioxidant:2 } },
-        { t:'I am thinking about my skin', s:'Tone, texture, skin wellness', i:'ph-sparkle',          w:{ skin:6, glutathione:3 } },
+        { t:'My joints ache',            s:'Stiffness, arthritis, wear',     i:'ph-bone',             w:{ jointskin:6, antioxidant:2 } },
+        { t:'I am thinking about my skin', s:'Tone, texture, skin wellness', i:'ph-sparkle',          w:{ jointskin:5, glutathione:3 } },
         { t:'I am losing muscle',        s:'On a GLP-1 or weight-loss plan', i:'ph-barbell',          w:{ muscle:7 } },
         { t:'My liver markers came back off', s:'Metabolic or liver concern',i:'ph-leaf',             w:{ liver:6, antioxidant:2 } },
         { t:'I want to age well',        s:'Longevity, cellular defenses',   i:'ph-infinity',         w:{ healthyaging:6, antioxidant:3 } },
@@ -884,7 +882,7 @@ const ASKS = [
 
     { ask:'Are you under a specialist’s care for anything?', hint:'This changes how carefully she coordinates, never whether you are welcome.', opts:[
         { t:'Yes — a gut condition',    s:'Crohn’s, colitis, coeliac',      i:'ph-first-aid-kit',  flag:true, w:{ custom:5, immune:2 } },
-        { t:'Yes — joints or skin',     s:'RA, osteoarthritis, psoriasis',  i:'ph-hand-heart',     flag:true, w:{ custom:4, joint:2, skin:2 } },
+        { t:'Yes — joints or skin',     s:'RA, osteoarthritis, psoriasis',  i:'ph-hand-heart',     flag:true, w:{ custom:4, jointskin:3 } },
         { t:'Yes — liver or metabolic', s:'Fatty liver, related',           i:'ph-heartbeat',      flag:true, w:{ custom:4, liver:3 } },
         { t:'No — generally well',      s:'No diagnosis, no specialist',    i:'ph-check-circle',   w:{} },
     ]},
@@ -897,8 +895,8 @@ const ASKS = [
     ]},
 
     /* Joint Support, Liver Support and Skin Health carry no weight here on
-       purpose — their pricing is not confirmed, so the quiz must not steer
-       anyone to them on cost. Add them once Dr. Aronov supplies the figures. */
+       purpose: at $750 and $850 they sit above every published band below,
+       and steering someone to them on price alone would be the wrong reason. */
     { ask:'What feels comfortable per session?', hint:'Every figure here is her real published rate.', opts:[
         { t:'Under $350',     s:'Single-compound infusions', i:'ph-coins',   w:{ glutathione:5 } },
         { t:'$350 – $550',    s:'The mid-length protocols',  i:'ph-wallet',  w:{ healthyaging:4, antioxidant:4, muscle:3 } },
@@ -1102,131 +1100,61 @@ class Quiz {
 
 
 /* =============================================================================
-   HOW A VISIT WORKS — the ledger and the record (#visit)
-   Motion grammar is its own: no pin, no toggle, no scrub. Each step claims the
-   sequence as it reaches the middle of the screen, the rail fills behind it,
-   and the screening record beside it changes status and accumulates ticks.
-   The record stamps once, on the last step. Clicking a step jumps to it.
-
-   Step content is read from a JSON island in the markup rather than duplicated
-   here, so the copy lives in one place and stays crawlable.
+   HOW A VISIT WORKS — four beats on one rule (#visit)
+   The rule draws once, on arrival, and each node lights as the fill reaches
+   it. Deliberately simple: the section sits between two heavy ones and its
+   job is to be over quickly. Horizontal above 560px, vertical below, so the
+   fill animates whichever axis the media query is using.
 ============================================================================= */
 class Visit {
     constructor() {
-        this.el     = $('#visit');
-        this.list   = $('#visitSteps');
-        this.steps  = $$('.vs', this.list ?? document);
-        this.fill   = $('.visit__fill', this.el ?? document);
-        this.status = $('#vfStatus');
-        this.ticks  = $('#vfTicks');
-        this.ref    = $('#vfRef');
-        this.seal   = $('#vfSeal');
-        this.at     = -1;
-        this.data   = [];
+        this.el    = $('#visit');
+        this.list  = $('#visitSteps');
+        this.steps = $$('.vs', this.list ?? document);
+        this.fill  = $('.visit__fill', this.el ?? document);
     }
 
     init() {
         if (!this.el || !this.steps.length) return;
 
-        try { this.data = JSON.parse($('#visitData')?.textContent || '[]'); }
-        catch { this.data = []; }
-
-        // the folio numeral behind each step comes from its own index
-        this.steps.forEach((s, i) => {
-            s.dataset.folio = String(i + 1).padStart(2, '0');
-            $('.vs__hit', s)?.addEventListener('click', () => {
-                this.set(i);
-                s.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
-            });
-        });
-
-        this.set(0);
-
+        // no GSAP or reduced motion -> everything already lit, nothing to draw
         if (typeof window.gsap === 'undefined' || REDUCED) {
-            this.steps.forEach((s) => s.classList.add('is-done'));
-            if (this.fill) this.fill.style.height = '100%';
-            this.set(this.steps.length - 1);
+            this.steps.forEach((s) => s.classList.add('is-on'));
             return;
         }
 
         gsap.registerPlugin(ScrollTrigger);
 
-        /* Each step owns a trigger rather than one scrubbed trigger for the
-           whole list — a scrub here would fight the sticky record beside it,
-           and a step should claim the sequence at a definite moment, not
-           fractionally. */
-        this.steps.forEach((s, i) => {
-            ScrollTrigger.create({
-                trigger: s,
-                start: 'top 62%',
-                end: 'bottom 42%',
-                onEnter:     () => this.set(i),
-                onEnterBack: () => this.set(i),
-            });
+        ScrollTrigger.create({
+            trigger: this.list,
+            start: 'top 74%',
+            once: true,
+            onEnter: () => this.draw(),
         });
 
-        popIn($$('.vh', this.el), { y: 26, scale: .98, stagger: .1, duration: .6 }, '.visit__honest', 'top 88%');
-        popIn(this.steps, { y: 24, stagger: .08, duration: .55, ease: 'back.out(1.4)' }, this.list, 'top 82%');
+        popIn(this.steps, { y: 26, stagger: .09, duration: .55, ease: 'back.out(1.5)' }, this.list, 'top 82%');
+        popIn($$('.visit__intro > *, .visit__close > *', this.el),
+              { y: 22, stagger: .08, duration: .55 }, this.el, 'top 86%');
     }
 
-    set(i) {
-        if (i === this.at) return;
-        const first = this.at === -1;
-        this.at = i;
+    /** fill the rule and light each node as it is passed */
+    draw() {
+        if (!this.fill) return;
+        const vertical = window.matchMedia('(max-width: 560px)').matches;
+        const axis = vertical ? 'height' : 'width';
+        const span = { v: 0 };
 
-        this.steps.forEach((s, n) => {
-            s.classList.toggle('is-on', n === i);
-            s.classList.toggle('is-done', n < i);
-            $('.vs__hit', s)?.setAttribute('aria-current', String(n === i));
+        gsap.to(span, {
+            v: 100,
+            duration: 1.5,
+            ease: 'power2.inOut',
+            onUpdate: () => {
+                this.fill.style[axis] = span.v.toFixed(1) + '%';
+                this.steps.forEach((s, i) => {
+                    s.classList.toggle('is-on', span.v >= (i / this.steps.length) * 100);
+                });
+            },
         });
-
-        if (this.fill) {
-            this.fill.style.height = (((i + 1) / this.steps.length) * 100).toFixed(1) + '%';
-        }
-        if (this.ref) this.ref.textContent = String(i + 1).padStart(2, '0');
-
-        this.paintCard(i, !first);
-    }
-
-    /** status swaps, ticks accumulate — every tick from this step and the ones before it */
-    paintCard(i, animate) {
-        const entry = this.data[i];
-        if (!entry) return;
-
-        if (this.status) {
-            if (animate && typeof window.gsap !== 'undefined' && !REDUCED) {
-                gsap.fromTo(this.status, { opacity: 0, y: 10 },
-                    { opacity: 1, y: 0, duration: .4, ease: 'expo.out' });
-            }
-            this.status.innerHTML = entry.status;
-        }
-
-        if (this.ticks) {
-            const all = this.data.slice(0, i + 1).flatMap((d) => d.ticks);
-            this.ticks.innerHTML = all.map((t) =>
-                `<li class="vf__tick"><i class="ph-fill ph-check" aria-hidden="true"></i><span>${t}</span></li>`
-            ).join('');
-
-            if (animate && typeof window.gsap !== 'undefined' && !REDUCED) {
-                const fresh = $$('.vf__tick', this.ticks).slice(-entry.ticks.length);
-                gsap.fromTo(fresh, { opacity: 0, x: -10 },
-                    { opacity: 1, x: 0, duration: .4, ease: 'back.out(1.6)', stagger: .07 });
-            }
-        }
-
-        // the record is only stamped once the sequence is complete
-        if (this.seal) {
-            const done = i === this.steps.length - 1;
-            if (typeof window.gsap === 'undefined' || REDUCED) {
-                gsap.set?.(this.seal, { opacity: done ? 1 : 0 });
-                this.seal.style.opacity = done ? '1' : '0';
-                this.seal.style.transform = 'none';
-                return;
-            }
-            gsap.to(this.seal, done
-                ? { opacity: 1, scale: 1, rotate: 0, duration: .55, ease: 'back.out(2.2)' }
-                : { opacity: 0, scale: .9, rotate: -4, duration: .3, ease: 'power2.in' });
-        }
     }
 }
 
