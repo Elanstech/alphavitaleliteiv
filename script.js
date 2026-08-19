@@ -427,161 +427,129 @@ class Shelf {
         this.meter    = $('#shelfMeter');
         this.now      = $('#shelfNow');
         this.total    = $('#shelfTotal');
+        this.skip     = $('#shelfSkip');
         this.last     = -1;
-        this.BREAK    = 900;   // below this the rail becomes a snap scroller
+        this.st       = null;
     }
 
     init() {
         if (!this.scene || !this.track) return;
 
-        const plates = $$('.plate', this.track);
-        if (this.total) this.total.textContent = String(plates.length).padStart(2, '0');
-
         this.filters();
         this.paint(0);
+        this.skipButton();
 
-        // No GSAP (blocked CDN, offline) or reduced motion → force the stacked
-        // layout rather than leaving a rail that can never move.
+        // No GSAP or reduced motion -> the CSS already lays this out as a grid
         if (typeof window.gsap === 'undefined' || REDUCED) {
-            if (this.viewport) {
-                this.viewport.style.height   = 'auto';
-                this.viewport.style.overflow = 'visible';
-                this.viewport.style.display  = 'block';
-                this.viewport.style.paddingBottom = '0';
-            }
-            this.track.style.cssText +=
-                'display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:3rem;transform:none;';
+            $$('.plate', this.track).forEach((p) => p.classList.add('is-active'));
             return;
         }
 
         gsap.registerPlugin(ScrollTrigger);
+
+        /* normalizeScroll takes the browser's own scrolling out of the loop on
+           touch, which is what stops the address-bar collapse from fighting a
+           pinned section mid-gesture. It is the single biggest difference
+           between this feeling smooth and feeling like it snags. */
+        if ('ontouchstart' in window) {
+            try { ScrollTrigger.normalizeScroll(true); } catch { /* older builds */ }
+        }
+
         this.rail();
     }
 
-    /** Which plates are currently on the shelf (filters hide the rest). */
     live() {
         return $$('.plate', this.track).filter((p) => !p.classList.contains('is-out'));
     }
 
-    /** Move the counter and the meter to the plate at `index`.
-        The field itself stays cream — each formula's compound colour lives
-        only in its own numeral, chips and hover. */
+    /** counter, meter, and which card is lit */
     paint(index) {
         const list = this.live();
         if (!list.length) return;
 
         const i = clamp(index, 0, list.length - 1);
+        if (this.total) this.total.textContent = String(list.length).padStart(2, '0');
         if (i === this.last) return;
         this.last = i;
 
         if (this.now)   this.now.textContent = String(i + 1).padStart(2, '0');
-        if (this.total) this.total.textContent = String(list.length).padStart(2, '0');
         if (this.meter) this.meter.style.width = ((i + 1) / list.length) * 100 + '%';
+
+        // only the card you are actually looking at is at full strength
+        list.forEach((p, n) => p.classList.toggle('is-active', n === i));
     }
 
+    /* =====================================================================
+       ONE MECHANIC, EVERY DEVICE
+       The old build pinned and scrubbed on desktop but handed phones a native
+       snap scroller. Two mechanics meant two sets of bugs, and the counter
+       could disagree with the screen mid-momentum. Now vertical scroll drives
+       the rail sideways everywhere; only the measurements change.
+       ===================================================================== */
     rail() {
-        const mm = gsap.matchMedia();
+        const plates = () => $$('.plate', this.track);
 
-        /* -- desktop: pin the viewport, scrub the track sideways --
-           Three things were causing the stutter and all three are fixed here:
+        // how far the track has to travel for its last card to sit on screen
+        const distance = () => {
+            const list = this.live();
+            if (!list.length) return 0;
+            const lastEl = list[list.length - 1];
+            const trackW = lastEl.offsetLeft + lastEl.offsetWidth;
+            const pad = parseFloat(getComputedStyle(this.track).paddingRight) || 0;
+            return Math.max(0, Math.round(trackW + pad - window.innerWidth));
+        };
 
-           1. Every plate had its OWN ScrollTrigger for the counter-scrolling
-              numeral — eleven extra scrubbed triggers all recalculating on the
-              same frame. They are gone. One quickSetter loop inside the main
-              onUpdate now moves every numeral, which is a single write per
-              frame instead of eleven.
-           2. The x transform landed on fractional pixels, so text inside the
-              plates shimmered as it slid. Values are rounded now and the tween
-              is forced onto the compositor.
-           3. `scrub: 0.9` smooths toward a target, so a mid-scroll refresh
-              re-targets and reads as a jump. Scrub is tighter and refreshes are
-              gated in boot() so they cannot fire while the pin is active.        -- */
-        mm.add(`(min-width: ${this.BREAK + 1}px)`, () => {
-            const plates = $$('.plate', this.track);
-            const noSetters = plates.map((p) => {
-                const no = $('.plate__no', p);
-                return no ? { set: gsap.quickSetter(no, 'x', 'px'), fade: gsap.quickSetter(no, 'opacity'), el: no } : null;
-            }).filter(Boolean);
+        const setX = gsap.quickSetter(this.track, 'x', 'px');
 
-            const distance = () => Math.max(0, Math.round(this.track.scrollWidth - window.innerWidth + 80));
+        this.st = ScrollTrigger.create({
+            trigger: this.pin,
+            start: 'top top',
+            end: () => '+=' + (distance() + window.innerHeight * 0.6),
+            pin: this.viewport,
+            pinSpacing: true,
+            scrub: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            fastScrollEnd: true,
+            onToggle: (self) => {
+                Shelf.pinned = self.isActive;
+                this.track.style.willChange = self.isActive ? 'transform' : 'auto';
+                this.scene.classList.toggle('is-running', self.isActive);
+            },
+            onUpdate: (self) => {
+                const d = distance();
+                // whole pixels: fractional transforms make the type shimmer
+                setX(-Math.round(self.progress * d));
 
-            const drag = gsap.to(this.track, {
-                x: () => -distance(),
-                ease: 'none',
-                force3D: true,
-                roundProps: 'x',            // whole pixels — no subpixel shimmer
-                scrollTrigger: {
-                    trigger: this.pin,
-                    start: 'top top',
-                    end: () => '+=' + distance(),
-                    pin: this.viewport,
-                    pinSpacing: true,
-                    scrub: 0.45,            // tighter: less to re-target on a refresh
-                    anticipatePin: 1,
-                    invalidateOnRefresh: true,
-                    fastScrollEnd: true,
-                    onToggle: (self) => {
-                        // will-change is expensive to leave on permanently
-                        this.track.style.willChange = self.isActive ? 'transform' : 'auto';
-                        Shelf.pinned = self.isActive;
-                    },
-                    onUpdate: (self) => {
-                        const p = self.progress;
-                        this.paint(Math.round(p * (this.live().length - 1)));
+                const list = this.live();
+                this.paint(Math.round(self.progress * (list.length - 1)));
 
-                        // one pass over the numerals instead of eleven triggers
-                        const vw = window.innerWidth;
-                        for (const n of noSetters) {
-                            const box = n.el.getBoundingClientRect();
-                            const t = 1 - clamp((box.left + box.width / 2) / vw, 0, 1);
-                            n.set(Math.round(30 - t * 60));
-                            n.fade((0.25 + t * 0.6).toFixed(2));
-                        }
-                    },
-                },
-            });
-
-            popIn(plates, { y: 60, stagger: .06, duration: 1, ease: 'expo.out' }, this.pin, 'top 70%');
-
-            this.drag = drag;
-            return () => { this.drag = null; this.track.style.willChange = 'auto'; Shelf.pinned = false; };
+                /* the numerals counter-scroll against their own card. One pass
+                   here rather than a ScrollTrigger per plate — eleven scrubbed
+                   triggers on the same frame was most of the old stutter. */
+                const vw = window.innerWidth;
+                for (const p of list) {
+                    const no = p.__no || (p.__no = $('.plate__no', p));
+                    if (!no) continue;
+                    const box = p.getBoundingClientRect();
+                    const t = 1 - clamp((box.left + box.width / 2) / vw, 0, 1);
+                    no.style.transform = `translateX(${Math.round(22 - t * 44)}px)`;
+                }
+            },
         });
 
-        /* -- phone: a real horizontal scroller with snap points --
-           No pin, no scrub. The track scrolls natively under the thumb and the
-           counter reads off its scrollLeft, which is what a phone expects and
-           what survives an address bar resizing mid-gesture. -- */
-        mm.add(`(max-width: ${this.BREAK}px)`, () => {
-            const track = this.track;
+        // the cards arrive once, as the shelf comes into view
+        popIn(plates(), { y: 46, stagger: .05, duration: .9, ease: 'expo.out' }, this.pin, 'top 72%');
+    }
 
-            /* The old version listened to `scroll` and re-measured every plate
-               on every frame — on a snap scroller with momentum that is a lot
-               of layout reads mid-gesture, which is where the phone stutter
-               came from. An IntersectionObserver rooted on the track does the
-               same job with no per-frame work at all. */
-            let io = null;
-            if ('IntersectionObserver' in window) {
-                io = new IntersectionObserver((entries) => {
-                    let best = null;
-                    for (const en of entries) {
-                        if (!en.isIntersecting) continue;
-                        if (!best || en.intersectionRatio > best.intersectionRatio) best = en;
-                    }
-                    if (!best) return;
-                    const i = this.live().indexOf(best.target);
-                    if (i >= 0) this.paint(i);
-                }, { root: track, threshold: [0.45, 0.6, 0.75, 0.9] });
-
-                $$('.plate', track).forEach((p) => io.observe(p));
-            }
-
-            popIn($$('.plate', track), { y: 34, stagger: .05, duration: .8, ease: 'expo.out' }, this.pin, 'top 82%');
-
-            return () => { io?.disconnect(); };
+    /** jump past the pinned run for anyone who does not want the tour */
+    skipButton() {
+        if (!this.skip) return;
+        this.skip.addEventListener('click', () => {
+            // land just past the end of the pin, wherever that currently is
+            const end = this.st ? this.st.end : (this.scene.offsetTop + this.scene.offsetHeight);
+            window.scrollTo({ top: end + 4, behavior: REDUCED ? 'auto' : 'smooth' });
         });
-
-        /* fonts land after first paint and change every measurement —
-           global refresh lives in boot() */
     }
 
     filters() {
@@ -606,18 +574,17 @@ class Shelf {
                 this.last = -1;
                 this.paint(0);
 
-                // a single-result filter has nothing to scroll through — send
-                // the phone scroller back to the start so the one card is on screen
-                this.track.scrollLeft = 0;
+                if (typeof window.gsap === 'undefined' || REDUCED) return;
 
-                if (typeof window.gsap !== 'undefined') {
-                    gsap.fromTo(this.live(),
-                        { opacity: 0, y: 26 },
-                        { opacity: 1, y: 0, duration: 0.65, ease: 'expo.out', stagger: 0.04 });
-                    // hiding plates changes scrollWidth, so the pin distance is
-                    // now wrong — refresh on the next frame, once layout settles
-                    requestAnimationFrame(() => ScrollTrigger.refresh());
-                }
+                gsap.set(this.track, { x: 0 });
+                gsap.fromTo(this.live(),
+                    { opacity: 0, y: 24 },
+                    { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04,
+                      onComplete: () => this.paint(0) });
+
+                // hiding cards changes the travel distance, so the pin length
+                // is now wrong — remeasure once layout has settled
+                requestAnimationFrame(() => ScrollTrigger.refresh());
             });
         });
     }
