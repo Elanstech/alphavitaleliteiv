@@ -10,6 +10,8 @@
 
 <!-- ============================================================
      FONTS — the same six voices as the home page:
+     Prata display · Cormorant accent · Marcellus caps ·
+     Instrument Sans body · Syne micro · Archivo data
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,8 +31,8 @@
 <link rel="icon" type="image/png" href="/logo.png">
 <!-- shared chrome first (tokens · atoms · header · menu · dock · footer),
      then this page's own sections -->
-<link rel="stylesheet" href="../styles.css">
-<link rel="stylesheet" href="../css/infusions.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/infusions.css">
 
 <noscript><style>
   [data-rise], [data-reveal] { opacity: 1 !important; transform: none !important; }
@@ -51,7 +53,56 @@
     </a>
 
     <nav class="head__nav" id="headNav">
-      <a class="head__link is-here" href="/infusions/" aria-current="page">Infusions</a>
+
+      <!-- INFUSIONS + THE FLYOUT — CSS-only: opens on hover, stays open on
+           keyboard focus (:focus-within). The link itself still navigates. -->
+      <div class="head__drop">
+        <a class="head__link is-here" href="/infusions/" aria-current="page">
+          Infusions <i class="ph ph-caret-down head__dcaret"></i>
+        </a>
+
+        <div class="head__panel">
+          <p class="head__panel-eyebrow">The Infusion Menu</p>
+
+          <div class="head__panel-grid">
+            <a class="hd-item" href="/drips/healthy-aging/" style="--tone:#5B7098">
+              <i>I</i><span>GLyNAC Longevity Restoration</span><b>$450</b>
+            </a>
+            <a class="hd-item" href="/drips/immune-support/" style="--tone:#D9982A">
+              <i>II</i><span>Immun-O-Boost IV Support</span><b>$650</b>
+            </a>
+            <a class="hd-item" href="/drips/muscle-recovery/" style="--tone:#B34E37">
+              <i>III</i><span>LIQUIXO Muscle Recovery</span><b>$495</b>
+            </a>
+            <a class="hd-item" href="/drips/antioxidant-support/" style="--tone:#4F7D5E">
+              <i>IV</i><span>Antioxidant &times;3 Reset</span><b>$500</b>
+            </a>
+            <a class="hd-item" href="/drips/glutathione-iv-therapy/" style="--tone:#7FA08C">
+              <i>V</i><span>Glutathione IV Injection</span><b>$125</b>
+            </a>
+            <a class="hd-item" href="/drips/joint-skin-wellness/" style="--tone:#8C6239">
+              <i>VI</i><span>Joint &amp; Skin Wellness</span><b>$750</b>
+            </a>
+            <a class="hd-item" href="/drips/liver-support/" style="--tone:#5F7A55">
+              <i>VII</i><span>Fatty Liver Support</span><b>$850</b>
+            </a>
+            <a class="hd-item" href="/drips/recovery-support/" style="--tone:#35707F">
+              <i>VIII</i><span>Revive IV Support</span><b>$625</b>
+            </a>
+            <a class="hd-item" href="/drips/mind-focus-support/" style="--tone:#7A5F98">
+              <i>IX</i><span>Stress &amp; Brain Wellness</span><b>$700</b>
+            </a>
+            <a class="hd-item" href="/drips/customized-infusion/" style="--tone:#C1963F">
+              <i>X</i><span>Customized IV Infusion</span><b>Consult</b>
+            </a>
+          </div>
+
+          <a class="head__panel-foot" href="/infusions/">
+            <span>View the full menu</span><i class="ph ph-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
       <a class="head__link" href="/the-practice/">The Practice</a>
       <a class="head__link" href="/about/">Dr.&nbsp;Aronov</a>
       <a class="head__link" href="/research/">Research</a>
@@ -954,6 +1005,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-<script src="../js/infusions.js" type="module"></script>
+<script src="/infusions.js" type="module"></script>
 </body>
 </html>
