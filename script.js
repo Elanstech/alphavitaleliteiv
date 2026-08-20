@@ -6,6 +6,7 @@
    sections drop in without touching this file.
 
      Helpers
+     Scroll      one listener, one rAF, every subscriber
      Nav         the single smooth-scroll path — every button and anchor
      Preloader   hairline draws with the load, curtain lifts onto the film
      Header      condense · retreat on the way down · return on the way up
@@ -13,25 +14,21 @@
      WordLoop    the rotating category in the "Infusions for ..." line
      HeroVideo   autoplay kick for iOS, poster fallback if the file is absent
      Magnetic    primary buttons lean toward the pointer (fine pointers only)
-     Shelf       the services rail — pinned horizontally, swipeable on phones
+     Rail        ONE snap-carousel engine — used by the shelf and the evidence
+     Shelf       the services rail — pinned horizontally, Rail-driven on phones
+     Chronic     the chronic-condition switcher, its compounds and spotlight
      Advantage   the oral-vs-IV switch, drawn on arrival and on every toggle
-     Visit       the four-step ledger and the screening record beside it
-     Dock        back to top (left) and the action dial (right)
-     Quiz        the modal matcher — four questions across the infusions
-     Chronic     the chronic-condition accordion, its compounds and spotlight
-     Social      the Instagram band
+     Visit       the four-step ledger
      Physician   sticky portrait, beats that pop, the chain of custody
-     Research    the reference rail — snap carousel, arrows, drag, keyboard
-                 (#programmes and #faq are deliberately script-free)
+     Research    the reference rail — a Rail with drag enabled
+     Dock        back to top (left) and the action dial (right)
+     Quiz        the modal matcher — four questions across the ten infusions
+     Social      the Instagram band
      Reveal      generic scroll reveal for anything marked [data-reveal]
      Boot
 
    REQUIRES GSAP + ScrollTrigger from CDN in index.html BEFORE this file.
    Without them every module degrades to a static, readable layout.
-
-   NOTE — the loop no longer sits inside the headline. It drives the
-   "Infusions for ..." descriptor line beneath it, so the approved hero wording
-   is never part of the moving text. Nine categories, Dr. Aronov's order.
 ============================================================================= */
 
 
@@ -72,7 +69,7 @@ const wait = (ms) => new Promise((res) => setTimeout(res, ms));
  *  rather than scrolled to it. */
 const popIn = (targets, opts = {}, trigger, start = 'top 86%') => {
     const { y = 32, scale = 1, stagger = 0, ease = 'back.out(1.7)', duration = 0.6 } = opts;
-    const els = Array.isArray(targets) ? targets : [targets];
+    const els = (Array.isArray(targets) ? targets : [targets]).filter(Boolean);
     if (!els.length || typeof window.gsap === 'undefined') return;
     if (REDUCED) { gsap.set(els, { opacity: 1, y: 0, scale: 1 }); return; }
 
@@ -84,12 +81,83 @@ const popIn = (targets, opts = {}, trigger, start = 'top 86%') => {
 };
 
 
+/* =============================================================================
+   SCROLL — one listener, one rAF, every subscriber
+   Header and Dock each had their own scroll listener and their own rAF. Two
+   listeners means two layout reads per frame for the same number. One loop
+   reads scrollY once and hands it to everyone.
+============================================================================= */
+const Scroll = {
+    subs: [],
+    queued: false,
+    add(fn) {
+        this.subs.push(fn);
+        fn(window.scrollY);
+        if (this.subs.length === 1) this.listen();
+    },
+    listen() {
+        const run = () => {
+            const y = window.scrollY;
+            for (const fn of this.subs) fn(y);
+            this.queued = false;
+        };
+        window.addEventListener('scroll', () => {
+            if (this.queued) return;
+            this.queued = true;
+            requestAnimationFrame(run);
+        }, { passive: true });
+    },
+};
+
+
+/* =============================================================================
+   NAV — the ONE place the page is allowed to scroll itself
+   `scroll-behavior: smooth` has been removed from html in styles.css because
+   it silently swallowed programmatic scrolls that arrived while one of its own
+   animations was still running — ScrollTrigger issues those constantly around
+   a pinned section. Every button and every in-page anchor routes through here
+   instead, so there is exactly one scroll animation in flight at a time and a
+   second click retargets it rather than being dropped.
+
+   The fixed header is subtracted, which CSS smooth scrolling never did — an
+   anchor used to land with its heading tucked underneath the bar.
+============================================================================= */
+const Nav = {
+    offset() { return ($('#head')?.offsetHeight || 0) + 8; },
+
+    toY(y) {
+        window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: REDUCED ? 'auto' : 'smooth' });
+    },
+
+    to(el) {
+        if (!el) return;
+        this.toY(window.scrollY + el.getBoundingClientRect().top - this.offset());
+    },
+
+    init() {
+        // delegated, so anchors added later (and the footer's) are covered too
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest?.('a[href^="#"]');
+            if (!a) return;
+            const href = a.getAttribute('href');
+            if (!href || href === '#') return;
+            const el = document.getElementById(href.slice(1));
+            if (!el) return;
+            e.preventDefault();
+            this.to(el);
+            // pushState, not replaceState: an in-page jump should be undoable
+            // with the back button, and Chronic listens for that.
+            if (window.location.hash !== href) history.pushState(null, '', href);
+            else window.dispatchEvent(new HashChangeEvent('hashchange'));
+        });
+    },
+};
+
 
 /* =============================================================================
    PRELOADER
-   Progress is real where it can be (fonts + images), padded by elapsed time
-   so the line never stalls. Minimum 1.2s so it reads; ceiling 5s so a slow
-   asset can never trap anyone.
+   Progress is real where it can be (fonts + critical images), padded by
+   elapsed time so the line never stalls.
 ============================================================================= */
 class Preloader {
     constructor() {
@@ -97,19 +165,20 @@ class Preloader {
         this.bar = $('#preBar');
         this.pct = $('#prePct');
 
-        /* Was 1.2s minimum and a 5s ceiling, and it waited on `window.load` —
-           which does not fire until every lazy image, the hero video and three
-           icon webfonts are in. On a phone that read as a wall.
+        /* It used to wait on `window.load` — which does not fire until every
+           lazy image, the hero video and three icon webfonts are in. On a
+           phone that read as a wall.
 
-           Now: it waits only on the things that are actually on screen (the
-           mark, the hero poster) and on fonts, with a hard 900ms cap on the
-           font wait so a slow Google Fonts response can never hold the page. */
+           Now: it waits only on the things actually on screen (the mark, the
+           hero poster) and on fonts, with a hard 900ms cap on the font wait so
+           a slow Google Fonts response can never hold the page. */
         this.MIN_MS = 320;
         this.MAX_MS = 2000;
         this.start  = performance.now();
         this.shown  = 0;
         this.target = 0;
         this.loaded = false;
+        this.dead   = false;
     }
 
     init() {
@@ -149,11 +218,12 @@ class Preloader {
     }
 
     tick() {
+        if (this.dead) return;
         const elapsed = performance.now() - this.start;
         const paced   = clamp((elapsed / this.MIN_MS) * 96, 0, 96);
         const goal    = this.loaded ? 100 : Math.max(this.target, paced);
 
-        this.shown = lerp(this.shown, goal, 0.22);      // was .1 — this is the visible speed
+        this.shown = lerp(this.shown, goal, 0.22);
         if (goal - this.shown < 0.6) this.shown = goal;
 
         if (this.bar) this.bar.style.width = `${this.shown.toFixed(1)}%`;
@@ -165,14 +235,16 @@ class Preloader {
     }
 
     async lift() {
-        await wait(80);                 // was 240
-        this.el.classList.add('is-lifting');
-        this.release();                 // the page is interactive during the curtain
+        this.dead = true;                // stop the rAF loop before the DOM goes
+        await wait(80);
+        this.el?.classList.add('is-lifting');
+        this.release();                  // the page is interactive during the curtain
         await wait(760);
-        this.el.remove();
+        this.el?.remove();
     }
 
     release(instant = false) {
+        this.dead = true;
         document.documentElement.classList.remove('is-preloading');
         document.body.classList.add('is-ready');
         if (instant) this.el?.remove();
@@ -191,7 +263,7 @@ class Header {
 
     init() {
         if (!this.el) return;
-        // driven by the single shared scroll loop in boot() — see Scroll
+        // driven by the single shared scroll loop — see Scroll
         Scroll.add((y) => {
             this.el.classList.toggle('is-stuck', y > 40);
             const goingDown = y > this.lastY && y > 320;
@@ -201,76 +273,6 @@ class Header {
         });
     }
 }
-
-
-/* =============================================================================
-   SCROLL — one listener, one rAF, every subscriber
-   Header and Dock each had their own scroll listener and their own rAF. Two
-   listeners means two layout reads per frame for the same number. One loop
-   reads scrollY once and hands it to everyone.
-============================================================================= */
-const Scroll = {
-    subs: [],
-    queued: false,
-    add(fn) {
-        this.subs.push(fn);
-        fn(window.scrollY);
-        if (this.subs.length === 1) this.listen();
-    },
-    listen() {
-        const run = () => {
-            const y = window.scrollY;
-            for (const fn of this.subs) fn(y);
-            this.queued = false;
-        };
-        window.addEventListener('scroll', () => {
-            if (this.queued) return;
-            this.queued = true;
-            requestAnimationFrame(run);
-        }, { passive: true });
-    },
-};
-
-
-/* =============================================================================
-   NAV — the ONE place the page is allowed to scroll itself
-   `scroll-behavior: smooth` has been removed from html in styles.css because
-   it silently swallowed programmatic scrolls that arrived while one of its own
-   animations was still running — ScrollTrigger issues those constantly around
-   a pinned section. Every button and every in-page anchor now routes through
-   here instead, so there is exactly one scroll animation in flight at a time
-   and a second click retargets it rather than being dropped.
-
-   The fixed header is subtracted, which CSS smooth scrolling never did — an
-   anchor used to land with its heading tucked underneath the bar.
-============================================================================= */
-const Nav = {
-    offset() { return ($('#head')?.offsetHeight || 0) + 8; },
-
-    toY(y) {
-        window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: REDUCED ? 'auto' : 'smooth' });
-    },
-
-    to(el) {
-        if (!el) return;
-        this.toY(window.scrollY + el.getBoundingClientRect().top - this.offset());
-    },
-
-    init() {
-        // delegated, so anchors added later (and the footer's) are covered too
-        document.addEventListener('click', (e) => {
-            const a = e.target.closest?.('a[href^="#"]');
-            if (!a) return;
-            const href = a.getAttribute('href');
-            if (!href || href === '#') return;
-            const el = document.getElementById(href.slice(1));
-            if (!el) return;
-            e.preventDefault();
-            this.to(el);
-            history.replaceState(null, '', href);
-        });
-    },
-};
 
 
 /* =============================================================================
@@ -304,10 +306,7 @@ class Menu {
     set(open) {
         this.open = open;
         this.el.classList.toggle('is-open', open);
-        this.el.setAttribute('aria-hidden', String(!open));
         this.burger.classList.toggle('is-open', open);
-        this.burger.setAttribute('aria-expanded', String(open));
-        this.burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
         document.documentElement.classList.toggle('is-locked', open);
     }
 }
@@ -317,7 +316,8 @@ class Menu {
    WORD LOOP — the rotating category in "Infusions for ..."
    The first child holds the layout width and height; the rest sit on top of it.
    Each category rises through the mask, holds, and exits upward. Only one is
-   ever legible at a time.
+   ever legible at a time. Nine categories — Joint and Skin are ONE infusion and
+   share one line, so the loop never implies a tenth signature formula.
 ============================================================================= */
 class WordLoop {
     constructor() {
@@ -326,6 +326,7 @@ class WordLoop {
         this.index = 0;
         this.HOLD  = 2600;
         this.timer = null;
+        this.swap  = null;
     }
 
     init() {
@@ -336,8 +337,12 @@ class WordLoop {
         setTimeout(begin, 2400);
 
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) { clearInterval(this.timer); this.timer = null; }
-            else if (!this.timer) this.timer = setInterval(() => this.next(), this.HOLD);
+            if (document.hidden) {
+                clearInterval(this.timer); this.timer = null;
+                clearTimeout(this.swap);   this.swap  = null;
+            } else if (!this.timer) {
+                this.timer = setInterval(() => this.next(), this.HOLD);
+            }
         });
     }
 
@@ -352,7 +357,8 @@ class WordLoop {
 
         // ...and only then bring the next category up through the bottom,
         // so two are never legible at once.
-        setTimeout(() => {
+        clearTimeout(this.swap);
+        this.swap = setTimeout(() => {
             current.classList.remove('is-out');
             incoming.classList.add('is-on');
         }, 220);
@@ -377,7 +383,7 @@ class HeroVideo {
         if (this.video.readyState >= 2) play();
         else this.video.addEventListener('loadeddata', play, { once: true });
 
-        // File missing or codec unsupported → hold on the poster, stop the drift
+        // File missing or codec unsupported -> hold on the poster, stop the drift
         this.video.addEventListener('error', () => this.media?.classList.add('is-still'), { once: true });
         const src = this.video.querySelector('source');
         src?.addEventListener('error', () => this.media?.classList.add('is-still'), { once: true });
@@ -449,16 +455,263 @@ class Magnetic {
 
 
 /* =============================================================================
+   RAIL — ONE snap-carousel engine
+   -----------------------------------------------------------------------------
+   The shelf (on phones) and the evidence rail were two separate implementations
+   of the same thing: a native scroll-snap track, arrow buttons, a counter, a
+   meter, keyboard support and pointer drag. They had drifted — the evidence
+   rail had the stale-index fix and the shelf did not, so the shelf's arrows
+   "worked sometimes". One engine, one place to fix anything.
+
+   Native snap deliberately: the browser scrolls the track on the compositor
+   for free. Hijacking vertical scroll to drive a transform is what was dropping
+   frames on a phone.
+
+   THE STALE INDEX, FIXED. `step()` used to compute the next index from the
+   index last WRITTEN BY A SCROLL EVENT. Click twice quickly and the second
+   click read the pre-scroll index, recomputed the SAME target, and the rail
+   went nowhere. `aim` is the index the buttons own; while it is set, scroll
+   events update the disabled states but may NOT overwrite the index underneath
+   an in-flight smooth scroll. It clears once scrolling has settled.
+
+   Options:
+     track    the scrolling element                       (required)
+     item     selector for one card, scoped to the track  (required)
+     prev/next/now/total/meter   optional chrome
+     drag     enable pointer drag on fine pointers        (default false)
+     onIndex  callback(i, liveItems) whenever the index changes
+============================================================================= */
+class Rail {
+    constructor(opts = {}) {
+        this.track = opts.track;
+        this.sel   = opts.item;
+        this.prev  = opts.prev  || null;
+        this.next  = opts.next  || null;
+        this.now   = opts.now   || null;
+        this.total = opts.total || null;
+        this.meter = opts.meter || null;
+        this.useDrag = !!opts.drag;
+        this.onIndex = opts.onIndex || null;
+
+        this.last = -1;
+        this.aim  = -1;
+        this.DRAG = 6;
+        this.io   = null;
+        this.off  = [];
+        this.settle = debounce(() => { this.aim = -1; this.read(); }, 180);
+    }
+
+    /** only the cards the filter has left visible */
+    items() {
+        return $$(this.sel, this.track).filter((el) => !el.classList.contains('is-out'));
+    }
+
+    mount() {
+        if (!this.track || !this.items().length) return;
+
+        this.count();
+        this.last = -1;
+        this.paint(0);
+
+        const onScroll = onFrame(() => {
+            this.edges();
+            if (this.aim < 0) this.read();
+            this.settle();
+        });
+        this.track.addEventListener('scroll', onScroll, { passive: true });
+        this.off.push(() => this.track.removeEventListener('scroll', onScroll));
+
+        const onPrev = () => this.step(-1);
+        const onNext = () => this.step(1);
+        this.prev?.addEventListener('click', onPrev);
+        this.next?.addEventListener('click', onNext);
+        this.off.push(() => {
+            this.prev?.removeEventListener('click', onPrev);
+            this.next?.removeEventListener('click', onNext);
+        });
+
+        // arrow keys, once the rail has focus
+        const onKey = (e) => {
+            if (e.key === 'ArrowRight') { e.preventDefault(); this.step(1); }
+            if (e.key === 'ArrowLeft')  { e.preventDefault(); this.step(-1); }
+        };
+        this.track.setAttribute('tabindex', '0');
+        this.track.addEventListener('keydown', onKey);
+        this.off.push(() => {
+            this.track.removeEventListener('keydown', onKey);
+            this.track.removeAttribute('tabindex');
+        });
+
+        this.observe();
+        if (this.useDrag && FINE_POINTER) this.drag();
+
+        // a late-loading webfont changes every card's height and the track's
+        // scrollWidth with it — re-read once the type has settled
+        if (document.fonts) document.fonts.ready.then(() => this.read());
+
+        this.edges();
+    }
+
+    unmount() {
+        this.off.forEach((fn) => fn());
+        this.off = [];
+        this.io?.disconnect();
+        this.io = null;
+        this.aim = -1;
+        this.last = -1;
+    }
+
+    /** THE FILTER BUG, FIXED. The observer used to be built once at mount and
+     *  went on watching all ten cards including the hidden ones, so after a
+     *  filter the counter read positions from cards that were not on screen.
+     *  Rebuilt against the live set every time the filter changes. */
+    observe() {
+        this.io?.disconnect();
+        this.io = null;
+        if (!('IntersectionObserver' in window)) return;
+
+        this.io = new IntersectionObserver((entries) => {
+            if (this.aim >= 0) return;          // the arrows own the index right now
+            let best = null;
+            for (const en of entries) {
+                if (!en.isIntersecting) continue;
+                if (!best || en.intersectionRatio > best.intersectionRatio) best = en;
+            }
+            if (!best) return;
+            const i = this.items().indexOf(best.target);
+            if (i >= 0) this.paint(i);
+        }, { root: this.track, threshold: [0.5, 0.7, 0.9] });
+
+        this.items().forEach((el) => this.io.observe(el));
+    }
+
+    /** call after the visible set changes */
+    refilter() {
+        this.count();
+        this.last = -1;
+        this.aim  = -1;
+        this.track.scrollLeft = 0;
+        this.paint(0);
+        this.observe();
+        this.edges();
+    }
+
+    count() {
+        if (this.total) this.total.textContent = String(this.items().length).padStart(2, '0');
+    }
+
+    /** read the index back off the scroll position */
+    read() {
+        const items = this.items();
+        if (!items.length) return;
+        const x = this.track.scrollLeft;
+        const base = items[0].offsetLeft;
+        let i = 0;
+        for (let n = 0; n < items.length; n += 1) {
+            if (items[n].offsetLeft - base <= x + 8) i = n;
+        }
+        this.paint(i);
+        this.edges();
+    }
+
+    /** counter + meter + whatever the owner wants to do with the index */
+    paint(i) {
+        const items = this.items();
+        if (!items.length || i === this.last) return;
+        this.last = i;
+        if (this.now)   this.now.textContent = String(i + 1).padStart(2, '0');
+        if (this.meter) this.meter.style.width = ((i + 1) / items.length) * 100 + '%';
+        this.onIndex?.(i, items);
+    }
+
+    /* Several cards are visible at once on a laptop, so the last card can never
+       become the leftmost one — index alone would leave "next" enabled forever.
+       Disable against the real scroll extent instead. A 2px tolerance covers
+       sub-pixel scroll positions on fractional device pixel ratios. */
+    edges() {
+        const max = this.track.scrollWidth - this.track.clientWidth;
+        if (this.prev) this.prev.disabled = this.track.scrollLeft <= 2;
+        if (this.next) this.next.disabled = this.track.scrollLeft >= max - 2;
+    }
+
+    step(dir) {
+        const items = this.items();
+        if (!items.length) return;
+
+        // start from the index the buttons already claimed, not from wherever
+        // the scroll happens to have reached this frame
+        const from = this.aim >= 0 ? this.aim : (this.last < 0 ? 0 : this.last);
+        const i = clamp(from + dir, 0, items.length - 1);
+        if (i === from) { this.edges(); return; }
+
+        this.aim = i;
+        this.paint(i);                     // the counter answers immediately
+        this.track.scrollTo({
+            left: items[i].offsetLeft - items[0].offsetLeft,
+            behavior: REDUCED ? 'auto' : 'smooth',
+        });
+        this.settle();                     // release the claim once it lands
+    }
+
+    /** grab and pull, the way you would slide a card across a desk */
+    drag() {
+        const t = this.track;
+        let down = false, moved = false, startX = 0, startLeft = 0;
+
+        const onDown = (e) => {
+            if (e.pointerType === 'touch' || e.button !== 0) return;   // touch already scrolls
+            down = true; moved = false;
+            startX = e.clientX;
+            startLeft = t.scrollLeft;
+        };
+        const onMove = (e) => {
+            if (!down) return;
+            const dx = e.clientX - startX;
+            if (!moved && Math.abs(dx) < this.DRAG) return;
+            if (!moved) { moved = true; t.classList.add('is-dragging'); t.setPointerCapture(e.pointerId); }
+            t.scrollLeft = startLeft - dx;
+        };
+        const release = (e) => {
+            if (!down) return;
+            down = false;
+            if (!moved) return;
+            this.aim = -1;                 // the pointer wins over the arrows
+            t.classList.remove('is-dragging');
+            if (e?.pointerId != null && t.hasPointerCapture?.(e.pointerId)) t.releasePointerCapture(e.pointerId);
+            // hand the position back to the snap engine, then re-read
+            requestAnimationFrame(() => this.read());
+        };
+        // a drag that ends on a card must not also open the link
+        const onClick = (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } };
+
+        t.addEventListener('pointerdown', onDown);
+        t.addEventListener('pointermove', onMove);
+        t.addEventListener('pointerup', release);
+        t.addEventListener('pointercancel', release);
+        t.addEventListener('pointerleave', release);
+        t.addEventListener('click', onClick, true);
+
+        this.off.push(() => {
+            t.removeEventListener('pointerdown', onDown);
+            t.removeEventListener('pointermove', onMove);
+            t.removeEventListener('pointerup', release);
+            t.removeEventListener('pointercancel', release);
+            t.removeEventListener('pointerleave', release);
+            t.removeEventListener('click', onClick, true);
+        });
+    }
+}
+
+
+/* =============================================================================
    THE SHELF — the services rail (#infusions)
    Ten plates: nine signature infusions and one customized option. Pinned
-   horizontally on desktop and dragged by the scrollbar; a native snap scroller
-   on phones. The counter and meter track whichever plate is centred.
-
-   Found by CLASS, not id: the section keeps id="infusions" so the header nav
-   and the hero's "View infusions" button still land on it.
+   horizontally on desktop and scrubbed by vertical scroll; a Rail on phones.
 
    The filters are generic — a pill's data-filter is matched against a plate's
-   data-tags, so Dr. Aronov's eleven-button order needs no code change here.
+   data-tags, so the eleven-button order needs no code change here. The desktop
+   pills and the phone select both call applyFilter(), so there is one code
+   path and the two controls can never disagree.
 ============================================================================= */
 class Shelf {
     static pinned = false;
@@ -474,8 +727,11 @@ class Shelf {
         this.skip     = $('#shelfSkip');
         this.prev     = $('#shelfPrev');
         this.next     = $('#shelfNext');
+        this.jump     = $('#shelfJump');
+        this.at       = 'all';
         this.last     = -1;
         this.st       = null;
+        this.rail     = null;
         this.BREAK    = 900;
     }
 
@@ -484,6 +740,7 @@ class Shelf {
 
         this.filters();
         this.skipButton();
+        this.count();
         this.paint(0);
 
         if (typeof window.gsap === 'undefined' || REDUCED) {
@@ -503,21 +760,23 @@ class Shelf {
         return $$('.plate', this.track).filter((p) => !p.classList.contains('is-out'));
     }
 
+    count() {
+        if (this.total) this.total.textContent = String(this.live().length).padStart(2, '0');
+    }
+
+    /** desktop counter/meter/dimming. The mobile rail drives this through its
+     *  own onIndex callback so the two never fight over the same numbers. */
     paint(index) {
         const list = this.live();
         if (!list.length) return;
 
         const i = clamp(index, 0, list.length - 1);
-        if (this.total) this.total.textContent = String(list.length).padStart(2, '0');
         if (i === this.last) return;
         this.last = i;
 
         if (this.now)   this.now.textContent = String(i + 1).padStart(2, '0');
         if (this.meter) this.meter.style.width = ((i + 1) / list.length) * 100 + '%';
         list.forEach((p, n) => p.classList.toggle('is-active', n === i));
-
-        if (this.prev) this.prev.disabled = i === 0;
-        if (this.next) this.next.disabled = i === list.length - 1;
     }
 
     /* =====================================================================
@@ -537,6 +796,10 @@ class Shelf {
         this.st = ScrollTrigger.create({
             trigger: this.pin,
             start: 'top top',
+            /* end is a FUNCTION and invalidateOnRefresh is on, so the scroll
+               length is re-measured against the live set every refresh —
+               which is what makes filtering shorten the section instead of
+               leaving a stretch of empty scroll behind the last card. */
             end: () => '+=' + (distance() + window.innerHeight * 0.6),
             pin: this.viewport,
             pinSpacing: true,
@@ -573,74 +836,41 @@ class Shelf {
             this.st = null;
             Shelf.pinned = false;
             gsap.set(this.track, { x: 0, clearProps: 'willChange' });
+            /* the counter-scroll wrote an inline transform onto every numeral.
+               Crossing the breakpoint tears this rail down but those writes
+               survive, so the numerals stayed shoved sideways on the phone
+               layout. Clear them on the way out. */
+            $$('.plate__no', this.track).forEach((no) => { no.style.transform = ''; });
         };
     }
 
     /* =====================================================================
-       PHONE + TABLET — no pin, no scrub, no scroll-jacking.
-
-       Hijacking vertical scroll to drive a transform is what was dropping
-       frames: every touchmove had to be intercepted, re-projected and then
-       re-measured against a viewport that resizes as the address bar
-       collapses. Here the track is an ordinary snap scroller, so the browser
-       scrolls it on the compositor for free, and the arrows drive it. The
-       counter reads position from an IntersectionObserver rather than from a
-       scroll handler, so there is no per-frame work at all.
+       PHONE + TABLET — the shared Rail. No pin, no scrub, no scroll-jacking.
        ===================================================================== */
     mobileRail() {
-        const track = this.track;
-        gsap.set(track, { x: 0 });
+        gsap.set(this.track, { x: 0 });
 
-        const step = (dir) => {
-            const list = this.live();
-            if (!list.length) return;
-            const i = clamp((this.last < 0 ? 0 : this.last) + dir, 0, list.length - 1);
-            const el = list[i];
-            const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
-            track.scrollTo({
-                left: el.offsetLeft - pad,
-                behavior: REDUCED ? 'auto' : 'smooth',
-            });
-            this.paint(i);
-        };
-
-        const onPrev = () => step(-1);
-        const onNext = () => step(1);
-        this.prev?.addEventListener('click', onPrev);
-        this.next?.addEventListener('click', onNext);
-
-        // arrow keys work too, once the rail has focus
-        const onKey = (e) => {
-            if (e.key === 'ArrowRight') { e.preventDefault(); onNext(); }
-            if (e.key === 'ArrowLeft')  { e.preventDefault(); onPrev(); }
-        };
-        track.setAttribute('tabindex', '0');
-        track.addEventListener('keydown', onKey);
-
-        let io = null;
-        if ('IntersectionObserver' in window) {
-            io = new IntersectionObserver((entries) => {
-                let best = null;
-                for (const en of entries) {
-                    if (!en.isIntersecting) continue;
-                    if (!best || en.intersectionRatio > best.intersectionRatio) best = en;
-                }
-                if (!best) return;
-                const i = this.live().indexOf(best.target);
-                if (i >= 0) this.paint(i);
-            }, { root: track, threshold: [0.5, 0.7, 0.9] });
-            $$('.plate', track).forEach((p) => io.observe(p));
-        }
+        this.rail = new Rail({
+            track: this.track,
+            item: '.plate',
+            prev: this.prev,
+            next: this.next,
+            now: this.now,
+            total: this.total,
+            meter: this.meter,
+            onIndex: (i, items) => {
+                this.last = i;
+                items.forEach((p, n) => p.classList.toggle('is-active', n === i));
+            },
+        });
+        this.rail.mount();
 
         this.arrows(true);
-        popIn($$('.plate', track), { y: 26, stagger: .05, duration: .7, ease: 'expo.out' }, this.scene, 'top 78%');
+        popIn($$('.plate', this.track), { y: 26, stagger: .05, duration: .7, ease: 'expo.out' }, this.scene, 'top 78%');
 
         return () => {
-            io?.disconnect();
-            this.prev?.removeEventListener('click', onPrev);
-            this.next?.removeEventListener('click', onNext);
-            track.removeEventListener('keydown', onKey);
-            track.removeAttribute('tabindex');
+            this.rail?.unmount();
+            this.rail = null;
         };
     }
 
@@ -675,43 +905,374 @@ class Shelf {
         });
     }
 
+    /* ---------------------------------------------------------------------
+       FILTERS — the pills (desktop) and the select (phone) are two faces of
+       one action. Both land in applyFilter().
+       --------------------------------------------------------------------- */
     filters() {
         const pills = $$('[data-filter]', this.scene);
-        if (!pills.length) return;
 
         pills.forEach((pill) => {
-            pill.addEventListener('click', () => {
-                const key = pill.dataset.filter;
+            pill.addEventListener('click', () => this.applyFilter(pill.dataset.filter));
+        });
 
-                pills.forEach((p) => {
-                    const on = p === pill;
-                    p.classList.toggle('is-on', on);
-                    p.setAttribute('aria-selected', String(on));
-                });
+        this.jump?.addEventListener('change', () => this.applyFilter(this.jump.value));
+    }
 
-                $$('.plate', this.track).forEach((plate) => {
-                    const tags = (plate.dataset.tags || '').split(' ');
-                    plate.classList.toggle('is-out', !(key === 'all' || tags.includes(key)));
-                });
+    applyFilter(key) {
+        if (!key || key === this.at) return;
+        this.at = key;
 
-                this.last = -1;
-                this.track.scrollLeft = 0;
-                this.paint(0);
+        // keep both controls in step, whichever one was used
+        $$('[data-filter]', this.scene).forEach((p) => {
+            p.classList.toggle('is-on', p.dataset.filter === key);
+        });
+        if (this.jump && this.jump.value !== key) this.jump.value = key;
 
-                if (typeof window.gsap === 'undefined' || REDUCED) return;
-                gsap.set(this.track, { x: 0 });
-                gsap.fromTo(this.live(),
-                    { opacity: 0, y: 24 },
-                    { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04 });
-                requestAnimationFrame(() => ScrollTrigger.refresh());
+        $$('.plate', this.track).forEach((plate) => {
+            const tags = (plate.dataset.tags || '').split(' ');
+            plate.classList.toggle('is-out', !(key === 'all' || tags.includes(key)));
+        });
+
+        this.last = -1;
+        this.count();
+
+        // the phone rail rebuilds its observer and its counter against the
+        // new visible set — see Rail.refilter()
+        if (this.rail) { this.rail.refilter(); }
+        else { this.track.scrollLeft = 0; this.paint(0); }
+
+        if (typeof window.gsap === 'undefined' || REDUCED) return;
+
+        gsap.set(this.track, { x: 0 });
+        gsap.fromTo(this.live(),
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04 });
+
+        /* THE PINNED-FILTER BUG, FIXED.
+           The global ScrollTrigger.refresh() is blocked while the rail is
+           pinned (see boot()) — for good reason, a global refresh mid-pin is
+           what makes the shelf jump. So the filter's refresh never landed and
+           the section kept the scroll length of all ten cards.
+
+           Refresh THIS trigger only, and do it from the top of the pin where
+           the scrub is at progress 0. Nothing else on the page is remeasured
+           and the pin is not mid-flight, so there is nothing to jump. */
+        if (this.st) {
+            const top = this.st.start;
+            if (window.scrollY > top) window.scrollTo({ top, behavior: 'auto' });
+            requestAnimationFrame(() => this.st?.refresh());
+        }
+    }
+}
+
+
+/* =============================================================================
+   CHRONIC CONDITIONS — a switcher, not a stack (#conditions)
+   Seven long cards made this the tallest block on the page and nobody reads a
+   condition they do not have. One panel is live at a time; the rest stay in
+   the DOM (visibility, not display) so every word is still crawlable.
+
+   Deep-linkable: /#cond-mafld opens fatty liver from an ad or an email —
+   and now at ANY time, not only on load. It used to read the hash exactly once
+   during init, so a link clicked while already on the page did nothing, and
+   the back button did nothing after switching conditions.
+============================================================================= */
+class Chronic {
+    constructor() {
+        this.scene = $('.chron');
+        this.tabs  = $$('.cnav__tab');
+        this.cards = $$('.cd');
+        this.prev  = $('#condPrev');
+        this.next  = $('#condNext');
+        this.now   = $('#condNow');
+        this.total = $('#condTotal');
+        this.at    = 0;
+    }
+
+    init() {
+        if (!this.scene || !this.cards.length) return;
+
+        this.tabs.forEach((tab, i) => {
+            tab.addEventListener('click', () => this.show(i, true));
+            tab.addEventListener('keydown', (e) => {
+                const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+                if (step) {
+                    e.preventDefault();
+                    const n = (i + step + this.tabs.length) % this.tabs.length;
+                    this.show(n, true); this.tabs[n].focus();
+                } else if (e.key === 'Home') { e.preventDefault(); this.show(0, true); this.tabs[0].focus(); }
+                else if (e.key === 'End')  { e.preventDefault(); const n = this.tabs.length - 1; this.show(n, true); this.tabs[n].focus(); }
             });
+        });
+
+        /* On a phone the pill rail scrolls sideways and the other six
+           conditions are off screen with nothing to say they exist. These
+           step through them and the counter states the total outright. */
+        if (this.total) this.total.textContent = String(this.cards.length).padStart(2, '0');
+        this.prev?.addEventListener('click', () => this.step(-1));
+        this.next?.addEventListener('click', () => this.step(1));
+
+        const first = this.fromHash();
+        this.show(first >= 0 ? first : 0, false);
+        if (first >= 0) setTimeout(() => Nav.to(this.scene), 60);
+
+        // any time, not just on load — covers in-page links and the back button
+        window.addEventListener('hashchange', () => {
+            const i = this.fromHash();
+            if (i < 0) return;
+            this.show(i, true);
+            Nav.to(this.scene);
+        });
+        window.addEventListener('popstate', () => {
+            const i = this.fromHash();
+            if (i >= 0) this.show(i, true);
+        });
+
+        this.spotlight();
+
+        if (typeof window.gsap !== 'undefined' && !REDUCED) {
+            gsap.registerPlugin(ScrollTrigger);
+            popIn($$('.cnav__tab', this.scene), { y: 14, stagger: .04, duration: .4, ease: 'back.out(1.8)' }, '.cnav', 'top 90%');
+            popIn($('.cstage'), { y: 26, duration: .6 }, '.cstage', 'top 88%');
+        }
+    }
+
+    fromHash() {
+        const h = window.location.hash;
+        if (!h) return -1;
+        return this.cards.findIndex((c) => '#' + c.id === h);
+    }
+
+    /** wrap around, so the arrows never dead-end */
+    step(dir) {
+        const n = (this.at + dir + this.cards.length) % this.cards.length;
+        this.show(n, true);
+    }
+
+    show(i, animate) {
+        if (i === this.at && animate) return;
+        this.at = i;
+        if (this.now) this.now.textContent = String(i + 1).padStart(2, '0');
+
+        this.tabs.forEach((t, n) => {
+            const on = n === i;
+            t.classList.toggle('is-on', on);
+            // keep the active pill in view on the phone's horizontal rail
+            if (on && animate && t.scrollIntoView) {
+                t.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+            }
+        });
+
+        this.cards.forEach((c, n) => c.classList.toggle('is-live', n === i));
+
+        const card = this.cards[i];
+        if (!animate || typeof window.gsap === 'undefined' || REDUCED) return;
+
+        gsap.killTweensOf([card, ...$$('.cd__l > *, .cd__mol, .cd__never', card)]);
+        gsap.fromTo(card, { opacity: 0, y: 20, scale: .99 },
+                          { opacity: 1, y: 0, scale: 1, duration: .48, ease: 'expo.out' });
+        gsap.fromTo($$('.cd__l > *', card), { opacity: 0, y: 14 },
+                    { opacity: 1, y: 0, duration: .42, ease: 'power3.out', stagger: .045, delay: .05 });
+        gsap.fromTo($$('.cd__mol, .cd__never', card), { opacity: 0, x: 14 },
+                    { opacity: 1, x: 0, duration: .42, ease: 'power3.out', stagger: .05, delay: .12 });
+        const ghost = $('.cd__ghost', card);
+        if (ghost) gsap.fromTo(ghost, { opacity: 0, scale: 1.12 }, { opacity: 1, scale: 1, duration: .8, ease: 'expo.out' });
+    }
+
+    /** a pool of warmth that follows the pointer across the section */
+    spotlight() {
+        if (!FINE_POINTER || REDUCED) return;
+        const move = onFrame((e) => {
+            const b = this.scene.getBoundingClientRect();
+            this.scene.style.setProperty('--mx', ((e.clientX - b.left) / b.width  * 100).toFixed(2) + '%');
+            this.scene.style.setProperty('--my', ((e.clientY - b.top)  / b.height * 100).toFixed(2) + '%');
+        });
+        this.scene.addEventListener('pointermove', move);
+        this.scene.addEventListener('pointerenter', () => this.scene.classList.add('is-live'));
+        this.scene.addEventListener('pointerleave', () => this.scene.classList.remove('is-live'));
+    }
+}
+
+
+/* =============================================================================
+   THE IV ADVANTAGE — one stage, one switch (#advantage)
+   Picking a road draws it: the rule fills, the pins light in sequence. The
+   first draw is fired by ScrollTrigger so it plays on arrival; every switch
+   after that replays it. Vertical below 900px, which is why the fill animates
+   whichever axis the media query is using — and why it redraws when the
+   layout flips, or a rotate left the fill running along the wrong axis.
+============================================================================= */
+class Advantage {
+    constructor() {
+        this.el     = $('#advantage');
+        this.switch = $('.adv__switch', this.el ?? document);
+        this.opts   = $$('.adv__opt', this.el ?? document);
+        this.lanes  = $$('.adv__lane', this.el ?? document);
+        this.at     = 'oral';
+        this.drawn  = false;
+    }
+
+    init() {
+        if (!this.el || !this.lanes.length) return;
+
+        this.opts.forEach((o) => o.addEventListener('click', () => this.show(o.dataset.lane)));
+
+        this.switch?.addEventListener('keydown', (e) => {
+            if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+            e.preventDefault();
+            const next = this.at === 'oral' ? 'iv' : 'oral';
+            this.show(next);
+            this.opts.find((o) => o.dataset.lane === next)?.focus();
+        });
+
+        if (typeof window.gsap === 'undefined' || REDUCED) {
+            this.lanes.forEach((l) => {
+                $$('.stp', l).forEach((s) => s.classList.add('is-passed'));
+                const f = $('.adv__fill', l);
+                if (f) { f.style.width = '100%'; f.style.height = '100%'; }
+            });
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.create({
+            trigger: this.el, start: 'top 72%', once: true,
+            onEnter: () => { this.drawn = true; this.draw(this.live()); },
+        });
+        popIn($$('.adv__head > *, .adv__switch, .adv__note', this.el),
+              { y: 26, stagger: .07, duration: .55, ease: 'back.out(1.5)' }, this.el, 'top 84%');
+
+        /* Crossing 900px swaps the rule from horizontal to vertical, but the
+           fill keeps whatever inline width/height the last draw left on it —
+           so a rotate or a resize stranded a fully-drawn lane with a 0% bar on
+           the new axis. Redraw when the breakpoint actually flips. */
+        const mq = window.matchMedia('(max-width: 900px)');
+        const onFlip = () => { if (this.drawn) this.draw(this.live()); };
+        mq.addEventListener ? mq.addEventListener('change', onFlip) : mq.addListener(onFlip);
+    }
+
+    live() { return this.lanes.find((l) => l.dataset.lane === this.at); }
+
+    show(lane) {
+        if (lane === this.at) return;
+        this.at = lane;
+
+        this.opts.forEach((o) => o.classList.toggle('is-on', o.dataset.lane === lane));
+        this.switch?.classList.toggle('is-iv', lane === 'iv');
+
+        this.lanes.forEach((l) => {
+            const on = l.dataset.lane === lane;
+            l.classList.toggle('is-live', on);
+            if (on && this.drawn) this.draw(l);
+        });
+
+        if (typeof window.gsap !== 'undefined' && !REDUCED) {
+            gsap.fromTo(this.live(), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .45, ease: 'expo.out' });
+        }
+    }
+
+    /** fill the rule, then light each pin as the fill reaches it */
+    draw(lane) {
+        if (!lane) return;
+        const fill  = $('.adv__fill', lane);
+        const stops = $$('.stp', lane);
+        if (!fill || !stops.length) return;
+
+        // below 900px the rule is vertical — animate whichever axis is in play
+        const vertical = window.matchMedia('(max-width: 900px)').matches;
+        stops.forEach((s) => s.classList.remove('is-passed'));
+        gsap.killTweensOf(fill);
+        gsap.set(fill, vertical ? { height: '0%', width: '100%' } : { width: '0%', height: '100%' });
+
+        const span = { v: 0 };
+        gsap.to(span, {
+            v: 100,
+            duration: 0.32 * stops.length + 0.5,
+            ease: 'power2.inOut',
+            onUpdate: () => {
+                const p = span.v;
+                fill.style[vertical ? 'height' : 'width'] = p.toFixed(1) + '%';
+                stops.forEach((s, i) => {
+                    s.classList.toggle('is-passed', p >= ((i + 0.55) / stops.length) * 100);
+                });
+            },
         });
     }
 }
 
 
 /* =============================================================================
-   THE PHYSICIAN — the pop
+   HOW A VISIT WORKS — four beats on one rule (#visit)
+   The rule draws once, on arrival, and each node lights as the fill reaches
+   it. Deliberately simple: the section sits between two heavy ones and its job
+   is to be over quickly. Horizontal above 640px, vertical below, so the fill
+   animates whichever axis the media query is using.
+============================================================================= */
+class Visit {
+    constructor() {
+        this.el    = $('#visit');
+        this.list  = $('#visitSteps');
+        this.steps = $$('.vs', this.list ?? document);
+        this.fill  = $('.visit__fill', this.el ?? document);
+        this.drawn = false;
+    }
+
+    init() {
+        if (!this.el || !this.steps.length) return;
+
+        // no GSAP or reduced motion -> everything already lit, nothing to draw
+        if (typeof window.gsap === 'undefined' || REDUCED) {
+            this.steps.forEach((s) => s.classList.add('is-on'));
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        ScrollTrigger.create({
+            trigger: this.list,
+            start: 'top 74%',
+            once: true,
+            onEnter: () => { this.drawn = true; this.draw(); },
+        });
+
+        popIn(this.steps, { y: 26, stagger: .09, duration: .55, ease: 'back.out(1.5)' }, this.list, 'top 82%');
+        popIn($$('.visit__intro > *, .visit__close > *', this.el),
+              { y: 22, stagger: .08, duration: .55 }, this.el, 'top 86%');
+
+        // same axis-flip problem as the advantage lanes — redraw on the hinge
+        const mq = window.matchMedia('(max-width: 640px)');
+        const onFlip = () => { if (this.drawn) this.draw(); };
+        mq.addEventListener ? mq.addEventListener('change', onFlip) : mq.addListener(onFlip);
+    }
+
+    /** fill the rule and light each node as it is passed */
+    draw() {
+        if (!this.fill) return;
+        const vertical = window.matchMedia('(max-width: 640px)').matches;
+        const axis = vertical ? 'height' : 'width';
+        // clear the other axis, or a flip leaves the old one at 100%
+        this.fill.style[vertical ? 'width' : 'height'] = '';
+        const span = { v: 0 };
+
+        gsap.killTweensOf(span);
+        gsap.to(span, {
+            v: 100,
+            duration: 1.5,
+            ease: 'power2.inOut',
+            onUpdate: () => {
+                this.fill.style[axis] = span.v.toFixed(1) + '%';
+                this.steps.forEach((s, i) => {
+                    s.classList.toggle('is-on', span.v >= (i / this.steps.length) * 100);
+                });
+            },
+        });
+    }
+}
+
+
+/* =============================================================================
+   THE PHYSICIAN — the pop (#physician)
    Beats snap in on overshoot easing rather than fading, the chain links land
    one at a time, and the rule under the portrait fills as you move through the
    story. Short durations and back.out are what make it read staccato instead
@@ -739,7 +1300,6 @@ class Physician {
         gsap.registerPlugin(ScrollTrigger);
         this.popBeats();
         this.popChain();
-        this.tally();
     }
 
     /** Each beat overshoots into place and lights its own dot. */
@@ -786,321 +1346,61 @@ class Physician {
             },
         });
     }
-
-    /** Count the figures up once they are on screen. */
-    tally() {
-        $$('[data-tally]', this.scene).forEach((el) => {
-            const end = parseFloat(el.dataset.tally);
-            const obj = { v: 0 };
-            ScrollTrigger.create({
-                trigger: el, start: 'top 92%', once: true,
-                onEnter: () => gsap.to(obj, {
-                    v: end, duration: 1.3, ease: 'power2.out',
-                    onUpdate: () => { el.textContent = Math.round(obj.v); },
-                    onComplete: () => { el.textContent = end; },
-                }),
-            });
-        });
-    }
 }
 
 
 /* =============================================================================
-   THE EVIDENCE — the reference rail (#research)          <- NEW CLASS, ADDED
-   Registered in `modules` at the bottom of this file, directly after the
-   physician. Nothing above or below was changed.
-
-   NO ScrollTrigger PIN HERE, on purpose. The shelf owns the pinned gesture
-   and two pinned sections on one page fight each other every time the
-   document height changes. This is an ordinary scroll-snap track: the browser
-   scrolls it on the compositor, the arrows nudge it, a pointer can drag it,
-   and the counter reads position from scrollLeft rather than from a
-   per-frame layout measurement.
+   THE EVIDENCE — the reference rail (#research)
+   A Rail with drag enabled. No pin: the shelf owns that gesture and two pinned
+   sections on one page fight each other every time the document height changes.
 
    Degrades cleanly: with GSAP absent the cards are simply visible and the
-   arrows still work. Under prefers-reduced-motion the CSS turns the track
-   into a grid and this class stands down entirely.
+   arrows still work. Under prefers-reduced-motion the CSS turns the track into
+   a grid and this class stands down entirely.
 ============================================================================= */
 class Research {
     constructor() {
         this.scene = $('.rsrch');
         this.track = $('#rsrchTrack');
-        this.now   = $('#rsrchNow');
-        this.total = $('#rsrchTotal');
-        this.meter = $('#rsrchMeter');
-        this.prev  = $('#rsrchPrev');
-        this.next  = $('#rsrchNext');
-        this.last  = -1;
-        this.aim   = -1;                // index the arrows own mid-scroll
-        this.DRAG  = 6;                 // px before a press counts as a drag
+        this.rail  = null;
     }
 
     init() {
         if (!this.scene || !this.track) return;
 
-        const cards = this.cards();
-        if (!cards.length) return;
-        if (this.total) this.total.textContent = String(cards.length).padStart(2, '0');
-        this.settle = debounce(() => { this.aim = -1; this.read(); }, 180);
-
         // reduced motion: the CSS has already flattened the rail into a grid,
         // so there is nothing left to drive
-        if (REDUCED) { this.prev?.setAttribute('hidden', ''); this.next?.setAttribute('hidden', ''); return; }
-
-        this.paint(0);
-
-        this.prev?.addEventListener('click', () => this.step(-1));
-        this.next?.addEventListener('click', () => this.step(1));
-
-        /* THE ARROW BUG, FIXED.
-           `step()` used to compute the next index from `this.last`, and
-           `this.last` is only written when a scroll event lands. Click twice
-           quickly and the second click read the pre-scroll index, recomputed
-           the SAME target, and the rail went nowhere — which is exactly why
-           the arrows felt like they worked sometimes and not others.
-
-           `aim` is the index the buttons own. While it is set, scroll events
-           update the disabled states but are NOT allowed to overwrite the
-           index underneath an in-flight smooth scroll. It clears once the
-           scrolling has settled, and the pointer takes over again. */
-        this.track.addEventListener('scroll', onFrame(() => {
-            this.edges();
-            if (this.aim < 0) this.read();
-            this.settle();
-        }), { passive: true });
-
-        // arrow keys, once the rail has focus
-        this.track.setAttribute('tabindex', '0');
-        this.track.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') { e.preventDefault(); this.step(1); }
-            if (e.key === 'ArrowLeft')  { e.preventDefault(); this.step(-1); }
-        });
-
-        if (FINE_POINTER) this.drag();
-        this.reveal();
-
-        // a late-loading webfont changes every card's height and the track's
-        // scrollWidth with it — re-read once the type has settled
-        if (document.fonts) document.fonts.ready.then(() => this.read());
-    }
-
-    cards() { return $$('.ref', this.track); }
-
-    /** read the index back off the scroll position */
-    read() {
-        const cards = this.cards();
-        if (!cards.length) return;
-
-        const x = this.track.scrollLeft;
-        let i = 0;
-        for (let n = 0; n < cards.length; n += 1) {
-            if (cards[n].offsetLeft - cards[0].offsetLeft <= x + 8) i = n;
+        if (REDUCED) {
+            $('#rsrchPrev')?.setAttribute('hidden', '');
+            $('#rsrchNext')?.setAttribute('hidden', '');
+            const total = $('#rsrchTotal');
+            if (total) total.textContent = String($$('.ref', this.track).length).padStart(2, '0');
+            return;
         }
-        this.paint(i);
-        this.edges();
-    }
 
-    /** counter + meter only */
-    paint(i) {
-        const cards = this.cards();
-        if (!cards.length || i === this.last) return;
-        this.last = i;
-        if (this.now) this.now.textContent = String(i + 1).padStart(2, '0');
-        if (this.meter) this.meter.style.width = ((i + 1) / cards.length) * 100 + '%';
-    }
-
-    /* Three cards are visible on a laptop, so the last card can never become
-       the leftmost one — index alone would leave "next" enabled forever.
-       Disable against the real scroll extent instead. A 2px tolerance covers
-       sub-pixel scroll positions on fractional device pixel ratios. */
-    edges() {
-        const max = this.track.scrollWidth - this.track.clientWidth;
-        if (this.prev) this.prev.disabled = this.track.scrollLeft <= 2;
-        if (this.next) this.next.disabled = this.track.scrollLeft >= max - 2;
-    }
-
-    step(dir) {
-        const cards = this.cards();
-        if (!cards.length) return;
-
-        // start from the index the buttons already claimed, not from wherever
-        // the scroll happens to have reached this frame
-        const from = this.aim >= 0 ? this.aim : (this.last < 0 ? 0 : this.last);
-        const i = clamp(from + dir, 0, cards.length - 1);
-        if (i === from) { this.edges(); return; }
-
-        this.aim = i;
-        this.paint(i);                     // the counter answers immediately
-        this.track.scrollTo({
-            left: cards[i].offsetLeft - cards[0].offsetLeft,
-            behavior: 'smooth',
+        this.rail = new Rail({
+            track: this.track,
+            item: '.ref',
+            prev: $('#rsrchPrev'),
+            next: $('#rsrchNext'),
+            now: $('#rsrchNow'),
+            total: $('#rsrchTotal'),
+            meter: $('#rsrchMeter'),
+            drag: true,
         });
-        this.settle();                     // release the claim once it lands
+        this.rail.mount();
+
+        this.reveal();
     }
 
-    /** grab and pull, the way you would slide a card across a desk */
-    drag() {
-        const t = this.track;
-        let down = false, moved = false, startX = 0, startLeft = 0;
-
-        t.addEventListener('pointerdown', (e) => {
-            if (e.pointerType === 'touch' || e.button !== 0) return;   // touch already scrolls
-            down = true; moved = false;
-            startX = e.clientX;
-            startLeft = t.scrollLeft;
-        });
-
-        t.addEventListener('pointermove', (e) => {
-            if (!down) return;
-            const dx = e.clientX - startX;
-            if (!moved && Math.abs(dx) < this.DRAG) return;
-            if (!moved) { moved = true; t.classList.add('is-dragging'); t.setPointerCapture(e.pointerId); }
-            t.scrollLeft = startLeft - dx;
-        });
-
-        const release = (e) => {
-            if (!down) return;
-            down = false;
-            if (!moved) return;
-            this.aim = -1;                 // the pointer wins over the arrows
-            t.classList.remove('is-dragging');
-            if (e?.pointerId != null && t.hasPointerCapture?.(e.pointerId)) t.releasePointerCapture(e.pointerId);
-            // hand the position back to the snap engine, then re-read
-            requestAnimationFrame(() => this.read());
-        };
-
-        t.addEventListener('pointerup', release);
-        t.addEventListener('pointercancel', release);
-        t.addEventListener('pointerleave', release);
-
-        // a drag that ends on a card must not also open the paper
-        t.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
-    }
-
-    /** the head, the paper and the cards arrive on the page's own grammar */
+    /** the head and the cards arrive on the page's own grammar */
     reveal() {
         if (typeof window.gsap === 'undefined') return;
         gsap.registerPlugin(ScrollTrigger);
 
         popIn($$('.rsrch__intro > *', this.scene),
               { y: 24, stagger: .08, duration: .55, ease: 'back.out(1.5)' }, this.scene, 'top 84%');
-        popIn(this.cards(), { y: 26, stagger: .06, duration: .6, ease: 'expo.out' }, '.rail', 'top 88%');
-    }
-}
-
-
-/* =============================================================================
-   THE IV ADVANTAGE — one stage, one switch (#advantage)
-   Picking a road draws it: the rule fills, the pins light in sequence. The
-   first draw is fired by ScrollTrigger so it plays on arrival; every switch
-   after that replays it. Vertical below 900px, which is why the fill animates
-   whichever axis the media query is using.
-============================================================================= */
-class Advantage {
-    constructor() {
-        this.el     = $('#advantage');
-        this.switch = $('.adv__switch', this.el ?? document);
-        this.opts   = $$('.adv__opt', this.el ?? document);
-        this.lanes  = $$('.adv__lane', this.el ?? document);
-        this.at     = 'oral';
-        this.drawn  = false;
-    }
-
-    init() {
-        if (!this.el || !this.lanes.length) return;
-
-        this.opts.forEach((o) => o.addEventListener('click', () => this.show(o.dataset.lane)));
-
-        this.switch?.addEventListener('keydown', (e) => {
-            if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
-            e.preventDefault();
-            const next = this.at === 'oral' ? 'iv' : 'oral';
-            this.show(next);
-            this.opts.find((o) => o.dataset.lane === next)?.focus();
-        });
-
-        if (typeof window.gsap === 'undefined' || REDUCED) {
-            this.lanes.forEach((l) => {
-                $$('.stp', l).forEach((s) => s.classList.add('is-passed'));
-                const f = $('.adv__fill', l);
-                if (f) { f.style.width = '100%'; f.style.height = '100%'; }
-            });
-            return;
-        }
-
-        gsap.registerPlugin(ScrollTrigger);
-        ScrollTrigger.create({
-            trigger: this.el, start: 'top 72%', once: true,
-            onEnter: () => { this.drawn = true; this.draw(this.lanes.find((l) => l.dataset.lane === this.at)); },
-        });
-        popIn($$('.adv__head > *, .adv__switch, .adv__note', this.el),
-              { y: 26, stagger: .07, duration: .55, ease: 'back.out(1.5)' }, this.el, 'top 84%');
-    }
-
-    show(lane) {
-        if (lane === this.at) return;
-        this.at = lane;
-
-        this.opts.forEach((o) => {
-            const on = o.dataset.lane === lane;
-            o.classList.toggle('is-on', on);
-            o.setAttribute('aria-selected', String(on));
-        });
-        this.switch?.classList.toggle('is-iv', lane === 'iv');
-
-        this.lanes.forEach((l) => {
-            const on = l.dataset.lane === lane;
-            l.classList.toggle('is-live', on);
-            l.setAttribute('aria-hidden', String(!on));
-            if (on && this.drawn) this.draw(l);
-        });
-
-        if (typeof window.gsap !== 'undefined' && !REDUCED) {
-            const live = this.lanes.find((l) => l.dataset.lane === lane);
-            gsap.fromTo(live, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .45, ease: 'expo.out' });
-        }
-    }
-
-    /** fill the rule, then light each pin as the fill reaches it */
-    draw(lane) {
-        if (!lane) return;
-        const fill  = $('.adv__fill', lane);
-        const stops = $$('.stp', lane);
-        if (!fill || !stops.length) return;
-
-        // below 900px the rule is vertical — animate whichever axis is in play
-        const vertical = window.matchMedia('(max-width: 900px)').matches;
-        stops.forEach((s) => s.classList.remove('is-passed'));
-        gsap.killTweensOf(fill);
-        gsap.set(fill, vertical ? { height: '0%', width: '100%' } : { width: '0%', height: '100%' });
-
-        const span = { v: 0 };
-        gsap.to(span, {
-            v: 100,
-            duration: 0.32 * stops.length + 0.5,
-            ease: 'power2.inOut',
-            onUpdate: () => {
-                const p = span.v;
-                fill.style[vertical ? 'height' : 'width'] = p.toFixed(1) + '%';
-                stops.forEach((s, i) => {
-                    s.classList.toggle('is-passed', p >= ((i + 0.55) / stops.length) * 100);
-                });
-            },
-        });
-    }
-}
-
-
-/* =============================================================================
-   THE PRACTICE, LIVE
-============================================================================= */
-class Social {
-    constructor() { this.el = $('.social'); }
-    init() {
-        if (!this.el || typeof window.gsap === 'undefined' || REDUCED) return;
-        gsap.registerPlugin(ScrollTrigger);
-        popIn($$('.social__head > *, .social__cta', this.el),
-              { y: 28, stagger: .08, duration: .6, ease: 'back.out(1.6)' }, this.el, 'top 84%');
+        popIn($$('.ref', this.track), { y: 26, stagger: .06, duration: .6, ease: 'expo.out' }, '.rail', 'top 88%');
     }
 }
 
@@ -1141,18 +1441,16 @@ class Dock {
         );
 
         document.addEventListener('click', (e) => {
-            if (this.open && !this.fab.contains(e.target)) this.set(false);
+            if (this.open && this.fab && !this.fab.contains(e.target)) this.set(false);
         });
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.open) { this.set(false); this.toggle.focus(); }
+            if (e.key === 'Escape' && this.open) { this.set(false); this.toggle?.focus(); }
         });
     }
 
     set(open) {
         this.open = open;
         this.fab?.classList.toggle('is-open', open);
-        this.toggle?.setAttribute('aria-expanded', String(open));
-        this.toggle?.setAttribute('aria-label', open ? 'Close contact options' : 'Open contact options');
     }
 }
 
@@ -1165,58 +1463,61 @@ class Dock {
 
    Copy rule for every `why` below: "supports" and "designed to complement".
    Never treats, cures, repairs, or guaranteed-outcome language.
-
-   ⚠ THREE ENTRIES STILL LACK TIME AND PRICING — Joint Support, Liver Support
-   and Skin Health. Their `price`/`prog` read "To be confirmed" so nothing
-   false is ever displayed, and they are deliberately left OUT of the budget
-   question's weighting until real figures exist — see ASKS[3].
 ============================================================================= */
 const DRIPS = [
-    { id:'healthyaging', name:'GLyNAC Longevity Restoration IV',        slug:'/drips/healthy-aging/',          img:'glynac',        time:'1 h 15',                     price:'$450', prog:'$405',    tag:'Healthy Aging',
+    { id:'healthyaging', name:'GLyNAC Longevity Restoration IV',  slug:'/drips/healthy-aging/',          img:'glynac',        time:'1 h 15',                     price:'$450', prog:'$405',    tag:'Healthy Aging',
       why:'The two compounds the body uses as building components to produce glutathione.' },
 
-    { id:'immune',       name:'Immun-O-Boost IV Support',               slug:'/drips/immune-support/',         img:'immuneoboost',  time:'2 h 30',                     price:'$650', prog:'$585',    tag:'Immune Support',
+    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immune-support/',         img:'immuneoboost',  time:'2 h 30',                     price:'$650', prog:'$585',    tag:'Immune Support',
       why:'Immune system support, hydration, recovery and wellness optimization.' },
 
-    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',             slug:'/drips/muscle-recovery/',        img:'liquixo',       time:'45 min',                     price:'$495', prog:'$445.50', tag:'Muscle Recovery',
+    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/muscle-recovery/',        img:'liquixo',       time:'45 min',                     price:'$495', prog:'$445.50', tag:'Muscle Recovery',
       why:'A full 20 amino acid blend with recovery nutrients, plus exosomes.' },
 
-    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',                slug:'/drips/antioxidant-support/',    img:'antioxidant',   time:'75 min',                     price:'$500', prog:'$450',    tag:'Antioxidant Support',
+    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant-support/',    img:'antioxidant',   time:'75 min',                     price:'$500', prog:'$450',    tag:'Antioxidant Support',
       why:'Three antioxidants in one network, recharging one another rather than working alone.' },
 
-    { id:'glutathione',  name:'Glutathione IV Injection',               slug:'/drips/glutathione-iv-therapy/', img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
+    { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione-iv-therapy/', img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
       why:'Concentrated antioxidant support as a slow physician-administered push.' },
 
     // one infusion, two categories — the quiz can land on it from either route
-    { id:'jointskin',    name:'Joint & Skin Wellness IV',               slug:'/drips/joint-skin-wellness/',    img:'jointsupport',  time:'2 h 30',                     price:'$750', prog:'$675',    tag:'Joint Support & Skin Health',
+    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin-wellness/',    img:'jointsupport',  time:'2 h 30',                     price:'$750', prog:'$675',    tag:'Joint Support & Skin Health',
       why:'Amino acids involved in normal collagen formation, with antioxidant support around them.' },
 
-    { id:'liver',        name:'Fatty Liver Support IV',                 slug:'/drips/liver-support/',          img:'liversupport',  time:'3 h',                        price:'$850', prog:'$765',    tag:'Liver Support',
+    { id:'liver',        name:'Fatty Liver Support IV',           slug:'/drips/liver-support/',          img:'liversupport',  time:'3 h',                        price:'$850', prog:'$765',    tag:'Liver Support',
       why:'Glycine and taurine for the liver’s normal bile work, with NAC for the glutathione pathway.' },
 
-    { id:'recovery',     name:'Revive IV Support',                      slug:'/drips/recovery-support/',       img:'revive',        time:'2 h 15',                     price:'$625', prog:'$562.50', tag:'Recovery Support',
+    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/recovery-support/',       img:'revive',        time:'2 h 15',                     price:'$625', prog:'$562.50', tag:'Recovery Support',
       why:'Hydration and nutritional replenishment for flexible, as-needed use.' },
 
-    { id:'mind',         name:'Stress, Mental Burnout & Brain Wellness IV', slug:'/drips/mind-focus-support/', img:'brainwellness', time:'1 h 30',                     price:'$700', prog:'$630',    tag:'Mind & Focus Support',
+    // name matches the plate exactly — it used to read "Stress, Mental Burnout
+    // & Brain Wellness IV" here and "Stress & Brain Wellness IV" on the card,
+    // so a quiz result and the shelf disagreed about what the thing is called
+    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/mind-focus-support/',     img:'brainwellness', time:'1 h 30',                     price:'$700', prog:'$630',    tag:'Mind & Focus Support',
       why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
 
-    { id:'custom',       name:'Customized IV Infusion',                 slug:'/drips/customized-infusion/',    img:'customized',    time:'Individually determined',    price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
+    { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized-infusion/',    img:'customized',    time:'Individually determined',    price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
       why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
 ];
 
 const ASKS = [
     { ask:'What brought you here?', hint:'Pick whichever is loudest right now.', opts:[
         { t:'I keep getting sick',       s:'Run-down, seasonal',             i:'ph-shield-check',     w:{ immune:6, recovery:2 } },
-        { t:'I am still run down',       s:'After illness, travel or stress',i:'ph-arrows-clockwise', w:{ recovery:6, immune:2 } },
+        { t:'I am still run down',       s:'After illness, travel or stress', i:'ph-arrows-clockwise', w:{ recovery:6, immune:2 } },
         { t:'My joints ache',            s:'Stiffness, arthritis, wear',     i:'ph-bone',             w:{ jointskin:6, antioxidant:2 } },
         { t:'I am thinking about my skin', s:'Tone, texture, skin wellness', i:'ph-sparkle',          w:{ jointskin:5, glutathione:3 } },
         { t:'I am losing muscle',        s:'On a GLP-1 or weight-loss plan', i:'ph-barbell',          w:{ muscle:7 } },
-        { t:'My liver markers came back off', s:'Metabolic or liver concern',i:'ph-leaf',             w:{ liver:6, antioxidant:2 } },
+        { t:'My liver markers came back off', s:'Metabolic or liver concern', i:'ph-leaf',            w:{ liver:6, antioxidant:2 } },
         { t:'I want to age well',        s:'Longevity, cellular defenses',   i:'ph-infinity',         w:{ healthyaging:6, antioxidant:3 } },
+        /* Seven specific complaints and no way out of them. Anyone who did not
+           fit still had to pick one, and got steered somewhere that did not
+           match. This is the honest answer, and it is what the customized
+           option exists for. */
+        { t:'I am not sure yet',         s:'Still working it out',           i:'ph-question',         w:{ custom:6 } },
     ]},
 
     { ask:'Are you under a specialist’s care for anything?', hint:'This changes how carefully she coordinates, never whether you are welcome.', opts:[
-        { t:'Yes — a gut condition',    s:'Crohn’s, colitis, coeliac',      i:'ph-first-aid-kit',  flag:true, w:{ custom:5, immune:2 } },
+        { t:'Yes — a gut condition',    s:'Crohn’s, colitis, celiac',       i:'ph-first-aid-kit',  flag:true, w:{ custom:5, immune:2 } },
         { t:'Yes — joints or skin',     s:'RA, osteoarthritis, psoriasis',  i:'ph-hand-heart',     flag:true, w:{ custom:4, jointskin:3 } },
         { t:'Yes — liver or metabolic', s:'Fatty liver, related',           i:'ph-heartbeat',      flag:true, w:{ custom:4, liver:3 } },
         { t:'No — generally well',      s:'No diagnosis, no specialist',    i:'ph-check-circle',   w:{} },
@@ -1225,17 +1526,18 @@ const ASKS = [
     { ask:'How long can you sit?', hint:'Her chairs are private — the long ones are the unhurried ones.', opts:[
         { t:'About half an hour', s:'A lunch break',      i:'ph-timer',     w:{ glutathione:6 } },
         { t:'About an hour',      s:'A proper sit',       i:'ph-clock',     w:{ healthyaging:4, antioxidant:4, muscle:3 } },
-        { t:'Ninety minutes',     s:'Time to switch off', i:'ph-armchair',  w:{ antioxidant:3, healthyaging:2 } },
-        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ recovery:5, immune:5 } },
+        { t:'Ninety minutes',     s:'Time to switch off', i:'ph-armchair',  w:{ antioxidant:3, healthyaging:2, mind:4 } },
+        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ recovery:5, immune:5, liver:4, jointskin:4 } },
     ]},
 
-    /* Joint Support, Liver Support and Skin Health carry no weight here on
-       purpose: at $750 and $850 they sit above every published band below,
-       and steering someone to them on price alone would be the wrong reason. */
+    /* Joint & Skin ($750) and Liver ($850) used to carry no weight here — a
+       deliberate hold from when neither had a confirmed price. Both are
+       published now, and they are the two most expensive infusions on the
+       menu, so the top band could never reach them. They belong in it. */
     { ask:'What feels comfortable per session?', hint:'Every figure here is her real published rate.', opts:[
         { t:'Under $350',     s:'Single-compound infusions', i:'ph-coins',   w:{ glutathione:5 } },
         { t:'$350 – $550',    s:'The mid-length protocols',  i:'ph-wallet',  w:{ healthyaging:4, antioxidant:4, muscle:3 } },
-        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, recovery:4 } },
+        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, recovery:4, mind:4, jointskin:4, liver:4 } },
         { t:'Let her decide', s:'Whatever is right',         i:'ph-pen-nib', w:{ custom:4 } },
     ]},
 ];
@@ -1252,6 +1554,8 @@ class Quiz {
         this.step  = 0;
         this.answers = [];
         this.lastFocus = null;
+        this.open  = false;
+        this.timers = [];
     }
 
     init() {
@@ -1269,10 +1573,26 @@ class Quiz {
         this.again.addEventListener('click', () => { this.step = 0; this.answers = []; this.render(); });
 
         document.addEventListener('keydown', (e) => {
-            if (!this.el.classList.contains('is-open')) return;
+            if (!this.open) return;
             if (e.key === 'Escape') { this.hide(); return; }
             if (e.key === 'Tab') this.trap(e);
         });
+    }
+
+    /** every setTimeout the modal starts is tracked, so closing mid-flight
+     *  cannot leave a panel swap or a thinking beat firing into a dead DOM */
+    later(fn, ms) {
+        const t = setTimeout(() => {
+            this.timers = this.timers.filter((x) => x !== t);
+            fn();
+        }, ms);
+        this.timers.push(t);
+        return t;
+    }
+
+    clearTimers() {
+        this.timers.forEach(clearTimeout);
+        this.timers = [];
     }
 
     /** Keep tabbing inside the dialog while it is open. */
@@ -1287,17 +1607,18 @@ class Quiz {
 
     show() {
         this.lastFocus = document.activeElement;
+        this.open = true;
         this.el.classList.add('is-open');
-        this.el.setAttribute('aria-hidden', 'false');
         document.documentElement.classList.add('is-locked');
         this.step = 0; this.answers = [];
         this.render();
-        setTimeout(() => $('.modal__x', this.el)?.focus(), 60);
+        this.later(() => $('.modal__x', this.el)?.focus(), 60);
     }
 
     hide() {
+        this.open = false;
+        this.clearTimers();
         this.el.classList.remove('is-open');
-        this.el.setAttribute('aria-hidden', 'true');
         document.documentElement.classList.remove('is-locked');
         this.lastFocus?.focus();
     }
@@ -1311,8 +1632,7 @@ class Quiz {
         $$('.q', this.stage).forEach((old) => {
             old.classList.remove('is-live');
             old.classList.add('is-out');
-            old.setAttribute('inert', '');
-            setTimeout(() => old.remove(), 420);
+            this.later(() => old.remove(), 420);
         });
         const p = document.createElement('div');
         p.className = 'q';
@@ -1344,7 +1664,7 @@ class Quiz {
             <div class="q__opts">
                 ${q.opts.map((o, i) => `
                     <button class="q__opt" type="button" data-pick="${i}">
-                        <i class="ph ${o.i}" aria-hidden="true"></i>
+                        <i class="ph ${o.i}"></i>
                         <span><b>${o.t}</b><span>${o.s}</span></span>
                     </button>`).join('')}
             </div>`);
@@ -1354,7 +1674,7 @@ class Quiz {
                 if (panel.dataset.locked) return;
                 panel.dataset.locked = '1';
                 this.answers[this.step] = q.opts[Number(b.dataset.pick)];
-                setTimeout(() => { this.step += 1; this.render(); }, 160);
+                this.later(() => { this.step += 1; this.render(); }, 160);
             });
         });
     }
@@ -1371,20 +1691,30 @@ class Quiz {
         });
         const rank = Object.entries(totals).sort((x, y) => y[1] - x[1]);
         const by = Object.fromEntries(DRIPS.map((d) => [d.id, d]));
-        return { top: by[rank[0][0]], alt: by[rank[1][0]], flag };
+
+        /* The runner-up used to be whatever landed second, with no check on
+           its score. If the answers were thin that could be an infusion with
+           ZERO points, presented with the same confidence as the top pick.
+           Only suggest something that actually scored. */
+        const second = rank[1];
+        const alt = second && second[1] > 0 ? by[second[0]] : null;
+
+        return { top: by[rank[0][0]], alt, flag };
     }
 
     async think() {
         const p = this.swap(`
             <div class="q__think">
-                <div class="q__ring" aria-hidden="true"></div>
+                <div class="q__ring"></div>
                 <p class="q__log" id="qLog">${THINKING[0]}</p>
             </div>`);
         const log = $('#qLog', p);
         for (const line of THINKING) {
+            if (!this.open) return;              // closed mid-thought
             if (log) log.textContent = line;
             await wait(REDUCED ? 40 : 340);
         }
+        if (!this.open) return;
         this.result();
     }
 
@@ -1394,16 +1724,22 @@ class Quiz {
             ? `<p class="rx__why"><b>Because you are under a specialist’s care</b>, Dr.&nbsp;Aronov will review your medications and requires your treating physician’s written approval before anything is scheduled. Nothing here replaces your prescribed treatment.</p>`
             : '';
 
-        // the programme row is only shown when there is a real figure for it
+        // the program row is only shown when there is a real figure for it
         const progRow = /^\$/.test(top.prog)
-            ? `<div class="rx__fact"><dt>In a programme</dt><dd>${top.prog}</dd></div>`
+            ? `<div class="rx__fact"><dt>In a program</dt><dd>${top.prog}</dd></div>`
+            : '';
+
+        const altRow = alt
+            ? `<div class="rx__alt">
+                   <span>Also worth asking about <b>${alt.name}</b></span>
+                   <a href="${alt.slug}">View&nbsp;→</a>
+               </div>`
             : '';
 
         this.swap(`
             <div class="rx">
                 <div class="rx__top">
-                    <img class="rx__bag" src="assets/drips/${top.img}.png" alt="${top.name}"
-                         onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null">
+                    <img class="rx__bag" src="/assets/drips/${top.img}.png" alt="${top.name}">
                     <div>
                         <p class="rx__kick">Your starting point</p>
                         <h3 class="rx__name">${top.name}</h3>
@@ -1416,16 +1752,13 @@ class Quiz {
                     <div class="rx__fact"><dt>Per session</dt><dd>${top.price}</dd></div>
                     ${progRow}
                 </dl>
-                <div class="rx__alt">
-                    <span>Also worth asking about <b>${alt.name}</b></span>
-                    <a href="${alt.slug}">View&nbsp;→</a>
-                </div>
+                ${altRow}
                 <div class="rx__cta">
                     <a class="rx__btn rx__btn--solid" href="${top.slug}">
-                        <span>Read the protocol</span><i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+                        <span>Read the protocol</span><i class="ph ph-arrow-up-right"></i>
                     </a>
                     <a class="rx__btn" href="tel:+19292010740">
-                        <span>929 · 201 · 0740</span><i class="ph ph-phone" aria-hidden="true"></i>
+                        <span>929 · 201 · 0740</span><i class="ph ph-phone"></i>
                     </a>
                 </div>
             </div>`);
@@ -1435,178 +1768,21 @@ class Quiz {
 
 
 /* =============================================================================
-   HOW A VISIT WORKS — four beats on one rule (#visit)
-   The rule draws once, on arrival, and each node lights as the fill reaches
-   it. Deliberately simple: the section sits between two heavy ones and its
-   job is to be over quickly. Horizontal above 560px, vertical below, so the
-   fill animates whichever axis the media query is using.
+   THE PRACTICE, LIVE (#instagram)
 ============================================================================= */
-class Visit {
-    constructor() {
-        this.el    = $('#visit');
-        this.list  = $('#visitSteps');
-        this.steps = $$('.vs', this.list ?? document);
-        this.fill  = $('.visit__fill', this.el ?? document);
-    }
-
+class Social {
+    constructor() { this.el = $('.social'); }
     init() {
-        if (!this.el || !this.steps.length) return;
-
-        // no GSAP or reduced motion -> everything already lit, nothing to draw
-        if (typeof window.gsap === 'undefined' || REDUCED) {
-            this.steps.forEach((s) => s.classList.add('is-on'));
-            return;
-        }
-
+        if (!this.el || typeof window.gsap === 'undefined' || REDUCED) return;
         gsap.registerPlugin(ScrollTrigger);
-
-        ScrollTrigger.create({
-            trigger: this.list,
-            start: 'top 74%',
-            once: true,
-            onEnter: () => this.draw(),
-        });
-
-        popIn(this.steps, { y: 26, stagger: .09, duration: .55, ease: 'back.out(1.5)' }, this.list, 'top 82%');
-        popIn($$('.visit__intro > *, .visit__close > *', this.el),
-              { y: 22, stagger: .08, duration: .55 }, this.el, 'top 86%');
-    }
-
-    /** fill the rule and light each node as it is passed */
-    draw() {
-        if (!this.fill) return;
-        const vertical = window.matchMedia('(max-width: 560px)').matches;
-        const axis = vertical ? 'height' : 'width';
-        const span = { v: 0 };
-
-        gsap.to(span, {
-            v: 100,
-            duration: 1.5,
-            ease: 'power2.inOut',
-            onUpdate: () => {
-                this.fill.style[axis] = span.v.toFixed(1) + '%';
-                this.steps.forEach((s, i) => {
-                    s.classList.toggle('is-on', span.v >= (i / this.steps.length) * 100);
-                });
-            },
-        });
+        popIn($$('.social__head > *, .social__cta', this.el),
+              { y: 28, stagger: .08, duration: .6, ease: 'back.out(1.6)' }, this.el, 'top 84%');
     }
 }
 
 
 /* =============================================================================
-   CHRONIC CONDITIONS — a switcher, not a stack (#conditions)
-   Seven long cards made this the tallest block on the page and nobody reads a
-   condition they do not have. One panel is live at a time; the rest stay in
-   the DOM (visibility, not display) so every word is still crawlable.
-   Deep-linkable: /#cond-mafld opens fatty liver from an ad or an email.
-============================================================================= */
-class Chronic {
-    constructor() {
-        this.scene = $('.chron');
-        this.tabs  = $$('.cnav__tab');
-        this.cards = $$('.cd');
-        this.prev  = $('#condPrev');
-        this.next  = $('#condNext');
-        this.now   = $('#condNow');
-        this.total = $('#condTotal');
-        this.at    = 0;
-    }
-
-    init() {
-        if (!this.scene || !this.cards.length) return;
-
-        this.tabs.forEach((tab, i) => {
-            tab.addEventListener('click', () => this.show(i, true));
-            tab.addEventListener('keydown', (e) => {
-                const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-                if (step) {
-                    e.preventDefault();
-                    const n = (i + step + this.tabs.length) % this.tabs.length;
-                    this.show(n, true); this.tabs[n].focus();
-                } else if (e.key === 'Home') { e.preventDefault(); this.show(0, true); this.tabs[0].focus(); }
-                else if (e.key === 'End')  { e.preventDefault(); const n = this.tabs.length - 1; this.show(n, true); this.tabs[n].focus(); }
-            });
-        });
-
-        /* On a phone the pill rail scrolls sideways and the other six
-           conditions are off screen with nothing to say they exist. These
-           step through them and the counter states the total outright. */
-        if (this.total) this.total.textContent = String(this.cards.length).padStart(2, '0');
-        this.prev?.addEventListener('click', () => this.step(-1));
-        this.next?.addEventListener('click', () => this.step(1));
-
-        const fromHash = this.cards.findIndex((c) => '#' + c.id === window.location.hash);
-        this.show(fromHash >= 0 ? fromHash : 0, false);
-        if (fromHash >= 0) setTimeout(() => Nav.to(this.scene), 60);
-
-        this.spotlight();
-
-        if (typeof window.gsap !== 'undefined' && !REDUCED) {
-            gsap.registerPlugin(ScrollTrigger);
-            popIn($$('.cnav__tab', this.scene), { y: 14, stagger: .04, duration: .4, ease: 'back.out(1.8)' }, '.cnav', 'top 90%');
-            popIn($('.cstage'), { y: 26, duration: .6 }, '.cstage', 'top 88%');
-        }
-    }
-
-    /** wrap around, so the arrows never dead-end */
-    step(dir) {
-        const n = (this.at + dir + this.cards.length) % this.cards.length;
-        this.show(n, true);
-    }
-
-    show(i, animate) {
-        if (i === this.at && animate) return;
-        this.at = i;
-        if (this.now) this.now.textContent = String(i + 1).padStart(2, '0');
-
-        this.tabs.forEach((t, n) => {
-            const on = n === i;
-            t.classList.toggle('is-on', on);
-            t.setAttribute('aria-selected', String(on));
-            // keep the active pill in view on the phone's horizontal rail
-            if (on && animate && t.scrollIntoView) {
-                t.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
-            }
-        });
-
-        this.cards.forEach((c, n) => {
-            const on = n === i;
-            c.classList.toggle('is-live', on);
-            c.setAttribute('aria-hidden', String(!on));
-        });
-
-        const card = this.cards[i];
-        if (!animate || typeof window.gsap === 'undefined' || REDUCED) return;
-
-        gsap.killTweensOf([card, $$('.cd__l > *, .cd__mol, .cd__never', card)]);
-        gsap.fromTo(card, { opacity: 0, y: 20, scale: .99 },
-                          { opacity: 1, y: 0, scale: 1, duration: .48, ease: 'expo.out' });
-        gsap.fromTo($$('.cd__l > *', card), { opacity: 0, y: 14 },
-                    { opacity: 1, y: 0, duration: .42, ease: 'power3.out', stagger: .045, delay: .05 });
-        gsap.fromTo($$('.cd__mol, .cd__never', card), { opacity: 0, x: 14 },
-                    { opacity: 1, x: 0, duration: .42, ease: 'power3.out', stagger: .05, delay: .12 });
-        gsap.fromTo($('.cd__ghost', card), { opacity: 0, scale: 1.12 },
-                    { opacity: 1, scale: 1, duration: .8, ease: 'expo.out' });
-    }
-
-    /** a pool of warmth that follows the pointer across the section */
-    spotlight() {
-        if (!FINE_POINTER || REDUCED) return;
-        const move = onFrame((e) => {
-            const b = this.scene.getBoundingClientRect();
-            this.scene.style.setProperty('--mx', ((e.clientX - b.left) / b.width  * 100).toFixed(2) + '%');
-            this.scene.style.setProperty('--my', ((e.clientY - b.top)  / b.height * 100).toFixed(2) + '%');
-        });
-        this.scene.addEventListener('pointermove', move);
-        this.scene.addEventListener('pointerenter', () => this.scene.classList.add('is-live'));
-        this.scene.addEventListener('pointerleave', () => this.scene.classList.remove('is-live'));
-    }
-}
-
-
-/* =============================================================================
-   REVEAL — generic scroll reveal for the sections still to come
+   REVEAL — generic scroll reveal
    Mark anything with [data-reveal]; siblings cascade automatically.
 ============================================================================= */
 class Reveal {
@@ -1650,14 +1826,14 @@ const modules = {
     heroVideo:  new HeroVideo(),
     magnetic:   new Magnetic(),
     shelf:      new Shelf(),
+    conditions: new Chronic(),
     advantage:  new Advantage(),
     visit:      new Visit(),
-    dock:       new Dock(),
-    quiz:       new Quiz(),
-    conditions: new Chronic(),
-    social:     new Social(),
     physician:  new Physician(),
     research:   new Research(),
+    dock:       new Dock(),
+    quiz:       new Quiz(),
+    social:     new Social(),
     reveal:     new Reveal(),
 };
 
@@ -1673,7 +1849,7 @@ const boot = () => {
 
     Object.values(modules).forEach((m) => {
         try { m.init(); }
-        catch (err) { console.error(`[AVE] ${m.constructor.name} failed to start`, err); release(); }
+        catch (err) { console.error(`[AVE] ${m.constructor?.name || 'module'} failed to start`, err); release(); }
     });
 
     if ('ontouchstart' in window) document.documentElement.classList.add('is-touch');
@@ -1698,15 +1874,17 @@ const boot = () => {
             autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load',
         });
 
-        // never refresh while the rail is pinned — queue it for when it is not
-        let queued = false;
+        /* Never refresh globally while the rail is pinned — queue it instead.
+           The shelf's own filter does NOT come through here: it refreshes its
+           single trigger directly, from the top of the pin, so it is never
+           blocked by this guard. */
+        let queued = null;
         const safeRefresh = () => {
             if (Shelf.pinned) {
                 if (queued) return;
-                queued = true;
-                const wait = setInterval(() => {
+                queued = setInterval(() => {
                     if (Shelf.pinned) return;
-                    clearInterval(wait); queued = false; ScrollTrigger.refresh();
+                    clearInterval(queued); queued = null; ScrollTrigger.refresh();
                 }, 400);
                 return;
             }
@@ -1745,4 +1923,4 @@ if (document.readyState === 'loading') {
 }
 
 // handy in the console while the rest of the pages get built
-window.AVE = { modules, boot, DRIPS, ASKS, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
+window.AVE = { modules, boot, DRIPS, ASKS, Rail, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
