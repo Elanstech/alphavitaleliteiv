@@ -1,0 +1,882 @@
+/* =============================================================================
+   ALPHA VITAL ELITE IV — INFUSIONS.CSS  ( /infusions/ )
+   -----------------------------------------------------------------------------
+   LOADS AFTER /styles.css AND DEPENDS ON IT.
+
+     <link rel="stylesheet" href="/styles.css">
+     <link rel="stylesheet" href="/infusions.css">
+
+   Everything shared lives in styles.css and is NOT repeated here:
+   tokens, reset, buttons, the rubric, header, menu, dock, footer,
+   [data-rise]/[data-reveal] grammar, focus and reduced-motion base rules.
+
+   This sheet owns only what exists on this page, in page order:
+     A  · PAGE ADDITIONS       the is-here nav state
+     04 · HERO                 #top
+     05 · THE TAPE             the running price line
+     06 · THE LEDGER           #ledger        Part I
+     07 · THE GALLERY          #gallery       Part II
+     08 · THE ASSURANCE        #assurance
+     M  · PAGE MOTION          reduced-motion rules for the pieces above
+
+   BREAKPOINTS, same as styles.css: 1280 · 1080 · 900 · 640 · 420
+============================================================================= */
+
+
+/* =============================================================================
+   A · PAGE ADDITIONS
+============================================================================= */
+
+/* the header link for the page you are on stays underlined */
+.head__link.is-here { color: var(--gold-deep); }
+.head__link.is-here::after { transform: scaleX(1); }
+
+/* =============================================================================
+   04 · HERO  (#top)
+   Type on cream. The one ornament is the outlined "X" — ten formulations —
+   set enormous behind the headline like a chapter numeral on a title page.
+============================================================================= */
+.ihero {
+    position: relative;
+    min-height: 92vh;
+    min-height: 92svh;
+    display: flex; align-items: stretch;
+    padding: calc(var(--head-h) + clamp(1.5rem, 4vh, 3rem)) var(--gut) clamp(2rem, 5vh, 3.5rem);
+    background: var(--cream);
+    color: var(--ink);
+    overflow: clip;
+}
+.ihero__wash {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        radial-gradient(90% 60% at 85% 0%,  rgba(231,203,134,.30), transparent 60%),
+        radial-gradient(70% 50% at 0% 100%, rgba(143,190,155,.14), transparent 58%),
+        radial-gradient(140% 80% at 50% -10%, #FBF8F1, transparent 62%);
+}
+.ihero__ghost {
+    position: absolute; right: -2vw; top: 46%; z-index: 0;
+    transform: translateY(-50%);
+    font-family: var(--accent); font-style: italic; font-weight: 600;
+    font-size: clamp(18rem, 44vw, 44rem); line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(193, 150, 63, .18);
+    pointer-events: none; user-select: none;
+}
+
+.ihero__wrap {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; justify-content: center;
+    width: 100%; max-width: var(--maxw);
+    margin: 0 auto;
+}
+
+.ihero__folio {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.9rem;
+    margin-bottom: clamp(2rem, 5vh, 3.5rem);
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--caps);
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+}
+.ihero__folio-mid { color: var(--gold-deep); }
+
+.ihero__kicker {
+    display: flex; align-items: center; gap: 1.1rem;
+    font-family: var(--caps);
+    font-size: 0.76rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    margin-bottom: clamp(1.25rem, 3vh, 2rem);
+}
+.ihero__rule { width: clamp(2.5rem, 5vw, 4.5rem); height: 1px; background: var(--gold); flex: 0 0 auto; }
+
+.ihero__title {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(3rem, 8.4vw, 8rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--forest);
+    margin-bottom: clamp(1.75rem, 4.5vh, 3rem);
+}
+.ihero__title .word { display: block; overflow: hidden; padding-bottom: 0.05em; margin-bottom: -0.05em; }
+.ihero__title .word > span { display: block; transform: translateY(108%); }
+.ihero__title .word { opacity: 1; transform: none; }
+body.is-ready .ihero__title .word > span {
+    transform: translateY(0);
+    transition: transform 1.15s var(--ease) calc(var(--i, 0) * .1s);
+}
+.ihero__title .word--accent > span {
+    font-family: var(--accent); font-style: italic; font-weight: 500;
+    color: var(--gold-deep);
+}
+
+.ihero__row {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .8fr);
+    gap: clamp(1.5rem, 5vw, 4.5rem);
+    align-items: end;
+    margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+}
+.ihero__dek {
+    max-width: 36rem;
+    font-size: clamp(0.98rem, 1.15vw, 1.1rem);
+    line-height: 1.75;
+    color: var(--ink-soft);
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--rule-gold);
+}
+
+.ihero__facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(.75rem, 2vw, 1.5rem); }
+.ifact { border-top: 1px solid var(--rule); padding-top: .9rem; }
+.ifact b {
+    display: block; font-family: var(--data); font-weight: 500;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1; color: var(--forest); margin-bottom: .4rem;
+}
+.ifact span {
+    display: block; font-family: var(--micro); font-size: .6rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist); line-height: 1.55;
+}
+
+.ihero__acts { display: flex; flex-wrap: wrap; gap: .85rem; }
+
+.ihero__legal {
+    margin-top: clamp(1.25rem, 3vh, 2rem);
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--rule);
+    max-width: 62ch;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: var(--mist);
+}
+
+/* ---------- hero · short viewports ---------- */
+@media (min-width: 981px) and (max-height: 900px) {
+    .ihero { min-height: 0; }
+    .ihero__title { font-size: clamp(2.6rem, 6.4vw, 5.6rem); margin-bottom: 1.6rem; }
+    .ihero__folio { margin-bottom: 1.5rem; }
+    .ihero__legal { font-size: .74rem; }
+}
+
+/* ---------- hero · 1080 ---------- */
+@media (max-width: 1080px) {
+    .ihero__row { grid-template-columns: 1fr; align-items: start; }
+    .ihero__dek { max-width: none; }
+}
+
+/* ---------- hero · 980 ---------- */
+@media (max-width: 980px) {
+    .ihero__folio { font-size: 0.56rem; letter-spacing: 0.16em; gap: 0.75rem; }
+    .ihero__folio span { white-space: nowrap; }
+    .ihero__folio-mid { display: none; }
+    .ihero__kicker { align-items: flex-start; line-height: 1.5; }
+    .ihero__rule { margin-top: .6em; }
+    .ihero__ghost { right: -14vw; -webkit-text-stroke-color: rgba(193, 150, 63, .13); }
+}
+
+/* ---------- hero · 640 ---------- */
+@media (max-width: 640px) {
+    .ihero { min-height: 0; padding-top: calc(var(--head-h) + 1.25rem); }
+    .ihero__title { font-size: clamp(2.5rem, 12vw, 3.6rem); }
+    .ihero__kicker { font-size: 0.6rem; letter-spacing: 0.18em; }
+    .ihero__dek { padding-left: 1rem; font-size: 0.94rem; }
+    .ihero__facts { grid-template-columns: 1fr; }
+    .ifact { display: flex; align-items: baseline; gap: .9rem; padding-top: .7rem; }
+    .ifact b { margin-bottom: 0; font-size: 1.45rem; }
+    .ihero__acts { width: 100%; }
+    .ihero__acts .btn { flex: 1 1 100%; min-height: 50px; }
+    .ihero__legal { padding-left: 1rem; font-size: 0.72rem; }
+    .ihero__ghost { font-size: 20rem; right: -18vw; top: 30%; }
+}
+
+/* ---------- hero · 420 ---------- */
+@media (max-width: 420px) {
+    .ihero__folio { font-size: .5rem; letter-spacing: .1em; }
+    .ihero__title { font-size: clamp(2.2rem, 11.5vw, 2.9rem); }
+}
+
+
+/* =============================================================================
+   05 · THE TAPE
+   One gold line of outlined Prata running the ten names and their rates.
+   CSS-only: the track holds two identical sets and slides one set-width, so
+   the loop is seamless. Paused when the tab is hidden (JS) and replaced by a
+   static centered line under reduced motion.
+============================================================================= */
+.tape {
+    position: relative;
+    padding: clamp(.9rem, 2vh, 1.4rem) 0;
+    background: var(--forest);
+    border-block: 1px solid var(--rule-gold);
+    overflow: hidden;
+}
+.tape__track {
+    display: flex; width: max-content;
+    animation: tape-run 46s linear infinite;
+    will-change: transform;
+}
+.tape:hover .tape__track { animation-play-state: paused; }
+.tape.is-paused .tape__track { animation-play-state: paused; }
+@keyframes tape-run { to { transform: translateX(-50%); } }
+
+.tape__set { display: flex; flex: 0 0 auto; }
+.tape__set i {
+    display: inline-flex; align-items: baseline; gap: .7rem;
+    padding: 0 clamp(1.4rem, 3vw, 2.6rem);
+    font-family: var(--display); font-style: normal;
+    font-size: clamp(1.05rem, 1.7vw, 1.5rem);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(231, 203, 134, .55);
+    white-space: nowrap;
+}
+.tape__set i b {
+    font-family: var(--data); font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: .72em;
+    color: var(--gold-lite);
+    -webkit-text-stroke: 0;
+}
+.tape__set i::after {
+    content: '·';
+    margin-left: clamp(1.4rem, 3vw, 2.6rem);
+    color: var(--gold);
+    -webkit-text-stroke: 0;
+}
+
+/* ---------- tape · reduced motion: one honest static line ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .tape__track { animation: none; width: auto; justify-content: center; }
+    .tape__set:last-child { display: none; }
+    .tape__set { flex-wrap: wrap; justify-content: center; row-gap: .35rem; }
+}
+
+
+/* =============================================================================
+   06 · THE LEDGER  (#ledger)   —   PART I
+   The signature. Ten hairline rows set like a house menu: numeral, name,
+   category, chair time, rate, arrow. Hover washes the row in its tone and
+   summons the bag as a floating thumbnail (fine pointers only).
+============================================================================= */
+.ledger {
+    position: relative;
+    padding: clamp(4rem, 9vw, 7rem) var(--gut);
+    background: var(--parchment);
+    color: var(--ink-soft);
+}
+.ledger::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+        radial-gradient(60% 45% at 92% 0%,  rgba(231,203,134,.24), transparent 60%),
+        radial-gradient(120% 55% at 50% 0%, rgba(255,255,255,.7),  transparent 55%);
+}
+.ledger__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
+
+.ledger__intro {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
+    gap: clamp(1.5rem, 4vw, 4rem); align-items: end;
+    margin-bottom: clamp(2rem, 4.5vw, 3.25rem);
+}
+.ledger__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2.1rem, 5.4vw, 4.3rem);
+    line-height: 1.03; letter-spacing: -.022em; color: var(--forest);
+}
+.ledger__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-deep); }
+.ledger__lede {
+    font-size: clamp(.96rem, 1.15vw, 1.08rem); line-height: 1.76; max-width: 48ch;
+    padding-left: 1.3rem; border-left: 1px solid var(--rule-gold);
+}
+
+/* the column heads — plain labels, Syne, whispered */
+.ledger__legend {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) 15rem 9rem 10rem 3.5rem;
+    gap: 1rem; align-items: baseline;
+    padding: 0 .75rem .7rem;
+    border-bottom: 1px solid var(--forest);
+    font-family: var(--micro); font-size: .56rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+}
+.ledger__legend-rate { text-align: right; }
+
+/* ---------- the rows ---------- */
+.ledger__list { position: relative; }
+.lrow {
+    --tone: var(--gold);
+    position: relative;
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) 15rem 9rem 10rem 3.5rem;
+    gap: 1rem; align-items: center;
+    padding: clamp(1.05rem, 2vw, 1.5rem) .75rem;
+    border-bottom: 1px solid var(--rule);
+    isolation: isolate;
+    transition: padding-left .5s var(--ease);
+}
+/* the tone wash rises from the baseline on hover */
+.lrow::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(90deg,
+        color-mix(in oklab, var(--tone) 10%, transparent),
+        color-mix(in oklab, var(--tone) 3%, transparent) 70%, transparent);
+    transform: scaleY(0); transform-origin: bottom;
+    transition: transform .5s var(--ease);
+}
+/* the tone underline draws left to right underneath */
+.lrow::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
+    background: var(--tone);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .55s var(--ease);
+}
+.lrow:hover { padding-left: 1.4rem; }
+.lrow:hover::before { transform: scaleY(1); }
+.lrow:hover::after { transform: scaleX(1); }
+
+.lrow__no {
+    font-family: var(--accent); font-style: italic; font-weight: 500;
+    font-size: clamp(1.5rem, 2.4vw, 2.2rem); line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--tone) 46%, transparent);
+    transition: color .5s var(--ease);
+}
+.lrow:hover .lrow__no { color: var(--tone); -webkit-text-stroke-color: var(--tone); }
+
+.lrow__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.15rem, 2.1vw, 1.8rem);
+    line-height: 1.15; letter-spacing: -.012em; color: var(--forest);
+    transition: color .45s var(--ease);
+    min-width: 0;
+}
+.lrow:hover .lrow__name { color: var(--gold-deep); }
+
+.lrow__cat {
+    display: inline-flex; align-items: center; gap: .5rem; min-width: 0;
+    font-family: var(--micro); font-size: .6rem; font-weight: 700;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--tone);
+}
+.lrow__cat i { font-size: 1.35em; flex: 0 0 auto; }
+
+.lrow__time {
+    font-family: var(--data); font-weight: 500;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: .82rem; color: var(--mist); white-space: nowrap;
+}
+
+.lrow__rate {
+    text-align: right;
+    font-family: var(--data); font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: clamp(1rem, 1.5vw, 1.3rem); color: var(--forest); white-space: nowrap;
+}
+
+.lrow__go {
+    display: grid; place-items: center; justify-self: end;
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--rule);
+    color: var(--ink-soft); font-size: 1.05rem;
+    transition: background .4s var(--ease), color .4s var(--ease),
+                border-color .4s var(--ease), transform .4s var(--ease);
+}
+.lrow:hover .lrow__go {
+    background: var(--tone); border-color: var(--tone); color: var(--cream);
+    transform: rotate(-45deg);
+}
+
+/* ---------- the floating thumbnail ----------
+   position: fixed and driven by JS on fine pointers only. It never accepts
+   the pointer, so it can never block the row underneath it. */
+.ledger__thumb {
+    position: fixed; left: 0; top: 0; z-index: 60;
+    width: clamp(120px, 11vw, 170px);
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -55%) rotate(3deg) scale(.9);
+    transition: opacity .3s var(--ease);
+    filter: drop-shadow(0 26px 34px rgba(32, 52, 33, .28));
+}
+.ledger__thumb.is-on { opacity: 1; }
+.ledger__thumb img { width: 100%; height: auto; }
+
+.ledger__note {
+    margin-top: clamp(1.25rem, 2.5vw, 2rem);
+    font-family: var(--accent); font-style: italic;
+    font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6;
+    color: var(--ink-soft); max-width: 64ch;
+}
+
+/* ---------- ledger · 1080: the category column folds under the name ---------- */
+@media (max-width: 1080px) {
+    .ledger__intro { grid-template-columns: 1fr; align-items: start; }
+    .ledger__lede { max-width: none; }
+    .ledger__legend { grid-template-columns: 3.5rem minmax(0, 1fr) 8rem 9rem 3.5rem; }
+    .ledger__legend-cat { display: none; }
+    .lrow { grid-template-columns: 3.5rem minmax(0, 1fr) 8rem 9rem 3.5rem; }
+    .lrow__cat { grid-column: 2; grid-row: 2; margin-top: .3rem; }
+    .lrow__name { grid-column: 2; grid-row: 1; }
+    .lrow__no { grid-row: 1 / span 2; }
+    .lrow__time, .lrow__rate, .lrow__go { grid-row: 1 / span 2; }
+}
+
+/* ---------- ledger · 760: down to essentials, thumb stands down ---------- */
+@media (max-width: 760px) {
+    .ledger__legend { display: none; }
+    .lrow {
+        grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+        gap: .35rem .8rem;
+        padding-inline: .25rem;
+    }
+    .lrow:hover { padding-left: .25rem; }
+    .lrow__no { grid-column: 1; grid-row: 1 / span 3; font-size: 1.3rem; }
+    .lrow__name { grid-column: 2; grid-row: 1; font-size: 1.12rem; }
+    .lrow__cat { grid-column: 2; grid-row: 2; margin-top: 0; }
+    .lrow__time { grid-column: 2; grid-row: 3; font-size: .74rem; }
+    .lrow__rate { grid-column: 3; grid-row: 1 / span 2; font-size: 1.05rem; }
+    .lrow__go { grid-column: 3; grid-row: 3; width: 36px; height: 36px; justify-self: end; }
+    .ledger__thumb { display: none; }
+    .ledger__note { font-size: .98rem; }
+}
+
+/* ---------- ledger · 420 ---------- */
+@media (max-width: 420px) {
+    .lrow__name { font-size: 1.02rem; }
+    .lrow__cat { font-size: .54rem; letter-spacing: .14em; }
+}
+
+
+/* =============================================================================
+   07 · THE GALLERY  (#gallery)   —   PART II
+   Ten dossiers on cream. Two columns on a laptop, one below 900. The pricing
+   ledger inside each card is the theatrical moment: single rate large in
+   Archivo, program total struck through, the gold seal stating the saving.
+============================================================================= */
+.gal {
+    position: relative;
+    padding: clamp(4rem, 9vw, 7rem) var(--gut);
+    background: var(--cream);
+    color: var(--ink-soft);
+    overflow: clip;
+}
+.gal__mesh {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        radial-gradient(120% 70% at 50% 0%,  rgba(255,255,255,.75), transparent 58%),
+        radial-gradient(90% 55% at 88% 12%,  rgba(231,203,134,.20), transparent 62%),
+        radial-gradient(100% 55% at 50% 100%, rgba(32,52,33,.06), transparent 62%);
+}
+.gal__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
+
+.gal__intro {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
+    gap: clamp(1.5rem, 4vw, 4rem); align-items: end;
+    margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+.gal__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2.1rem, 5.4vw, 4.3rem);
+    line-height: 1.03; letter-spacing: -.022em; color: var(--forest);
+}
+.gal__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-deep); }
+.gal__lede {
+    font-size: clamp(.96rem, 1.15vw, 1.08rem); line-height: 1.76; max-width: 50ch;
+    padding-left: 1.3rem; border-left: 1px solid var(--rule-gold);
+}
+
+/* ---------- filters: pills on desktop ---------- */
+.gal__filters {
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+}
+.gal__pill {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .6rem 1.15rem; border: 1px solid var(--rule); border-radius: 999px;
+    background: rgba(255,255,255,.5);
+    font-family: var(--micro); font-size: .63rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
+    transition: color .4s var(--ease), border-color .4s var(--ease),
+                background .4s var(--ease), transform .4s var(--ease);
+}
+.gal__pill i { font-size: 1.15em; }
+.gal__pill sup { font-family: var(--data); font-size: .62em; font-weight: 500; color: var(--gold-deep); vertical-align: super; }
+.gal__pill:hover { color: var(--forest); border-color: var(--gold); background: #fff; transform: translateY(-2px); }
+.gal__pill.is-on { background: var(--forest); border-color: var(--forest); color: var(--cream); }
+.gal__pill.is-on sup { color: var(--gold-lite); }
+
+/* ---------- filters: the select on the phone ---------- */
+.gal__jump {
+    display: none;
+    position: relative;
+    margin-bottom: 1.25rem;
+    align-items: center;
+}
+.gal__jump-ico {
+    position: absolute; left: .95rem; top: 50%;
+    transform: translateY(-50%); margin-top: -.62rem;
+    font-size: 1.05rem; color: var(--gold-deep); pointer-events: none;
+}
+.gal__caret {
+    position: absolute; right: .95rem; top: 50%;
+    transform: translateY(-50%); margin-top: -.62rem;
+    font-size: .95rem; color: var(--gold-deep); pointer-events: none;
+}
+.gal__select {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; min-height: 48px;
+    padding: .75rem 2.6rem .75rem 2.6rem;
+    border: 1px solid var(--rule-gold); border-radius: 999px;
+    background: rgba(255,255,255,.72);
+    font-family: var(--micro); font-size: .68rem; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--forest);
+    cursor: pointer;
+    transition: border-color .35s var(--ease), background .35s var(--ease);
+}
+.gal__select:focus { outline: none; border-color: var(--gold); background: #fff; }
+.gal__select option { font-family: var(--ui); text-transform: none; letter-spacing: 0; color: var(--ink); }
+
+/* ---------- the grid ---------- */
+.gal__grid {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2.6vw, 2.25rem);
+    /* the last row can be a lone card — keep it its natural width */
+    align-items: stretch;
+}
+
+/* =========================================================================
+   THE DOSSIER
+   ========================================================================= */
+.dos {
+    --tone: var(--gold);
+    position: relative; isolation: isolate;
+    display: flex; flex-direction: column;
+    padding: clamp(1.35rem, 2.6vw, 2rem);
+    background: rgba(255, 255, 255, .72);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--tone);
+    border-radius: 3px;
+    box-shadow: 0 26px 56px -42px rgba(32, 52, 33, .38);
+    overflow: hidden;
+    transition: transform .55s var(--ease), box-shadow .55s var(--ease), border-color .55s var(--ease);
+}
+.dos:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 42px 80px -46px rgba(32, 52, 33, .46);
+    border-color: color-mix(in oklab, var(--tone) 36%, transparent);
+    border-top-color: var(--tone);
+}
+.dos.is-out { display: none; }
+
+.dos__ghost {
+    position: absolute; right: -.12em; top: -.24em; z-index: 0;
+    font-family: var(--accent); font-style: italic; font-weight: 600;
+    font-size: clamp(6.5rem, 12vw, 11rem); line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--tone) 16%, transparent);
+    pointer-events: none; user-select: none;
+}
+
+.dos__head {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; margin-bottom: 1rem;
+}
+.dos__cat {
+    display: inline-flex; align-items: center; gap: .5rem; min-width: 0;
+    font-family: var(--micro); font-size: .6rem; font-weight: 700;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--tone);
+}
+.dos__cat i { font-size: 1.3em; flex: 0 0 auto; }
+.dos__flag {
+    flex: 0 0 auto;
+    padding: .28rem .65rem;
+    border: 1px solid var(--rule); border-radius: 999px;
+    font-family: var(--caps); font-size: .54rem;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
+    background: rgba(246, 241, 231, .7);
+}
+.dos__flag--gold { border-color: var(--rule-gold); color: var(--gold-deep); background: rgba(193, 150, 63, .1); }
+
+/* ---------- the stage: bag beside the writing ---------- */
+.dos__stage {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(1rem, 2.2vw, 1.75rem);
+    align-items: center;
+    margin-bottom: 1.15rem;
+}
+.dos__bag { position: relative; display: block; }
+.dos__bag img {
+    position: relative; z-index: 2;
+    height: clamp(170px, 22vw, 250px); width: auto; max-width: none;
+    filter: drop-shadow(0 20px 28px rgba(32, 52, 33, .2));
+    transition: transform .8s var(--ease);
+}
+.dos:hover .dos__bag img { transform: translateY(-8px) rotate(-1.2deg); }
+.dos__cast {
+    position: absolute; left: 50%; bottom: -12px; z-index: 0;
+    width: 66%; height: 14px; transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, rgba(32, 52, 33, .2), transparent 70%);
+    filter: blur(3px);
+    transition: width .7s var(--ease), opacity .7s var(--ease);
+}
+.dos:hover .dos__cast { width: 52%; opacity: .7; }
+
+.dos__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.25rem, 2vw, 1.7rem);
+    line-height: 1.16; letter-spacing: -.012em; color: var(--forest);
+    margin-bottom: .5rem;
+}
+.dos__name a { transition: color .45s var(--ease); }
+.dos:hover .dos__name a { color: var(--gold-deep); }
+
+.dos__note {
+    font-family: var(--accent); font-style: italic;
+    font-size: clamp(.96rem, 1.1vw, 1.05rem); line-height: 1.5; color: var(--ink-soft);
+    margin-bottom: .85rem;
+}
+
+.dos__ing { display: flex; flex-wrap: wrap; gap: .34rem; margin-bottom: .85rem; }
+.dos__ing li {
+    display: inline-flex; align-items: center; gap: .38rem;
+    padding: .3rem .6rem; border: 1px solid var(--rule); border-radius: 2px;
+    background: rgba(255, 255, 255, .6);
+    font-family: var(--micro); font-size: .55rem; font-weight: 500;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--ink-soft);
+    white-space: nowrap;
+    transition: border-color .5s var(--ease), color .5s var(--ease);
+}
+.dos__ing li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--tone); flex: 0 0 auto; }
+.dos:hover .dos__ing li { border-color: var(--rule-gold); color: var(--forest); }
+
+.dos__meta {
+    display: flex; align-items: center; flex-wrap: wrap; gap: .45rem;
+    font-family: var(--data); font-size: .72rem; font-weight: 500;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: var(--mist);
+}
+.dos__meta i { color: var(--tone); font-size: 1.2em; }
+.dos__meta em { font-style: normal; color: var(--rule); }
+
+/* ---------- THE PRICING LEDGER ----------
+   The theatrical block. Single rate on the left in large Archivo; the
+   program on the right with its full total struck through; the gold seal
+   overlapping the divide, stating the saving outright. */
+.dos__ledger {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: 1rem;
+    margin-top: auto;               /* every ledger shares a baseline */
+    padding: 1rem 1.1rem;
+    background: rgba(246, 241, 231, .85);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--tone);
+    border-radius: 2px;
+}
+.dos__lab {
+    display: block;
+    font-family: var(--micro); font-size: .52rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+    margin-bottom: .35rem;
+}
+.dos__single b {
+    display: block;
+    font-family: var(--data); font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: clamp(1.7rem, 2.8vw, 2.3rem); line-height: 1; color: var(--forest);
+}
+.dos__single b.dos__single--word { font-family: var(--display); font-weight: 400; font-size: clamp(1.15rem, 1.8vw, 1.5rem); line-height: 1.15; }
+
+.dos__program { border-left: 1px solid var(--rule); padding-left: 1rem; min-width: 0; }
+.dos__was {
+    display: flex; align-items: baseline; flex-wrap: wrap; gap: .55rem;
+    font-family: var(--data); font-variant-numeric: tabular-nums lining-nums;
+}
+.dos__was s { font-weight: 500; font-size: .95rem; color: var(--mist); text-decoration-color: color-mix(in oklab, var(--tone) 70%, transparent); text-decoration-thickness: 1.5px; }
+.dos__was b { font-weight: 600; font-size: clamp(1.15rem, 1.9vw, 1.5rem); line-height: 1; color: var(--forest); }
+.dos__eff {
+    display: block; margin-top: .3rem;
+    font-family: var(--accent); font-style: italic;
+    font-size: .92rem; line-height: 1.4; color: var(--gold-deep);
+}
+
+/* the seal — a gold coin overlapping the ledger's top edge */
+.dos__seal {
+    position: absolute; top: -1.1rem; right: 1rem;
+    display: grid; place-items: center; place-content: center;
+    width: 62px; height: 62px; border-radius: 50%;
+    background: var(--gold);
+    border: 1px solid var(--gold-deep);
+    box-shadow: 0 12px 24px -10px rgba(143, 107, 34, .6),
+                inset 0 0 0 3px rgba(246, 241, 231, .35);
+    transform: rotate(8deg);
+    transition: transform .5s cubic-bezier(.34, 1.56, .64, 1);
+}
+.dos:hover .dos__seal { transform: rotate(-4deg) scale(1.08); }
+.dos__seal i {
+    font-family: var(--accent); font-style: italic;
+    font-size: .62rem; line-height: 1; color: var(--forest-deep);
+}
+.dos__seal b {
+    font-family: var(--data); font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: .84rem; line-height: 1.1; color: var(--forest-deep);
+}
+
+/* ---------- actions ---------- */
+.dos__acts { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1rem; }
+.dos__btn {
+    flex: 1 1 auto;
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    min-height: 46px; padding: .8rem 1.3rem; border-radius: 999px;
+    font-family: var(--ui); font-size: .62rem; font-weight: 700;
+    letter-spacing: .18em; text-transform: uppercase;
+    border: 1px solid var(--forest); color: var(--forest);
+    transition: background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease);
+}
+.dos__btn i { font-size: 1.25em; transition: transform .4s var(--ease); }
+.dos__btn:hover { background: var(--gold); border-color: var(--gold); color: var(--forest-deep); }
+.dos__btn:hover i { transform: translate(2px, -2px); }
+.dos__btn--solid { background: var(--forest); color: var(--cream); }
+
+/* the bespoke card closes the menu on its own note */
+.dos--custom { background: rgba(251, 248, 241, .9); border-style: solid; border-color: var(--rule-gold); }
+
+.gal__empty {
+    padding: 2rem 0 0;
+    font-family: var(--accent); font-style: italic;
+    font-size: 1.1rem; color: var(--ink-soft);
+}
+.gal__empty button {
+    font-family: var(--micro); font-size: .6rem; font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--gold-deep);
+    border-bottom: 1px solid var(--gold);
+    margin-left: .5rem; padding-bottom: .1rem;
+}
+
+/* ---------- gallery · 1080 ---------- */
+@media (max-width: 1080px) {
+    .gal__intro { grid-template-columns: 1fr; align-items: start; }
+    .gal__lede { max-width: none; }
+    .dos__bag img { height: clamp(150px, 19vw, 210px); }
+}
+
+/* ---------- gallery · 900, THE HINGE: one column, the select takes over ---------- */
+@media (max-width: 900px) {
+    .gal__filters { display: none; }
+    .gal__jump { display: flex; }
+    .gal__grid { grid-template-columns: 1fr; }
+    .dos__stage { grid-template-columns: 1fr; justify-items: start; }
+    .dos__bag { justify-self: center; }
+    /* per-frame drop-shadow on a big PNG is too costly mid-scroll on a phone */
+    .dos__bag img { filter: none; height: clamp(150px, 26vh, 210px); }
+    .dos__cast { display: none; }
+}
+
+/* ---------- gallery · 640 ---------- */
+@media (max-width: 640px) {
+    .gal { padding-top: clamp(3rem, 7vw, 4.5rem); }
+    .gal__title { font-size: clamp(1.9rem, 8.5vw, 2.7rem); }
+    .gal__lede { font-size: .94rem; padding-left: 1rem; }
+    .dos { padding: 1.2rem 1rem 1.35rem; }
+    .dos__name { font-size: 1.22rem; }
+    .dos__note { font-size: .95rem; }
+    .dos__ledger { grid-template-columns: 1fr; gap: .8rem; padding: .95rem .9rem; }
+    .dos__program { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: .8rem; }
+    .dos__seal { width: 56px; height: 56px; top: -1rem; right: .8rem; }
+    .dos__seal b { font-size: .78rem; }
+    .dos__acts .dos__btn { flex: 1 1 100%; }
+    .dos__ghost { font-size: 5.5rem; }
+}
+
+/* ---------- gallery · 420 ---------- */
+@media (max-width: 420px) {
+    .dos__ing li { font-size: .52rem; padding: .28rem .5rem; }
+    .dos__single b { font-size: 1.6rem; }
+}
+
+
+/* =============================================================================
+   08 · THE ASSURANCE  (#assurance)
+   Parchment. Three facts and the program legal, quiet on purpose — the page
+   has already done its selling.
+============================================================================= */
+.assure {
+    position: relative;
+    padding: clamp(3.5rem, 8vw, 6rem) var(--gut);
+    background: var(--parchment);
+    color: var(--ink-soft);
+}
+.assure::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(60% 45% at 8% 0%, rgba(231, 203, 134, .2), transparent 60%);
+}
+.assure__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
+
+.assure__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.9rem, 4.6vw, 3.4rem);
+    line-height: 1.06; letter-spacing: -.02em; color: var(--forest);
+    max-width: 24ch;
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+}
+.assure__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.05em; color: var(--gold-deep); }
+
+.assure__grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1rem, 2.5vw, 2rem);
+    margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+.assure__item {
+    padding: clamp(1.2rem, 2.2vw, 1.6rem);
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--gold);
+    border-radius: 2px;
+    box-shadow: 0 12px 26px -18px rgba(32, 52, 33, .26);
+    transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.assure__item:hover { transform: translateY(-4px); box-shadow: 0 22px 40px -20px rgba(32, 52, 33, .32); }
+.assure__item i { display: block; font-size: 1.55rem; color: var(--gold-deep); margin-bottom: .7rem; }
+.assure__item h3 {
+    font-family: var(--caps); font-weight: 400;
+    font-size: clamp(.98rem, 1.4vw, 1.12rem);
+    letter-spacing: .02em; color: var(--forest);
+    margin-bottom: .5rem;
+}
+.assure__item p { font-size: .89rem; line-height: 1.7; }
+
+.assure__legal {
+    max-width: 88ch;
+    font-size: .76rem; line-height: 1.72; color: var(--mist);
+}
+
+/* ---------- assurance · 900 ---------- */
+@media (max-width: 900px) {
+    .assure__grid { grid-template-columns: 1fr; }
+    .assure__title { max-width: none; }
+}
+
+/* ---------- assurance · 640 ---------- */
+@media (max-width: 640px) {
+    .assure { padding-block: clamp(3rem, 7vw, 4.5rem); }
+    .assure__title { font-size: clamp(1.7rem, 7.8vw, 2.4rem); }
+    .assure__legal { font-size: .72rem; }
+}
+
+
+/* =============================================================================
+   M · PAGE MOTION
+   styles.css already flattens [data-rise]/[data-reveal] and kills durations
+   under reduced motion; these rules cover only this page's own pieces.
+============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    .ihero__title .word > span { transform: none !important; }
+    .ledger__thumb { display: none !important; }
+    .lrow:hover { padding-left: .75rem; }
+    /* .tape handles itself — see 05 above */
+}
