@@ -43,27 +43,27 @@
 <body>
 
 <!-- ==============================================================
-     HEADER — identical grammar to the home page; Infusions is live
+     HEADER
      ============================================================== -->
 <header class="head" id="head">
   <div class="head__rail">
-
+ 
     <a class="head__mark" href="/">
       <img src="/logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
     </a>
-
+ 
     <nav class="head__nav" id="headNav">
-
+ 
       <!-- INFUSIONS + THE FLYOUT — CSS-only: opens on hover, stays open on
            keyboard focus (:focus-within). The link itself still navigates. -->
       <div class="head__drop">
-        <a class="head__link is-here" href="/infusions/" aria-current="page">
+        <a class="head__link" href="/infusions/">
           Infusions <i class="ph ph-caret-down head__dcaret"></i>
         </a>
-
+ 
         <div class="head__panel">
           <p class="head__panel-eyebrow">The Infusion Menu</p>
-
+ 
           <div class="head__panel-grid">
             <a class="hd-item" href="/drips/healthy-aging/" style="--tone:#5B7098">
               <i>I</i><span>GLyNAC Longevity Restoration</span><b>$450</b>
@@ -96,19 +96,19 @@
               <i>X</i><span>Customized IV Infusion</span><b>Consult</b>
             </a>
           </div>
-
+ 
           <a class="head__panel-foot" href="/infusions/">
             <span>View the full menu</span><i class="ph ph-arrow-right"></i>
           </a>
         </div>
       </div>
-
+ 
       <a class="head__link" href="/the-practice/">The Practice</a>
       <a class="head__link" href="/about/">Dr.&nbsp;Aronov</a>
       <a class="head__link" href="/research/">Research</a>
       <a class="head__link" href="/contact/">Contact</a>
     </nav>
-
+ 
     <div class="head__actions">
       <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
       <a class="btn btn--forest head__cta" href="/contact/" data-magnetic><span>Begin screening</span></a>
@@ -116,15 +116,43 @@
         <span></span><span></span>
       </button>
     </div>
-
+ 
   </div>
 </header>
-
-<!-- Mobile menu -->
+ 
+ 
+<!-- ==============================================================
+     MOBILE MENU
+     ============================================================== -->
 <div class="menu" id="menu">
   <div class="menu__inner">
     <nav class="menu__nav">
-      <a href="/infusions/"><i>i.</i><em>Infusions</em></a>
+ 
+      <!-- INFUSIONS ACCORDION — native <details>, no JS. Tapping the row
+           opens the sublist; tapping any link inside still closes the menu
+           through the existing Menu class. -->
+      <details class="menu__drop">
+        <summary>
+          <i>i.</i><em>Infusions</em>
+          <b class="menu__dcaret"><span class="ph ph-caret-down"></span></b>
+        </summary>
+        <div class="menu__sub">
+          <a class="menu__sub-all" href="/infusions/">
+            <span>The full menu</span><span class="ph ph-arrow-right"></span>
+          </a>
+          <a class="menu__sub-item" href="/drips/healthy-aging/" style="--tone:#5B7098"><i>I</i>GLyNAC Longevity Restoration</a>
+          <a class="menu__sub-item" href="/drips/immune-support/" style="--tone:#D9982A"><i>II</i>Immun-O-Boost IV Support</a>
+          <a class="menu__sub-item" href="/drips/muscle-recovery/" style="--tone:#B34E37"><i>III</i>LIQUIXO Muscle Recovery</a>
+          <a class="menu__sub-item" href="/drips/antioxidant-support/" style="--tone:#4F7D5E"><i>IV</i>Antioxidant &times;3 Reset</a>
+          <a class="menu__sub-item" href="/drips/glutathione-iv-therapy/" style="--tone:#7FA08C"><i>V</i>Glutathione IV Injection</a>
+          <a class="menu__sub-item" href="/drips/joint-skin-wellness/" style="--tone:#8C6239"><i>VI</i>Joint &amp; Skin Wellness</a>
+          <a class="menu__sub-item" href="/drips/liver-support/" style="--tone:#5F7A55"><i>VII</i>Fatty Liver Support</a>
+          <a class="menu__sub-item" href="/drips/recovery-support/" style="--tone:#35707F"><i>VIII</i>Revive IV Support</a>
+          <a class="menu__sub-item" href="/drips/mind-focus-support/" style="--tone:#7A5F98"><i>IX</i>Stress &amp; Brain Wellness</a>
+          <a class="menu__sub-item" href="/drips/customized-infusion/" style="--tone:#C1963F"><i>X</i>Customized IV Infusion</a>
+        </div>
+      </details>
+ 
       <a href="/the-practice/"><i>ii.</i><em>The Practice</em></a>
       <a href="/about/"><i>iii.</i><em>Dr. Aronov</em></a>
       <a href="/research/"><i>iv.</i><em>Research</em></a>
@@ -137,7 +165,6 @@
     </div>
   </div>
 </div>
-
 
 <main id="main">
 
