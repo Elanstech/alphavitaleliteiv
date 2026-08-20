@@ -3,12 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Alpha Vital Elite IV</title>
 <meta name="theme-color" content="#F6F1E7">
 <meta name="format-detection" content="telephone=yes">
-<title>Alpha Vital Elite IV</title>
 
 <!-- ============================================================
-     PERFORMANCE + FONTS
+     FONTS
+     Prata            display serif — Didone contrast, cuts hard on video
+     Cormorant        italic accent — the living word, pull-quotes, plate notes
+     Marcellus        engraved caps — labels, matches the wordmark
+     Instrument Sans  body + UI
+     Syne             micro-labels — chips, category, actions
+     Archivo          tabular figures — prices, durations, the counter
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +25,7 @@
 
 <!-- ICONS — Phosphor web font. Regular needs the base class: <i class="ph ph-clock"> -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
-<!-- fill and duotone are used below the fold only — load them without blocking first paint -->
+<!-- fill and duotone are below the fold only — load without blocking first paint -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css" media="print" onload="this.media='all'">
 <noscript>
@@ -28,7 +34,7 @@
 </noscript>
 
 <link rel="icon" type="image/png" href="/logo.png">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="/styles.css">
 
 <!-- If scripting is off, the preloader must not become a wall -->
 <noscript><style>
@@ -40,7 +46,7 @@
   .loop__fallback { display: inline !important; }
   .shelf__viewport { height: auto !important; display: block !important; overflow: visible !important; padding-bottom: 0 !important; }
   .shelf__track { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important; gap: 3rem !important; transform: none !important; }
-  .plate { width: 100% !important; height: auto !important; }
+  .plate { width: 100% !important; }
 </style></noscript>
 </head>
 
@@ -112,7 +118,8 @@
 
 <!-- ==============================================================
      HERO
-     Copy is Dr. Aronov's approved Edit #2 wording.
+     Copy is Dr. Aronov's approved Edit #2 wording. "Held to hospital
+     standards" and "hospital-level safety" are gone and stay gone.
      ============================================================== -->
 <section class="hero" id="hero">
 
@@ -142,6 +149,8 @@
       <span class="word" data-rise style="--i:4"><span>IV Care.</span></span>
     </h1>
 
+    <!-- Nine categories. Joint and Skin are ONE infusion and read as one
+         line, so the loop never implies a tenth signature formula. -->
     <p class="hero__for" data-rise style="--i:5">
       <span class="hero__for-lead">Infusions for</span>
       <span class="loop" id="wordLoop">
@@ -194,8 +203,9 @@
 <!-- ==============================================================
      THE SHELF  (#infusions)   —   CHAPTER I
      Nine signature infusions + one customized option = ten plates.
-     Language rule: "supports" and "designed to complement" — never treats,
-     cures, repairs, or guarantees.
+     Category names, order and formulations per Dr. Aronov's 17 Aug email.
+     Quercetin and Curcumin are off the menu. Language rule: "supports" and
+     "designed to complement" — never treats, cures, repairs, or guarantees.
      ============================================================== -->
 <section class="shelf" id="infusions">
   <span class="shelf__wash"></span>
@@ -231,9 +241,10 @@
     </div>
   </header>
 
-  <!-- Desktop: eleven pills. Below 900px they wrap to five rows and shove the
-       page down, so the pills hide and the select below takes over. Both write
-       the same data-filter value, so the JS has one code path. -->
+  <!-- FILTERS — desktop gets eleven pills; the phone gets the same eleven as
+       one select, because wrapped to five rows they pushed the whole page
+       down. Both write to the same Shelf.applyFilter(), so there is one
+       code path and the two can never disagree. -->
   <div class="shelf__filters" data-reveal>
     <button class="shelf__pill is-on" type="button" data-filter="all"><i class="ph ph-squares-four"></i> Everything <sup>10</sup></button>
     <button class="shelf__pill" type="button" data-filter="healthyaging"><i class="ph ph-infinity"></i> Healthy Aging</button>
@@ -249,23 +260,21 @@
   </div>
 
   <div class="shelf__jump" data-reveal>
-    <span class="shelf__jump-lab"><i class="ph ph-funnel"></i> Filter</span>
-    <span class="shelf__jump-box">
-      <select class="shelf__jump-sel" id="shelfJump">
-        <option value="all">Everything — 10 infusions</option>
-        <option value="healthyaging">Healthy Aging</option>
-        <option value="immune">Immune Support</option>
-        <option value="muscle">Muscle Recovery</option>
-        <option value="antioxidant">Antioxidant Support</option>
-        <option value="glutathione">Glutathione IV Therapy</option>
-        <option value="joint">Joint &amp; Skin Support</option>
-        <option value="liver">Liver Support</option>
-        <option value="recovery">Recovery Support</option>
-        <option value="mind">Mind &amp; Focus Support</option>
-        <option value="custom">Customized IV Infusion</option>
-      </select>
-      <i class="ph ph-caret-down shelf__jump-caret"></i>
-    </span>
+    <i class="ph ph-funnel-simple shelf__jump-ico"></i>
+    <select class="shelf__select" id="shelfJump">
+      <option value="all">Everything &mdash; 10 infusions</option>
+      <option value="healthyaging">Healthy Aging</option>
+      <option value="immune">Immune Support</option>
+      <option value="muscle">Muscle Recovery</option>
+      <option value="antioxidant">Antioxidant Support</option>
+      <option value="glutathione">Glutathione IV Therapy</option>
+      <option value="joint">Joint &amp; Skin Support</option>
+      <option value="liver">Liver Support</option>
+      <option value="recovery">Recovery Support</option>
+      <option value="mind">Mind &amp; Focus Support</option>
+      <option value="custom">Customized IV Infusion</option>
+    </select>
+    <i class="ph ph-caret-down shelf__caret"></i>
   </div>
 
   <div class="shelf__pin" id="shelfPin">
@@ -412,7 +421,7 @@
           </div>
         </li>
 
-        <li class="plate" data-tags="joint skin" style="--tone:var(--t-joint);--i:5">
+        <li class="plate" data-tags="joint" style="--tone:var(--t-joint);--i:5">
           <a class="plate__bag" href="/drips/joint-skin-wellness/" tabindex="-1">
             <span class="plate__pole"></span>
             <img src="/assets/drips/jointsupport.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
@@ -557,14 +566,14 @@
       <!-- rail furniture — lives inside the pinned element so it stays on
            screen for the whole horizontal run -->
       <div class="shelf__rail">
-        <p class="railbar__count"><b id="shelfNow">01</b> <span>/</span> <span id="shelfTotal">10</span></p>
-        <span class="railbar__meter"><i id="shelfMeter"></i></span>
+        <p class="shelf__counter"><b id="shelfNow">01</b> <span class="shelf__counter-sep">/</span> <span id="shelfTotal">10</span></p>
+        <span class="shelf__meter"><i id="shelfMeter"></i></span>
 
-        <div class="railbar__arrows" id="shelfArrows">
-          <button class="railbar__arrow" id="shelfPrev" type="button" disabled>
+        <div class="shelf__arrows">
+          <button class="shelf__arrow" id="shelfPrev" type="button" disabled>
             <i class="ph ph-arrow-left"></i>
           </button>
-          <button class="railbar__arrow" id="shelfNext" type="button">
+          <button class="shelf__arrow" id="shelfNext" type="button">
             <i class="ph ph-arrow-right"></i>
           </button>
         </div>
@@ -582,9 +591,10 @@
 
 <!-- ==============================================================
      LIVING WITH A CHRONIC CONDITION  (#conditions)
-     A switcher, not a scroll. One condition on screen at a time; every panel
-     stays in the DOM so all seven remain in the page source.
-     Deep-linkable: /#cond-mafld opens fatty liver from an ad or an email.
+     A switcher, not a scroll. One condition on screen at a time so the
+     section stays short; every panel stays in the DOM. Type here is its own
+     register — Marcellus for the names, Syne for the rail, Archivo for the
+     figures, Cormorant for the mechanism.
      ============================================================== -->
 <section class="chron" id="conditions">
   <span class="chron__field"></span>
@@ -602,7 +612,7 @@
       </p>
     </header>
 
-    <nav class="cnav" data-reveal>
+    <nav class="cnav">
       <button class="cnav__tab is-on" type="button" data-cond="cond-crohns" style="--cond:#C0563E"><i class="ph ph-first-aid-kit"></i><span>Crohn&rsquo;s Disease</span></button>
       <button class="cnav__tab" type="button" data-cond="cond-uc" style="--cond:#9C4A6B"><i class="ph ph-drop"></i><span>Ulcerative Colitis</span></button>
       <button class="cnav__tab" type="button" data-cond="cond-celiac" style="--cond:#B8873C"><i class="ph ph-fork-knife"></i><span>Celiac &amp; Malabsorption</span></button>
@@ -617,8 +627,12 @@
     <div class="cnav__pager">
       <p class="cnav__count"><b id="condNow">01</b> <span>/</span> <span id="condTotal">07</span> conditions</p>
       <div class="cnav__arrows">
-        <button class="cnav__arrow" id="condPrev" type="button"><i class="ph ph-arrow-left"></i></button>
-        <button class="cnav__arrow" id="condNext" type="button"><i class="ph ph-arrow-right"></i></button>
+        <button class="cnav__arrow" id="condPrev" type="button">
+          <i class="ph ph-arrow-left"></i>
+        </button>
+        <button class="cnav__arrow" id="condNext" type="button">
+          <i class="ph ph-arrow-right"></i>
+        </button>
       </div>
     </div>
 
@@ -642,9 +656,15 @@
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol"><b>Zinc</b><span>Supports hundreds of enzymes, immune-cell communication and normal tissue repair.</span></li>
-              <li class="cd__mol"><b>B-Complex &amp; B12</b><span>Taken up in the ileum &mdash; the segment most often involved.</span></li>
-              <li class="cd__mol"><b>Amino Acids</b><span>Building blocks that reduced intake and long flares leave short.</span></li>
+              <li class="cd__mol">
+                <b>Zinc</b><span>Supports hundreds of enzymes, immune-cell communication and normal tissue repair.</span>
+              </li>
+              <li class="cd__mol">
+                <b>B-Complex &amp; B12</b><span>Taken up in the ileum &mdash; the segment most often involved.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Amino Acids</b><span>Building blocks that reduced intake and long flares leave short.</span>
+              </li>
             </ul>
             <p class="cd__never"><b>Not:</b> Does not treat Crohn&rsquo;s. Biologics, immunomodulators and steroids do.</p>
           </div>
@@ -668,9 +688,15 @@
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol"><b>Hydration &amp; Electrolytes</b><span>Replacing measurable losses &mdash; the least speculative use of a line.</span></li>
-              <li class="cd__mol"><b>B-Complex &amp; Amino Acids</b><span>Support while intake and absorption are both reduced.</span></li>
-              <li class="cd__mol"><b>Glutathione &amp; ALA</b><span>Antioxidant-network compounds supporting normal redox balance.</span></li>
+              <li class="cd__mol">
+                <b>Hydration &amp; Electrolytes</b><span>Replacing measurable losses &mdash; the least speculative use of a line.</span>
+              </li>
+              <li class="cd__mol">
+                <b>B-Complex &amp; Amino Acids</b><span>Support while intake and absorption are both reduced.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Glutathione &amp; ALA</b><span>Antioxidant-network compounds supporting normal redox balance.</span>
+              </li>
             </ul>
             <p class="cd__never"><b>Not:</b> Does not induce remission and does not maintain it. Nothing offered here changes the course of the disease.</p>
           </div>
@@ -694,9 +720,15 @@
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol"><b>Trace Minerals</b><span>Zinc, copper, manganese and selenium &mdash; what a shortened bowel stops taking up.</span></li>
-              <li class="cd__mol"><b>B-Complex &amp; Minerals</b><span>B1 through B12 with magnesium chloride and calcium gluconate.</span></li>
-              <li class="cd__mol"><b>Vitamin&nbsp;C</b><span>An antioxidant that is also required for normal collagen production.</span></li>
+              <li class="cd__mol">
+                <b>Trace Minerals</b><span>Zinc, copper, manganese and selenium &mdash; what a shortened bowel stops taking up.</span>
+              </li>
+              <li class="cd__mol">
+                <b>B-Complex &amp; Minerals</b><span>B1 through B12 with magnesium chloride and calcium gluconate.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Vitamin&nbsp;C</b><span>An antioxidant that is also required for normal collagen production.</span>
+              </li>
             </ul>
             <p class="cd__never"><b>Not:</b> A gluten-free diet remains the treatment. An infusion does not repair villi.</p>
           </div>
@@ -720,10 +752,18 @@
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol"><b>Collagen Amino Acids</b><span>Glycine, proline and lysine &mdash; involved in normal type&nbsp;II collagen formation.</span></li>
-              <li class="cd__mol"><b>Vitamin&nbsp;C</b><span>Required for normal collagen production, and an antioxidant.</span></li>
-              <li class="cd__mol"><b>Copper</b><span>Cofactor for the enzymes behind collagen cross-linking.</span></li>
-              <li class="cd__mol"><b>Selenium</b><span>Built into glutathione peroxidases, the enzymes that use glutathione.</span></li>
+              <li class="cd__mol">
+                <b>Collagen Amino Acids</b><span>Glycine, proline and lysine &mdash; involved in normal type&nbsp;II collagen formation.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Vitamin&nbsp;C</b><span>Required for normal collagen production, and an antioxidant.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Copper</b><span>Cofactor for the enzymes behind collagen cross-linking.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Selenium</b><span>Built into glutathione peroxidases, the enzymes that use glutathione.</span>
+              </li>
             </ul>
             <p class="cd__never"><b>Not:</b> Not a DMARD. Does not stop autoimmune joint damage or slow its progression.</p>
           </div>
@@ -747,9 +787,15 @@
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol"><b>Glycine, Proline &amp; Lysine</b><span>The amino acids involved in normal collagen formation.</span></li>
-              <li class="cd__mol"><b>Magnesium</b><span>Supports energy production, protein synthesis and glutathione production.</span></li>
-              <li class="cd__mol"><b>Zinc &amp; Copper, balanced</b><span>Excess zinc interferes with copper absorption, so the two are kept in ratio.</span></li>
+              <li class="cd__mol">
+                <b>Glycine, Proline &amp; Lysine</b><span>The amino acids involved in normal collagen formation.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Magnesium</b><span>Supports energy production, protein synthesis and glutathione production.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Zinc &amp; Copper, balanced</b><span>Excess zinc interferes with copper absorption, so the two are kept in ratio.</span>
+              </li>
             </ul>
             <p class="cd__never"><b>Not:</b> Supplying nutrients involved in collagen production is not the same as producing new cartilage. This does not replace or regenerate destroyed cartilage.</p>
           </div>
@@ -773,9 +819,15 @@
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol"><b>Type&nbsp;I &amp; III Collagen Aminos</b><span>The skin&rsquo;s structural layer depends on collagen as cartilage does.</span></li>
-              <li class="cd__mol"><b>N-Acetylcysteine</b><span>Supplies cysteine &mdash; one amino acid the body needs to make glutathione.</span></li>
-              <li class="cd__mol"><b>Glutathione &amp; Selenium</b><span>A major intracellular antioxidant and the enzymes that work with it.</span></li>
+              <li class="cd__mol">
+                <b>Type&nbsp;I &amp; III Collagen Aminos</b><span>The skin&rsquo;s structural layer depends on collagen as cartilage does.</span>
+              </li>
+              <li class="cd__mol">
+                <b>N-Acetylcysteine</b><span>Supplies cysteine &mdash; one amino acid the body needs to make glutathione.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Glutathione &amp; Selenium</b><span>A major intracellular antioxidant and the enzymes that work with it.</span>
+              </li>
             </ul>
             <p class="cd__never"><b>Not:</b> Not a treatment for psoriasis, and no guaranteed skin healing.</p>
           </div>
@@ -799,10 +851,18 @@
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol"><b>Glycine &amp; Taurine</b><span>Amino acids the liver uses to prepare bile, which helps process fats.</span></li>
-              <li class="cd__mol"><b>NAC &amp; Glycine</b><span>Together they supply the building blocks the body uses to make glutathione.</span></li>
-              <li class="cd__mol"><b>Alpha-Lipoic Acid</b><span>Works in mitochondrial energy metabolism and the antioxidant network.</span></li>
-              <li class="cd__mol"><b>Magnesium &amp; B-Complex</b><span>The metabolic foundation that lets the rest be processed and used.</span></li>
+              <li class="cd__mol">
+                <b>Glycine &amp; Taurine</b><span>Amino acids the liver uses to prepare bile, which helps process fats.</span>
+              </li>
+              <li class="cd__mol">
+                <b>NAC &amp; Glycine</b><span>Together they supply the building blocks the body uses to make glutathione.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Alpha-Lipoic Acid</b><span>Works in mitochondrial energy metabolism and the antioxidant network.</span>
+              </li>
+              <li class="cd__mol">
+                <b>Magnesium &amp; B-Complex</b><span>The metabolic foundation that lets the rest be processed and used.</span>
+              </li>
             </ul>
             <p class="cd__never"><b>Not:</b> Not a detox and not a shortcut. The evidence behind fatty liver is metabolic &mdash; weight, glycemic control and alcohol.</p>
           </div>
@@ -825,7 +885,9 @@
 
 <!-- ==============================================================
      THE IV ADVANTAGE  (#advantage)
-     One stage with a switch: pick a road, watch it draw.
+     One stage with a switch: pick a road, watch it draw. Marcellus for the
+     stop names, Archivo for the counters, Cormorant for the caveat —
+     deliberately not the shelf's voice.
      ============================================================== -->
 <section class="adv" id="advantage">
   <span class="adv__field"></span>
@@ -913,6 +975,9 @@
 
 <!-- ==============================================================
      HOW A VISIT WORKS  (#visit)   —   CHAPTER II
+     Four beats, one rule, one honest line. Kept deliberately short — the
+     surrounding sections are long, and this one only has to make the
+     no-walk-ins policy feel like a reason rather than an obstacle.
      ============================================================== -->
 <section class="visit" id="visit">
   <span class="visit__field"></span>
@@ -984,7 +1049,7 @@
 
 
 <!-- ==============================================================
-     THE PHYSICIAN (#physician)   —   CHAPTER III
+     THE PHYSICIAN  (#physician)   —   CHAPTER III
      ============================================================== -->
 <section class="doc" id="physician">
   <div class="doc__wrap">
@@ -1026,7 +1091,7 @@
             <span class="beat__dot"></span>
             <p class="beat__when">Regeneron</p>
             <h3 class="beat__what">Tarrytown, New York</h3>
-            <p class="beat__body">Continued that research at Regeneron Pharmaceuticals, focused on nerve regeneration and cellular recovery — the biochemistry of tissue putting itself back together.</p>
+            <p class="beat__body">Continued that research at Regeneron Pharmaceuticals, focused on nerve regeneration and cellular recovery &mdash; the biochemistry of tissue putting itself back together.</p>
           </article>
 
           <article class="beat">
@@ -1047,7 +1112,7 @@
             <span class="beat__dot"></span>
             <p class="beat__when">Today</p>
             <h3 class="beat__what">Alpha Vital Elite</h3>
-            <p class="beat__body">Every protocol here is built on years of reading patients under stress — hydration status, blood pressure, inflammation, blood loss, medication response, electrolyte shifts.</p>
+            <p class="beat__body">Every protocol here is built on years of reading patients under stress &mdash; hydration status, blood pressure, inflammation, blood loss, medication response, electrolyte shifts.</p>
           </article>
       </div>
 
@@ -1063,7 +1128,7 @@
             <span class="link__no">01</span>
             <i class="ph ph-file-text"></i>
             <p class="link__txt">I review your history</p>
-            <p class="link__sub">Medications, allergies, conditions — before anything is mixed.</p>
+            <p class="link__sub">Medications, allergies, conditions &mdash; before anything is mixed.</p>
           </div>
 
           <div class="link">
@@ -1121,8 +1186,8 @@
 <!-- ==============================================================
      THE EVIDENCE  (#research)   —   CHAPTER IV
      A horizontal reference rail. NO PIN — the shelf owns that gesture and one
-     pinned section per page is the rule. Native snap scroller at every
-     breakpoint, driven by arrows, drag and the keyboard.
+     pinned section per page is the rule. This rail is a native snap scroller
+     at every breakpoint, driven by arrows, drag and the keyboard.
 
      COPY RULE — every takeaway states what a study LOOKED AT. Never what an
      infusion will do for you. Three of these six are preclinical or
@@ -1188,7 +1253,7 @@
             <h4 class="ref__name">GlyNAC supplementation in mice increases length of life by correcting glutathione deficiency</h4>
             <p class="ref__take">Conducted in mice, not people. What it examined was glycine and NAC together against glutathione deficiency and mitochondrial function.</p>
             <footer class="ref__foot">
-              <span class="ref__src">PubMed</span>
+              <span class="ref__src">PubMed<i>&middot;</i>2022</span>
               <span class="ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
             </footer>
           </a>
@@ -1236,7 +1301,7 @@
             <h4 class="ref__name">Preventing Alzheimer&rsquo;s disease-related gray matter atrophy by B-vitamin treatment</h4>
             <p class="ref__take">A trial in people, studying B-vitamin treatment against imaged rates of gray matter change.</p>
             <footer class="ref__foot">
-              <span class="ref__src">PubMed</span>
+              <span class="ref__src">PubMed<i>&middot;</i>2013</span>
               <span class="ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
             </footer>
           </a>
@@ -1262,13 +1327,13 @@
     </div>
 
     <div class="rail__bar">
-      <p class="railbar__count"><b id="rsrchNow">01</b> <span>/</span> <span id="rsrchTotal">06</span></p>
-      <span class="railbar__meter"><i id="rsrchMeter"></i></span>
-      <div class="railbar__arrows">
-        <button class="railbar__arrow" id="rsrchPrev" type="button" disabled>
+      <p class="rail__count"><b id="rsrchNow">01</b> <span>/</span> <span id="rsrchTotal">06</span></p>
+      <span class="rail__meter"><i id="rsrchMeter"></i></span>
+      <div class="rail__arrows">
+        <button class="rail__arrow" id="rsrchPrev" type="button" disabled>
           <i class="ph ph-arrow-left"></i>
         </button>
-        <button class="railbar__arrow" id="rsrchNext" type="button">
+        <button class="rail__arrow" id="rsrchNext" type="button">
           <i class="ph ph-arrow-right"></i>
         </button>
       </div>
@@ -1290,7 +1355,8 @@
      break, and every answer is in the DOM whether or not it is open.
 
      EVERY ANSWER BELOW IS DRAWN FROM COPY ALREADY APPROVED ELSEWHERE ON THIS
-     PAGE. Nothing here is new claim-making.
+     PAGE — the hero disclaimer, the shelf stat block, the visit steps, the
+     chain of custody and the footer legal. Nothing here is new claim-making.
 
      STILL NEEDS HER ANSWERS, then add each as a new <details>:
         · Do you take insurance
@@ -1373,17 +1439,17 @@
     <h2 class="slot__title">The guide library</h2>
     <p class="slot__lede">Email capture in exchange for the guides she already writes. Feeds the same CRM as the screening form and gives you a list of warm prospects who self-identified by topic.</p>
     <ul class="slot__todo">
-        <li>Live now — "Zinc, Simply: The Tiny Mineral With a Very Big Job", 12 pages</li>
-        <li>Slim band rather than a full section — cover thumbnail, one line, email field</li>
-        <li>Wire the submit to the same CRM as the screening form</li>
-        <li>NEEDS — a decision on this vs the Stan Store route Liana suggested</li>
+        <li>Live now &mdash; "Zinc, Simply: The Tiny Mineral With a Very Big Job", 12 pages</li>
+        <li>Slim band rather than a full section &mdash; cover thumbnail, one line, email field</li>
+        <li>Wire the submit to whichever CRM the screening form ends up on</li>
+        <li>NEEDS &mdash; a decision on this vs the Stan Store route Liana suggested</li>
     </ul>
   </div>
 </section>
 
 
 <!-- ==============================================================
-     THE PRACTICE, LIVE (#instagram)
+     THE PRACTICE, LIVE  (#instagram)
      ============================================================== -->
 <section class="social" id="instagram">
   <div class="social__wrap">
@@ -1464,7 +1530,7 @@
       </div>
 
       <div class="foot__col">
-        <h3 class="foot__h foot__h--blank">&nbsp;</h3>
+        <h3 class="foot__h">&nbsp;</h3>
         <ul class="foot__list">
           <li><a href="/drips/joint-skin-wellness/">Joint &amp; Skin Wellness</a></li>
           <li><a href="/drips/liver-support/">Liver Support</a></li>
@@ -1567,8 +1633,8 @@
 
 <!-- ==============================================================
      THE QUIZ MODAL
-     The question set and the ten protocols live in script.js (DRIPS + ASKS)
-     and match this menu exactly.
+     The question set and the ten protocols live in script.js
+     (DRIPS + ASKS) and match this menu exactly.
      ============================================================== -->
 <div class="modal" id="quiz">
   <div class="modal__veil" data-close-quiz></div>
@@ -1606,6 +1672,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
 <script src="https://elfsightcdn.com/platform.js" async></script>
-<script src="script.js" type="module"></script>
+<script src="/script.js" type="module"></script>
 </body>
 </html>
