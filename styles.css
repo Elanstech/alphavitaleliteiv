@@ -5,28 +5,32 @@
    Cream is the field, forest green is the type, gold is the accent.
 
    ORDER: the sheet runs in the same order the page does, so finding a section
-   here means scrolling to where you would find it in the browser. Every
-   section owns its own responsive rules — its tablet and phone media queries
-   live at the bottom of its own block, never in a shared breakpoint dump.
+   here means scrolling to where you would find it in the browser.
+
+   EVERY SECTION OWNS ITS OWN RESPONSIVE RULES. A section's tablet and phone
+   media queries live at the bottom of that section's own block — never in a
+   shared breakpoint dump at the end of the file.
 
      00 · TOKENS
      01 · RESET & BASE
-     02 · ATOMS                buttons · rules
+     02 · ATOMS                buttons · the rubric
      03 · PRELOADER
      04 · HEADER & MENU
      -- the page, in order --
      05 · HERO                     #hero
-     06 · THE SHELF                #infusions
+     06 · THE SHELF                #infusions      Chapter I
      07 · CHRONIC CONDITIONS       #conditions
      08 · THE IV ADVANTAGE         #advantage
-     09 · HOW A VISIT WORKS        #visit
-     10 · THE PHYSICIAN            #physician
-     11 · PLACEHOLDER SLOTS        #research #programmes #faq #guides
-     12 · THE PRACTICE, LIVE       #instagram
-     13 · THE DOCK                 back to top · actions · quiz modal
-     14 · FOOTER
+     09 · HOW A VISIT WORKS        #visit          Chapter II
+     10 · THE PHYSICIAN            #physician      Chapter III
+     11 · THE EVIDENCE             #research       Chapter IV
+     12 · FREQUENTLY ASKED         #faq
+     13 · PLACEHOLDER SLOTS        #guides
+     14 · THE PRACTICE, LIVE       #instagram
+     15 · THE DOCK                 back to top · action dial · quiz modal
+     16 · FOOTER
      -- global --
-     15 · MOTION & FOCUS
+     17 · MOTION & FOCUS
 
    BREAKPOINTS used throughout, consistently:
      1280  large laptop
@@ -56,7 +60,7 @@
     --gold-lite:   #E7CB86;
     --gold-deep:   #8F6B22;
 
-    /* Type colour */
+    /* Type color */
     --ink:         #1E2A20;
     --ink-soft:    #465043;
     --mist:        #8B8877;
@@ -72,6 +76,8 @@
     --accent:  'Cormorant', Georgia, serif;
     --caps:    'Marcellus', 'Trajan Pro', Georgia, serif;
     --ui:      'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --data:    'Archivo', 'Instrument Sans', sans-serif;
+    --micro:   'Syne', 'Instrument Sans', sans-serif;
 
     /* Layout */
     --maxw:   1480px;
@@ -105,8 +111,9 @@ html {
        buttons were showing: every button on this page that moves the page was
        racing an animation it could not see. Smooth scrolling is now done in
        one place, in JS — see the Nav helper in script.js. */
+
     /* the page gains a scrollbar once the preloader releases — reserving the
-       gutter stops every centred section shifting sideways at that moment */
+       gutter stops every centered section shifting sideways at that moment */
     scrollbar-gutter: stable;
 }
 html.is-preloading { overflow: hidden; }
@@ -139,12 +146,6 @@ ul { list-style: none; }
 
 ::selection { background: var(--gold); color: var(--forest-deep); }
 
-.sr {
-    position: absolute; width: 1px; height: 1px;
-    margin: -1px; padding: 0; overflow: hidden;
-    clip: rect(0 0 0 0); white-space: nowrap; border: 0;
-}
-
 /* Phosphor icons sit on the baseline like type, not like images */
 [class^="ph-"], [class*=" ph-"] { line-height: 1; vertical-align: -0.12em; }
 
@@ -152,6 +153,8 @@ ul { list-style: none; }
 /* =============================================================================
    02 · ATOMS
 ============================================================================= */
+
+/* ---------- buttons ---------- */
 .btn {
     position: relative;
     display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem;
@@ -189,6 +192,36 @@ ul { list-style: none; }
 .btn--line { color: var(--forest); border-color: var(--rule); background: rgba(251, 248, 241, .5); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .btn--line::before { background: var(--forest); }
 .btn--line:hover { color: var(--cream); border-color: var(--forest); }
+
+/* ---------- THE RUBRIC ----------
+   One component, four uses: Chapter I on the shelf, II on the visit, III on
+   the physician, IV on the evidence. This was five near-identical blocks that
+   had already started to drift apart; there is now one place to change it and
+   the pages still to be built inherit it for free.                            */
+.rubric {
+    display: flex; align-items: center; gap: 1.25rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--forest);
+    margin-bottom: clamp(1.75rem, 4vh, 3rem);
+}
+.rubric__no {
+    font-family: var(--accent); font-style: italic;
+    font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap;
+}
+.rubric__name {
+    font-family: var(--caps); font-size: .74rem;
+    letter-spacing: .26em; text-transform: uppercase;
+    color: var(--forest); white-space: nowrap;
+}
+.rubric__rule { flex: 1; height: 1px; background: var(--rule); }
+
+/* ---------- rubric · 640 ---------- */
+@media (max-width: 640px) {
+    .rubric { flex-wrap: wrap; row-gap: .5rem; gap: .9rem; }
+    .rubric__rule { flex-basis: 100%; order: 3; }
+    .rubric__no { font-size: 1rem; }
+    .rubric__name { font-size: .66rem; letter-spacing: .2em; }
+}
 
 
 /* =============================================================================
@@ -247,7 +280,7 @@ ul { list-style: none; }
 .pre.is-lifting { transform: translateY(-101%); visibility: hidden; }
 .pre.is-lifting .pre__core { opacity: 0; transition: opacity .3s linear; }
 
-/* ---------- preloader · mobile ---------- */
+/* ---------- preloader · 640 ---------- */
 @media (max-width: 640px) {
     .pre__mark { width: clamp(190px, 58vw, 250px); }
     .pre__meter { margin-top: 1.9rem; }
@@ -426,16 +459,20 @@ ul { list-style: none; }
 
 html.is-locked .head { transform: none; }
 
-/* ---------- header · mobile ---------- */
+/* ---------- header · 1240 ---------- */
 @media (max-width: 1240px) {
     .head__tel { display: none; }
 }
+
+/* ---------- header · 1080 ---------- */
 @media (max-width: 1080px) {
     .head__nav { display: none; }
     .head__rail { grid-template-columns: auto 1fr; }
     .head__actions { justify-content: flex-end; }
     .head__tel { display: inline; }
 }
+
+/* ---------- header · 780, the burger takes over ---------- */
 @media (max-width: 780px) {
     :root { --head-h: 68px; }
     .head__cta, .head__tel { display: none; }
@@ -448,9 +485,9 @@ html.is-locked .head { transform: none; }
 
 /* =============================================================================
    05 · HERO
-   Copy is Dr. Aronov's approved Edit #2 wording. The word-loop rules below are
-   kept but currently unused — the headline is now a fixed two-line statement.
-   Restoring the loop is a markup change only.
+   Copy is Dr. Aronov's approved Edit #2 wording. The word-loop drives the
+   "Infusions for ..." descriptor line beneath the headline, so the approved
+   hero wording is never part of the moving text.
 ============================================================================= */
 .hero {
     position: relative;
@@ -476,7 +513,6 @@ html.is-locked .head { transform: none; }
     to   { transform: scale(1.08) translateX(-1.2%); }
 }
 .hero__media.is-still .hero__video { animation: none; }
-
 
 .hero__scrim {
     position: absolute; inset: 0;
@@ -550,19 +586,9 @@ html.is-locked .head { transform: none; }
     max-width: 15ch;
 }
 .hero__title .word { display: block; overflow: hidden; padding-bottom: 0.04em; margin-bottom: -0.04em; }
-.hero__title .word > span, .hero__title .loop { display: block; }
+.hero__title .word > span { display: block; }
 
-/* --- word-loop: drives the "Infusions for ..." line under the headline --- */
-.hero__for .loop,
-.word--loop .loop {
-    position: relative;
-    font-family: var(--accent);
-    font-style: italic;
-    font-weight: 500;
-    font-size: 1.14em;
-    line-height: 0.92;
-    color: var(--gold-deep);
-}
+/* --- the word-loop: "Infusions for ..." --- */
 .loop__fallback { display: none; }
 .loop__stack { position: relative; display: block; overflow: hidden; padding-bottom: 0.06em; }
 .loop__stack span {
@@ -578,8 +604,6 @@ html.is-locked .head { transform: none; }
 .loop__stack span.is-on  { opacity: 1; transform: translateY(0); transition: transform .5s var(--ease); }
 .loop__stack span.is-out { opacity: 1; transform: translateY(-112%); transition: transform .45s var(--ease-in); }
 
-/* the rotating category line. Sits under the headline as a descriptor, so the
-   approved hero wording above it is never part of the moving text. */
 .hero__for {
     display: flex; align-items: baseline; flex-wrap: wrap;
     gap: .2rem .8rem;
@@ -639,14 +663,6 @@ html.is-locked .head { transform: none; }
     text-transform: uppercase;
     color: var(--ink-soft);
 }
-.hero__cred em {
-    font-family: var(--accent);
-    font-style: italic;
-    font-size: 1.05rem;
-    letter-spacing: 0.04em;
-    text-transform: none;
-    color: var(--gold-deep);
-}
 .hero__scroll {
     display: inline-flex; align-items: center; gap: 0.85rem;
     font-family: var(--caps);
@@ -667,19 +683,18 @@ html.is-locked .head { transform: none; }
     50%      { transform: scaleX(1); opacity: 1; }
 }
 
-
+/* ---------- the entrance ---------- */
 [data-rise] { opacity: 0; transform: translateY(28px); }
 [data-reveal] { opacity: 0; transform: translateY(30px); transition: opacity .9s var(--ease), transform 1s var(--ease); }
 [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
-.hero__title .word > span, .hero__title .word .loop { transform: translateY(108%); }
+.hero__title .word > span { transform: translateY(108%); }
 .hero__title .word { opacity: 1; transform: none; }
 body.is-ready [data-rise] {
     opacity: 1; transform: translateY(0);
     transition: opacity .9s var(--ease) calc(var(--i, 0) * .1s),
                 transform 1s var(--ease) calc(var(--i, 0) * .1s);
 }
-body.is-ready .hero__title .word > span,
-body.is-ready .hero__title .word .loop {
+body.is-ready .hero__title .word > span {
     transform: translateY(0);
     transition: transform 1.15s var(--ease) calc(var(--i, 0) * .1s);
 }
@@ -751,21 +766,16 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
-   06 · THE SHELF  (#infusions)
-   Rebuilt. The old version pinned three fixed heights onto the card — the name,
-   the note and the chip block — and clipped the overflow, which is why long
-   names broke mid-word, notes lost their last line, and ten ingredients ran
-   under the clock. Nothing here is clipped.
+   06 · THE SHELF  (#infusions)   —   CHAPTER I
 
-   The rule now: the CARD has a fixed height, its contents do not. The body is a
+   The rule: the CARD has a fixed height, its contents do not. The body is a
    flex column and the price block is pushed to the bottom with margin-top:auto,
    so every card is the same height and every price line sits on the same
    baseline no matter whether a formula has one ingredient or ten.
 
    The folio numeral is in flow inside the header row rather than absolutely
-   positioned, so it can never land on top of the category again.
+   positioned, so it can never land on top of the category.
 ============================================================================= */
-
 .shelf {
     --tone: var(--gold);
 
@@ -781,9 +791,6 @@ body.is-ready .hero__title .word .loop {
     --t-recovery:  #35707F;
     --t-mind:      #7A5F98;
     --t-custom:    #C1963F;
-
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
 
     position: relative;
     background: var(--cream);
@@ -810,23 +817,6 @@ body.is-ready .hero__title .word .loop {
     max-width: var(--maxw); margin: 0 auto;
     padding: clamp(4rem, 9vh, 7rem) var(--gut) clamp(1.75rem, 3.5vh, 2.5rem);
 }
-.shelf__rubric {
-    display: flex; align-items: center; gap: 1.25rem;
-    padding-bottom: 1.1rem;
-    border-bottom: 1px solid var(--forest);
-    margin-bottom: clamp(1.75rem, 4vh, 3rem);
-}
-.shelf__rubric-no { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
-.shelf__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
-.shelf__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
-.shelf__ig {
-    display: inline-flex; align-items: center; gap: .55rem;
-    font-family: var(--caps); font-size: .68rem; letter-spacing: .18em;
-    text-transform: uppercase; color: var(--gold-deep); white-space: nowrap;
-    transition: color .35s var(--ease), gap .35s var(--ease);
-}
-.shelf__ig i { font-size: 1.2em; }
-.shelf__ig:hover { color: var(--forest); gap: .85rem; }
 
 .shelf__title {
     font-family: var(--display); font-weight: 400;
@@ -851,11 +841,10 @@ body.is-ready .hero__title .word .loop {
     font-variant-numeric: tabular-nums lining-nums;
     font-size: clamp(1.6rem,3vw,2.4rem); line-height: 1; color: var(--forest); margin-bottom: .4rem;
 }
-.shelf__stat b sup { font-size: .46em; color: var(--gold-deep); vertical-align: super; }
 .shelf__stat > span { display: block; font-family: var(--micro); font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mist); line-height: 1.55; }
 .shelf__stat--word b { font-family: var(--display); font-size: clamp(1.1rem, 1.9vw, 1.5rem); line-height: 1.15; letter-spacing: -.01em; }
 
-/* ---------- filters ---------- */
+/* ---------- filters: the pills (desktop) ---------- */
 .shelf__filters {
     position: relative; z-index: 3;
     max-width: var(--maxw); margin: 0 auto;
@@ -875,6 +864,43 @@ body.is-ready .hero__title .word .loop {
 .shelf__pill:hover { color: var(--forest); border-color: var(--gold); background: #fff; transform: translateY(-2px); }
 .shelf__pill.is-on { background: var(--forest); border-color: var(--forest); color: var(--cream); }
 .shelf__pill.is-on sup { color: var(--gold-lite); }
+
+/* ---------- filters: the select (phone) ----------
+   Eleven pills wrapped to five rows and pushed the whole page down, so below
+   900px the same eleven become one native select. Native, deliberately: the
+   OS picker is a better control on a phone than anything built here, and it
+   costs nothing. Hidden on desktop, where the pills speak for themselves.   */
+.shelf__jump {
+    display: none;
+    position: relative; z-index: 3;
+    max-width: var(--maxw); margin: 0 auto;
+    padding: 0 var(--gut) 1.25rem;
+    align-items: center;
+}
+.shelf__jump-ico {
+    position: absolute; left: calc(var(--gut) + .95rem); top: 50%;
+    transform: translateY(-50%); margin-top: -.62rem;
+    font-size: 1.05rem; color: var(--gold-deep); pointer-events: none;
+}
+.shelf__caret {
+    position: absolute; right: calc(var(--gut) + .95rem); top: 50%;
+    transform: translateY(-50%); margin-top: -.62rem;
+    font-size: .95rem; color: var(--gold-deep); pointer-events: none;
+}
+.shelf__select {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; min-height: 48px;
+    padding: .75rem 2.6rem .75rem 2.6rem;
+    border: 1px solid var(--rule-gold); border-radius: 999px;
+    background: rgba(255,255,255,.72);
+    font-family: var(--micro); font-size: .68rem; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--forest);
+    cursor: pointer;
+    transition: border-color .35s var(--ease), background .35s var(--ease);
+}
+.shelf__select:focus { outline: none; border-color: var(--gold); background: #fff; }
+/* the options themselves are OS-drawn — only the colors are ours */
+.shelf__select option { font-family: var(--ui); text-transform: none; letter-spacing: 0; color: var(--ink); }
 
 /* ---------- the rail ---------- */
 .shelf__pin { position: relative; z-index: 2; }
@@ -952,7 +978,7 @@ body.is-ready .hero__title .word .loop {
     padding: .25rem 0;
 }
 
-/* the numeral lives in the header row now — it cannot collide with anything */
+/* the numeral lives in the header row — it cannot collide with anything */
 .plate__head {
     display: flex; align-items: baseline; justify-content: space-between;
     gap: 1rem; margin-bottom: .55rem;
@@ -1053,8 +1079,8 @@ body.is-ready .hero__title .word .loop {
     pointer-events: none;
     /* the action dial is fixed at bottom-right with z-index 1200 — it sits
        ON TOP of this rail. Skip is the last flex item, so its right end was
-       underneath the toggle andthat part of the button was simply not clickable.
-       Hold the rail clear of the dial's footprint. */
+       underneath the toggle and that part of the button was simply not
+       clickable. Hold the rail clear of the dial's footprint. */
     padding-right: 86px;
 }
 .shelf__counter {
@@ -1101,14 +1127,6 @@ body.is-ready .hero__title .word .loop {
 }
 .shelf__skip:hover i { transform: translateY(3px); }
 
-.shelf__note {
-    max-width: min(var(--maxw), 72ch); margin: 0 auto;
-    padding: clamp(1.5rem,3vh,2.25rem) var(--gut) clamp(3.5rem,7vh,5.5rem);
-    font-size: .86rem; line-height: 1.7; color: var(--ink-soft);
-}
-.shelf__note a { color: var(--gold-deep); border-bottom: 1px solid var(--rule-gold); transition: color .3s var(--ease); }
-.shelf__note a:hover { color: var(--forest); }
-
 /* ---------- the arrows: the mobile mechanic ---------- */
 .shelf__arrows { display: none; gap: .4rem; pointer-events: auto; flex: 0 0 auto; }
 .shelf__arrow {
@@ -1147,10 +1165,11 @@ body.is-ready .hero__title .word .loop {
    normalised, re-projected onto a transform and re-measured against a viewport
    that resizes as the address bar collapses. Below 900px the track becomes an
    ordinary snap scroller — the browser does the scrolling on the compositor,
-   which costs nothing — and the arrows drive it. The filters are hidden here
-   too: eleven pills wrapped to five rows and pushed the whole page down.       */
+   which costs nothing — and the arrows drive it. The pills give way to the
+   select here for the same reason: five wrapped rows of chrome.              */
 @media (max-width: 900px) {
     .shelf__filters { display: none; }
+    .shelf__jump { display: flex; }
 
     .shelf__pin { position: static; }
     .shelf__viewport {
@@ -1216,14 +1235,11 @@ body.is-ready .hero__title .word .loop {
     .shelf__stat { display: flex; align-items: baseline; gap: .9rem; padding-top: .7rem; }
     .shelf__stat b { margin-bottom: 0; font-size: 1.45rem; }
     .shelf__stat--word b { font-size: 1.1rem; }
-    .shelf__rubric { flex-wrap: wrap; row-gap: .55rem; }
-    .shelf__rubric-rule { flex-basis: 100%; order: 3; }
-    .shelf__ig { order: 4; }
     .plate { width: min(88vw, 380px); }
     .plate__go { min-height: 44px; align-items: center; }
     .shelf__counter { font-size: .66rem; }
     .shelf__counter b { font-size: 1.1rem; }
-    .shelf__note { padding-bottom: clamp(2.5rem, 6vh, 3.5rem); font-size: .82rem; }
+    .shelf__select { font-size: .62rem; letter-spacing: .1em; }
 }
 
 /* ---------- shelf · 420, small phone ---------- */
@@ -1257,8 +1273,6 @@ body.is-ready .hero__title .word .loop {
    Cormorant for the mechanism line.
 ============================================================================= */
 .chron {
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
     --cond:  var(--gold);
     --mx: 50%; --my: 0%;
     position: relative;
@@ -1533,6 +1547,7 @@ body.is-ready .hero__title .word .loop {
     .cnav__count { font-size: .66rem; }
 }
 
+/* ---------- conditions · reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
     .chron__spot { display: none; }
     .cd__mol::before { transform: scale(1) !important; }
@@ -1546,8 +1561,6 @@ body.is-ready .hero__title .word .loop {
    this section does not read in the shelf's voice.
 ============================================================================= */
 .adv {
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
     --lane:  var(--gold-deep);
     position: relative;
     padding: clamp(4rem, 9vw, 7rem) var(--gut);
@@ -1722,7 +1735,7 @@ body.is-ready .hero__title .word .loop {
     .stp__pin { left: -3rem; top: -.2rem; width: 30px; height: 30px; }
 
     /* the switch becomes two full-width rows — a 50/50 pill row was too tight
-       for "Glutathione IV Therapy"-length labels on a phone */
+       for the longer labels on a phone */
     .adv__switch { display: grid; grid-auto-flow: row; width: 100%; border-radius: 6px; }
     .adv__thumb { left: 5px; right: 5px; width: auto; height: calc(50% - 5px); bottom: auto; border-radius: 4px; }
     .adv__switch.is-iv .adv__thumb { transform: translateY(100%); }
@@ -1750,6 +1763,7 @@ body.is-ready .hero__title .word .loop {
     .adv__opt b { display: none; }        /* "4 stops" already sits in the head */
 }
 
+/* ---------- advantage · reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
     .adv__fill { width: 100% !important; height: 100% !important; }
     .stp .stp__pin { color: var(--cream); background: var(--lane); border-color: var(--lane); }
@@ -1757,15 +1771,13 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
-   09 · HOW A VISIT WORKS  (#visit)
+   09 · HOW A VISIT WORKS  (#visit)   —   CHAPTER II
    Parchment, to separate the two cream sections either side of it. Four beats
-   across one rule. Everything else was cut: the section only has to make the
-   no-walk-ins policy read as a reason, and it should be over quickly.
+   across one rule. The section only has to make the no-walk-ins policy read as
+   a reason, and it should be over quickly.
    Type register: Archivo for the numerals, Marcellus for the beats.
 ============================================================================= */
 .visit {
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
     position: relative;
     padding: clamp(3.5rem, 8vw, 6rem) var(--gut);
     background: var(--parchment);
@@ -1780,17 +1792,8 @@ body.is-ready .hero__title .word .loop {
 }
 .visit__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
 
-/* ---------- masthead: title and lede sit side by side, so it stays short ---------- */
+/* ---------- masthead: title and lede side by side, so it stays short ---------- */
 .visit__head { position: relative; }
-.visit__rubric {
-    display: flex; align-items: center; gap: 1.25rem;
-    padding-bottom: 1.1rem; margin-bottom: clamp(1.5rem, 3.5vh, 2.25rem);
-    border-bottom: 1px solid var(--forest);
-}
-.visit__rubric-no { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
-.visit__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
-.visit__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
-
 .visit__intro {
     display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr);
     gap: clamp(1.25rem, 4vw, 3.5rem); align-items: end;
@@ -1933,13 +1936,14 @@ body.is-ready .hero__title .word .loop {
     .vs__no { font-size: 1.7rem; }
 }
 
+/* ---------- visit · reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
     .visit__fill { width: 100% !important; height: 100% !important; }
 }
 
 
 /* =============================================================================
-   10 · THE PHYSICIAN  (#physician)
+   10 · THE PHYSICIAN  (#physician)   —   CHAPTER III
    Parchment, not forest. This is the warmest, most human section on the page —
    it should feel like light through a window, not a clinic at night. Forest
    type, gold accents, white mounts, a lot of air.
@@ -1951,8 +1955,6 @@ body.is-ready .hero__title .word .loop {
    position: sticky on the portrait.
 ============================================================================= */
 .doc {
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
     position: relative;
     background: var(--parchment);
     color: var(--ink-soft);
@@ -1966,17 +1968,6 @@ body.is-ready .hero__title .word .loop {
         radial-gradient(120% 60% at 50% 0%, rgba(255,255,255,.7),  transparent 55%);
 }
 .doc__wrap { position: relative; max-width: var(--maxw); margin: 0 auto; }
-
-/* ---------- masthead ---------- */
-.doc__rubric {
-    display: flex; align-items: center; gap: 1.25rem;
-    padding-bottom: 1.1rem;
-    border-bottom: 1px solid var(--forest);
-    margin-bottom: clamp(2rem, 5vh, 3.5rem);
-}
-.doc__rubric-no { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
-.doc__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
-.doc__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
 
 .doc__title {
     font-family: var(--display); font-weight: 400;
@@ -2130,8 +2121,11 @@ body.is-ready .hero__title .word .loop {
 /* ---------- counters ---------- */
 .doc__cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: clamp(2rem, 4vh, 3rem); }
 .doc .btn--forest, .doc .btn--line { border-radius: 2px; }
+
 /* ---------- physician · 1180 ---------- */
-@media (max-width: 1180px) { .chain__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1180px) {
+    .chain__grid { grid-template-columns: repeat(3, 1fr); }
+}
 
 /* ---------- physician · 900, the sticky portrait stands down ---------- */
 @media (max-width: 900px) {
@@ -2153,7 +2147,6 @@ body.is-ready .hero__title .word .loop {
     .beat { padding-left: 2.1rem; }
     .beat__what { font-size: 1.25rem; }
     .beat__body { font-size: .92rem; }
-    .doc__rubric { flex-wrap: wrap; row-gap: .5rem; }
 }
 
 /* ---------- physician · 420 ---------- */
@@ -2161,6 +2154,7 @@ body.is-ready .hero__title .word .loop {
     .doc__plate { flex-direction: column; align-items: flex-start; gap: .3rem; }
 }
 
+/* ---------- physician · reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
     .beat, .link { opacity: 1 !important; transform: none !important; }
     .beat__dot::after { transform: scale(1) !important; }
@@ -2168,16 +2162,12 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
-   11 · THE EVIDENCE  (#research)          <- NEW BLOCK, ADDED
-   Sits here because the page does: after #physician, before the placeholders.
-   Nothing above or below this block was touched — the placeholder block that
-   follows still carries its original "11" heading, which is cosmetic only.
-
+   11 · THE EVIDENCE  (#research)   —   CHAPTER IV
    Cream, because #physician above it is parchment and the two must separate.
 
-   Type register is its own again: Marcellus for the paper name and the study
-   type, Prata for the reference titles, Cormorant for the takeaways, Archivo
-   for the counter and the dates, Syne for every micro-label.
+   Type register is its own again: Marcellus for the study type, Prata for the
+   reference titles, Cormorant for the takeaways, Archivo for the counter and
+   the dates, Syne for every micro-label.
 
    The rail is a native scroll-snap carousel at EVERY breakpoint. No pin, no
    scrub — the shelf owns that gesture and two pinned sections on one page
@@ -2185,11 +2175,9 @@ body.is-ready .hero__title .word .loop {
    phone, and the browser does the scrolling on the compositor for free.
 ============================================================================= */
 .rsrch {
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
     --tone:  var(--gold);
     position: relative;
-    padding: clamp(4rem, 9vw, 7rem) 0 clamp(4rem, 9vw, 7rem);
+    padding: clamp(4rem, 9vw, 7rem) 0;
     background: var(--cream);
     color: var(--ink-soft);
     overflow: clip;
@@ -2203,16 +2191,6 @@ body.is-ready .hero__title .word .loop {
 }
 /* the wrap is padded, the rail is not — it has to run to the viewport edge */
 .rsrch__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gut); }
-
-/* ---------- masthead ---------- */
-.rsrch__rubric {
-    display: flex; align-items: center; gap: 1.25rem;
-    padding-bottom: 1.1rem; margin-bottom: clamp(1.75rem, 4vh, 3rem);
-    border-bottom: 1px solid var(--forest);
-}
-.rsrch__rubric-no   { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
-.rsrch__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
-.rsrch__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
 
 .rsrch__intro {
     display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .92fr);
@@ -2297,7 +2275,7 @@ body.is-ready .hero__title .word .loop {
     box-shadow: 0 18px 34px -26px rgba(32,52,33,.3);
     transition: transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
 }
-/* the tone lives on the top edge — the only colour on an otherwise white card */
+/* the tone lives on the top edge — the only color on an otherwise white card */
 .ref__in::before {
     content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
     background: var(--tone);
@@ -2429,8 +2407,6 @@ body.is-ready .hero__title .word .loop {
     .rsrch { padding-block: clamp(3rem, 7vw, 4.5rem); }
     .rsrch__title { font-size: clamp(1.9rem, 8.5vw, 2.7rem); }
     .rsrch__lede { font-size: .94rem; padding-left: 1rem; }
-    .rsrch__rubric { flex-wrap: wrap; row-gap: .5rem; }
-
     .ref { width: min(84vw, 330px); }
     .ref__go { min-height: 40px; }
     .rail__top { padding-bottom: .85rem; }
@@ -2461,142 +2437,7 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
-   11b · HOW PROGRAMMES WORK  (#programmes)          <- NEW BLOCK, ADDED
-   Parchment, to break the two cream sections either side. The section is a
-   masthead and a price ledger and nothing else — the whole mechanic is one
-   number and it should be over in a screen.
-
-   The ledger is a grid, not a <table>: below 760px each row folds into its
-   own card and the column headings come back as data-lab pseudo-elements,
-   which a real table cannot do without duplicating the labels in the markup.
-============================================================================= */
-.prog {
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
-    position: relative;
-    padding: clamp(3.5rem, 8vw, 6rem) var(--gut);
-    background: var(--parchment);
-    color: var(--ink-soft);
-}
-.prog__field {
-    position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background:
-        radial-gradient(55% 45% at 94% 2%,  rgba(231,203,134,.26), transparent 60%),
-        radial-gradient(50% 40% at 2% 98%,  rgba(143,190,155,.12), transparent 58%),
-        radial-gradient(120% 55% at 50% 0%, rgba(255,255,255,.7),  transparent 55%);
-}
-.prog__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
-
-.prog__rubric {
-    display: flex; align-items: center; gap: 1.25rem;
-    padding-bottom: 1.1rem; margin-bottom: clamp(1.5rem, 3.5vh, 2.25rem);
-    border-bottom: 1px solid var(--forest);
-}
-.prog__rubric-no   { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
-.prog__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
-.prog__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
-
-.prog__intro {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .95fr);
-    gap: clamp(1.25rem, 4vw, 3.5rem); align-items: end;
-    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
-}
-.prog__title {
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(2rem, 5.2vw, 4rem);
-    line-height: 1.03; letter-spacing: -.022em; color: var(--forest);
-}
-.prog__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.05em; color: var(--gold-deep); }
-.prog__lede {
-    font-size: clamp(.96rem, 1.1vw, 1.06rem); line-height: 1.76; max-width: 52ch;
-    padding-left: 1.25rem; border-left: 1px solid var(--rule-gold);
-}
-
-/* ---------- the ledger ---------- */
-.pgrid { list-style: none; display: grid; }
-.pg {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 8rem 9rem 7rem;
-    align-items: baseline; gap: 1rem;
-    padding: .95rem .25rem;
-    border-bottom: 1px solid var(--rule);
-    transition: background .35s var(--ease);
-}
-.pg:not(.pg--head):hover { background: rgba(255,255,255,.6); }
-.pg--head {
-    border-bottom: 1px solid var(--forest); padding-block: .6rem;
-}
-.pg--head span {
-    font-family: var(--micro); font-size: .55rem; font-weight: 700;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
-}
-.pg--head span:not(:first-child) { text-align: right; }
-
-.pg__name {
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(.95rem, 1.2vw, 1.08rem); line-height: 1.25; color: var(--forest);
-}
-.pg__fig {
-    text-align: right;
-    font-family: var(--data); font-weight: 500; font-size: .95rem;
-    font-variant-numeric: tabular-nums lining-nums;
-    color: var(--mist);
-}
-.pg__fig--prog { font-weight: 600; color: var(--forest); }
-.pg__fig--save { color: var(--gold-deep); }
-
-.prog__note {
-    display: grid; grid-template-columns: auto 1fr; gap: 1rem;
-    align-items: start;
-    margin-top: clamp(1.5rem, 3vw, 2.25rem);
-    padding: clamp(1rem, 2.4vw, 1.5rem);
-    border: 1px solid var(--rule-gold); border-left: 3px solid var(--gold);
-    background: rgba(193,150,63,.07);
-    font-size: .88rem; line-height: 1.72;
-}
-.prog__note > i { font-size: 1.5rem; color: var(--gold-deep); line-height: 1; }
-
-/* ---------- programmes · 900 ---------- */
-@media (max-width: 900px) {
-    .prog__intro { grid-template-columns: 1fr; align-items: start; }
-    .prog__lede { max-width: none; }
-    .pg { grid-template-columns: minmax(0, 1fr) 6rem 7rem 5.5rem; gap: .6rem; }
-    .pg__fig { font-size: .88rem; }
-}
-
-/* ---------- programmes · 760, every row becomes its own card ---------- */
-@media (max-width: 760px) {
-    .pg--head { display: none; }
-    .pgrid { gap: .6rem; }
-    .pg {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: .5rem .75rem;
-        padding: .9rem 1rem;
-        border: 1px solid var(--rule); border-top: 2px solid var(--gold);
-        border-radius: 2px; background: rgba(255,255,255,.55);
-    }
-    .pg__name { grid-column: 1 / -1; margin-bottom: .2rem; }
-    /* the column heading comes back above each figure */
-    .pg__fig { text-align: left; }
-    .pg__fig::before {
-        content: attr(data-lab); display: block; margin-bottom: .15rem;
-        font-family: var(--micro); font-size: .5rem; font-weight: 700;
-        letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
-    }
-}
-
-/* ---------- programmes · 640 ---------- */
-@media (max-width: 640px) {
-    .prog { padding-block: clamp(3rem, 7vw, 4.5rem); }
-    .prog__title { font-size: clamp(1.85rem, 8.5vw, 2.6rem); }
-    .prog__lede { font-size: .94rem; padding-left: 1rem; }
-    .prog__rubric { flex-wrap: wrap; row-gap: .5rem; }
-    .prog__note { grid-template-columns: 1fr; font-size: .85rem; }
-}
-
-
-/* =============================================================================
-   11c · FREQUENTLY ASKED  (#faq)          <- NEW BLOCK, ADDED
+   12 · FREQUENTLY ASKED  (#faq)
    Native <details> / <summary>. No JavaScript, so there is nothing here that
    can fail — it opens with a click, with Enter, with Space, and with the
    browser's own find-in-page. The plus rotates to a minus on [open].
@@ -2605,7 +2446,6 @@ body.is-ready .hero__title .word .loop {
    triangle next to the icon.
 ============================================================================= */
 .faq {
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
     position: relative;
     padding: clamp(3.5rem, 8vw, 6rem) var(--gut);
     background: var(--cream);
@@ -2689,7 +2529,7 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
-   11 · PLACEHOLDER SLOTS
+   13 · PLACEHOLDER SLOTS
    Sections that are planned but not built. Deliberately loud — a dashed gold
    frame and a corner flag — so one can never ship by accident. Delete this
    whole block once the last .slot is replaced by a real section.
@@ -2698,8 +2538,6 @@ body.is-ready .hero__title .word .loop {
     /* placeholders never need to be in the first paint */
     content-visibility: auto;
     contain-intrinsic-size: auto 420px;
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
     position: relative;
     padding: clamp(3rem, 7vw, 5rem) var(--gut);
     background: var(--cream);
@@ -2753,11 +2591,13 @@ body.is-ready .hero__title .word .loop {
 .slot__todo li:last-child { color: var(--gold-deep); font-weight: 500; }
 .slot__todo li:last-child::before { content: '!'; font-weight: 700; }
 
-/* ---------- slots · responsive ---------- */
+/* ---------- slots · 900 ---------- */
 @media (max-width: 900px) {
     .slot { padding-block: clamp(2.5rem, 6vw, 4rem); }
     .slot__lede { max-width: none; }
 }
+
+/* ---------- slots · 640 ---------- */
 @media (max-width: 640px) {
     .slot__wrap { padding: 1.5rem 1.1rem; }
     .slot__title { font-size: clamp(1.6rem, 7.5vw, 2.2rem); }
@@ -2767,7 +2607,7 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
-   12 · THE PRACTICE, LIVE  (#instagram)
+   14 · THE PRACTICE, LIVE  (#instagram)
    A frame for the Elfsight feed. We own the heading and the mount; the widget
    paints itself inside. Given a min-height so the page does not jump when it
    loads in.
@@ -2819,19 +2659,19 @@ body.is-ready .hero__title .word .loop {
 
 /* the widget mount — reserved height stops a layout jump on load, and
    content-visibility keeps the third-party embed out of the first paint */
-/* the widget mount — reserved height stops a layout jump on load, and
-   content-visibility keeps the third-party embed out of the first paint */
 .social__feed {
     min-height: 320px;
     content-visibility: auto;
     contain-intrinsic-size: auto 320px;
 }
 
-/* ---------- practice · responsive ---------- */
+/* ---------- practice · 900 ---------- */
 @media (max-width: 900px) {
     .social__head { grid-template-columns: 1fr; align-items: start; }
     .social__sub { max-width: none; }
 }
+
+/* ---------- practice · 640 ---------- */
 @media (max-width: 640px) {
     .social { padding-block: clamp(3rem, 7vw, 4.5rem); }
     .social__title { font-size: clamp(1.7rem, 8vw, 2.4rem); }
@@ -2842,7 +2682,7 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
-   13 · THE DOCK  (back to top · actions · quiz modal)
+   15 · THE DOCK  (back to top · action dial · quiz modal)
    Back to top sits bottom-LEFT so it never covers the actions. Both surface
    once you are past the hero and hide again at the very top.
 ============================================================================= */
@@ -3096,7 +2936,7 @@ body.is-ready .hero__title .word .loop {
     letter-spacing: .2em; text-transform: uppercase; color: var(--mist); margin-bottom: .3rem;
 }
 .rx__fact dd {
-    font-family: 'Archivo', var(--ui); font-weight: 600;
+    font-family: var(--data); font-weight: 600;
     font-variant-numeric: tabular-nums lining-nums;
     font-size: .98rem; color: var(--forest);
 }
@@ -3153,20 +2993,19 @@ body.is-ready .hero__title .word .loop {
     .modal__stage { padding-inline: 1rem; }
 }
 
+/* ---------- dock · reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
     .q__ring { animation: none !important; border-top-color: transparent; }
 }
 
 
 /* =============================================================================
-   14 · FOOTER
+   16 · FOOTER
    Deep forest, gold hairlines, and the wordmark set enormous along the bottom
    edge as an outline — it reads as an engraved plate rather than a sitemap.
    The build credit sits on the right of the closing bar.
 ============================================================================= */
 .foot {
-    --data:  'Archivo', 'Instrument Sans', sans-serif;
-    --micro: 'Syne', 'Instrument Sans', sans-serif;
     position: relative;
     background: var(--forest-deep);
     color: var(--cream);
@@ -3335,7 +3174,7 @@ body.is-ready .hero__title .word .loop {
 
 
 /* =============================================================================
-   15 · MOTION & FOCUS
+   17 · MOTION & FOCUS
 ============================================================================= */
 :focus-visible {
     outline: 2px solid var(--gold);
@@ -3351,7 +3190,7 @@ body.is-ready .hero__title .word .loop {
         scroll-behavior: auto !important;
     }
     .pre { display: none; }
-    [data-rise], .hero__title .word > span, .hero__title .word .loop { opacity: 1 !important; transform: none !important; }
+    [data-rise], .hero__title .word > span { opacity: 1 !important; transform: none !important; }
     .loop__stack span.is-on { opacity: 1 !important; transform: none !important; }
     [data-reveal] { opacity: 1 !important; transform: none !important; }
     .hero__video { animation: none !important; }
