@@ -2215,136 +2215,13 @@ body.is-ready .hero__title .word .loop {
 }
 
 /* =========================================================================
-   THE FEATURED PAPER
-   A reading plate: the argument on the left, the catalogue card on the right.
-   White mount on cream so it reads as a document laid on the field.
-   ========================================================================= */
-.paper {
-    position: relative;
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .58fr);
-    gap: clamp(1.5rem, 4vw, 3.5rem);
-    padding: clamp(1.75rem, 3.5vw, 2.75rem);
-    margin-bottom: clamp(3rem, 6vw, 4.5rem);
-    background: rgba(255,255,255,.72);
-    border: 1px solid var(--rule);
-    border-top: 2px solid var(--gold);
-    border-radius: 3px;
-    box-shadow: 0 40px 80px -56px rgba(32,52,33,.45);
-}
-.paper__flag {
-    position: absolute; top: -.72rem; left: clamp(1.5rem, 3vw, 2.5rem);
-    padding: .28rem .75rem;
-    background: var(--forest); color: var(--cream);
-    font-family: var(--micro); font-size: .55rem; font-weight: 700;
-    letter-spacing: .22em; text-transform: uppercase;
-}
-
-.paper__kick {
-    display: inline-flex; align-items: center; gap: .6rem;
-    font-family: var(--micro); font-size: .58rem; font-weight: 700;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep);
-    margin-bottom: .85rem;
-}
-.paper__kick i { font-size: 1.5em; }
-.paper__name {
-    /* Marcellus — a document title, not a headline */
-    font-family: var(--caps); font-weight: 400;
-    font-size: clamp(1.4rem, 2.8vw, 2.1rem);
-    line-height: 1.14; letter-spacing: .008em;
-    color: var(--forest); margin-bottom: 1rem;
-}
-.paper__body { font-size: .95rem; line-height: 1.78; color: var(--ink-soft); max-width: 60ch; }
-.paper__body + .paper__body { margin-top: 1rem; }
-
-.paper__lab {
-    font-family: var(--micro); font-size: .56rem; font-weight: 700;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
-    margin: 1.35rem 0 .7rem;
-}
-.paper__points {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .45rem .85rem; list-style: none; margin-bottom: .35rem;
-}
-.paper__points li {
-    position: relative; padding: .5rem .75rem .5rem 1.6rem;
-    border: 1px solid var(--rule); border-radius: 2px;
-    background: rgba(246,241,231,.6);
-    font-family: var(--display); font-weight: 400;
-    font-size: .88rem; line-height: 1.3; color: var(--forest);
-}
-.paper__points li::before {
-    content: ''; position: absolute; left: .7rem; top: 50%;
-    width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%;
-    background: var(--gold);
-}
-
-.paper__link {
-    display: inline-flex; align-items: center; gap: .6rem;
-    margin-top: 1.4rem; padding-bottom: .3rem;
-    border-bottom: 1px solid var(--rule);
-    font-family: var(--micro); font-size: .58rem; font-weight: 700;
-    letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
-    transition: color .4s var(--ease), border-color .4s var(--ease), gap .4s var(--ease);
-}
-.paper__link i { font-size: 1.3em; }
-.paper__link:hover { color: var(--gold-deep); border-color: var(--gold); gap: .95rem; }
-
-/* ---------- the catalogue card ---------- */
-.paper__r {
-    align-self: start;
-    padding: clamp(1.1rem, 2.2vw, 1.6rem);
-    background: var(--parchment);
-    border: 1px solid var(--rule-gold);
-    border-radius: 2px;
-}
-.paper__meta { display: grid; }
-.paper__row {
-    display: grid; gap: .3rem;
-    padding: .85rem 0;
-    border-bottom: 1px solid var(--rule);
-}
-.paper__row:first-child { padding-top: 0; }
-.paper__row dt {
-    font-family: var(--micro); font-size: .52rem; font-weight: 700;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
-}
-.paper__row dd {
-    font-family: var(--data); font-weight: 500; font-size: .92rem;
-    font-variant-numeric: tabular-nums lining-nums;
-    line-height: 1.4; color: var(--forest);
-}
-.paper__row dd span {
-    display: block; margin-top: .15rem;
-    font-family: var(--accent); font-style: italic; font-weight: 500;
-    font-size: .95rem; color: var(--gold-deep);
-}
-
-.paper__dl {
-    display: flex; align-items: center; justify-content: center; gap: .65rem;
-    width: 100%; margin-top: 1.2rem;
-    padding: 1rem 1.25rem; min-height: 48px;
-    background: var(--forest); color: var(--cream);
-    border: 1px solid var(--forest); border-radius: 2px;
-    font-family: var(--ui); font-size: .66rem; font-weight: 600;
-    letter-spacing: .18em; text-transform: uppercase;
-    transition: background .45s var(--ease), color .45s var(--ease), border-color .45s var(--ease);
-}
-.paper__dl i { font-size: 1.3em; transition: transform .4s var(--ease); }
-.paper__dl:hover { background: var(--gold); color: var(--forest-deep); border-color: var(--gold); }
-.paper__dl:hover i { transform: translateY(3px); }
-
-.paper__note {
-    margin-top: 1rem;
-    font-size: .74rem; line-height: 1.65; color: var(--mist);
-}
-
-/* =========================================================================
    THE REFERENCE RAIL
    ========================================================================= */
 .rail__top {
     display: flex; align-items: center; justify-content: space-between;
     flex-wrap: wrap; gap: 1rem;
     padding-bottom: 1rem; margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+    margin-top: clamp(.5rem, 1.5vw, 1rem);
     border-bottom: 1px solid var(--rule);
 }
 .rail__lab {
@@ -2524,9 +2401,6 @@ body.is-ready .hero__title .word .loop {
 @media (max-width: 1080px) {
     .rsrch__intro { grid-template-columns: 1fr; align-items: start; }
     .rsrch__lede { max-width: none; }
-    .paper { grid-template-columns: 1fr; }
-    .paper__r { max-width: 460px; }
-    .paper__body { max-width: none; }
 }
 
 /* ---------- evidence · 900, portrait tablet ---------- */
@@ -2540,13 +2414,6 @@ body.is-ready .hero__title .word .loop {
     .rsrch__title { font-size: clamp(1.9rem, 8.5vw, 2.7rem); }
     .rsrch__lede { font-size: .94rem; padding-left: 1rem; }
     .rsrch__rubric { flex-wrap: wrap; row-gap: .5rem; }
-
-    .paper { padding: 1.35rem 1.15rem; }
-    .paper__name { font-size: clamp(1.25rem, 6.5vw, 1.65rem); }
-    .paper__body { font-size: .92rem; }
-    .paper__points { grid-template-columns: 1fr; }
-    .paper__r { max-width: none; }
-    .paper__note { font-size: .72rem; }
 
     .ref { width: min(84vw, 330px); }
     .ref__go { min-height: 40px; }
@@ -2574,6 +2441,234 @@ body.is-ready .hero__title .word .loop {
     }
     .ref { width: 100%; }
     .rail__bar { display: none; }
+}
+
+
+/* =============================================================================
+   11b · HOW PROGRAMMES WORK  (#programmes)          <- NEW BLOCK, ADDED
+   Parchment, to break the two cream sections either side. The section is a
+   masthead and a price ledger and nothing else — the whole mechanic is one
+   number and it should be over in a screen.
+
+   The ledger is a grid, not a <table>: below 760px each row folds into its
+   own card and the column headings come back as data-lab pseudo-elements,
+   which a real table cannot do without duplicating the labels in the markup.
+============================================================================= */
+.prog {
+    --data:  'Archivo', 'Instrument Sans', sans-serif;
+    --micro: 'Syne', 'Instrument Sans', sans-serif;
+    position: relative;
+    padding: clamp(3.5rem, 8vw, 6rem) var(--gut);
+    background: var(--parchment);
+    color: var(--ink-soft);
+}
+.prog__field {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        radial-gradient(55% 45% at 94% 2%,  rgba(231,203,134,.26), transparent 60%),
+        radial-gradient(50% 40% at 2% 98%,  rgba(143,190,155,.12), transparent 58%),
+        radial-gradient(120% 55% at 50% 0%, rgba(255,255,255,.7),  transparent 55%);
+}
+.prog__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
+
+.prog__rubric {
+    display: flex; align-items: center; gap: 1.25rem;
+    padding-bottom: 1.1rem; margin-bottom: clamp(1.5rem, 3.5vh, 2.25rem);
+    border-bottom: 1px solid var(--forest);
+}
+.prog__rubric-no   { font-family: var(--accent); font-style: italic; font-size: 1.15rem; color: var(--gold-deep); white-space: nowrap; }
+.prog__rubric-name { font-family: var(--caps); font-size: .74rem; letter-spacing: .26em; text-transform: uppercase; color: var(--forest); white-space: nowrap; }
+.prog__rubric-rule { flex: 1; height: 1px; background: var(--rule); }
+
+.prog__intro {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .95fr);
+    gap: clamp(1.25rem, 4vw, 3.5rem); align-items: end;
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+}
+.prog__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2rem, 5.2vw, 4rem);
+    line-height: 1.03; letter-spacing: -.022em; color: var(--forest);
+}
+.prog__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.05em; color: var(--gold-deep); }
+.prog__lede {
+    font-size: clamp(.96rem, 1.1vw, 1.06rem); line-height: 1.76; max-width: 52ch;
+    padding-left: 1.25rem; border-left: 1px solid var(--rule-gold);
+}
+
+/* ---------- the ledger ---------- */
+.pgrid { list-style: none; display: grid; }
+.pg {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 8rem 9rem 7rem;
+    align-items: baseline; gap: 1rem;
+    padding: .95rem .25rem;
+    border-bottom: 1px solid var(--rule);
+    transition: background .35s var(--ease);
+}
+.pg:not(.pg--head):hover { background: rgba(255,255,255,.6); }
+.pg--head {
+    border-bottom: 1px solid var(--forest); padding-block: .6rem;
+}
+.pg--head span {
+    font-family: var(--micro); font-size: .55rem; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+}
+.pg--head span:not(:first-child) { text-align: right; }
+
+.pg__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(.95rem, 1.2vw, 1.08rem); line-height: 1.25; color: var(--forest);
+}
+.pg__fig {
+    text-align: right;
+    font-family: var(--data); font-weight: 500; font-size: .95rem;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: var(--mist);
+}
+.pg__fig--prog { font-weight: 600; color: var(--forest); }
+.pg__fig--save { color: var(--gold-deep); }
+
+.prog__note {
+    display: grid; grid-template-columns: auto 1fr; gap: 1rem;
+    align-items: start;
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    padding: clamp(1rem, 2.4vw, 1.5rem);
+    border: 1px solid var(--rule-gold); border-left: 3px solid var(--gold);
+    background: rgba(193,150,63,.07);
+    font-size: .88rem; line-height: 1.72;
+}
+.prog__note > i { font-size: 1.5rem; color: var(--gold-deep); line-height: 1; }
+
+/* ---------- programmes · 900 ---------- */
+@media (max-width: 900px) {
+    .prog__intro { grid-template-columns: 1fr; align-items: start; }
+    .prog__lede { max-width: none; }
+    .pg { grid-template-columns: minmax(0, 1fr) 6rem 7rem 5.5rem; gap: .6rem; }
+    .pg__fig { font-size: .88rem; }
+}
+
+/* ---------- programmes · 760, every row becomes its own card ---------- */
+@media (max-width: 760px) {
+    .pg--head { display: none; }
+    .pgrid { gap: .6rem; }
+    .pg {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: .5rem .75rem;
+        padding: .9rem 1rem;
+        border: 1px solid var(--rule); border-top: 2px solid var(--gold);
+        border-radius: 2px; background: rgba(255,255,255,.55);
+    }
+    .pg__name { grid-column: 1 / -1; margin-bottom: .2rem; }
+    /* the column heading comes back above each figure */
+    .pg__fig { text-align: left; }
+    .pg__fig::before {
+        content: attr(data-lab); display: block; margin-bottom: .15rem;
+        font-family: var(--micro); font-size: .5rem; font-weight: 700;
+        letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+    }
+}
+
+/* ---------- programmes · 640 ---------- */
+@media (max-width: 640px) {
+    .prog { padding-block: clamp(3rem, 7vw, 4.5rem); }
+    .prog__title { font-size: clamp(1.85rem, 8.5vw, 2.6rem); }
+    .prog__lede { font-size: .94rem; padding-left: 1rem; }
+    .prog__rubric { flex-wrap: wrap; row-gap: .5rem; }
+    .prog__note { grid-template-columns: 1fr; font-size: .85rem; }
+}
+
+
+/* =============================================================================
+   11c · FREQUENTLY ASKED  (#faq)          <- NEW BLOCK, ADDED
+   Native <details> / <summary>. No JavaScript, so there is nothing here that
+   can fail — it opens with a click, with Enter, with Space, and with the
+   browser's own find-in-page. The plus rotates to a minus on [open].
+
+   summary::-webkit-details-marker is killed off, or Safari draws its own
+   triangle next to the icon.
+============================================================================= */
+.faq {
+    --micro: 'Syne', 'Instrument Sans', sans-serif;
+    position: relative;
+    padding: clamp(3.5rem, 8vw, 6rem) var(--gut);
+    background: var(--cream);
+    color: var(--ink-soft);
+}
+.faq::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(60% 45% at 8% 0%, rgba(231,203,134,.22), transparent 60%);
+}
+.faq__wrap {
+    position: relative; z-index: 2;
+    max-width: min(var(--maxw), 62rem); margin: 0 auto;
+}
+
+.faq__head { margin-bottom: clamp(1.5rem, 3.5vw, 2.5rem); }
+.faq__eyebrow {
+    display: inline-flex; align-items: center; gap: .7rem;
+    font-family: var(--caps); font-size: .72rem; letter-spacing: .3em;
+    text-transform: uppercase; color: var(--gold-deep); margin-bottom: 1rem;
+}
+.faq__eyebrow i { font-size: 1.3em; }
+.faq__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2rem, 5.2vw, 3.8rem);
+    line-height: 1.03; letter-spacing: -.022em; color: var(--forest);
+}
+.faq__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.05em; color: var(--gold-deep); }
+
+.faq__list { border-top: 1px solid var(--rule); }
+.fq { border-bottom: 1px solid var(--rule); }
+.fq__q {
+    display: flex; align-items: center; justify-content: space-between; gap: 1.25rem;
+    padding: 1.15rem .25rem;
+    cursor: pointer; list-style: none;
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.3;
+    color: var(--forest);
+    transition: color .35s var(--ease), padding-left .35s var(--ease);
+}
+.fq__q::-webkit-details-marker { display: none; }
+.fq__q:hover { color: var(--gold-deep); padding-left: .5rem; }
+.fq__q i {
+    flex: 0 0 auto;
+    display: grid; place-items: center;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1px solid var(--rule-gold);
+    font-size: .85rem; color: var(--gold-deep);
+    transition: transform .4s var(--ease), background .4s var(--ease), color .4s var(--ease);
+}
+.fq[open] .fq__q { color: var(--gold-deep); }
+.fq[open] .fq__q i { transform: rotate(135deg); background: var(--gold); color: var(--forest-deep); }
+
+.fq__a { padding: 0 3.5rem 1.35rem .25rem; }
+.fq__a p { font-size: .94rem; line-height: 1.78; max-width: 68ch; }
+
+.faq__foot {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+    padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
+    border-top: 1px solid var(--rule);
+}
+.faq__foot > p {
+    font-family: var(--accent); font-style: italic;
+    font-size: clamp(1.05rem, 1.7vw, 1.35rem); color: var(--forest);
+}
+.faq__acts { display: flex; flex-wrap: wrap; gap: .7rem; }
+.faq .btn { border-radius: 2px; }
+
+/* ---------- faq · 640 ---------- */
+@media (max-width: 640px) {
+    .faq { padding-block: clamp(3rem, 7vw, 4.5rem); }
+    .faq__title { font-size: clamp(1.85rem, 8.5vw, 2.6rem); }
+    .fq__q { font-size: .98rem; gap: .85rem; padding-block: 1rem; min-height: 56px; }
+    .fq__q i { width: 27px; height: 27px; }
+    .fq__a { padding-right: 1rem; }
+    .fq__a p { font-size: .9rem; }
+    .faq__foot { flex-direction: column; align-items: stretch; }
+    .faq__acts .btn { width: 100%; }
 }
 
 
