@@ -10,8 +10,6 @@
 
 <!-- ============================================================
      FONTS — the same six voices as the home page:
-     Prata display · Cormorant accent · Marcellus caps ·
-     Instrument Sans body · Syne micro · Archivo data
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +27,10 @@
 </noscript>
 
 <link rel="icon" type="image/png" href="/logo.png">
-<link rel="stylesheet" href="/infusions.css">
+<!-- shared chrome first (tokens · atoms · header · menu · dock · footer),
+     then this page's own sections -->
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../css/infusions.css">
 
 <noscript><style>
   [data-rise], [data-reveal] { opacity: 1 !important; transform: none !important; }
@@ -953,6 +954,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-<script src="/infusions.js" type="module"></script>
+<script src="../js/infusions.js" type="module"></script>
 </body>
 </html>
