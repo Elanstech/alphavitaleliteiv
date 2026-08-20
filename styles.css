@@ -94,7 +94,17 @@
 
 html {
     -webkit-text-size-adjust: 100%;
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth REMOVED — do not put it back.
+       ScrollTrigger sets window.scrollY programmatically (on refresh, on pin
+       enter/leave, and whenever a pinned section is entered from a jump).
+       Native CSS smooth scrolling intercepts those writes and animates them
+       instead, and any NEW scroll request that arrives while one of those
+       animations is still running is silently dropped by the browser.
+
+       That is exactly the "sometimes it works, sometimes it does not" the
+       buttons were showing: every button on this page that moves the page was
+       racing an animation it could not see. Smooth scrolling is now done in
+       one place, in JS — see the Nav helper in script.js. */
     /* the page gains a scrollbar once the preloader releases — reserving the
        gutter stops every centred section shifting sideways at that moment */
     scrollbar-gutter: stable;
@@ -1041,6 +1051,11 @@ body.is-ready .hero__title .word .loop {
     bottom: clamp(1.25rem,3.5vh,2.25rem); z-index: 5;
     display: flex; align-items: center; gap: clamp(.85rem,2.5vw,2rem);
     pointer-events: none;
+    /* the action dial is fixed at bottom-right with z-index 1200 — it sits
+       ON TOP of this rail. Skip is the last flex item, so its right end was
+       underneath the toggle andthat part of the button was simply not clickable.
+       Hold the rail clear of the dial's footprint. */
+    padding-right: 86px;
 }
 .shelf__counter {
     font-family: var(--data); font-weight: 500;
@@ -1180,6 +1195,7 @@ body.is-ready .hero__title .word .loop {
 
     .shelf__rail {
         position: static; padding: 0 var(--gut) 1.25rem;
+        /* static rail, no fixed dial on top of it — clear the desktop inset */
         display: grid; grid-template-columns: auto 1fr auto;
         grid-template-areas: 'count meter arrows' 'skip skip skip';
         gap: .8rem 1rem; align-items: center;
@@ -2858,7 +2874,14 @@ body.is-ready .hero__title .word .loop {
 .fab {
     right: clamp(1rem, 3vw, 1.75rem);
     display: flex; flex-direction: column; align-items: flex-end; gap: .7rem;
+    /* The closed dial still LAYS OUT its four actions — they are only faded
+       and shifted, not display:none — so the <ul> was a ~200px invisible box
+       sitting in the bottom-right corner eating every click that landed on it,
+       including the shelf's skip button. The container ignores the pointer;
+       only the toggle, and the list once it is open, accept one. */
+    pointer-events: none;
 }
+.fab__toggle, .fab.is-open .fab__list { pointer-events: auto; }
 .fab__list {
     display: flex; flex-direction: column; align-items: flex-end; gap: .55rem;
     list-style: none;
