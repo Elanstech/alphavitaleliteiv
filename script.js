@@ -6,6 +6,7 @@
    sections drop in without touching this file.
 
      Helpers
+     Nav         the single smooth-scroll path — every button and anchor
      Preloader   hairline draws with the load, curtain lifts onto the film
      Header      condense · retreat on the way down · return on the way up
      Menu        parchment page, circular reveal, scroll lock, escape
@@ -227,6 +228,47 @@ const Scroll = {
             this.queued = true;
             requestAnimationFrame(run);
         }, { passive: true });
+    },
+};
+
+
+/* =============================================================================
+   NAV — the ONE place the page is allowed to scroll itself
+   `scroll-behavior: smooth` has been removed from html in styles.css because
+   it silently swallowed programmatic scrolls that arrived while one of its own
+   animations was still running — ScrollTrigger issues those constantly around
+   a pinned section. Every button and every in-page anchor now routes through
+   here instead, so there is exactly one scroll animation in flight at a time
+   and a second click retargets it rather than being dropped.
+
+   The fixed header is subtracted, which CSS smooth scrolling never did — an
+   anchor used to land with its heading tucked underneath the bar.
+============================================================================= */
+const Nav = {
+    offset() { return ($('#head')?.offsetHeight || 0) + 8; },
+
+    toY(y) {
+        window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: REDUCED ? 'auto' : 'smooth' });
+    },
+
+    to(el) {
+        if (!el) return;
+        this.toY(window.scrollY + el.getBoundingClientRect().top - this.offset());
+    },
+
+    init() {
+        // delegated, so anchors added later (and the footer's) are covered too
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest?.('a[href^="#"]');
+            if (!a) return;
+            const href = a.getAttribute('href');
+            if (!href || href === '#') return;
+            const el = document.getElementById(href.slice(1));
+            if (!el) return;
+            e.preventDefault();
+            this.to(el);
+            history.replaceState(null, '', href);
+        });
     },
 };
 
@@ -610,14 +652,26 @@ class Shelf {
 
     skipButton() {
         if (!this.skip) return;
-        this.skip.addEventListener('click', () => {
+
+        /* Was scrollIntoView() on #conditions. Two problems with that while the
+           rail is pinned:
+
+           1. The pin owns hundreds of pixels of scroll BELOW the viewport, and
+              #conditions' box is measured against the pin-spacer, so the
+              browser aimed into the middle of the pinned range and the page
+              appeared not to move — or moved and got dragged straight back by
+              the scrub.
+           2. It requested a smooth scroll while CSS smooth scrolling was also
+              on, so the request was frequently dropped outright.
+
+           The pin already knows the one scroll position where it lets go:
+           st.end. Go there. On mobile there is no pin, so aim at the section. */
+        this.skip.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (this.st) { Nav.toY(this.st.end + 2); return; }
             const after = $('#conditions') || this.scene.nextElementSibling;
-            if (after) {
-                after.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
-                return;
-            }
-            const end = this.st ? this.st.end : this.scene.offsetTop + this.scene.offsetHeight;
-            window.scrollTo({ top: end + 4, behavior: REDUCED ? 'auto' : 'smooth' });
+            if (after) { Nav.to(after); return; }
+            Nav.toY(this.scene.offsetTop + this.scene.offsetHeight);
         });
     }
 
@@ -1074,9 +1128,7 @@ class Dock {
             if (!past && this.open) this.set(false);
         });
 
-        this.top?.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: REDUCED ? 'auto' : 'smooth' });
-        });
+        this.top?.addEventListener('click', () => Nav.toY(0));
 
         this.toggle?.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -1486,7 +1538,7 @@ class Chronic {
 
         const fromHash = this.cards.findIndex((c) => '#' + c.id === window.location.hash);
         this.show(fromHash >= 0 ? fromHash : 0, false);
-        if (fromHash >= 0) setTimeout(() => this.scene.scrollIntoView({ block: 'start' }), 60);
+        if (fromHash >= 0) setTimeout(() => Nav.to(this.scene), 60);
 
         this.spotlight();
 
@@ -1590,6 +1642,7 @@ class Reveal {
    BOOT
 ============================================================================= */
 const modules = {
+    nav:        Nav,
     preloader:  new Preloader(),
     header:     new Header(),
     menu:       new Menu(),
