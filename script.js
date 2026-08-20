@@ -21,6 +21,7 @@
      Social      the Instagram band
      Physician   sticky portrait, beats that pop, the chain of custody
      Research    the reference rail — snap carousel, arrows, drag, keyboard
+                 (#programmes and #faq are deliberately script-free)
      Reveal      generic scroll reveal for anything marked [data-reveal]
      Boot
 
@@ -776,6 +777,7 @@ class Research {
         this.prev  = $('#rsrchPrev');
         this.next  = $('#rsrchNext');
         this.last  = -1;
+        this.aim   = -1;                // index the arrows own mid-scroll
         this.DRAG  = 6;                 // px before a press counts as a drag
     }
 
@@ -785,6 +787,7 @@ class Research {
         const cards = this.cards();
         if (!cards.length) return;
         if (this.total) this.total.textContent = String(cards.length).padStart(2, '0');
+        this.settle = debounce(() => { this.aim = -1; this.read(); }, 180);
 
         // reduced motion: the CSS has already flattened the rail into a grid,
         // so there is nothing left to drive
@@ -795,7 +798,22 @@ class Research {
         this.prev?.addEventListener('click', () => this.step(-1));
         this.next?.addEventListener('click', () => this.step(1));
 
-        this.track.addEventListener('scroll', onFrame(() => this.read()), { passive: true });
+        /* THE ARROW BUG, FIXED.
+           `step()` used to compute the next index from `this.last`, and
+           `this.last` is only written when a scroll event lands. Click twice
+           quickly and the second click read the pre-scroll index, recomputed
+           the SAME target, and the rail went nowhere — which is exactly why
+           the arrows felt like they worked sometimes and not others.
+
+           `aim` is the index the buttons own. While it is set, scroll events
+           update the disabled states but are NOT allowed to overwrite the
+           index underneath an in-flight smooth scroll. It clears once the
+           scrolling has settled, and the pointer takes over again. */
+        this.track.addEventListener('scroll', onFrame(() => {
+            this.edges();
+            if (this.aim < 0) this.read();
+            this.settle();
+        }), { passive: true });
 
         // arrow keys, once the rail has focus
         this.track.setAttribute('tabindex', '0');
@@ -814,7 +832,7 @@ class Research {
 
     cards() { return $$('.ref', this.track); }
 
-    /** which card is at the left edge, and can we still scroll? */
+    /** read the index back off the scroll position */
     read() {
         const cards = this.cards();
         if (!cards.length) return;
@@ -825,21 +843,23 @@ class Research {
             if (cards[n].offsetLeft - cards[0].offsetLeft <= x + 8) i = n;
         }
         this.paint(i);
+        this.edges();
     }
 
+    /** counter + meter only */
     paint(i) {
         const cards = this.cards();
-        if (!cards.length) return;
+        if (!cards.length || i === this.last) return;
+        this.last = i;
+        if (this.now) this.now.textContent = String(i + 1).padStart(2, '0');
+        if (this.meter) this.meter.style.width = ((i + 1) / cards.length) * 100 + '%';
+    }
 
-        if (i !== this.last) {
-            this.last = i;
-            if (this.now) this.now.textContent = String(i + 1).padStart(2, '0');
-            if (this.meter) this.meter.style.width = ((i + 1) / cards.length) * 100 + '%';
-        }
-
-        /* Three cards are visible on a laptop, so the last card can never
-           become the leftmost one — index alone would leave "next" enabled
-           forever. Disable against the real scroll extent instead. */
+    /* Three cards are visible on a laptop, so the last card can never become
+       the leftmost one — index alone would leave "next" enabled forever.
+       Disable against the real scroll extent instead. A 2px tolerance covers
+       sub-pixel scroll positions on fractional device pixel ratios. */
+    edges() {
         const max = this.track.scrollWidth - this.track.clientWidth;
         if (this.prev) this.prev.disabled = this.track.scrollLeft <= 2;
         if (this.next) this.next.disabled = this.track.scrollLeft >= max - 2;
@@ -848,11 +868,20 @@ class Research {
     step(dir) {
         const cards = this.cards();
         if (!cards.length) return;
-        const i = clamp((this.last < 0 ? 0 : this.last) + dir, 0, cards.length - 1);
+
+        // start from the index the buttons already claimed, not from wherever
+        // the scroll happens to have reached this frame
+        const from = this.aim >= 0 ? this.aim : (this.last < 0 ? 0 : this.last);
+        const i = clamp(from + dir, 0, cards.length - 1);
+        if (i === from) { this.edges(); return; }
+
+        this.aim = i;
+        this.paint(i);                     // the counter answers immediately
         this.track.scrollTo({
             left: cards[i].offsetLeft - cards[0].offsetLeft,
             behavior: 'smooth',
         });
+        this.settle();                     // release the claim once it lands
     }
 
     /** grab and pull, the way you would slide a card across a desk */
@@ -879,6 +908,7 @@ class Research {
             if (!down) return;
             down = false;
             if (!moved) return;
+            this.aim = -1;                 // the pointer wins over the arrows
             t.classList.remove('is-dragging');
             if (e?.pointerId != null && t.hasPointerCapture?.(e.pointerId)) t.releasePointerCapture(e.pointerId);
             // hand the position back to the snap engine, then re-read
@@ -900,7 +930,6 @@ class Research {
 
         popIn($$('.rsrch__intro > *', this.scene),
               { y: 24, stagger: .08, duration: .55, ease: 'back.out(1.5)' }, this.scene, 'top 84%');
-        popIn($('.paper'), { y: 34, duration: .7, ease: 'expo.out' }, '.paper', 'top 84%');
         popIn(this.cards(), { y: 26, stagger: .06, duration: .6, ease: 'expo.out' }, '.rail', 'top 88%');
     }
 }
