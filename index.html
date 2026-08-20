@@ -3,56 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<!-- ============================================================
-     PRIMARY META
-     ============================================================ -->
-<title>Alpha Vital Elite IV | Physician-Directed IV Care — Middle Village, Queens NY</title>
-<meta name="description" content="A physician-directed IV practice in Middle Village, Queens. Dr. Violeta Aronov, DO, a board-certified anesthesiologist, reviews each patient's health information and determines whether IV therapy is appropriate. Appointments only — physician review and eligibility determination required.">
-<meta name="author" content="Dr. Violeta Aronov, DO">
-<link rel="canonical" href="https://precisionmedicaliv.com/">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="theme-color" content="#F6F1E7">
 <meta name="format-detection" content="telephone=yes">
-
-<meta name="geo.region" content="US-NY">
-<meta name="geo.placename" content="Middle Village, Queens, New York">
-<meta name="geo.position" content="40.7156;-73.8779">
-<meta name="ICBM" content="40.7156, -73.8779">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://precisionmedicaliv.com/">
-<meta property="og:title" content="Alpha Vital Elite IV — Physician-Directed IV Care">
-<meta property="og:description" content="Individual screening. Individualized dosing. Monitoring throughout treatment. Middle Village, Queens.">
-<meta property="og:image" content="https://precisionmedicaliv.com/assets/images/og-image.jpg">
-<meta property="og:site_name" content="Alpha Vital Elite IV">
-<meta property="og:locale" content="en_US">
-<meta name="twitter:card" content="summary_large_image">
+<title>Alpha Vital Elite IV</title>
 
 <!-- ============================================================
      PERFORMANCE + FONTS
-     Prata            display serif — Didone contrast, cuts hard on video
-     Cormorant        italic accent — the living word, pull-quotes, plate notes
-     Marcellus        engraved caps — labels, matches the wordmark
-     Instrument Sans  body + UI
-     Syne             micro-labels on the shelf — chips, category, actions
-     Archivo          tabular figures — prices, durations, the counter
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preload" as="image" href="logo.png" fetchpriority="high">
-<link rel="preload" as="image" href="https://precisionmedicaliv.com/wp-content/themes/alphavital/assets/img/photos/bedside-nurse-iv.webp" fetchpriority="high">
-<!-- One request, not two, and only the weights the stylesheet actually asks
-     for. Cormorant is used italic everywhere except one roman label, Marcellus
-     and Prata have a single weight each, Archivo never uses 400. -->
+<link rel="preload" as="image" href="/logo.png" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/images/hero-poster.webp" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
 
-<!-- ICONS — Phosphor web font. Every icon on the shelf is a linked glyph.
-     Regular needs the base class: <i class="ph ph-clock">. -->
+<!-- ICONS — Phosphor web font. Regular needs the base class: <i class="ph ph-clock"> -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
-<!-- fill and duotone are used below the fold only — load them without
-     blocking the first paint -->
+<!-- fill and duotone are used below the fold only — load them without blocking first paint -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css" media="print" onload="this.media='all'">
 <noscript>
@@ -60,7 +27,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
 </noscript>
 
-<link rel="icon" type="image/png" href="logo.png">
+<link rel="icon" type="image/png" href="/logo.png">
 <link rel="stylesheet" href="styles.css">
 
 <!-- If scripting is off, the preloader must not become a wall -->
@@ -73,68 +40,8 @@
   .loop__fallback { display: inline !important; }
   .shelf__viewport { height: auto !important; display: block !important; overflow: visible !important; padding-bottom: 0 !important; }
   .shelf__track { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important; gap: 3rem !important; transform: none !important; }
-  .plate { width: 100% !important; }
+  .plate { width: 100% !important; height: auto !important; }
 </style></noscript>
-
-<!-- ============================================================
-     STRUCTURED DATA
-     ============================================================ -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": ["MedicalBusiness", "MedicalClinic", "LocalBusiness"],
-      "@id": "https://precisionmedicaliv.com/#practice",
-      "name": "Alpha Vital Elite IV",
-      "alternateName": ["Alpha Vital Elite", "Alpha Vital Elite Precision Medical IV"],
-      "url": "https://precisionmedicaliv.com/",
-      "telephone": "+1-929-201-0740",
-      "email": "contact@precisionmedicaliv.com",
-      "priceRange": "$$$",
-      "description": "Physician-directed IV practice in Middle Village, Queens. Dr. Violeta Aronov, DO reviews the health information provided by each patient, determines whether IV therapy is appropriate, and supervise each infusion individually. Every infusion is personally administered and monitored by Dr. Aronov.",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "79-01 Metropolitan Avenue",
-        "addressLocality": "Middle Village",
-        "addressRegion": "NY",
-        "postalCode": "11379",
-        "addressCountry": "US"
-      },
-      "geo": { "@type": "GeoCoordinates", "latitude": 40.7156, "longitude": -73.8779 },
-      "areaServed": [
-        { "@type": "Place", "name": "Queens" },
-        { "@type": "Place", "name": "Brooklyn" },
-        { "@type": "Place", "name": "Long Island" },
-        { "@type": "Place", "name": "New York metropolitan area" }
-      ],
-      "founder": { "@id": "https://precisionmedicaliv.com/#physician" },
-      "employee": { "@id": "https://precisionmedicaliv.com/#physician" },
-      "medicalSpecialty": ["Anesthesiology", "Preventive Medicine"],
-      "availableService": {
-        "@type": "MedicalTherapy",
-        "name": "Physician-directed IV infusion therapy",
-        "description": "Supportive, adjunctive IV care selected after individual physician review of medical history, medications, allergies and health status. Not every patient is eligible."
-      }
-    },
-    {
-      "@type": ["Physician", "Person"],
-      "@id": "https://precisionmedicaliv.com/#physician",
-      "name": "Dr. Violeta Aronov",
-      "honorificPrefix": "Dr.",
-      "honorificSuffix": "DO",
-      "jobTitle": "Board-Certified Anesthesiologist, Founder",
-      "worksFor": { "@id": "https://precisionmedicaliv.com/#practice" },
-      "medicalSpecialty": "Anesthesiology",
-      "alumniOf": [
-        { "@type": "CollegeOrUniversity", "name": "NYIT College of Osteopathic Medicine" },
-        { "@type": "CollegeOrUniversity", "name": "SUNY Stony Brook" }
-      ],
-      "knowsAbout": ["IV infusion therapy", "Anesthesiology", "Glutathione", "N-acetylcysteine", "Electrolyte balance", "Antioxidant pathways"]
-    }
-  ]
-}
-</script>
 </head>
 
 <body>
@@ -142,9 +49,9 @@
 <!-- ==============================================================
      PRELOADER
      ============================================================== -->
-<div class="pre" id="pre" role="status" aria-label="Loading">
+<div class="pre" id="pre">
   <div class="pre__core">
-    <img class="pre__mark" src="logo.png" alt="Alpha Vital Elite IV" width="640" height="592">
+    <img class="pre__mark" src="/logo.png" alt="Alpha Vital Elite IV" width="640" height="592">
     <div class="pre__meter">
       <span class="pre__bar" id="preBar"></span>
       <span class="pre__pct" id="prePct">0</span>
@@ -159,22 +66,22 @@
 <header class="head" id="head">
   <div class="head__rail">
 
-    <a class="head__mark" href="/" aria-label="Alpha Vital Elite IV, home">
-      <img src="logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
+    <a class="head__mark" href="/">
+      <img src="/logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
     </a>
 
-    <nav class="head__nav" id="headNav" aria-label="Primary">
-      <a class="head__link" href="/infusions/" data-nav>Infusions</a>
-      <a class="head__link" href="/the-practice/" data-nav>The Practice</a>
-      <a class="head__link" href="/about/" data-nav>Dr.&nbsp;Aronov</a>
-      <a class="head__link" href="/research/" data-nav>Research</a>
-      <a class="head__link" href="/contact/" data-nav>Contact</a>
+    <nav class="head__nav" id="headNav">
+      <a class="head__link" href="/infusions/">Infusions</a>
+      <a class="head__link" href="/the-practice/">The Practice</a>
+      <a class="head__link" href="/about/">Dr.&nbsp;Aronov</a>
+      <a class="head__link" href="/research/">Research</a>
+      <a class="head__link" href="/contact/">Contact</a>
     </nav>
 
     <div class="head__actions">
       <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
-      <a class="btn btn--forest head__cta" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener" data-magnetic><span>Begin screening</span></a>
-      <button class="head__burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <a class="btn btn--forest head__cta" href="/contact/" data-magnetic><span>Begin screening</span></a>
+      <button class="head__burger" id="burger" type="button">
         <span></span><span></span>
       </button>
     </div>
@@ -183,9 +90,9 @@
 </header>
 
 <!-- Mobile menu -->
-<div class="menu" id="menu" aria-hidden="true">
+<div class="menu" id="menu">
   <div class="menu__inner">
-    <nav class="menu__nav" aria-label="Mobile">
+    <nav class="menu__nav">
       <a href="/infusions/"><i>i.</i><em>Infusions</em></a>
       <a href="/the-practice/"><i>ii.</i><em>The Practice</em></a>
       <a href="/about/"><i>iii.</i><em>Dr. Aronov</em></a>
@@ -193,7 +100,7 @@
       <a href="/contact/"><i>v.</i><em>Contact</em></a>
     </nav>
     <div class="menu__foot">
-      <a class="btn btn--gold" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener"><span>Begin screening</span></a>
+      <a class="btn btn--gold" href="/contact/"><span>Begin screening</span></a>
       <a class="menu__tel" href="tel:+19292010740">929 · 201 · 0740</a>
       <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
@@ -205,15 +112,13 @@
 
 <!-- ==============================================================
      HERO
-     Copy per Dr. Aronov's Edit #2 — "held to hospital standards" and
-     "hospital-level safety" are gone. The headline, kicker, dek,
-     eligibility line and disclaimer are her approved wording.
+     Copy is Dr. Aronov's approved Edit #2 wording.
      ============================================================== -->
 <section class="hero" id="hero">
 
-  <div class="hero__media" aria-hidden="true">
+  <div class="hero__media">
     <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata"
-           poster="https://precisionmedicaliv.com/wp-content/themes/alphavital/assets/img/photos/bedside-nurse-iv.webp">
+           poster="/assets/images/hero-poster.webp">
       <source src="https://github.com/Elanstech/precisionmedicaliv/releases/download/Hero/hero.mp4" type="video/mp4">
     </video>
     <span class="hero__scrim"></span>
@@ -241,15 +146,14 @@
       <span class="hero__for-lead">Infusions for</span>
       <span class="loop" id="wordLoop">
         <span class="loop__fallback">Healthy Aging</span>
-        <span class="loop__stack" aria-hidden="true">
+        <span class="loop__stack">
           <span class="is-on">Healthy Aging</span>
           <span>Immune Support</span>
           <span>Muscle Recovery</span>
           <span>Antioxidant Support</span>
           <span>Glutathione IV Therapy</span>
-          <span>Joint Support</span>
+          <span>Joint &amp; Skin Support</span>
           <span>Liver Support</span>
-          <span>Skin Health</span>
           <span>Recovery Support</span>
           <span>Mind &amp; Focus Support</span>
         </span>
@@ -264,9 +168,9 @@
         personally administered and monitored by Dr.&nbsp;Aronov.
       </p>
       <div class="hero__actions">
-        <a class="btn btn--gold btn--lg" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener" data-magnetic>
+        <a class="btn btn--gold btn--lg" href="/contact/" data-magnetic>
           <span>Begin screening</span>
-          <i class="ph ph-arrow-right" aria-hidden="true"></i>
+          <i class="ph ph-arrow-right"></i>
         </a>
         <a class="btn btn--line btn--lg" href="#infusions"><span>View infusions</span></a>
       </div>
@@ -281,37 +185,31 @@
 
   <div class="hero__foot" data-rise style="--i:8">
     <p class="hero__cred">Appointments only &bull; Physician review and eligibility determination required</p>
-    <a class="hero__scroll" href="#infusions"><span>Scroll</span><i aria-hidden="true"></i></a>
+    <a class="hero__scroll" href="#infusions"><span>Scroll</span><i></i></a>
   </div>
 
 </section>
 
 
 <!-- ==============================================================
-     THE SHELF  (#infusions)
+     THE SHELF  (#infusions)   —   CHAPTER I
      Nine signature infusions + one customized option = ten plates.
-     Category names, order and formulations per Dr. Aronov's 17 Aug email.
-     Quercetin and Curcumin are off the menu. Language rule: "supports" and
-     "designed to complement" — never treats, cures, repairs, or guarantees.
+     Language rule: "supports" and "designed to complement" — never treats,
+     cures, repairs, or guarantees.
      ============================================================== -->
-<section class="shelf" id="infusions" aria-labelledby="shelfTitle">
-  <span class="shelf__wash" aria-hidden="true"></span>
-  <span class="shelf__mesh" aria-hidden="true"></span>
+<section class="shelf" id="infusions">
+  <span class="shelf__wash"></span>
+  <span class="shelf__mesh"></span>
 
   <header class="shelf__head">
 
-    <div class="shelf__rubric" data-reveal>
-      <span class="shelf__rubric-no">Chapter I</span>
-      <span class="shelf__rubric-name">Signature IV Infusions</span>
-      <span class="shelf__rubric-rule"></span>
-      <!-- TODO: her real handle -->
-      <a class="shelf__ig" href="https://www.instagram.com/YOUR_HANDLE" target="_blank" rel="noopener">
-        <i class="ph-duotone ph-instagram-logo" aria-hidden="true"></i>
-        <span>Follow the practice</span>
-      </a>
+    <div class="rubric" data-reveal>
+      <span class="rubric__no">Chapter I</span>
+      <span class="rubric__name">Signature IV Infusions</span>
+      <span class="rubric__rule"></span>
     </div>
 
-    <h2 class="shelf__title" id="shelfTitle" data-reveal>
+    <h2 class="shelf__title" data-reveal>
       Signature infusions,<br><em>individually reviewed.</em>
     </h2>
 
@@ -333,18 +231,41 @@
     </div>
   </header>
 
-  <div class="shelf__filters" role="tablist" aria-label="Filter infusions" data-reveal>
-    <button class="shelf__pill is-on" type="button" data-filter="all" role="tab" aria-selected="true"><i class="ph ph-squares-four" aria-hidden="true"></i> Everything <sup>10</sup></button>
-    <button class="shelf__pill" type="button" data-filter="healthyaging" role="tab" aria-selected="false"><i class="ph ph-infinity" aria-hidden="true"></i> Healthy Aging</button>
-    <button class="shelf__pill" type="button" data-filter="immune" role="tab" aria-selected="false"><i class="ph ph-shield-check" aria-hidden="true"></i> Immune Support</button>
-    <button class="shelf__pill" type="button" data-filter="muscle" role="tab" aria-selected="false"><i class="ph ph-barbell" aria-hidden="true"></i> Muscle Recovery</button>
-    <button class="shelf__pill" type="button" data-filter="antioxidant" role="tab" aria-selected="false"><i class="ph ph-atom" aria-hidden="true"></i> Antioxidant Support</button>
-    <button class="shelf__pill" type="button" data-filter="glutathione" role="tab" aria-selected="false"><i class="ph ph-drop" aria-hidden="true"></i> Glutathione IV Therapy</button>
-    <button class="shelf__pill" type="button" data-filter="joint" role="tab" aria-selected="false"><i class="ph ph-bone" aria-hidden="true"></i> Joint & Skin Support</button>
-    <button class="shelf__pill" type="button" data-filter="liver" role="tab" aria-selected="false"><i class="ph ph-leaf" aria-hidden="true"></i> Liver Support</button>
-    <button class="shelf__pill" type="button" data-filter="recovery" role="tab" aria-selected="false"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i> Recovery Support</button>
-    <button class="shelf__pill" type="button" data-filter="mind" role="tab" aria-selected="false"><i class="ph ph-brain" aria-hidden="true"></i> Mind &amp; Focus Support</button>
-    <button class="shelf__pill" type="button" data-filter="custom" role="tab" aria-selected="false"><i class="ph ph-pen-nib" aria-hidden="true"></i> Customized IV Infusion</button>
+  <!-- Desktop: eleven pills. Below 900px they wrap to five rows and shove the
+       page down, so the pills hide and the select below takes over. Both write
+       the same data-filter value, so the JS has one code path. -->
+  <div class="shelf__filters" data-reveal>
+    <button class="shelf__pill is-on" type="button" data-filter="all"><i class="ph ph-squares-four"></i> Everything <sup>10</sup></button>
+    <button class="shelf__pill" type="button" data-filter="healthyaging"><i class="ph ph-infinity"></i> Healthy Aging</button>
+    <button class="shelf__pill" type="button" data-filter="immune"><i class="ph ph-shield-check"></i> Immune Support</button>
+    <button class="shelf__pill" type="button" data-filter="muscle"><i class="ph ph-barbell"></i> Muscle Recovery</button>
+    <button class="shelf__pill" type="button" data-filter="antioxidant"><i class="ph ph-atom"></i> Antioxidant Support</button>
+    <button class="shelf__pill" type="button" data-filter="glutathione"><i class="ph ph-drop"></i> Glutathione IV Therapy</button>
+    <button class="shelf__pill" type="button" data-filter="joint"><i class="ph ph-bone"></i> Joint &amp; Skin Support</button>
+    <button class="shelf__pill" type="button" data-filter="liver"><i class="ph ph-leaf"></i> Liver Support</button>
+    <button class="shelf__pill" type="button" data-filter="recovery"><i class="ph ph-arrows-clockwise"></i> Recovery Support</button>
+    <button class="shelf__pill" type="button" data-filter="mind"><i class="ph ph-brain"></i> Mind &amp; Focus Support</button>
+    <button class="shelf__pill" type="button" data-filter="custom"><i class="ph ph-pen-nib"></i> Customized IV Infusion</button>
+  </div>
+
+  <div class="shelf__jump" data-reveal>
+    <span class="shelf__jump-lab"><i class="ph ph-funnel"></i> Filter</span>
+    <span class="shelf__jump-box">
+      <select class="shelf__jump-sel" id="shelfJump">
+        <option value="all">Everything — 10 infusions</option>
+        <option value="healthyaging">Healthy Aging</option>
+        <option value="immune">Immune Support</option>
+        <option value="muscle">Muscle Recovery</option>
+        <option value="antioxidant">Antioxidant Support</option>
+        <option value="glutathione">Glutathione IV Therapy</option>
+        <option value="joint">Joint &amp; Skin Support</option>
+        <option value="liver">Liver Support</option>
+        <option value="recovery">Recovery Support</option>
+        <option value="mind">Mind &amp; Focus Support</option>
+        <option value="custom">Customized IV Infusion</option>
+      </select>
+      <i class="ph ph-caret-down shelf__jump-caret"></i>
+    </span>
   </div>
 
   <div class="shelf__pin" id="shelfPin">
@@ -352,16 +273,16 @@
       <ol class="shelf__track" id="shelfTrack">
 
         <li class="plate" data-tags="healthyaging" style="--tone:var(--t-aging);--i:0">
-          <a class="plate__bag" href="/drips/healthy-aging/" aria-label="GLyNAC Longevity Restoration IV" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/healthy-aging/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/glynac.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/glynac.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-infinity" aria-hidden="true"></i> Healthy Aging</p>
-              <span class="plate__no" aria-hidden="true">I</span>
+              <p class="plate__cat"><i class="ph ph-infinity"></i> Healthy Aging</p>
+              <span class="plate__no">I</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/healthy-aging/">GLyNAC Longevity Restoration IV</a></h3>
@@ -370,26 +291,26 @@
             <ul class="plate__ing"><li>Hydration Fluid</li><li>Glycine</li><li>N-Acetylcysteine</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 1 h 15</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 1 h 15</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$450</b><span>per session</span><em>programme $405</em></p>
-                <a class="plate__go" href="/drips/healthy-aging/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$450</b><span>per session</span><em>program $405</em></p>
+                <a class="plate__go" href="/drips/healthy-aging/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="immune" style="--tone:var(--t-immune);--i:1">
-          <a class="plate__bag" href="/drips/immune-support/" aria-label="Immun-O-Boost IV Support" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/immune-support/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/immuneoboost.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/immuneoboost.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-shield-check" aria-hidden="true"></i> Immune Support</p>
-              <span class="plate__no" aria-hidden="true">II</span>
+              <p class="plate__cat"><i class="ph ph-shield-check"></i> Immune Support</p>
+              <span class="plate__no">II</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/immune-support/">Immun-O-Boost IV Support</a></h3>
@@ -398,26 +319,26 @@
             <ul class="plate__ing"><li>B-Complex &amp; Minerals</li><li>Amino Acids</li><li>Vitamin&nbsp;C</li><li>Glutathione</li><li>Zinc</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 2 h 30</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 2 h 30</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$650</b><span>per session</span><em>6-month programme $585</em></p>
-                <a class="plate__go" href="/drips/immune-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$650</b><span>per session</span><em>program $585</em></p>
+                <a class="plate__go" href="/drips/immune-support/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="muscle" style="--tone:var(--t-muscle);--i:2">
-          <a class="plate__bag" href="/drips/muscle-recovery/" aria-label="LIQUIXO Muscle Recovery IV" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/muscle-recovery/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/liquixo.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/liquixo.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-barbell" aria-hidden="true"></i> Muscle Recovery</p>
-              <span class="plate__no" aria-hidden="true">III</span>
+              <p class="plate__cat"><i class="ph ph-barbell"></i> Muscle Recovery</p>
+              <span class="plate__no">III</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/muscle-recovery/">LIQUIXO Muscle Recovery IV</a></h3>
@@ -426,26 +347,26 @@
             <ul class="plate__ing"><li>Hydration Fluid</li><li>20 Amino Acids</li><li>Exosomes</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 45 min</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 45 min</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$495</b><span>per session</span><em>programme $445.50</em></p>
-                <a class="plate__go" href="/drips/muscle-recovery/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$495</b><span>per session</span><em>program $445.50</em></p>
+                <a class="plate__go" href="/drips/muscle-recovery/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="antioxidant" style="--tone:var(--t-antiox);--i:3">
-          <a class="plate__bag" href="/drips/antioxidant-support/" aria-label="Antioxidant &times;3 Reset IV" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/antioxidant-support/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/antioxidant.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/antioxidant.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-atom" aria-hidden="true"></i> Antioxidant Support</p>
-              <span class="plate__no" aria-hidden="true">IV</span>
+              <p class="plate__cat"><i class="ph ph-atom"></i> Antioxidant Support</p>
+              <span class="plate__no">IV</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/antioxidant-support/">Antioxidant &times;3 Reset IV</a></h3>
@@ -454,26 +375,26 @@
             <ul class="plate__ing"><li>Hydration Fluid</li><li>Vitamin&nbsp;C</li><li>Glutathione</li><li>Alpha-Lipoic Acid</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 75 min</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 75 min</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$500</b><span>per session</span><em>programme $450</em></p>
-                <a class="plate__go" href="/drips/antioxidant-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$500</b><span>per session</span><em>program $450</em></p>
+                <a class="plate__go" href="/drips/antioxidant-support/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="glutathione" style="--tone:var(--t-gluta);--i:4">
-          <a class="plate__bag" href="/drips/glutathione-iv-therapy/" aria-label="Glutathione IV Injection" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/glutathione-iv-therapy/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/glutathione.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/glutathione.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-drop" aria-hidden="true"></i> Glutathione IV Therapy</p>
-              <span class="plate__no" aria-hidden="true">V</span>
+              <p class="plate__cat"><i class="ph ph-drop"></i> Glutathione IV Therapy</p>
+              <span class="plate__no">V</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/glutathione-iv-therapy/">Glutathione IV Injection</a></h3>
@@ -482,26 +403,26 @@
             <ul class="plate__ing"><li>Glutathione</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 15 min push &middot; 30 min visit</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 15 min push &middot; 30 min visit</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$125</b><span>per session</span><em>programme $112.50</em></p>
-                <a class="plate__go" href="/drips/glutathione-iv-therapy/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$125</b><span>per session</span><em>program $112.50</em></p>
+                <a class="plate__go" href="/drips/glutathione-iv-therapy/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="joint skin" style="--tone:var(--t-joint);--i:5">
-          <a class="plate__bag" href="/drips/joint-skin-wellness/" aria-label="Joint &amp; Skin Wellness IV" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/joint-skin-wellness/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/jointsupport.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/jointsupport.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-bone" aria-hidden="true"></i> Joint Support &amp; Skin Health</p>
-              <span class="plate__no" aria-hidden="true">VI</span>
+              <p class="plate__cat"><i class="ph ph-bone"></i> Joint Support &amp; Skin Health</p>
+              <span class="plate__no">VI</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/joint-skin-wellness/">Joint &amp; Skin Wellness IV</a></h3>
@@ -510,26 +431,26 @@
             <ul class="plate__ing"><li>Hydration Fluid</li><li>Magnesium</li><li>Trace Minerals</li><li>B-Complex</li><li>Collagen Amino Acids</li><li>N-Acetylcysteine</li><li>Alpha-Lipoic Acid</li><li>Vitamin&nbsp;C</li><li>Glutathione</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 2 h 30</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 2 h 30</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$750</b><span>per session</span><em>programme $675</em></p>
-                <a class="plate__go" href="/drips/joint-skin-wellness/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$750</b><span>per session</span><em>program $675</em></p>
+                <a class="plate__go" href="/drips/joint-skin-wellness/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="liver" style="--tone:var(--t-liver);--i:6">
-          <a class="plate__bag" href="/drips/liver-support/" aria-label="Fatty Liver Support IV" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/liver-support/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/liversupport.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/liversupport.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-leaf" aria-hidden="true"></i> Liver Support</p>
-              <span class="plate__no" aria-hidden="true">VII</span>
+              <p class="plate__cat"><i class="ph ph-leaf"></i> Liver Support</p>
+              <span class="plate__no">VII</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/liver-support/">Fatty Liver Support IV</a></h3>
@@ -538,26 +459,26 @@
             <ul class="plate__ing"><li>Hydration Fluid</li><li>Magnesium</li><li>Trace Minerals</li><li>B-Complex</li><li>Glycine</li><li>Taurine</li><li>N-Acetylcysteine</li><li>Alpha-Lipoic Acid</li><li>Vitamin&nbsp;C</li><li>Glutathione</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 3 h</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 3 h</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$850</b><span>per session</span><em>programme $765</em></p>
-                <a class="plate__go" href="/drips/liver-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$850</b><span>per session</span><em>program $765</em></p>
+                <a class="plate__go" href="/drips/liver-support/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="recovery" style="--tone:var(--t-recovery);--i:7">
-          <a class="plate__bag" href="/drips/recovery-support/" aria-label="Revive IV Support" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/recovery-support/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/revive.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/revive.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i> Recovery Support</p>
-              <span class="plate__no" aria-hidden="true">VIII</span>
+              <p class="plate__cat"><i class="ph ph-arrows-clockwise"></i> Recovery Support</p>
+              <span class="plate__no">VIII</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/recovery-support/">Revive IV Support</a></h3>
@@ -566,26 +487,26 @@
             <ul class="plate__ing"><li>Hydration Fluid</li><li>B-Complex</li><li>Amino Acids</li><li>Electrolytes</li><li>Alpha-Lipoic Acid</li><li>Vitamin&nbsp;C</li><li>Glutathione</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 2 h 15</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 2 h 15</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$625</b><span>per session</span><em>programme $562.50</em></p>
-                <a class="plate__go" href="/drips/recovery-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$625</b><span>per session</span><em>program $562.50</em></p>
+                <a class="plate__go" href="/drips/recovery-support/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="mind" style="--tone:var(--t-mind);--i:8">
-          <a class="plate__bag" href="/drips/mind-focus-support/" aria-label="Stress &amp; Brain Wellness IV" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/mind-focus-support/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/brainwellness.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/brainwellness.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-brain" aria-hidden="true"></i> Mind &amp; Focus Support</p>
-              <span class="plate__no" aria-hidden="true">IX</span>
+              <p class="plate__cat"><i class="ph ph-brain"></i> Mind &amp; Focus Support</p>
+              <span class="plate__no">IX</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/mind-focus-support/">Stress &amp; Brain Wellness IV</a></h3>
@@ -594,26 +515,26 @@
             <ul class="plate__ing"><li>Hydration Fluid</li><li>Vitamin B1</li><li>Vitamin B6</li><li>Vitamin B12</li><li>Alpha-Lipoic Acid</li><li>Taurine</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> 1 h 30</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> 1 h 30</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$700</b><span>per session</span><em>programme $630</em></p>
-                <a class="plate__go" href="/drips/mind-focus-support/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <p class="plate__price"><b>$700</b><span>per session</span><em>program $630</em></p>
+                <a class="plate__go" href="/drips/mind-focus-support/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="custom" style="--tone:var(--t-custom);--i:9">
-          <a class="plate__bag" href="/drips/customized-infusion/" aria-label="Customized IV Infusion" tabindex="-1" aria-hidden="true">
+          <a class="plate__bag" href="/drips/customized-infusion/" tabindex="-1">
             <span class="plate__pole"></span>
-            <img src="assets/drips/customized.png" onerror="this.src='assets/drips/immuneoboost.png';this.onerror=null" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="/assets/drips/customized.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
           </a>
 
           <div class="plate__body">
             <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-pen-nib" aria-hidden="true"></i> Customized IV Infusion</p>
-              <span class="plate__no" aria-hidden="true">X</span>
+              <p class="plate__cat"><i class="ph ph-pen-nib"></i> Customized IV Infusion</p>
+              <span class="plate__no">X</span>
             </header>
 
             <h3 class="plate__name"><a href="/drips/customized-infusion/">Customized IV Infusion</a></h3>
@@ -622,10 +543,10 @@
             <ul class="plate__ing"><li>Based on individual needs</li><li>Private consultation</li></ul>
 
             <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock" aria-hidden="true"></i> Individually determined</p>
+              <p class="plate__clock"><i class="ph ph-clock"></i> Individually determined</p>
               <div class="plate__deal">
                 <p class="plate__price"><b>By consultation</b><span>quoted after screening</span></p>
-                <a class="plate__go" href="/drips/customized-infusion/">Protocol <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+                <a class="plate__go" href="/drips/customized-infusion/">Protocol <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
@@ -636,23 +557,21 @@
       <!-- rail furniture — lives inside the pinned element so it stays on
            screen for the whole horizontal run -->
       <div class="shelf__rail">
-        <p class="shelf__counter"><b id="shelfNow">01</b> <span class="shelf__counter-sep">/</span> <span id="shelfTotal">10</span></p>
-        <span class="shelf__meter"><i id="shelfMeter"></i></span>
+        <p class="railbar__count"><b id="shelfNow">01</b> <span>/</span> <span id="shelfTotal">10</span></p>
+        <span class="railbar__meter"><i id="shelfMeter"></i></span>
 
-        <!-- phones and tablets drive the rail with these, not with a pinned
-             scrub — see the Shelf class in script.js -->
-        <div class="shelf__arrows">
-          <button class="shelf__arrow" id="shelfPrev" type="button" aria-label="Previous infusion" aria-controls="shelfTrack" disabled>
-            <i class="ph ph-arrow-left" aria-hidden="true"></i>
+        <div class="railbar__arrows" id="shelfArrows">
+          <button class="railbar__arrow" id="shelfPrev" type="button" disabled>
+            <i class="ph ph-arrow-left"></i>
           </button>
-          <button class="shelf__arrow" id="shelfNext" type="button" aria-label="Next infusion" aria-controls="shelfTrack">
-            <i class="ph ph-arrow-right" aria-hidden="true"></i>
+          <button class="railbar__arrow" id="shelfNext" type="button">
+            <i class="ph ph-arrow-right"></i>
           </button>
         </div>
 
-        <span class="shelf__hint">Keep scrolling <i class="ph ph-arrow-right" aria-hidden="true"></i></span>
+        <span class="shelf__hint">Keep scrolling <i class="ph ph-arrow-right"></i></span>
         <button class="shelf__skip" id="shelfSkip" type="button">
-          <span>Skip this section</span><i class="ph ph-arrow-down" aria-hidden="true"></i>
+          <span>Skip this section</span><i class="ph ph-arrow-down"></i>
         </button>
       </div>
     </div>
@@ -663,19 +582,18 @@
 
 <!-- ==============================================================
      LIVING WITH A CHRONIC CONDITION  (#conditions)
-     A switcher, not a scroll. One condition on screen at a time so the
-     section stays short; every panel stays in the DOM so crawlers get all
-     seven. Type is deliberately different here — Marcellus for the names,
-     Syne for the rail, Archivo for the figures, Cormorant for the mechanism.
+     A switcher, not a scroll. One condition on screen at a time; every panel
+     stays in the DOM so all seven remain in the page source.
+     Deep-linkable: /#cond-mafld opens fatty liver from an ad or an email.
      ============================================================== -->
-<section class="chron" id="conditions" aria-labelledby="chronTitle">
-  <span class="chron__field" aria-hidden="true"></span>
-  <span class="chron__spot" aria-hidden="true"></span>
+<section class="chron" id="conditions">
+  <span class="chron__field"></span>
+  <span class="chron__spot"></span>
 
   <div class="chron__wrap">
     <header class="chron__head">
-      <p class="chron__eyebrow" data-reveal><i class="ph-duotone ph-heartbeat" aria-hidden="true"></i> Living with a chronic condition</p>
-      <h2 class="chron__title" id="chronTitle" data-reveal>A diagnosis is not<br><em>a closed door.</em></h2>
+      <p class="chron__eyebrow" data-reveal><i class="ph-duotone ph-heartbeat"></i> Living with a chronic condition</p>
+      <h2 class="chron__title" data-reveal>A diagnosis is not<br><em>a closed door.</em></h2>
       <p class="chron__lede" data-reveal>
         Nutritional and antioxidant support that sits <strong>beside</strong> the care you already
         have. Every entry names the compound, states what it does, and is explicit about where the
@@ -684,14 +602,14 @@
       </p>
     </header>
 
-    <nav class="cnav" role="tablist" aria-label="Choose a condition" data-reveal>
-      <button class="cnav__tab is-on" type="button" role="tab" aria-selected="true" aria-controls="cond-crohns" data-cond="cond-crohns" style="--cond:#C0563E"><i class="ph ph-first-aid-kit" aria-hidden="true"></i><span>Crohn&rsquo;s Disease</span></button>
-      <button class="cnav__tab" type="button" role="tab" aria-selected="false" aria-controls="cond-uc" data-cond="cond-uc" style="--cond:#9C4A6B"><i class="ph ph-drop" aria-hidden="true"></i><span>Ulcerative Colitis</span></button>
-      <button class="cnav__tab" type="button" role="tab" aria-selected="false" aria-controls="cond-celiac" data-cond="cond-celiac" style="--cond:#B8873C"><i class="ph ph-fork-knife" aria-hidden="true"></i><span>Celiac &amp; Malabsorption</span></button>
-      <button class="cnav__tab" type="button" role="tab" aria-selected="false" aria-controls="cond-ra" data-cond="cond-ra" style="--cond:#D98C1F"><i class="ph ph-hand-heart" aria-hidden="true"></i><span>Rheumatoid Arthritis</span></button>
-      <button class="cnav__tab" type="button" role="tab" aria-selected="false" aria-controls="cond-oa" data-cond="cond-oa" style="--cond:#8C6239"><i class="ph ph-bone" aria-hidden="true"></i><span>Osteoarthritis</span></button>
-      <button class="cnav__tab" type="button" role="tab" aria-selected="false" aria-controls="cond-psoriasis" data-cond="cond-psoriasis" style="--cond:#8A6FA8"><i class="ph ph-shield-check" aria-hidden="true"></i><span>Psoriasis</span></button>
-      <button class="cnav__tab" type="button" role="tab" aria-selected="false" aria-controls="cond-mafld" data-cond="cond-mafld" style="--cond:#5F7A55"><i class="ph ph-leaf" aria-hidden="true"></i><span>Fatty Liver Disease</span></button>
+    <nav class="cnav" data-reveal>
+      <button class="cnav__tab is-on" type="button" data-cond="cond-crohns" style="--cond:#C0563E"><i class="ph ph-first-aid-kit"></i><span>Crohn&rsquo;s Disease</span></button>
+      <button class="cnav__tab" type="button" data-cond="cond-uc" style="--cond:#9C4A6B"><i class="ph ph-drop"></i><span>Ulcerative Colitis</span></button>
+      <button class="cnav__tab" type="button" data-cond="cond-celiac" style="--cond:#B8873C"><i class="ph ph-fork-knife"></i><span>Celiac &amp; Malabsorption</span></button>
+      <button class="cnav__tab" type="button" data-cond="cond-ra" style="--cond:#D98C1F"><i class="ph ph-hand-heart"></i><span>Rheumatoid Arthritis</span></button>
+      <button class="cnav__tab" type="button" data-cond="cond-oa" style="--cond:#8C6239"><i class="ph ph-bone"></i><span>Osteoarthritis</span></button>
+      <button class="cnav__tab" type="button" data-cond="cond-psoriasis" style="--cond:#8A6FA8"><i class="ph ph-shield-check"></i><span>Psoriasis</span></button>
+      <button class="cnav__tab" type="button" data-cond="cond-mafld" style="--cond:#5F7A55"><i class="ph ph-leaf"></i><span>Fatty Liver Disease</span></button>
     </nav>
 
     <!-- the pill rail scrolls out of sight on a phone, so the count and the
@@ -699,244 +617,194 @@
     <div class="cnav__pager">
       <p class="cnav__count"><b id="condNow">01</b> <span>/</span> <span id="condTotal">07</span> conditions</p>
       <div class="cnav__arrows">
-        <button class="cnav__arrow" id="condPrev" type="button" aria-label="Previous condition">
-          <i class="ph ph-arrow-left" aria-hidden="true"></i>
-        </button>
-        <button class="cnav__arrow" id="condNext" type="button" aria-label="Next condition">
-          <i class="ph ph-arrow-right" aria-hidden="true"></i>
-        </button>
+        <button class="cnav__arrow" id="condPrev" type="button"><i class="ph ph-arrow-left"></i></button>
+        <button class="cnav__arrow" id="condNext" type="button"><i class="ph ph-arrow-right"></i></button>
       </div>
     </div>
 
     <div class="cstage" id="cstage">
 
-        <article class="cd is-live" id="cond-crohns" style="--cond:#C0563E" aria-hidden="false">
-          <span class="cd__ghost" aria-hidden="true">I</span>
+        <article class="cd is-live" id="cond-crohns" style="--cond:#C0563E">
+          <span class="cd__ghost">I</span>
 
           <div class="cd__l">
-            <p class="cd__kick"><i class="ph-duotone ph-first-aid-kit" aria-hidden="true"></i> Malabsorption</p>
+            <p class="cd__kick"><i class="ph-duotone ph-first-aid-kit"></i> Malabsorption</p>
             <h3 class="cd__name">Crohn&rsquo;s Disease</h3>
             <p class="cd__what">Crohn&rsquo;s most often inflames the terminal ileum &mdash; the exact stretch of bowel where vitamin&nbsp;B12 and bile salts are absorbed. Low iron, B12, folate, vitamin&nbsp;D and zinc are documented in inflammatory bowel disease, and studies find low zinc in 15 to 40 of every 100 patients.</p>
             <a class="cd__drip" href="/drips/immune-support/">
               <span class="cd__drip-lead">Delivered in</span>
               <span class="cd__drip-name">Immun-O-Boost IV Support</span>
               <span class="cd__drip-meta">2 h 30<i>&middot;</i>$650</span>
-              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+              <i class="ph ph-arrow-up-right"></i>
             </a>
           </div>
 
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol">
-                <b>Zinc</b><span>Supports hundreds of enzymes, immune-cell communication and normal tissue repair.</span>
-              </li>
-              <li class="cd__mol">
-                <b>B-Complex &amp; B12</b><span>Taken up in the ileum &mdash; the segment most often involved.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Amino Acids</b><span>Building blocks that reduced intake and long flares leave short.</span>
-              </li>
+              <li class="cd__mol"><b>Zinc</b><span>Supports hundreds of enzymes, immune-cell communication and normal tissue repair.</span></li>
+              <li class="cd__mol"><b>B-Complex &amp; B12</b><span>Taken up in the ileum &mdash; the segment most often involved.</span></li>
+              <li class="cd__mol"><b>Amino Acids</b><span>Building blocks that reduced intake and long flares leave short.</span></li>
             </ul>
             <p class="cd__never"><b>Not:</b> Does not treat Crohn&rsquo;s. Biologics, immunomodulators and steroids do.</p>
           </div>
         </article>
 
-        <article class="cd" id="cond-uc" style="--cond:#9C4A6B" aria-hidden="true">
-          <span class="cd__ghost" aria-hidden="true">II</span>
+        <article class="cd" id="cond-uc" style="--cond:#9C4A6B">
+          <span class="cd__ghost">II</span>
 
           <div class="cd__l">
-            <p class="cd__kick"><i class="ph-duotone ph-drop" aria-hidden="true"></i> Fluid &amp; nutrient loss</p>
+            <p class="cd__kick"><i class="ph-duotone ph-drop"></i> Fluid &amp; nutrient loss</p>
             <h3 class="cd__name">Ulcerative Colitis</h3>
             <p class="cd__what">UC involves the colon and rectum. Ongoing blood loss makes iron deficiency the most common complication outside the gut itself, and frequent stools carry off fluid and electrolytes faster than drinking can replace them.</p>
             <a class="cd__drip" href="/drips/recovery-support/">
               <span class="cd__drip-lead">Delivered in</span>
               <span class="cd__drip-name">Revive IV Support</span>
               <span class="cd__drip-meta">2 h 15<i>&middot;</i>$625</span>
-              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+              <i class="ph ph-arrow-up-right"></i>
             </a>
           </div>
 
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol">
-                <b>Hydration &amp; Electrolytes</b><span>Replacing measurable losses &mdash; the least speculative use of a line.</span>
-              </li>
-              <li class="cd__mol">
-                <b>B-Complex &amp; Amino Acids</b><span>Support while intake and absorption are both reduced.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Glutathione &amp; ALA</b><span>Antioxidant-network compounds supporting normal redox balance.</span>
-              </li>
+              <li class="cd__mol"><b>Hydration &amp; Electrolytes</b><span>Replacing measurable losses &mdash; the least speculative use of a line.</span></li>
+              <li class="cd__mol"><b>B-Complex &amp; Amino Acids</b><span>Support while intake and absorption are both reduced.</span></li>
+              <li class="cd__mol"><b>Glutathione &amp; ALA</b><span>Antioxidant-network compounds supporting normal redox balance.</span></li>
             </ul>
             <p class="cd__never"><b>Not:</b> Does not induce remission and does not maintain it. Nothing offered here changes the course of the disease.</p>
           </div>
         </article>
 
-        <article class="cd" id="cond-celiac" style="--cond:#B8873C" aria-hidden="true">
-          <span class="cd__ghost" aria-hidden="true">III</span>
+        <article class="cd" id="cond-celiac" style="--cond:#B8873C">
+          <span class="cd__ghost">III</span>
 
           <div class="cd__l">
-            <p class="cd__kick"><i class="ph-duotone ph-fork-knife" aria-hidden="true"></i> Reduced absorbing surface</p>
+            <p class="cd__kick"><i class="ph-duotone ph-fork-knife"></i> Reduced absorbing surface</p>
             <h3 class="cd__name">Celiac &amp; Malabsorption</h3>
             <p class="cd__what">In newly diagnosed celiac disease the injured intestinal lining may not absorb zinc well &mdash; some studies put around half of patients at risk. The same problem follows bariatric or bowel surgery, where there is simply less absorbing surface.</p>
             <a class="cd__drip" href="/drips/immune-support/">
               <span class="cd__drip-lead">Delivered in</span>
               <span class="cd__drip-name">Immun-O-Boost IV Support</span>
               <span class="cd__drip-meta">2 h 30<i>&middot;</i>$650</span>
-              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+              <i class="ph ph-arrow-up-right"></i>
             </a>
           </div>
 
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol">
-                <b>Trace Minerals</b><span>Zinc, copper, manganese and selenium &mdash; what a shortened bowel stops taking up.</span>
-              </li>
-              <li class="cd__mol">
-                <b>B-Complex &amp; Minerals</b><span>B1 through B12 with magnesium chloride and calcium gluconate.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Vitamin&nbsp;C</b><span>An antioxidant that is also required for normal collagen production.</span>
-              </li>
+              <li class="cd__mol"><b>Trace Minerals</b><span>Zinc, copper, manganese and selenium &mdash; what a shortened bowel stops taking up.</span></li>
+              <li class="cd__mol"><b>B-Complex &amp; Minerals</b><span>B1 through B12 with magnesium chloride and calcium gluconate.</span></li>
+              <li class="cd__mol"><b>Vitamin&nbsp;C</b><span>An antioxidant that is also required for normal collagen production.</span></li>
             </ul>
             <p class="cd__never"><b>Not:</b> A gluten-free diet remains the treatment. An infusion does not repair villi.</p>
           </div>
         </article>
 
-        <article class="cd" id="cond-ra" style="--cond:#D98C1F" aria-hidden="true">
-          <span class="cd__ghost" aria-hidden="true">IV</span>
+        <article class="cd" id="cond-ra" style="--cond:#D98C1F">
+          <span class="cd__ghost">IV</span>
 
           <div class="cd__l">
-            <p class="cd__kick"><i class="ph-duotone ph-hand-heart" aria-hidden="true"></i> Systemic autoimmune inflammation</p>
+            <p class="cd__kick"><i class="ph-duotone ph-hand-heart"></i> Systemic autoimmune inflammation</p>
             <h3 class="cd__name">Rheumatoid Arthritis</h3>
             <p class="cd__what">RA is autoimmune disease, not worn joints. Methotrexate works by interfering with folate, which is why folic acid is prescribed alongside it. Nutritional needs shift with diet, inflammation and medication.</p>
             <a class="cd__drip" href="/drips/joint-skin-wellness/">
               <span class="cd__drip-lead">Delivered in</span>
               <span class="cd__drip-name">Joint &amp; Skin Wellness IV</span>
               <span class="cd__drip-meta">2 h 30<i>&middot;</i>$750</span>
-              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+              <i class="ph ph-arrow-up-right"></i>
             </a>
           </div>
 
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol">
-                <b>Collagen Amino Acids</b><span>Glycine, proline and lysine &mdash; involved in normal type&nbsp;II collagen formation.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Vitamin&nbsp;C</b><span>Required for normal collagen production, and an antioxidant.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Copper</b><span>Cofactor for the enzymes behind collagen cross-linking.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Selenium</b><span>Built into glutathione peroxidases, the enzymes that use glutathione.</span>
-              </li>
+              <li class="cd__mol"><b>Collagen Amino Acids</b><span>Glycine, proline and lysine &mdash; involved in normal type&nbsp;II collagen formation.</span></li>
+              <li class="cd__mol"><b>Vitamin&nbsp;C</b><span>Required for normal collagen production, and an antioxidant.</span></li>
+              <li class="cd__mol"><b>Copper</b><span>Cofactor for the enzymes behind collagen cross-linking.</span></li>
+              <li class="cd__mol"><b>Selenium</b><span>Built into glutathione peroxidases, the enzymes that use glutathione.</span></li>
             </ul>
             <p class="cd__never"><b>Not:</b> Not a DMARD. Does not stop autoimmune joint damage or slow its progression.</p>
           </div>
         </article>
 
-        <article class="cd" id="cond-oa" style="--cond:#8C6239" aria-hidden="true">
-          <span class="cd__ghost" aria-hidden="true">V</span>
+        <article class="cd" id="cond-oa" style="--cond:#8C6239">
+          <span class="cd__ghost">V</span>
 
           <div class="cd__l">
-            <p class="cd__kick"><i class="ph-duotone ph-bone" aria-hidden="true"></i> Cartilage matrix maintenance</p>
+            <p class="cd__kick"><i class="ph-duotone ph-bone"></i> Cartilage matrix maintenance</p>
             <h3 class="cd__name">Osteoarthritis</h3>
             <p class="cd__what">Cartilage is a matrix, and type&nbsp;II collagen is one of its principal structural components. The body maintains that matrix continuously, using amino acids, minerals and enzyme cofactors drawn from what you absorb.</p>
             <a class="cd__drip" href="/drips/joint-skin-wellness/">
               <span class="cd__drip-lead">Delivered in</span>
               <span class="cd__drip-name">Joint &amp; Skin Wellness IV</span>
               <span class="cd__drip-meta">2 h 30<i>&middot;</i>$750</span>
-              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+              <i class="ph ph-arrow-up-right"></i>
             </a>
           </div>
 
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol">
-                <b>Glycine, Proline &amp; Lysine</b><span>The amino acids involved in normal collagen formation.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Magnesium</b><span>Supports energy production, protein synthesis and glutathione production.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Zinc &amp; Copper, balanced</b><span>Excess zinc interferes with copper absorption, so the two are kept in ratio.</span>
-              </li>
+              <li class="cd__mol"><b>Glycine, Proline &amp; Lysine</b><span>The amino acids involved in normal collagen formation.</span></li>
+              <li class="cd__mol"><b>Magnesium</b><span>Supports energy production, protein synthesis and glutathione production.</span></li>
+              <li class="cd__mol"><b>Zinc &amp; Copper, balanced</b><span>Excess zinc interferes with copper absorption, so the two are kept in ratio.</span></li>
             </ul>
             <p class="cd__never"><b>Not:</b> Supplying nutrients involved in collagen production is not the same as producing new cartilage. This does not replace or regenerate destroyed cartilage.</p>
           </div>
         </article>
 
-        <article class="cd" id="cond-psoriasis" style="--cond:#8A6FA8" aria-hidden="true">
-          <span class="cd__ghost" aria-hidden="true">VI</span>
+        <article class="cd" id="cond-psoriasis" style="--cond:#8A6FA8">
+          <span class="cd__ghost">VI</span>
 
           <div class="cd__l">
-            <p class="cd__kick"><i class="ph-duotone ph-shield-check" aria-hidden="true"></i> Immune-mediated skin inflammation</p>
+            <p class="cd__kick"><i class="ph-duotone ph-shield-check"></i> Immune-mediated skin inflammation</p>
             <h3 class="cd__name">Psoriasis</h3>
             <p class="cd__what">Psoriasis is systemic immune-mediated inflammation that shows up on the skin. Around a third of patients develop psoriatic arthritis, and metabolic and cardiovascular risk run higher than in the general population.</p>
             <a class="cd__drip" href="/drips/joint-skin-wellness/">
               <span class="cd__drip-lead">Delivered in</span>
               <span class="cd__drip-name">Joint &amp; Skin Wellness IV</span>
               <span class="cd__drip-meta">2 h 30<i>&middot;</i>$750</span>
-              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+              <i class="ph ph-arrow-up-right"></i>
             </a>
           </div>
 
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol">
-                <b>Type&nbsp;I &amp; III Collagen Aminos</b><span>The skin&rsquo;s structural layer depends on collagen as cartilage does.</span>
-              </li>
-              <li class="cd__mol">
-                <b>N-Acetylcysteine</b><span>Supplies cysteine &mdash; one amino acid the body needs to make glutathione.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Glutathione &amp; Selenium</b><span>A major intracellular antioxidant and the enzymes that work with it.</span>
-              </li>
+              <li class="cd__mol"><b>Type&nbsp;I &amp; III Collagen Aminos</b><span>The skin&rsquo;s structural layer depends on collagen as cartilage does.</span></li>
+              <li class="cd__mol"><b>N-Acetylcysteine</b><span>Supplies cysteine &mdash; one amino acid the body needs to make glutathione.</span></li>
+              <li class="cd__mol"><b>Glutathione &amp; Selenium</b><span>A major intracellular antioxidant and the enzymes that work with it.</span></li>
             </ul>
             <p class="cd__never"><b>Not:</b> Not a treatment for psoriasis, and no guaranteed skin healing.</p>
           </div>
         </article>
 
-        <article class="cd" id="cond-mafld" style="--cond:#5F7A55" aria-hidden="true">
-          <span class="cd__ghost" aria-hidden="true">VII</span>
+        <article class="cd" id="cond-mafld" style="--cond:#5F7A55">
+          <span class="cd__ghost">VII</span>
 
           <div class="cd__l">
-            <p class="cd__kick"><i class="ph-duotone ph-leaf" aria-hidden="true"></i> Metabolic &amp; oxidative load</p>
+            <p class="cd__kick"><i class="ph-duotone ph-leaf"></i> Metabolic &amp; oxidative load</p>
             <h3 class="cd__name">Fatty Liver Disease</h3>
-            <p class="cd__what">Now the most common chronic liver condition in the world. Everything absorbed from your gut is routed through the liver first, which is why liver health sits at the centre of how the body handles anything you take in.</p>
+            <p class="cd__what">Now the most common chronic liver condition in the world. Everything absorbed from your gut is routed through the liver first, which is why liver health sits at the center of how the body handles anything you take in.</p>
             <a class="cd__drip" href="/drips/liver-support/">
               <span class="cd__drip-lead">Delivered in</span>
               <span class="cd__drip-name">Fatty Liver Support IV</span>
               <span class="cd__drip-meta">3 h<i>&middot;</i>$850</span>
-              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+              <i class="ph ph-arrow-up-right"></i>
             </a>
           </div>
 
           <div class="cd__r">
             <p class="cd__lab">The active components</p>
             <ul class="cd__mols">
-              <li class="cd__mol">
-                <b>Glycine &amp; Taurine</b><span>Amino acids the liver uses to prepare bile, which helps process fats.</span>
-              </li>
-              <li class="cd__mol">
-                <b>NAC &amp; Glycine</b><span>Together they supply the building blocks the body uses to make glutathione.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Alpha-Lipoic Acid</b><span>Works in mitochondrial energy metabolism and the antioxidant network.</span>
-              </li>
-              <li class="cd__mol">
-                <b>Magnesium &amp; B-Complex</b><span>The metabolic foundation that lets the rest be processed and used.</span>
-              </li>
+              <li class="cd__mol"><b>Glycine &amp; Taurine</b><span>Amino acids the liver uses to prepare bile, which helps process fats.</span></li>
+              <li class="cd__mol"><b>NAC &amp; Glycine</b><span>Together they supply the building blocks the body uses to make glutathione.</span></li>
+              <li class="cd__mol"><b>Alpha-Lipoic Acid</b><span>Works in mitochondrial energy metabolism and the antioxidant network.</span></li>
+              <li class="cd__mol"><b>Magnesium &amp; B-Complex</b><span>The metabolic foundation that lets the rest be processed and used.</span></li>
             </ul>
-            <p class="cd__never"><b>Not:</b> Not a detox and not a shortcut. The evidence behind fatty liver is metabolic &mdash; weight, glycaemic control and alcohol.</p>
+            <p class="cd__never"><b>Not:</b> Not a detox and not a shortcut. The evidence behind fatty liver is metabolic &mdash; weight, glycemic control and alcohol.</p>
           </div>
         </article>
 
@@ -954,85 +822,84 @@
   </div>
 </section>
 
+
 <!-- ==============================================================
      THE IV ADVANTAGE  (#advantage)
-     Was two tall cards side by side. Now one stage with a switch: pick a
-     road, watch it draw. Marcellus for the stop names, Archivo for the
-     counters, Cormorant for the caveat — deliberately not the shelf's voice.
+     One stage with a switch: pick a road, watch it draw.
      ============================================================== -->
-<section class="adv" id="advantage" aria-labelledby="advTitle">
-  <span class="adv__field" aria-hidden="true"></span>
+<section class="adv" id="advantage">
+  <span class="adv__field"></span>
 
   <div class="adv__wrap">
     <header class="adv__head">
-      <p class="adv__eyebrow" data-reveal><i class="ph-duotone ph-path" aria-hidden="true"></i> The IV advantage</p>
-      <h2 class="adv__title" id="advTitle" data-reveal>Same destination.<br><em>Very different roads.</em></h2>
+      <p class="adv__eyebrow" data-reveal><i class="ph-duotone ph-path"></i> The IV advantage</p>
+      <h2 class="adv__title" data-reveal>Same destination.<br><em>Very different roads.</em></h2>
       <p class="adv__lede" data-reveal>
         A vitamin only works once it reaches your bloodstream. Swallow it and it has to survive the
         trip. Put it in a vein and it is simply already there. Pick a road and watch it run.
       </p>
     </header>
 
-    <div class="adv__switch" role="tablist" aria-label="Choose a route" data-reveal>
-      <span class="adv__thumb" aria-hidden="true"></span>
-      <button class="adv__opt is-on" type="button" role="tab" aria-selected="true" aria-controls="lane-oral" data-lane="oral">
-        <i class="ph ph-pill" aria-hidden="true"></i><span>By mouth</span><b>4 stops</b>
+    <div class="adv__switch" data-reveal>
+      <span class="adv__thumb"></span>
+      <button class="adv__opt is-on" type="button" data-lane="oral">
+        <i class="ph ph-pill"></i><span>By mouth</span><b>4 stops</b>
       </button>
-      <button class="adv__opt" type="button" role="tab" aria-selected="false" aria-controls="lane-iv" data-lane="iv">
-        <i class="ph ph-drop" aria-hidden="true"></i><span>By line</span><b>0 stops</b>
+      <button class="adv__opt" type="button" data-lane="iv">
+        <i class="ph ph-drop"></i><span>By line</span><b>0 stops</b>
       </button>
     </div>
 
     <div class="adv__stage" id="advStage">
 
-      <div class="adv__lane is-live" id="lane-oral" data-lane="oral" aria-hidden="false">
+      <div class="adv__lane is-live" id="lane-oral" data-lane="oral">
         <ol class="adv__track">
-          <span class="adv__rule" aria-hidden="true"><i class="adv__fill"></i></span>
+          <span class="adv__rule"><i class="adv__fill"></i></span>
           <li class="stp" style="--n:0">
-            <span class="stp__pin" aria-hidden="true">1</span>
+            <span class="stp__pin">1</span>
             <h4 class="stp__name">Your stomach</h4>
             <p class="stp__what">Acid and enzymes start breaking the tablet apart. Some of what you swallowed does not survive this room.</p>
           </li>
           <li class="stp" style="--n:1">
-            <span class="stp__pin" aria-hidden="true">2</span>
+            <span class="stp__pin">2</span>
             <h4 class="stp__name">Your gut wall</h4>
             <p class="stp__what">Whatever is left has to cross into the blood. How much crosses depends on the nutrient, your gut, and what else you ate.</p>
           </li>
           <li class="stp" style="--n:2">
-            <span class="stp__pin" aria-hidden="true">3</span>
+            <span class="stp__pin">3</span>
             <h4 class="stp__name">Your liver</h4>
             <p class="stp__what">Everything absorbed from the gut is routed through the liver first. It takes its share before passing the rest on.</p>
           </li>
           <li class="stp" style="--n:3">
-            <span class="stp__pin" aria-hidden="true">4</span>
+            <span class="stp__pin">4</span>
             <h4 class="stp__name">Your bloodstream</h4>
             <p class="stp__what">What finally arrives is some fraction of the dose on the label &mdash; and it arrives over hours.</p>
           </li>
         </ol>
-        <p class="adv__verdict"><b>The catch —</b> you never quite know how much made it. The label dose is an estimate wearing a number.</p>
+        <p class="adv__verdict"><b>The catch &mdash;</b> you never quite know how much made it. The label dose is an estimate wearing a number.</p>
       </div>
 
-      <div class="adv__lane" id="lane-iv" data-lane="iv" aria-hidden="true">
+      <div class="adv__lane" id="lane-iv" data-lane="iv">
         <ol class="adv__track adv__track--iv">
-          <span class="adv__rule" aria-hidden="true"><i class="adv__fill"></i></span>
+          <span class="adv__rule"><i class="adv__fill"></i></span>
           <li class="stp" style="--n:0">
-            <span class="stp__pin" aria-hidden="true"><i class="ph-fill ph-check"></i></span>
+            <span class="stp__pin"><i class="ph-fill ph-check"></i></span>
             <h4 class="stp__name">Into the vein</h4>
             <p class="stp__what">The infusion goes directly into circulation. No stomach to survive, no gut wall to cross.</p>
           </li>
           <li class="stp" style="--n:1">
-            <span class="stp__pin" aria-hidden="true"><i class="ph-fill ph-check"></i></span>
+            <span class="stp__pin"><i class="ph-fill ph-check"></i></span>
             <h4 class="stp__name">Your bloodstream</h4>
             <p class="stp__what">The dose is in circulation within minutes, and Dr.&nbsp;Aronov controls the rate the entire time.</p>
           </li>
         </ol>
-        <p class="adv__verdict"><b>The point —</b> she knows exactly what went in, because she calculated it, mixed it and watched it go.</p>
+        <p class="adv__verdict"><b>The point &mdash;</b> she knows exactly what went in, because she calculated it, mixed it and watched it go.</p>
       </div>
 
     </div>
 
     <aside class="adv__note" data-reveal>
-      <i class="ph-duotone ph-stethoscope" aria-hidden="true"></i>
+      <i class="ph-duotone ph-stethoscope"></i>
       <p>
         This is not an argument against swallowing your vitamins. For most people, most of the time,
         by mouth is exactly right &mdash; cheaper, easier, and it works. The line matters when
@@ -1043,25 +910,23 @@
   </div>
 </section>
 
+
 <!-- ==============================================================
-     HOW A VISIT WORKS  (#visit)
-     Four beats, one rule, one honest line. Kept deliberately short — the
-     surrounding sections are long, and this one only has to make the
-     no-walk-ins policy feel like a reason rather than an obstacle.
+     HOW A VISIT WORKS  (#visit)   —   CHAPTER II
      ============================================================== -->
-<section class="visit" id="visit" aria-labelledby="visitTitle">
-  <span class="visit__field" aria-hidden="true"></span>
+<section class="visit" id="visit">
+  <span class="visit__field"></span>
 
   <div class="visit__wrap">
 
     <header class="visit__head">
-      <div class="visit__rubric" data-reveal>
-        <span class="visit__rubric-no">Chapter III</span>
-        <span class="visit__rubric-name">Before you come in</span>
-        <span class="visit__rubric-rule"></span>
+      <div class="rubric" data-reveal>
+        <span class="rubric__no">Chapter II</span>
+        <span class="rubric__name">Before you come in</span>
+        <span class="rubric__rule"></span>
       </div>
       <div class="visit__intro">
-        <h2 class="visit__title" id="visitTitle" data-reveal>No walk-ins.<br><em>That is the point.</em></h2>
+        <h2 class="visit__title" data-reveal>No walk-ins.<br><em>That is the point.</em></h2>
         <p class="visit__lede" data-reveal>
           Four steps sit between your first message and the chair &mdash; every one of them
           performed by the physician who will be in the room with you.
@@ -1070,32 +935,32 @@
     </header>
 
     <ol class="visit__steps" id="visitSteps">
-      <span class="visit__rail" aria-hidden="true"><i class="visit__fill"></i></span>
+      <span class="visit__rail"><i class="visit__fill"></i></span>
         <li class="vs" style="--i:0">
-          <span class="vs__pin" aria-hidden="true"></span>
-          <span class="vs__no" aria-hidden="true">01</span>
-          <i class="vs__ico ph ph-file-text" aria-hidden="true"></i>
+          <span class="vs__pin"></span>
+          <span class="vs__no">01</span>
+          <i class="vs__ico ph ph-file-text"></i>
           <h3 class="vs__title">You send your history</h3>
           <p class="vs__text">Medical history, current medications, allergies. A few minutes. Nothing is booked and nothing is charged at this stage.</p>
         </li>
         <li class="vs" style="--i:1">
-          <span class="vs__pin" aria-hidden="true"></span>
-          <span class="vs__no" aria-hidden="true">02</span>
-          <i class="vs__ico ph ph-eyeglasses" aria-hidden="true"></i>
+          <span class="vs__pin"></span>
+          <span class="vs__no">02</span>
+          <i class="vs__ico ph ph-eyeglasses"></i>
           <h3 class="vs__title">She reads it herself</h3>
           <p class="vs__text">Dr.&nbsp;Aronov reviews what you sent and decides whether IV therapy is appropriate &mdash; and which formula fits.</p>
         </li>
         <li class="vs" style="--i:2">
-          <span class="vs__pin" aria-hidden="true"></span>
-          <span class="vs__no" aria-hidden="true">03</span>
-          <i class="vs__ico ph ph-envelope-simple" aria-hidden="true"></i>
+          <span class="vs__pin"></span>
+          <span class="vs__no">03</span>
+          <i class="vs__ico ph ph-envelope-simple"></i>
           <h3 class="vs__title">Eligibility, decided case by case</h3>
           <p class="vs__text">There is no blanket rule. She weighs your history, your medications and your goals, and decides what is appropriate for you specifically &mdash; or that nothing here is.</p>
         </li>
         <li class="vs" style="--i:3">
-          <span class="vs__pin" aria-hidden="true"></span>
-          <span class="vs__no" aria-hidden="true">04</span>
-          <i class="vs__ico ph ph-heartbeat" aria-hidden="true"></i>
+          <span class="vs__pin"></span>
+          <span class="vs__no">04</span>
+          <i class="vs__ico ph ph-heartbeat"></i>
           <h3 class="vs__title">Your appointment</h3>
           <p class="vs__text">She calculates the doses, prepares the medications, sets the rate, and stays in the room until it is finished.</p>
         </li>
@@ -1107,8 +972,8 @@
         <em>she will say so, and tell you why.</em>
       </p>
       <div class="visit__cta" data-reveal>
-        <a class="btn btn--forest" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener" data-magnetic>
-          <span>Begin screening</span><i class="ph ph-arrow-right" aria-hidden="true"></i>
+        <a class="btn btn--forest" href="/contact/" data-magnetic>
+          <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="btn btn--line" href="tel:+19292010740"><span>929 · 201 · 0740</span></a>
       </div>
@@ -1117,19 +982,20 @@
   </div>
 </section>
 
+
 <!-- ==============================================================
-     THE PHYSICIAN (#physician)
+     THE PHYSICIAN (#physician)   —   CHAPTER III
      ============================================================== -->
-<section class="doc" id="physician" aria-labelledby="docTitle">
+<section class="doc" id="physician">
   <div class="doc__wrap">
 
-    <header class="doc__rubric" data-reveal>
-      <span class="doc__rubric-no">Chapter II</span>
-      <span class="doc__rubric-name">Meet the physician</span>
-      <span class="doc__rubric-rule"></span>
-    </header>
+    <div class="rubric" data-reveal>
+      <span class="rubric__no">Chapter III</span>
+      <span class="rubric__name">Meet the physician</span>
+      <span class="rubric__rule"></span>
+    </div>
 
-    <h2 class="doc__title" id="docTitle" data-reveal>
+    <h2 class="doc__title" data-reveal>
       She does not <em>supervise</em> your infusion.<br>She performs it.
     </h2>
     <p class="doc__sub" data-reveal>Dr. Violeta Aronov, DO &middot; Board-Certified Anesthesiologist &middot; Founder</p>
@@ -1138,10 +1004,9 @@
 
       <div class="doc__portrait">
         <figure class="doc__shot">
-          <img src="assets/gen-images/dr.aronov.png"
+          <img src="/assets/gen-images/dr.aronov.png"
                alt="Dr. Violeta Aronov, DO, board-certified anesthesiologist and founder of Alpha Vital Elite"
-               loading="lazy" decoding="async"
-               onerror="this.src='https://precisionmedicaliv.com/wp-content/themes/alphavital/assets/img/photos/dr-aronov-home.webp';this.onerror=null">
+               loading="lazy" decoding="async">
         </figure>
         <figcaption class="doc__plate">
           <b>Violeta Aronov, DO</b>
@@ -1151,35 +1016,35 @@
 
       <div class="doc__beats" id="docBeats">
           <article class="beat">
-            <span class="beat__dot" aria-hidden="true"></span>
+            <span class="beat__dot"></span>
             <p class="beat__when">2003 — 2006</p>
             <h3 class="beat__what">SUNY Stony Brook</h3>
             <p class="beat__body">Biochemistry research on vitamin, enzyme and drug delivery through hyaluronic-acid polymer systems. <em>How a molecule gets where it needs to go</em> was the question before it was the practice.</p>
           </article>
 
           <article class="beat">
-            <span class="beat__dot" aria-hidden="true"></span>
+            <span class="beat__dot"></span>
             <p class="beat__when">Regeneron</p>
             <h3 class="beat__what">Tarrytown, New York</h3>
             <p class="beat__body">Continued that research at Regeneron Pharmaceuticals, focused on nerve regeneration and cellular recovery — the biochemistry of tissue putting itself back together.</p>
           </article>
 
           <article class="beat">
-            <span class="beat__dot" aria-hidden="true"></span>
+            <span class="beat__dot"></span>
             <p class="beat__when">Medical school</p>
             <h3 class="beat__what">NYIT College of Osteopathic Medicine</h3>
             <p class="beat__body">Then anesthesiology, a field she describes as <em>biochemistry happening in real time inside the human body</em>.</p>
           </article>
 
           <article class="beat">
-            <span class="beat__dot" aria-hidden="true"></span>
+            <span class="beat__dot"></span>
             <p class="beat__when">Nearly two decades</p>
             <h3 class="beat__what">In the operating room</h3>
             <p class="beat__body">Clinical anesthesia across general surgery, OB-GYN, vascular, gastroenterology, pediatrics, urology, dental, bariatric and orthopedic surgery.</p>
           </article>
 
           <article class="beat">
-            <span class="beat__dot" aria-hidden="true"></span>
+            <span class="beat__dot"></span>
             <p class="beat__when">Today</p>
             <h3 class="beat__what">Alpha Vital Elite</h3>
             <p class="beat__body">Every protocol here is built on years of reading patients under stress — hydration status, blood pressure, inflammation, blood loss, medication response, electrolyte shifts.</p>
@@ -1196,42 +1061,42 @@
       <div class="chain__grid" id="chainGrid">
           <div class="link">
             <span class="link__no">01</span>
-            <i class="ph ph-file-text" aria-hidden="true"></i>
+            <i class="ph ph-file-text"></i>
             <p class="link__txt">I review your history</p>
             <p class="link__sub">Medications, allergies, conditions — before anything is mixed.</p>
           </div>
 
           <div class="link">
             <span class="link__no">02</span>
-            <i class="ph ph-calculator" aria-hidden="true"></i>
+            <i class="ph ph-calculator"></i>
             <p class="link__txt">I calculate the doses</p>
             <p class="link__sub">Weight, physiology and history, not a fixed recipe.</p>
           </div>
 
           <div class="link">
             <span class="link__no">03</span>
-            <i class="ph ph-flask" aria-hidden="true"></i>
+            <i class="ph ph-flask"></i>
             <p class="link__txt">I prepare the medications</p>
             <p class="link__sub">Medical-grade and preservative-free.</p>
           </div>
 
           <div class="link">
             <span class="link__no">04</span>
-            <i class="ph ph-drop" aria-hidden="true"></i>
+            <i class="ph ph-drop"></i>
             <p class="link__txt">I spike the bag myself</p>
             <p class="link__sub">No technician, no delegation.</p>
           </div>
 
           <div class="link">
             <span class="link__no">05</span>
-            <i class="ph ph-gauge" aria-hidden="true"></i>
+            <i class="ph ph-gauge"></i>
             <p class="link__txt">I control the flow rate</p>
             <p class="link__sub">Set and adjusted through the whole infusion.</p>
           </div>
 
           <div class="link">
             <span class="link__no">06</span>
-            <i class="ph ph-heartbeat" aria-hidden="true"></i>
+            <i class="ph ph-heartbeat"></i>
             <p class="link__txt">Then the IV goes in</p>
             <p class="link__sub">And she stays in the room until it is finished.</p>
           </div>
@@ -1245,7 +1110,7 @@
     </div>
 
     <div class="doc__cta" data-reveal>
-      <a class="btn btn--forest" href="/about/"><span>Read the full biography</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+      <a class="btn btn--forest" href="/about/"><span>Read the full biography</span><i class="ph ph-arrow-right"></i></a>
       <a class="btn btn--line" href="/research/"><span>The research she cites</span></a>
     </div>
 
@@ -1254,49 +1119,43 @@
 
 
 <!-- ==============================================================
-     THE EVIDENCE  (#research)
-     Two movements: one featured paper set as a reading plate, then a
-     horizontal reference rail. NO PIN — the shelf owns that gesture and one
-     pinned section per page is the rule. This rail is a native snap scroller
-     on every breakpoint, driven by arrows, drag and the keyboard.
+     THE EVIDENCE  (#research)   —   CHAPTER IV
+     A horizontal reference rail. NO PIN — the shelf owns that gesture and one
+     pinned section per page is the rule. Native snap scroller at every
+     breakpoint, driven by arrows, drag and the keyboard.
 
      COPY RULE — every takeaway states what a study LOOKED AT. Never what an
      infusion will do for you. Three of these six are preclinical or
      observational and say so on the card face.
-
-     ⚠ OUTBOUND URLS ARE PLACEHOLDERS. Each <a> carries data-needs-url and
-     href="#". Drop the real PubMed / PMC link in and delete the attribute.
-     Nothing false ships in the meantime.
      ============================================================== -->
-<section class="rsrch" id="research" aria-labelledby="researchTitle">
-  <span class="rsrch__field" aria-hidden="true"></span>
+<section class="rsrch" id="research">
+  <span class="rsrch__field"></span>
 
   <div class="rsrch__wrap">
 
     <header class="rsrch__head">
-      <div class="rsrch__rubric" data-reveal>
-        <span class="rsrch__rubric-no">Chapter IV</span>
-        <span class="rsrch__rubric-name">The evidence</span>
-        <span class="rsrch__rubric-rule"></span>
+      <div class="rubric" data-reveal>
+        <span class="rubric__no">Chapter IV</span>
+        <span class="rubric__name">The evidence</span>
+        <span class="rubric__rule"></span>
       </div>
 
       <div class="rsrch__intro">
-        <h2 class="rsrch__title" id="researchTitle" data-reveal>
+        <h2 class="rsrch__title" data-reveal>
           What she reads<br><em>before she recommends.</em>
         </h2>
         <p class="rsrch__lede" data-reveal>
           Published literature on the compounds behind each infusion &mdash; listed so you can read
-          it yourself, not summarised into a claim. Every card states the study type, because the
+          it yourself, not summarized into a claim. Every card states the study type, because the
           difference between a trial in people and a study in mice matters more than the finding.
         </p>
       </div>
     </header>
 
-    <!-- ---------- the reference rail ---------- -->
     <div class="rail__top" data-reveal>
-      <p class="rail__lab"><i class="ph ph-flask" aria-hidden="true"></i> From the reference library</p>
+      <p class="rail__lab"><i class="ph ph-flask"></i> From the reference library</p>
       <a class="rail__all" href="/research/">
-        <span>All references</span><i class="ph ph-arrow-right" aria-hidden="true"></i>
+        <span>All references</span><i class="ph ph-arrow-right"></i>
       </a>
     </div>
 
@@ -1304,97 +1163,97 @@
       <ol class="rail__track" id="rsrchTrack">
 
         <li class="ref" style="--tone:#D9982A">
-          <a class="ref__in" href="#" data-needs-url>
+          <a class="ref__in" href="https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2024.1385591/full" target="_blank" rel="noopener">
             <header class="ref__head">
-              <p class="ref__cat"><i class="ph ph-shield-check" aria-hidden="true"></i> Immune Support</p>
-              <span class="ref__no" aria-hidden="true">01</span>
+              <p class="ref__cat"><i class="ph ph-shield-check"></i> Immune Support</p>
+              <span class="ref__no">01</span>
             </header>
             <p class="ref__type">Peer-reviewed review</p>
             <h4 class="ref__name">The nutritional roles of zinc for immune system and COVID-19 patients</h4>
             <p class="ref__take">Reviews what is known about zinc&rsquo;s part in normal immune-cell function, and where that evidence is strongest.</p>
             <footer class="ref__foot">
               <span class="ref__src">Frontiers in Nutrition<i>&middot;</i>2024</span>
-              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
             </footer>
           </a>
         </li>
 
         <li class="ref" style="--tone:#5B7098">
-          <a class="ref__in" href="#" data-needs-url>
+          <a class="ref__in" href="https://pubmed.ncbi.nlm.nih.gov/35268089/" target="_blank" rel="noopener">
             <header class="ref__head">
-              <p class="ref__cat"><i class="ph ph-infinity" aria-hidden="true"></i> Healthy Aging</p>
-              <span class="ref__no" aria-hidden="true">02</span>
+              <p class="ref__cat"><i class="ph ph-infinity"></i> Healthy Aging</p>
+              <span class="ref__no">02</span>
             </header>
             <p class="ref__type ref__type--flag">Preclinical &mdash; animal study</p>
             <h4 class="ref__name">GlyNAC supplementation in mice increases length of life by correcting glutathione deficiency</h4>
             <p class="ref__take">Conducted in mice, not people. What it examined was glycine and NAC together against glutathione deficiency and mitochondrial function.</p>
             <footer class="ref__foot">
               <span class="ref__src">PubMed</span>
-              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
             </footer>
           </a>
         </li>
 
         <li class="ref" style="--tone:#4F7D5E">
-          <a class="ref__in" href="#" data-needs-url>
+          <a class="ref__in" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12465445/" target="_blank" rel="noopener">
             <header class="ref__head">
-              <p class="ref__cat"><i class="ph ph-atom" aria-hidden="true"></i> Antioxidant Support</p>
-              <span class="ref__no" aria-hidden="true">03</span>
+              <p class="ref__cat"><i class="ph ph-atom"></i> Antioxidant Support</p>
+              <span class="ref__no">03</span>
             </header>
             <p class="ref__type ref__type--flag">Observational &mdash; cross-sectional</p>
             <h4 class="ref__name">Serum vitamin C concentrations are inversely related to biological aging</h4>
             <p class="ref__take">A population study describing an association between measured vitamin&nbsp;C and markers of biological aging. Association, not cause.</p>
             <footer class="ref__foot">
               <span class="ref__src">PMC / NIH</span>
-              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
             </footer>
           </a>
         </li>
 
         <li class="ref" style="--tone:#7FA08C">
-          <a class="ref__in" href="#" data-needs-url>
+          <a class="ref__in" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13029213/" target="_blank" rel="noopener">
             <header class="ref__head">
-              <p class="ref__cat"><i class="ph ph-drop" aria-hidden="true"></i> Glutathione IV Therapy</p>
-              <span class="ref__no" aria-hidden="true">04</span>
+              <p class="ref__cat"><i class="ph ph-drop"></i> Glutathione IV Therapy</p>
+              <span class="ref__no">04</span>
             </header>
             <p class="ref__type">Systematic review</p>
             <h4 class="ref__name">Glutathione in skin aging and tissue regeneration: molecular mechanisms and redox modulation</h4>
             <p class="ref__take">Gathers the mechanistic literature on glutathione and redox balance in skin, and sets out where the questions remain open.</p>
             <footer class="ref__foot">
               <span class="ref__src">PMC / NIH</span>
-              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
             </footer>
           </a>
         </li>
 
         <li class="ref" style="--tone:#7A5F98">
-          <a class="ref__in" href="#" data-needs-url>
+          <a class="ref__in" href="https://pubmed.ncbi.nlm.nih.gov/23690582/" target="_blank" rel="noopener">
             <header class="ref__head">
-              <p class="ref__cat"><i class="ph ph-brain" aria-hidden="true"></i> Mind &amp; Focus Support</p>
-              <span class="ref__no" aria-hidden="true">05</span>
+              <p class="ref__cat"><i class="ph ph-brain"></i> Mind &amp; Focus Support</p>
+              <span class="ref__no">05</span>
             </header>
             <p class="ref__type">Clinical study</p>
             <h4 class="ref__name">Preventing Alzheimer&rsquo;s disease-related gray matter atrophy by B-vitamin treatment</h4>
-            <p class="ref__take">A trial in people, studying B-vitamin treatment against imaged rates of gray matter change. Sits directly beside the featured report above.</p>
+            <p class="ref__take">A trial in people, studying B-vitamin treatment against imaged rates of gray matter change.</p>
             <footer class="ref__foot">
               <span class="ref__src">PubMed</span>
-              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
             </footer>
           </a>
         </li>
 
         <li class="ref" style="--tone:#B34E37">
-          <a class="ref__in" href="#" data-needs-url>
+          <a class="ref__in" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8473793/" target="_blank" rel="noopener">
             <header class="ref__head">
-              <p class="ref__cat"><i class="ph ph-barbell" aria-hidden="true"></i> Muscle Recovery</p>
-              <span class="ref__no" aria-hidden="true">06</span>
+              <p class="ref__cat"><i class="ph ph-barbell"></i> Muscle Recovery</p>
+              <span class="ref__no">06</span>
             </header>
             <p class="ref__type">Systematic review &amp; meta-analysis</p>
             <h4 class="ref__name">Signatures and clinical significance of amino acid flux in sarcopenia</h4>
             <p class="ref__take">Pools the published studies on amino acid movement in age-related muscle loss &mdash; the highest evidence tier in this library.</p>
             <footer class="ref__foot">
               <span class="ref__src">PMC / NIH</span>
-              <span class="ref__go">Read <i class="ph ph-arrow-up-right" aria-hidden="true"></i></span>
+              <span class="ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
             </footer>
           </a>
         </li>
@@ -1403,14 +1262,14 @@
     </div>
 
     <div class="rail__bar">
-      <p class="rail__count"><b id="rsrchNow">01</b> <span>/</span> <span id="rsrchTotal">06</span></p>
-      <span class="rail__meter"><i id="rsrchMeter"></i></span>
-      <div class="rail__arrows">
-        <button class="rail__arrow" id="rsrchPrev" type="button" aria-label="Previous reference" aria-controls="rsrchTrack" disabled>
-          <i class="ph ph-arrow-left" aria-hidden="true"></i>
+      <p class="railbar__count"><b id="rsrchNow">01</b> <span>/</span> <span id="rsrchTotal">06</span></p>
+      <span class="railbar__meter"><i id="rsrchMeter"></i></span>
+      <div class="railbar__arrows">
+        <button class="railbar__arrow" id="rsrchPrev" type="button" disabled>
+          <i class="ph ph-arrow-left"></i>
         </button>
-        <button class="rail__arrow" id="rsrchNext" type="button" aria-label="Next reference" aria-controls="rsrchTrack">
-          <i class="ph ph-arrow-right" aria-hidden="true"></i>
+        <button class="railbar__arrow" id="rsrchNext" type="button">
+          <i class="ph ph-arrow-right"></i>
         </button>
       </div>
     </div>
@@ -1428,66 +1287,63 @@
 <!-- ==============================================================
      FREQUENTLY ASKED  (#faq)
      Native <details> / <summary> — no JavaScript at all, so this cannot
-     break, works with the keyboard for free, and every answer is in the DOM
-     for crawlers whether or not it is open.
+     break, and every answer is in the DOM whether or not it is open.
 
      EVERY ANSWER BELOW IS DRAWN FROM COPY ALREADY APPROVED ELSEWHERE ON THIS
-     PAGE — the hero disclaimer, the shelf stat block, the visit steps, the
-     chain of custody and the footer legal. Nothing here is new claim-making.
+     PAGE. Nothing here is new claim-making.
 
-     ⚠ STILL NEEDS HER ANSWERS, then add each as a new <details>:
+     STILL NEEDS HER ANSWERS, then add each as a new <details>:
         · Do you take insurance
         · Do I need bloodwork first · Can I eat beforehand
         · Does it hurt · Cancellation and rescheduling · Where do I park
-     ⚠ ADD JSON-LD FAQPage SCHEMA once she has signed off this wording.
      ============================================================== -->
-<section class="faq" id="faq" aria-labelledby="faqTitle">
+<section class="faq" id="faq">
   <div class="faq__wrap">
 
     <header class="faq__head">
-      <p class="faq__eyebrow" data-reveal><i class="ph-duotone ph-question" aria-hidden="true"></i> Common questions</p>
-      <h2 class="faq__title" id="faqTitle" data-reveal>Before you<br><em>get in touch.</em></h2>
+      <p class="faq__eyebrow" data-reveal><i class="ph-duotone ph-question"></i> Common questions</p>
+      <h2 class="faq__title" data-reveal>Before you<br><em>get in touch.</em></h2>
     </header>
 
     <div class="faq__list" data-reveal>
 
       <details class="fq">
-        <summary class="fq__q">Do I need an appointment?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <summary class="fq__q">Do I need an appointment?<i class="ph ph-plus"></i></summary>
         <div class="fq__a"><p>Yes. Appointments only &mdash; there are no walk-ins. Physician review and an eligibility determination are required before anything can be scheduled.</p></div>
       </details>
 
       <details class="fq">
-        <summary class="fq__q">What happens before I can book?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <summary class="fq__q">What happens before I can book?<i class="ph ph-plus"></i></summary>
         <div class="fq__a"><p>You send your medical history, current medications and allergies. Dr.&nbsp;Aronov reads it herself and decides whether IV therapy is appropriate for you and which formula fits. Nothing is booked and nothing is charged at that stage.</p></div>
       </details>
 
       <details class="fq">
-        <summary class="fq__q">Is there a consultation fee?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <summary class="fq__q">Is there a consultation fee?<i class="ph ph-plus"></i></summary>
         <div class="fq__a"><p>The consultation is $100 and is required before scheduling. If Dr.&nbsp;Aronov approves an infusion for you, that fee is applied toward it.</p></div>
       </details>
 
       <details class="fq">
-        <summary class="fq__q">Who actually gives the infusion?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <summary class="fq__q">Who actually gives the infusion?<i class="ph ph-plus"></i></summary>
         <div class="fq__a"><p>Dr.&nbsp;Aronov does, personally. She reviews your history, calculates the doses, prepares the medications, spikes the bag, sets the flow rate, and stays in the room until the infusion is finished. There is no technician and nothing is delegated.</p></div>
       </details>
 
       <details class="fq">
-        <summary class="fq__q">How long does an infusion take?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <summary class="fq__q">How long does an infusion take?<i class="ph ph-plus"></i></summary>
         <div class="fq__a"><p>It depends entirely on the formula. The shortest is a 15-minute physician-administered push within a 30-minute visit; the longest signature infusion runs three hours. Every infusion lists its chair time on its card.</p></div>
       </details>
 
       <details class="fq">
-        <summary class="fq__q">Can I come in if I have a chronic condition?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <summary class="fq__q">Can I come in if I have a chronic condition?<i class="ph ph-plus"></i></summary>
         <div class="fq__a"><p>There is no blanket rule. Eligibility is decided case by case against your history, your medications and your goals. If you are under a specialist&rsquo;s care, Dr.&nbsp;Aronov will review your medications and coordinate accordingly &mdash; being under treatment does not by itself rule you out.</p></div>
       </details>
 
       <details class="fq">
-        <summary class="fq__q">Will an infusion treat my condition?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <summary class="fq__q">Will an infusion treat my condition?<i class="ph ph-plus"></i></summary>
         <div class="fq__a"><p>No. IV services here are supportive care, designed to complement &mdash; not replace &mdash; appropriate primary or specialty medical treatment. They are not intended to diagnose, treat, cure, mitigate, prevent or reverse any disease or medical condition, and have not been evaluated by the FDA for those purposes. Individual results vary and no outcome is guaranteed.</p></div>
       </details>
 
       <details class="fq">
-        <summary class="fq__q">What if I am not eligible?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+        <summary class="fq__q">What if I am not eligible?<i class="ph ph-plus"></i></summary>
         <div class="fq__a"><p>Not everyone is. If IV therapy is not appropriate for you, Dr.&nbsp;Aronov will say so and tell you why.</p></div>
       </details>
 
@@ -1496,8 +1352,8 @@
     <div class="faq__foot" data-reveal>
       <p>Something not answered here?</p>
       <div class="faq__acts">
-        <a class="btn btn--forest" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener" data-magnetic>
-          <span>Begin screening</span><i class="ph ph-arrow-right" aria-hidden="true"></i>
+        <a class="btn btn--forest" href="/contact/" data-magnetic>
+          <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="btn btn--line" href="tel:+19292010740"><span>929 · 201 · 0740</span></a>
       </div>
@@ -1510,16 +1366,16 @@
 <!-- ==============================================================
      THE GUIDE LIBRARY  (#guides)   —   PLACEHOLDER, TO BUILD
      ============================================================== -->
-<section class="slot slot--cream" id="guides" aria-labelledby="guidesTitle">
+<section class="slot slot--cream" id="guides">
   <div class="slot__wrap">
     <span class="slot__flag">Placeholder</span>
-    <p class="slot__eyebrow"><i class="ph-duotone ph-download-simple" aria-hidden="true"></i> Physician-written guides</p>
-    <h2 class="slot__title" id="guidesTitle">The guide library</h2>
+    <p class="slot__eyebrow"><i class="ph-duotone ph-download-simple"></i> Physician-written guides</p>
+    <h2 class="slot__title">The guide library</h2>
     <p class="slot__lede">Email capture in exchange for the guides she already writes. Feeds the same CRM as the screening form and gives you a list of warm prospects who self-identified by topic.</p>
     <ul class="slot__todo">
         <li>Live now — "Zinc, Simply: The Tiny Mineral With a Very Big Job", 12 pages</li>
         <li>Slim band rather than a full section — cover thumbnail, one line, email field</li>
-        <li>Wire the submit to the same LeadConnector account as the screening form</li>
+        <li>Wire the submit to the same CRM as the screening form</li>
         <li>NEEDS — a decision on this vs the Stan Store route Liana suggested</li>
     </ul>
   </div>
@@ -1529,19 +1385,19 @@
 <!-- ==============================================================
      THE PRACTICE, LIVE (#instagram)
      ============================================================== -->
-<section class="social" id="instagram" aria-labelledby="socialTitle">
+<section class="social" id="instagram">
   <div class="social__wrap">
     <header class="social__head">
       <div>
-        <p class="social__eyebrow"><i class="ph-duotone ph-instagram-logo" aria-hidden="true"></i> The practice, day to day</p>
-        <h2 class="social__title" id="socialTitle">See the room<br><em>before you call.</em></h2>
+        <p class="social__eyebrow"><i class="ph-duotone ph-instagram-logo"></i> The practice, day to day</p>
+        <h2 class="social__title">See the room<br><em>before you call.</em></h2>
         <p class="social__sub">
           The chair, the line, the people who sit in it. If you want to know what an afternoon
           here actually looks like, it is all there.
         </p>
       </div>
-      <a class="social__cta" href="https://www.instagram.com/YOUR_HANDLE" target="_blank" rel="noopener">
-        <i class="ph ph-instagram-logo" aria-hidden="true"></i>
+      <a class="social__cta" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener">
+        <i class="ph ph-instagram-logo"></i>
         <span>Follow the practice</span>
       </a>
     </header>
@@ -1554,27 +1410,29 @@
 </section>
 
 </main>
+
+
 <!-- ==============================================================
      FOOTER
      ============================================================== -->
 <footer class="foot" id="contact">
-  <span class="foot__glow" aria-hidden="true"></span>
+  <span class="foot__glow"></span>
 
   <div class="foot__wrap">
 
     <!-- closing call -->
     <div class="foot__call">
-      <p class="foot__eyebrow"><i class="ph-duotone ph-seal-check" aria-hidden="true"></i> By physician review only</p>
+      <p class="foot__eyebrow"><i class="ph-duotone ph-seal-check"></i> By physician review only</p>
       <h2 class="foot__title">Every infusion begins<br>with a <em>physician</em>.</h2>
       <p class="foot__lede">
         Appointments only. Tell us what you are looking for and Dr.&nbsp;Aronov reviews the health
         information you provide herself, then determines whether IV therapy is appropriate.
       </p>
       <div class="foot__acts">
-        <a class="rx__btn rx__btn--solid" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
-          <span>Begin screening</span><i class="ph ph-arrow-right" aria-hidden="true"></i>
+        <a class="rx__btn rx__btn--solid" href="/contact/">
+          <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
-        <a class="rx__btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone" aria-hidden="true"></i></a>
+        <a class="rx__btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
       </div>
     </div>
 
@@ -1588,9 +1446,9 @@
           79-01 Metropolitan Avenue<br>
           Middle Village, NY 11379
         </address>
-        <a class="foot__line" href="tel:+19292010740"><i class="ph ph-phone" aria-hidden="true"></i> 929 · 201 · 0740</a>
-        <a class="foot__line" href="mailto:contact@precisionmedicaliv.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i> contact@precisionmedicaliv.com</a>
-        <a class="foot__line" href="https://www.instagram.com/YOUR_HANDLE" target="_blank" rel="noopener"><i class="ph ph-instagram-logo" aria-hidden="true"></i> Follow the practice</a>
+        <a class="foot__line" href="tel:+19292010740"><i class="ph ph-phone"></i> 929 · 201 · 0740</a>
+        <a class="foot__line" href="mailto:contact@precisionmedicaliv.com"><i class="ph ph-envelope-simple"></i> contact@precisionmedicaliv.com</a>
+        <a class="foot__line" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo"></i> Follow the practice</a>
         <p class="foot__served">Serving Queens · Brooklyn · Long Island · Greater New York</p>
       </div>
 
@@ -1606,7 +1464,7 @@
       </div>
 
       <div class="foot__col">
-        <h3 class="foot__h" aria-hidden="true">&nbsp;</h3>
+        <h3 class="foot__h foot__h--blank">&nbsp;</h3>
         <ul class="foot__list">
           <li><a href="/drips/joint-skin-wellness/">Joint &amp; Skin Wellness</a></li>
           <li><a href="/drips/liver-support/">Liver Support</a></li>
@@ -1648,7 +1506,7 @@
     </div>
 
     <!-- the wordmark, oversized along the bottom edge -->
-    <p class="foot__mark" aria-hidden="true">Alpha Vital Elite</p>
+    <p class="foot__mark">Alpha Vital Elite</p>
 
     <!-- bar -->
     <div class="foot__bar">
@@ -1656,18 +1514,19 @@
 
       <a class="credit" href="https://www.elanstechworld.com" target="_blank" rel="noopener">
         <span class="credit__by">Designed &amp; built by</span>
-        <img class="credit__logo" src="https://www.elanstechworld.com/assets/images/Elanslogo.jpeg" onerror="this.src='assets/elans-tech-world.png';this.onerror=null"
+        <img class="credit__logo" src="https://www.elanstechworld.com/assets/images/Elanslogo.jpeg"
              alt="Elan's Tech World" width="520" height="386" loading="lazy" decoding="async">
       </a>
     </div>
   </div>
 </footer>
 
+
 <!-- ==============================================================
      THE DOCK
      ============================================================== -->
-<button class="totop" id="toTop" type="button" aria-label="Back to top">
-  <i class="ph ph-arrow-up" aria-hidden="true"></i>
+<button class="totop" id="toTop" type="button">
+  <i class="ph ph-arrow-up"></i>
   <span>Top</span>
 </button>
 
@@ -1676,66 +1535,66 @@
     <li>
       <button class="fab__act fab__act--quiz" type="button" data-open-quiz>
         <span class="fab__label">Which infusion suits me?</span>
-        <span class="fab__ico"><i class="ph-fill ph-sparkle" aria-hidden="true"></i></span>
+        <span class="fab__ico"><i class="ph-fill ph-sparkle"></i></span>
       </button>
     </li>
     <li>
       <a class="fab__act" href="tel:+19292010740">
         <span class="fab__label">929 · 201 · 0740</span>
-        <span class="fab__ico"><i class="ph-fill ph-phone" aria-hidden="true"></i></span>
+        <span class="fab__ico"><i class="ph-fill ph-phone"></i></span>
       </a>
     </li>
     <li>
       <a class="fab__act" href="mailto:contact@precisionmedicaliv.com">
         <span class="fab__label">Email the practice</span>
-        <span class="fab__ico"><i class="ph-fill ph-envelope-simple" aria-hidden="true"></i></span>
+        <span class="fab__ico"><i class="ph-fill ph-envelope-simple"></i></span>
       </a>
     </li>
     <li>
-      <a class="fab__act" href="https://www.instagram.com/YOUR_HANDLE" target="_blank" rel="noopener">
+      <a class="fab__act" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener">
         <span class="fab__label">Instagram</span>
-        <span class="fab__ico"><i class="ph-fill ph-instagram-logo" aria-hidden="true"></i></span>
+        <span class="fab__ico"><i class="ph-fill ph-instagram-logo"></i></span>
       </a>
     </li>
   </ul>
 
-  <button class="fab__toggle" id="fabToggle" type="button" aria-expanded="false" aria-controls="fabList" aria-label="Open contact options">
-    <i class="ph ph-chat-circle-dots fab__i fab__i--open" aria-hidden="true"></i>
-    <i class="ph ph-x fab__i fab__i--close" aria-hidden="true"></i>
+  <button class="fab__toggle" id="fabToggle" type="button">
+    <i class="ph ph-chat-circle-dots fab__i fab__i--open"></i>
+    <i class="ph ph-x fab__i fab__i--close"></i>
   </button>
 </div>
 
 
 <!-- ==============================================================
      THE QUIZ MODAL
-     ⚠ The question set and the ten protocols live in script.js
-     (DRIPS + ASKS) and now match this menu exactly.
+     The question set and the ten protocols live in script.js (DRIPS + ASKS)
+     and match this menu exactly.
      ============================================================== -->
-<div class="modal" id="quiz" aria-hidden="true">
+<div class="modal" id="quiz">
   <div class="modal__veil" data-close-quiz></div>
 
-  <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+  <div class="modal__box">
     <header class="modal__head">
       <div>
-        <p class="modal__eyebrow"><i class="ph-fill ph-sparkle" aria-hidden="true"></i> Guided by AI</p>
-        <h2 class="modal__title" id="quizTitle">Which infusion suits you?</h2>
+        <p class="modal__eyebrow"><i class="ph-fill ph-sparkle"></i> Guided by AI</p>
+        <h2 class="modal__title">Which infusion suits you?</h2>
       </div>
-      <button class="modal__x" type="button" data-close-quiz aria-label="Close">
-        <i class="ph ph-x" aria-hidden="true"></i>
+      <button class="modal__x" type="button" data-close-quiz>
+        <i class="ph ph-x"></i>
       </button>
     </header>
 
-    <div class="modal__prog" id="quizProg" aria-hidden="true"></div>
+    <div class="modal__prog" id="quizProg"></div>
 
-    <div class="modal__stage" id="quizStage" aria-live="polite"></div>
+    <div class="modal__stage" id="quizStage"></div>
 
     <footer class="modal__foot">
       <button class="modal__nav" id="quizBack" type="button" hidden>
-        <i class="ph ph-arrow-left" aria-hidden="true"></i> Back
+        <i class="ph ph-arrow-left"></i> Back
       </button>
       <p class="modal__legal">A starting point, not a medical opinion. Dr.&nbsp;Aronov reviews every request.</p>
       <button class="modal__nav" id="quizAgain" type="button" hidden>
-        Start over <i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i>
+        Start over <i class="ph ph-arrow-counter-clockwise"></i>
       </button>
     </footer>
   </div>
