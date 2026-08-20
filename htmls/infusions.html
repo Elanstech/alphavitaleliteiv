@@ -26,8 +26,9 @@
 </noscript>
 
 <link rel="icon" type="image/png" href="/logo.png">
-<!-- ONE stylesheet — the page's rules live at the end of styles.css -->
-<link rel="stylesheet" href="/styles.css">
+<!-- main sheet first, then this page's own -->
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../css/infusions.css">
 
 <noscript><style>
   [data-rise], [data-reveal] { opacity: 1 !important; transform: none !important; }
@@ -461,7 +462,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<!-- ONE script — the page's module lives at the end of script.js -->
-<script src="/script.js" type="module"></script>
+<!-- main script first (header, menu, dock, reveals), then this page's own -->
+<script src="../script.js" type="module"></script>
+<script src="../js/infusions.js" type="module"></script>
 </body>
 </html>
