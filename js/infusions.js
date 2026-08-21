@@ -1,250 +1,323 @@
-/* =============================================================================
-   ALPHA VITAL ELITE IV — INFUSIONS.JS
-   Loads after /script.js and shares its GSAP + ScrollTrigger.
-   Bails immediately unless .page-infusions is present.
+/* ═════════════════════════════════════════════════════════════════
+   INFUSIONS.JS — /htmls/infusions.html
+   Loads AFTER /script.js and shares its GSAP + ScrollTrigger CDN.
+   Bails immediately unless .page-ix is present.
 
      Helpers
-     Hero        masked lines, counters, the running index
-     Cabinet     one relayout path — view, order and pricing all route here
-     Cards       tilt, lift, arrival
-     Rail        the line that draws as you read
-     Reveal      section heads
-============================================================================= */
+     Opening    aura, counters, the belt
+     Cabinet    the ten slats — open, pin, deep-link
+     Sort       menu order · chair time · rate
+     Field      the plot, built from the slats' own data
+   ═════════════════════════════════════════════════════════════════ */
 
 (() => {
-    const page = document.querySelector('.page-infusions');
+    const page = document.querySelector('.page-ix');
     if (!page) return;
 
-    /* ---------- helpers ---------- */
+    /* ── HELPERS ── */
     const $  = (s, c = document) => c.querySelector(s);
     const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 
     const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const FINE    = matchMedia('(hover: hover) and (pointer: fine)').matches;
     const GS      = typeof window.gsap !== 'undefined';
-    const LIVE    = GS && !REDUCED;
-
     if (GS) gsap.registerPlugin(ScrollTrigger);
-    if (!LIVE) document.documentElement.classList.remove('has-js');
 
-    const rise = (els, trigger, opts = {}) => {
-        if (!els.length || !LIVE) return;
-        gsap.set(els, { opacity: 0, y: opts.y ?? 26 });
-        ScrollTrigger.create({
-            trigger: trigger || els[0],
-            start: opts.start || 'top 84%',
-            once: true,
-            onEnter: () => gsap.to(els, {
-                opacity: 1, y: 0, duration: .85, ease: 'expo.out', stagger: opts.stagger ?? .08,
-            }),
+    const isRail = () => matchMedia('(min-width: 1025px)').matches;
+
+    // if the shared script never booted, nothing here should stay hidden
+    requestAnimationFrame(() => document.body.classList.add('is-ready'));
+
+    // set the start state, then tween to the end — a ScrollTrigger refresh
+    // can never strand an element at opacity 0
+    const rise = (targets, opts = {}, trigger, start = 'top 86%') => {
+        const els = (Array.isArray(targets) ? targets : [targets]).filter(Boolean);
+        if (!els.length || !GS) return;
+        if (REDUCED) { gsap.set(els, { opacity: 1, y: 0, scale: 1 }); return; }
+        const { y = 30, scale = 1, duration = .7, ease = 'expo.out', stagger = 0 } = opts;
+        gsap.set(els, { opacity: 0, y, scale });
+        gsap.to(els, {
+            opacity: 1, y: 0, scale: 1, duration, ease, stagger,
+            scrollTrigger: { trigger: trigger || els[0], start, once: true },
         });
     };
 
+    // the shared Nav is the only thing allowed to scroll the page
+    const goTo = (el) => {
+        const nav = window.AVE?.modules?.nav;
+        if (nav) nav.to(el);
+        else el.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+    };
 
-    /* =========================================================================
-       HERO
-    ========================================================================= */
-    if (LIVE) {
-        const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-        gsap.set('.inf-anim', { y: 18 });
-        tl.to('.inf-mask__in', { y: 0, duration: 1.2, stagger: .1 }, .1)
-          .to('.inf-anim',     { opacity: 1, y: 0, duration: .9, stagger: .08 }, .4);
+
+    /* ── OPENING ── */
+    const open = $('.ix-open');
+    const aura = $('#ixAura');
+
+    if (open && aura && FINE && !REDUCED) {
+        let tx = 76, ty = 26, cx = 76, cy = 26, live = false;
+
+        const loop = () => {
+            if (!live && Math.abs(tx - cx) < .2 && Math.abs(ty - cy) < .2) return;
+            cx += (tx - cx) * .07;
+            cy += (ty - cy) * .07;
+            aura.style.setProperty('--ax', cx.toFixed(2) + '%');
+            aura.style.setProperty('--ay', cy.toFixed(2) + '%');
+            requestAnimationFrame(loop);
+        };
+
+        open.addEventListener('pointermove', (e) => {
+            const b = open.getBoundingClientRect();
+            tx = ((e.clientX - b.left) / b.width) * 100;
+            ty = ((e.clientY - b.top) / b.height) * 100;
+        });
+        open.addEventListener('pointerenter', () => { live = true; open.classList.add('is-warm'); loop(); });
+        open.addEventListener('pointerleave', () => { live = false; open.classList.remove('is-warm'); });
     }
 
     $$('[data-count]').forEach((el) => {
         const end = +el.dataset.count;
-        if (!LIVE) { el.textContent = end; return; }
+        if (!GS || REDUCED) { el.textContent = end; return; }
         const o = { v: 0 };
         gsap.to(o, {
-            v: end, duration: 1.6, ease: 'expo.out', delay: .9,
+            v: end, duration: 1.6, ease: 'expo.out', delay: .55,
             onUpdate: () => { el.textContent = Math.round(o.v); },
         });
     });
 
-    const ticker = $('#infTicker');
-    if (ticker && LIVE) {
-        const roll = gsap.to(ticker, { xPercent: -50, duration: 44, ease: 'none', repeat: -1 });
-        ticker.addEventListener('pointerenter', () => gsap.to(roll, { timeScale: .2, duration: .5 }));
-        ticker.addEventListener('pointerleave', () => gsap.to(roll, { timeScale: 1, duration: .5 }));
+    /* the belt runs slowly and slows further under the pointer */
+    const belt = $('#ixBelt');
+    const tape = $('#ixTape');
+    if (belt && tape && GS && !REDUCED) {
+        const run = gsap.to(belt, { xPercent: -50, duration: 64, ease: 'none', repeat: -1 });
+        tape.addEventListener('pointerenter', () => gsap.to(run, { timeScale: .12, duration: .5 }));
+        tape.addEventListener('pointerleave', () => gsap.to(run, { timeScale: 1, duration: .8 }));
+        document.addEventListener('visibilitychange', () => (document.hidden ? run.pause() : run.play()));
     }
 
 
-    /* =========================================================================
-       CABINET — one relayout path
-       Every control (view, order, pricing) measures, mutates, then animates the
-       cards from where they were to where they now are. Nothing is re-rendered.
-    ========================================================================= */
-    const grid = $('#infGrid');
-    if (!grid) return;
+    /* ── CABINET ── */
+    const rack  = $('#ixRack');
+    const slats = rack ? $$('.ix-slat', rack) : [];
+    if (!rack || !slats.length) return;
 
-    const cards = $$('.inf-card', grid);
-    const nums  = $$('.inf-num', grid);
-    let view = 'cabinet', order = 'order', pricing = 'single';
-
-    const box = () => cards.map((c) => c.getBoundingClientRect());
-
-    const relayout = (mutate) => {
-        if (!LIVE) { mutate(); return; }
-
-        gsap.killTweensOf(cards);
-        gsap.killTweensOf(grid);
-        gsap.set(cards, { x: 0, y: 0 });
-        gsap.set(grid, { clearProps: 'height' });
-
-        const h0 = grid.offsetHeight;
-        const first = box();
-        mutate();
-        const last = box();
-        const h1 = grid.offsetHeight;
-
-        gsap.fromTo(grid, { height: h0 }, {
-            height: h1, duration: .7, ease: 'expo.out',
-            clearProps: 'height',
-            onComplete: () => ScrollTrigger.refresh(),
-        });
-
-        cards.forEach((c, i) => {
-            const dx = first[i].left - last[i].left;
-            const dy = first[i].top - last[i].top;
-            if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
-            gsap.fromTo(c, { x: dx, y: dy }, {
-                x: 0, y: 0, duration: .8, ease: 'expo.out', clearProps: 'transform',
-            });
-        });
-
-        gsap.fromTo(cards.map((c) => $('.inf-card__in', c)),
-            { opacity: .3 },
-            { opacity: 1, duration: .55, ease: 'power2.out', stagger: .015 });
+    /* the field's readout — declared here because the cabinet writes to it
+       from the moment the first slat opens */
+    const dots = new Map();
+    const read = {
+        box:  $('#ixRead'),
+        cat:  $('#ixReadCat'),
+        name: $('#ixReadName'),
+        time: $('#ixReadTime'),
+        fee:  $('#ixReadFee'),
+        go:   $('#ixReadGo'),
     };
 
-    /* ---------- view ---------- */
-    const segView = $('#segView');
-    $$('[data-view]', segView).forEach((b) => {
-        b.addEventListener('click', () => {
-            if (b.dataset.view === view) return;
-            view = b.dataset.view;
-            $$('[data-view]', segView).forEach((x) => x.classList.toggle('is-on', x === b));
-            segView.classList.toggle('is-b', view === 'ledger');
-            relayout(() => grid.classList.toggle('is-ledger', view === 'ledger'));
+    const syncField = (el) => {
+        if (!read.box || !el) return;
+        const d = el.dataset;
+        read.box.style.setProperty('--ix-tone', el.style.getPropertyValue('--tone') || '#C1963F');
+        read.cat.textContent  = d.cat;
+        read.name.textContent = d.name;
+        read.time.textContent = d.time;
+        read.fee.textContent  = d.fee;
+        read.go.setAttribute('href', '#' + el.id);
+        dots.forEach((slat, dot) => dot.classList.toggle('is-live', slat === el));
+    };
+
+    let liveEl = null;
+    let pinEl  = slats[0];
+
+    const openSlat = (el, animate = true) => {
+        if (!el) return;
+        liveEl = el;
+
+        slats.forEach((s) => {
+            const on = s === el;
+            s.classList.toggle('is-open', on);
+            $('.ix-slat__spine', s)?.setAttribute('aria-expanded', String(on));
         });
-    });
 
-    /* ---------- order ---------- */
-    $$('[data-sort]').forEach((b) => {
-        b.addEventListener('click', () => {
-            if (b.dataset.sort === order) return;
-            order = b.dataset.sort;
-            $$('[data-sort]').forEach((x) => x.classList.toggle('is-on', x === b));
-            relayout(() => {
-                [...cards]
-                    .sort((a, z) => (+a.dataset[order]) - (+z.dataset[order]))
-                    .forEach((c) => grid.appendChild(c));
-            });
-        });
-    });
+        syncField(el);
 
-    /* ---------- pricing ---------- */
-    const money = (v) => '$' + (Number.isInteger(v) ? v : v.toFixed(2));
+        if (!animate || !GS || REDUCED) return;
 
-    const setPricing = (mode) => {
-        grid.classList.toggle('is-program', mode === 'program');
-        nums.forEach((n) => {
-            const to = parseFloat(n.dataset[mode]);
-            if (!isFinite(to)) return;
-            const from = parseFloat(n.dataset.now || n.dataset.single);
-            n.dataset.now = to;
-            if (!LIVE) { n.textContent = money(to); return; }
-            const o = { v: from };
-            gsap.to(o, {
-                v: to, duration: .75, ease: 'expo.out',
-                onUpdate: () => { n.textContent = '$' + Math.round(o.v); },
-                onComplete: () => { n.textContent = money(to); },
-            });
+        const bits = $$('[data-bit]', el);
+        const bag  = $('.ix-slat__bag', el);
+        gsap.killTweensOf([...bits, bag].filter(Boolean));
+        gsap.set(bits, { opacity: 0, y: 20 });
+        gsap.to(bits, { opacity: 1, y: 0, duration: .55, ease: 'expo.out', stagger: .05, delay: .16 });
+        if (bag) {
+            gsap.set(bag, { opacity: 0, y: 30, rotate: 2 });
+            gsap.to(bag, { opacity: 1, y: 0, rotate: 0, duration: .95, ease: 'expo.out', delay: .14 });
+        }
+    };
+
+    const closeAll = () => {
+        liveEl = null;
+        slats.forEach((s) => {
+            s.classList.remove('is-open');
+            $('.ix-slat__spine', s)?.setAttribute('aria-expanded', 'false');
         });
     };
 
-    const segPrice = $('#segPrice');
-    $$('[data-price]', segPrice).forEach((b) => {
-        b.addEventListener('click', () => {
-            if (b.dataset.price === pricing) return;
-            pricing = b.dataset.price;
-            $$('[data-price]', segPrice).forEach((x) => x.classList.toggle('is-on', x === b));
-            segPrice.classList.toggle('is-b', pricing === 'program');
-            setPricing(pricing);
+    slats.forEach((slat) => {
+        const spine = $('.ix-slat__spine', slat);
+
+        spine?.addEventListener('click', () => {
+            if (isRail()) { pinEl = slat; openSlat(slat); return; }
+            if (slat === liveEl) { closeAll(); return; }        // tap again to close
+            openSlat(slat);
+        });
+
+        if (FINE) {
+            slat.addEventListener('pointerenter', () => { if (isRail()) openSlat(slat); });
+        }
+        spine?.addEventListener('focus', () => { if (isRail()) openSlat(slat); });
+    });
+
+    rack.addEventListener('pointerleave', () => { if (isRail() && pinEl !== liveEl) openSlat(pinEl); });
+
+    /* deep links: /htmls/infusions.html#drip-06 opens VI */
+    const fromHash = () => slats.find((s) => '#' + s.id === location.hash);
+    const landing = fromHash();
+    openSlat(landing || slats[0], false);
+    pinEl = landing || slats[0];
+    if (landing) setTimeout(() => goTo(landing), 160);
+
+    // the belt and the plot both link by hash — open what they point at
+    document.addEventListener('click', (e) => {
+        const a = e.target.closest?.('a[href^="#drip-"]');
+        if (!a) return;
+        const el = document.getElementById(a.getAttribute('href').slice(1));
+        if (!el) return;
+        pinEl = el;
+        openSlat(el);
+    });
+    addEventListener('hashchange', () => {
+        const el = fromHash();
+        if (el) { pinEl = el; openSlat(el); }
+    });
+
+    rise(slats, { y: 40, duration: .8, stagger: .05 }, rack, 'top 84%');
+
+
+    /* ── SORT ── */
+    const sortBox = $('#ixSort');
+    let sortKey = 'order';
+    let sortDir = 1;
+
+    const value = (el, key) => {
+        const v = parseFloat(el.dataset[key]);
+        return Number.isFinite(v) ? v : null;
+    };
+
+    const arrange = () => {
+        const order = [...slats].sort((a, b) => {
+            const va = value(a, sortKey);
+            const vb = value(b, sortKey);
+            if (va === null) return 1;                 // the customized one always sits last
+            if (vb === null) return -1;
+            return (va - vb) * sortDir;
+        });
+
+        const land = () => {
+            order.forEach((s) => rack.appendChild(s));
+            pinEl = order[0];
+            openSlat(order[0], false);
+        };
+
+        if (!GS || REDUCED) { land(); return; }
+
+        gsap.to(slats, {
+            opacity: 0, y: 18, duration: .3, ease: 'power2.in', stagger: .025,
+            onComplete: () => {
+                land();
+                gsap.set(slats, { opacity: 0, y: 18 });
+                gsap.to(slats, { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04 });
+            },
+        });
+    };
+
+    $$('.ix-sort__pill', sortBox ?? document).forEach((pill) => {
+        pill.addEventListener('click', () => {
+            const key = pill.dataset.sort;
+            if (key === sortKey && key !== 'order') sortDir *= -1;
+            else { sortKey = key; sortDir = 1; }
+
+            $$('.ix-sort__pill', sortBox).forEach((p) => {
+                p.classList.toggle('is-on', p === pill);
+                if (p !== pill) p.classList.remove('is-desc');
+            });
+            pill.classList.toggle('is-desc', sortDir === -1);
+
+            arrange();
         });
     });
 
 
-    /* =========================================================================
-       CARDS — arrival, lift, tilt
-    ========================================================================= */
-    if (LIVE) {
-        gsap.set(cards, { opacity: 0, y: 38 });
-        ScrollTrigger.create({
-            trigger: grid, start: 'top 84%', once: true,
-            onEnter: () => gsap.to(cards, {
-                opacity: 1, y: 0, duration: .9, ease: 'expo.out', stagger: .055,
-                clearProps: 'transform',
-            }),
+    /* ── FIELD ── */
+    const plot = $('#ixPlot');
+
+    if (plot) {
+        const T0 = 30, T1 = 180, P0 = 125, P1 = 850, PAD = 9;
+        const px = (m) => PAD + ((m - T0) / (T1 - T0)) * (100 - PAD * 2);
+        const py = (p) => PAD + ((p - P0) / (P1 - P0)) * (100 - PAD * 2);
+
+        [[30, '30m'], [60, '1h'], [90, '1h30'], [120, '2h'], [150, '2h30'], [180, '3h']].forEach(([m, label]) => {
+            const t = document.createElement('span');
+            t.className = 'ix-tick ix-tick--x';
+            t.style.left = px(m).toFixed(2) + '%';
+            t.textContent = label;
+            plot.appendChild(t);
         });
-    }
 
-    if (LIVE && FINE) {
-        cards.forEach((card) => {
-            const inner = $('.inf-card__in', card);
-            const rx = gsap.quickTo(inner, 'rotationX', { duration: .5, ease: 'power3' });
-            const ry = gsap.quickTo(inner, 'rotationY', { duration: .5, ease: 'power3' });
-            const up = gsap.quickTo(inner, 'y', { duration: .5, ease: 'power3' });
-            let rect = null;
+        [125, 350, 600, 850].forEach((p) => {
+            const t = document.createElement('span');
+            t.className = 'ix-tick ix-tick--y';
+            t.style.bottom = py(p).toFixed(2) + '%';
+            t.textContent = '$' + p;
+            plot.appendChild(t);
+        });
 
-            card.addEventListener('pointerenter', () => {
-                rect = card.getBoundingClientRect();
-                up(grid.classList.contains('is-ledger') ? 0 : -8);
+        slats.forEach((slat) => {
+            const m = value(slat, 'min');
+            const p = value(slat, 'price');
+            if (m === null || p === null) return;                 // customized has no coordinates
+
+            const dot = document.createElement('button');
+            dot.className = 'ix-dot';
+            dot.type = 'button';
+            dot.style.left = px(m).toFixed(2) + '%';
+            dot.style.bottom = py(p).toFixed(2) + '%';
+            dot.style.setProperty('--tone', slat.style.getPropertyValue('--tone'));
+            dot.setAttribute('aria-label', `${slat.dataset.name} — ${slat.dataset.time}, ${slat.dataset.fee}`);
+            dot.innerHTML = `<span class="ix-dot__pin"></span>
+                <span class="ix-dot__tag">${slat.dataset.name}<b>${slat.dataset.fee}</b></span>`;
+
+            dot.addEventListener('pointerenter', () => syncField(slat));
+            dot.addEventListener('focus', () => syncField(slat));
+            dot.addEventListener('click', () => { pinEl = slat; openSlat(slat); goTo(slat); });
+
+            plot.appendChild(dot);
+            dots.set(dot, slat);
+        });
+
+        if (GS && !REDUCED) {
+            const pins = $$('.ix-dot', plot);
+            gsap.set(pins, { opacity: 0, scale: .3 });
+            gsap.to(pins, {
+                opacity: 1, scale: 1, duration: .7, ease: 'back.out(2.2)', stagger: .06,
+                scrollTrigger: { trigger: plot, start: 'top 82%', once: true },
             });
+            rise($('#ixRead'), { y: 26 }, '.ix-field__grid', 'top 84%');
+        }
 
-            card.addEventListener('pointermove', (e) => {
-                if (grid.classList.contains('is-ledger')) return;
-                if (!rect) rect = card.getBoundingClientRect();
-                const px = (e.clientX - rect.left) / rect.width  - .5;
-                const py = (e.clientY - rect.top)  / rect.height - .5;
-                ry(px * 7);
-                rx(-py * 7);
-            });
-
-            card.addEventListener('pointerleave', () => {
-                rect = null;
-                rx(0); ry(0); up(0);
-            });
-        });
+        syncField(liveEl || slats[0]);
     }
 
 
-    /* =========================================================================
-       RAIL
-    ========================================================================= */
-    const fill = $('.inf-rail__fill');
-    if (fill && LIVE) {
-        gsap.to(fill, {
-            height: '100%', ease: 'none',
-            scrollTrigger: { trigger: '.inf-cab', start: 'top 60%', end: 'bottom 85%', scrub: .6 },
-        });
-    }
-
-
-    /* =========================================================================
-       REVEAL
-    ========================================================================= */
-    rise($$('.inf-cab__head > *'), '.inf-cab__head', { start: 'top 86%' });
-    rise($$('.inf-inc__item'), '.inf-inc__grid', { y: 30, stagger: .1 });
-    rise($$('.inf-inc__title'), '.inf-inc', { y: 22 });
-
-    if (LIVE) {
-        gsap.to('.inf-begin__shot img', {
-            yPercent: -7, ease: 'none',
-            scrollTrigger: { trigger: '.inf-begin', start: 'top bottom', end: 'bottom top', scrub: .8 },
-        });
-    }
-
+    /* ── keep triggers honest once fonts and bags land ── */
     if (GS) {
         const refresh = () => ScrollTrigger.refresh();
         if (document.fonts) document.fonts.ready.then(refresh);
