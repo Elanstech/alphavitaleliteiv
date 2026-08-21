@@ -1,884 +1,359 @@
-/* =============================================================================
-   ALPHA VITAL ELITE IV — DRIPS.CSS   ·   REBUILD
-   The ten /drips/<slug>/ protocol pages. Loads AFTER /styles.css and inherits
-   the palette, header, footer and dock from its :root.
+/* ALPHA VITAL ELITE IV — DRIPS.CSS */
 
-   WHAT CHANGED FROM THE FIRST BUILD, AND WHY
-   ------------------------------------------
-   1 · TYPE. Funnel Display (condensed, confident at size) over Onest (quiet
-       body) with JetBrains Mono for every figure. No serif anywhere. The home
-       page is Prata, the menu page is Fraunces — both serif-led — so a third
-       serif would have read as a slightly-wrong version of the brand instead
-       of a distinct voice. Mono for doses and prices is functional, not
-       decorative: unambiguous 0/O and 1/l on a page listing amounts.
+@property --fill  { syntax: '<number>'; initial-value: 1; inherits: true; }
+@property --vel   { syntax: '<number>'; initial-value: 0; inherits: true; }
+@property --sweep { syntax: '<number>'; initial-value: 1; inherits: true; }
 
-   2 · MOTION IS NOW CSS, NOT JAVASCRIPT. animation-timeline runs on the
-       compositor. The bag fill, the ledger highlight, the week markers and the
-       progress rule were ~450 lines of IntersectionObserver and GSAP; they are
-       now keyframes. Everything is written REVEALED BY DEFAULT and the motion
-       is added inside @supports, so a browser without scroll timelines shows a
-       complete, static, correct page rather than a broken one.
-
-   3 · THE SIGNATURE IS THE MORPH. Cross-document view transitions carry the
-       bag from the card you clicked into the hero of the page you land on.
-       See section 01.
-
-   4 · FEWER SECTIONS. Six, not nine.
-
-     00 · TYPE & TOKENS
-     01 · VIEW TRANSITIONS      the morph
-     02 · ATOMS
-     03 · HERO                  #top
-     04 · THE COMPOSITION       #composition   ← the bag fills, in pure CSS
-     05 · THE COURSE            #course
-     06 · QUESTIONS             #questions
-     07 · BEGIN                 #begin
-     08 · THE OTHER NINE        #more
-     09 · MOTION & FOCUS
-
-   BREAKPOINTS, same as the site: 1180 · 1080 · 900 · 780 · 640 · 420
-============================================================================= */
-
-
-/* =============================================================================
-   00 · TYPE & TOKENS
-============================================================================= */
+/* ── 00 TOKENS ─────────────────────────────────────────────────────────── */
 .page-drip {
     --dx-display: 'Funnel Display', 'Instrument Sans', sans-serif;
     --dx-body:    'Onest', var(--ui), sans-serif;
-    --dx-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --dx-mono:    'JetBrains Mono', ui-monospace, monospace;
 
-    /* the infusion's own accent — the ONLY token that changes between pages */
     --tone: var(--gold);
 
-    --dx-pad:   clamp(3.5rem, 8vw, 6.5rem);
-    --dx-stack: clamp(1.75rem, 4vw, 2.75rem);
-    --dx-gap:   clamp(.8rem, 1.4vw, 1.25rem);
+    --t-ink:  color-mix(in oklab, var(--tone) 46%, var(--forest));
+    --t-line: color-mix(in oklab, var(--tone) 32%, transparent);
+    --t-wash: color-mix(in oklab, var(--tone) 9%, transparent);
+
+    /* ten values, ONE hue. the old bag mixed orange, olive, gold and three
+       greens — that is what read as muddy. new drip = one hex, nothing else. */
+    --f01: color-mix(in oklab, var(--tone) 15%, #FFFDF8);
+    --f02: color-mix(in oklab, var(--tone) 25%, #FFFDF8);
+    --f03: color-mix(in oklab, var(--tone) 35%, #FFFDF8);
+    --f04: color-mix(in oklab, var(--tone) 46%, #FFFDF8);
+    --f05: color-mix(in oklab, var(--tone) 58%, #FFFDF8);
+    --f06: color-mix(in oklab, var(--tone) 72%, #FFFDF8);
+    --f07: color-mix(in oklab, var(--tone) 87%, #FFFDF8);
+    --f08: var(--tone);
+    --f09: color-mix(in oklab, var(--tone) 80%, var(--forest));
+    --f10: color-mix(in oklab, var(--tone) 60%, var(--forest));
+
+    --pad:   clamp(3.5rem, 8vw, 6.5rem);
+    --stack: clamp(1.75rem, 4vw, 2.75rem);
+    --gap:   clamp(.8rem, 1.4vw, 1.25rem);
+    --sp:    cubic-bezier(.16, 1, .3, 1);
 
     background: var(--cream);
     font-family: var(--dx-body);
     font-size: clamp(.95rem, 1.02vw, 1.02rem);
-    line-height: 1.68;
+    line-height: 1.66;
     color: var(--ink-soft);
+    -webkit-tap-highlight-color: transparent;
 }
-
 .page-drip section[id] { scroll-margin-top: calc(var(--head-h) + 1rem); }
 
-/* every figure on the page is set this way */
-.dx-fig {
-    font-family: var(--dx-mono); font-weight: 500;
-    font-variant-numeric: tabular-nums lining-nums;
-    letter-spacing: -.04em;
-}
-
-
-/* =============================================================================
-   01 · VIEW TRANSITIONS  —  THE SIGNATURE
-   -----------------------------------------------------------------------------
-   Click Fatty Liver on the menu page and the bag IMAGE ITSELF travels from
-   that card into this page's hero. Not a fade, not a reload — the browser
-   snapshots both documents and morphs the shared element between them.
-
-   HOW IT IS WIRED. Every bag on the site carries a view-transition-name of the
-   form bag-<slug>, set inline in the markup. The card on infusions.html and the
-   hero on /drips/liver-support/ share the name bag-liver-support, so the
-   browser knows they are the same object. Names must be unique per document,
-   which they are: a drip page's hero is the only element with its own slug, and
-   the "other nine" rail never contains the page it is on.
-
-   The header, footer and dock are named too, so they hold still instead of
-   cross-fading with everything else.
-
-   REQUIRES the matching @view-transition rule on the page you navigate FROM.
-   Firefox does not ship cross-document transitions yet, so it simply performs
-   an ordinary navigation — there is no fallback to write.
-============================================================================= */
+/* ── 01 VIEW TRANSITIONS ───────────────────────────────────────────────── */
 @view-transition { navigation: auto; }
-
-/* the furniture stays put across the navigation */
 .head { view-transition-name: site-head; }
 .foot { view-transition-name: site-foot; }
 .totop { view-transition-name: site-totop; }
-.fab   { view-transition-name: site-fab; }
+.fab { view-transition-name: site-fab; }
+::view-transition-group(.bag) { animation-duration: .66s; animation-timing-function: cubic-bezier(.62,.05,.2,1); }
+::view-transition-old(.bag), ::view-transition-new(.bag) { height: 100%; width: auto; object-fit: contain; }
+::view-transition-group(root) { animation-duration: .36s; }
 
-/* the bag travels on its own curve — heavier and slower than the page fade,
-   so the eye follows the object rather than the background */
-::view-transition-group(.bag) {
-    animation-duration: .62s;
-    animation-timing-function: cubic-bezier(.62, .05, .2, 1);
-}
-::view-transition-old(.bag),
-::view-transition-new(.bag) {
-    /* the two snapshots have different aspect ratios; without this the bag
-       squashes on the way across */
-    height: 100%; width: auto;
-    object-fit: contain;
-}
+/* ── 02 MOTION PRIMITIVES ──────────────────────────────────────────────── */
+html.dx-on [data-anim] { opacity: 0; will-change: transform, opacity; }
+html.dx-on [data-anim="rise"]  { transform: translate3d(0, 34px, 0); }
+html.dx-on [data-anim="pop"]   { transform: translate3d(0, 28px, 0) scale(.93); }
+html.dx-on [data-anim="tilt"]  { transform: perspective(900px) rotateX(-15deg) translate3d(0, 42px, 0); transform-origin: 50% 100%; }
+html.dx-on [data-anim="slide"] { transform: translate3d(-28px, 0, 0); }
+html.dx-on [data-anim="scale"] { transform: scale(.84); }
+html.dx-on .dx-char { opacity: 0; transform: translate3d(0, .9em, 0) rotate(5deg); }
+.dx-word { display: inline-block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+.dx-char { display: inline-block; will-change: transform, opacity; }
+.dx-done { will-change: auto; }
 
-/* everything that is not the bag or the furniture gets a short, quiet fade */
-::view-transition-group(root) { animation-duration: .38s; }
-
-@media (prefers-reduced-motion: reduce) {
-    ::view-transition-group(*),
-    ::view-transition-old(*),
-    ::view-transition-new(*) { animation: none !important; }
-}
-
-
-/* =============================================================================
-   02 · ATOMS
-============================================================================= */
+/* ── 03 ATOMS ──────────────────────────────────────────────────────────── */
 .dx-brow {
-    display: inline-flex; align-items: center; gap: .55rem;
+    display: inline-flex; align-items: center; gap: .5rem;
     font-family: var(--dx-mono); font-size: .6rem; font-weight: 500;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--tone);
+    letter-spacing: .18em; text-transform: uppercase; color: var(--t-ink);
     margin-bottom: 1rem;
 }
-.dx-brow i { font-size: 1.3em; letter-spacing: 0; }
+.dx-brow i { font-size: 1.3em; color: var(--tone); }
+.dx-brow::after { content: ''; width: 0; height: 1px; background: var(--tone); transition: width .8s var(--sp) .15s; }
+.dx-brow.dx-is-in::after { width: 26px; }
 
-/* Funnel Display is condensed, so it wants negative tracking and a tight
-   leading or it reads loose at size */
 .dx-h {
     font-family: var(--dx-display); font-weight: 500;
     font-size: clamp(2.1rem, 5vw, 4rem);
-    line-height: .98; letter-spacing: -.035em; color: var(--forest);
-    margin-bottom: 1.1rem;
-    text-wrap: balance;
+    line-height: .96; letter-spacing: -.038em; color: var(--forest);
+    margin-bottom: 1.05rem; text-wrap: balance;
 }
-.dx-h em { font-style: normal; color: var(--tone); }
-
-.dx-lede {
-    max-width: 56ch;
-    font-size: clamp(.95rem, 1.06vw, 1.04rem); line-height: 1.75;
-    color: var(--ink-soft);
-}
+.dx-h em { font-style: normal; color: var(--t-ink); }
+.dx-lede { max-width: 56ch; font-size: clamp(.95rem, 1.06vw, 1.04rem); line-height: 1.72; }
 
 .dx-btn {
+    position: relative; overflow: hidden; isolation: isolate;
     display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
     min-height: 54px; padding: .9rem 1.6rem;
     border: 1px solid var(--forest); border-radius: 3px;
     font-family: var(--dx-mono); font-size: .66rem; font-weight: 500;
     letter-spacing: .14em; text-transform: uppercase; color: var(--forest);
     white-space: nowrap;
-    transition: background .4s var(--ease), color .4s var(--ease),
-                border-color .4s var(--ease);
+    transition: color .45s var(--sp), border-color .45s var(--sp);
 }
-.dx-btn i { font-size: 1.25em; transition: transform .4s var(--ease); }
+.dx-btn::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--tone); transform: translateY(101%); transition: transform .55s var(--sp); }
+.dx-btn:hover::before { transform: translateY(0); }
+.dx-btn:hover { color: #fff; border-color: var(--tone); }
+.dx-btn i { transition: transform .45s var(--sp); }
+.dx-btn:hover i { transform: translateX(4px); }
 .dx-btn--solid { background: var(--forest); color: var(--cream); }
-.dx-btn:hover { background: var(--tone); border-color: var(--tone); color: #fff; }
-.dx-btn:hover i { transform: translateX(3px); }
+.dx-btn--solid:hover { color: #fff; }
 
-@media (max-width: 640px) {
-    .dx-h { font-size: clamp(2rem, 9vw, 2.8rem); }
-    .dx-lede { max-width: none; font-size: .95rem; }
-    .dx-btn { width: 100%; }
-}
-
-
-/* =============================================================================
-   03 · HERO  (#top)
-   The bag is the largest thing on the screen because the bag is what arrived
-   from the previous page. The type sits under it, not beside it.
-============================================================================= */
-.dx-hero {
-    position: relative;
-    padding: calc(var(--head-h) + clamp(1.5rem, 4vh, 3rem)) var(--gut) 0;
-    background: var(--cream);
-    overflow: hidden;
-}
+/* ── 04 HERO ───────────────────────────────────────────────────────────── */
+.dx-hero { position: relative; padding: calc(var(--head-h) + clamp(1.5rem,4vh,3rem)) var(--gut) 0; background: var(--cream); overflow: clip; }
 .dx-hero::before {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    background:
-        radial-gradient(46% 40% at 76% 12%,
-            color-mix(in oklab, var(--tone) 20%, transparent), transparent 64%),
-        radial-gradient(120% 46% at 50% 0%, rgba(255,255,255,.7), transparent 56%);
+    background: radial-gradient(44% 38% at 78% 14%, var(--t-wash), transparent 66%),
+                radial-gradient(120% 44% at 50% 0%, rgba(255,255,255,.72), transparent 58%);
 }
-
-.dx-hero__wrap {
-    position: relative; z-index: 2;
-    display: grid; grid-template-columns: minmax(0, 1fr) auto;
-    gap: clamp(1.5rem, 4vw, 4rem); align-items: center;
-    max-width: var(--maxw); margin: 0 auto;
-    padding-bottom: clamp(2rem, 5vh, 3.5rem);
-}
-
-.dx-hero__no {
-    display: block;
-    font-family: var(--dx-mono); font-size: .62rem; font-weight: 500;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--tone);
-    margin-bottom: 1.1rem;
-}
-.dx-hero__no b { font-weight: 500; color: var(--ink-soft); }
-
-.dx-hero__name {
-    font-family: var(--dx-display); font-weight: 600;
-    font-size: clamp(3rem, 8.6vw, 7.6rem);
-    line-height: .88; letter-spacing: -.045em; color: var(--forest);
-    margin-bottom: clamp(1.25rem, 3vh, 1.9rem);
-    text-wrap: balance;
-}
-.dx-hero__name em { font-style: normal; font-weight: 300; color: var(--tone); }
-
-.dx-hero__dek {
-    max-width: 42ch;
-    font-size: clamp(.98rem, 1.1vw, 1.08rem); line-height: 1.72;
-    margin-bottom: clamp(1.5rem, 3.5vh, 2rem);
-}
+.dx-hero__wrap { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(1.5rem,4vw,4rem); align-items: center; max-width: var(--maxw); margin: 0 auto; padding-bottom: clamp(2rem,5vh,3.5rem); }
+.dx-hero__no { display: flex; align-items: center; gap: .6rem; font-family: var(--dx-mono); font-size: .62rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--t-ink); margin-bottom: 1.1rem; }
+.dx-hero__no b { font-weight: 500; color: var(--tone); }
+.dx-hero__no s { text-decoration: none; width: 26px; height: 1px; background: var(--t-line); }
+.dx-hero__name { font-family: var(--dx-display); font-weight: 600; font-size: clamp(2.9rem,8.4vw,7.4rem); line-height: .86; letter-spacing: -.048em; color: var(--forest); margin-bottom: clamp(1.25rem,3vh,1.9rem); }
+.dx-hero__name em { font-style: normal; font-weight: 300; color: var(--t-ink); }
+.dx-hero__dek { max-width: 42ch; font-size: clamp(.98rem,1.1vw,1.08rem); line-height: 1.7; margin-bottom: clamp(1.5rem,3.5vh,2rem); }
 .dx-hero__acts { display: flex; flex-wrap: wrap; gap: .6rem; }
+.dx-hero__bag { position: relative; justify-self: center; width: clamp(190px,26vw,340px); }
+.dx-hero__bag img { width: 100%; height: auto; filter: drop-shadow(0 40px 50px rgba(32,52,33,.22)); }
+.dx-hero__bag::after { content: ''; position: absolute; inset: -18% -22%; z-index: -1; background: radial-gradient(circle, var(--t-wash), transparent 64%); }
 
-/* the bag. view-transition-name is set inline in the markup. */
-.dx-hero__bag {
-    justify-self: center;
-    width: clamp(200px, 27vw, 360px);
-    filter: drop-shadow(0 40px 50px rgba(32,52,33,.24));
-}
-.dx-hero__bag img { width: 100%; height: auto; }
-
-/* ---------- the vitals ----------
-   Dividers are borders on the cells. They were a background showing through
-   grid gaps in the last build, which painted a solid bar across the container's
-   own padding. */
-.dx-vitals {
-    position: relative; z-index: 2;
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    max-width: var(--maxw); margin: 0 auto;
-    padding-bottom: clamp(1.5rem, 4vh, 2.5rem);
-    border-top: 1px solid var(--forest);
-}
-.dx-vital {
-    padding: clamp(.9rem, 2vh, 1.3rem) clamp(.7rem, 1.5vw, 1.25rem) 0;
-    border-left: 1px solid var(--rule);
-}
+.dx-vitals { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4,1fr); max-width: var(--maxw); margin: 0 auto; padding-bottom: clamp(1.5rem,4vh,2.5rem); border-top: 1px solid var(--forest); }
+.dx-vital { padding: clamp(.9rem,2vh,1.3rem) clamp(.7rem,1.5vw,1.25rem) 0; border-left: 1px solid var(--rule); }
 .dx-vital:first-child { border-left: 0; padding-left: 0; }
-.dx-vital dt {
-    font-family: var(--dx-mono); font-size: .55rem; font-weight: 400;
-    letter-spacing: .14em; text-transform: uppercase; color: var(--mist);
-    margin-bottom: .5rem;
-}
-.dx-vital dd {
-    font-family: var(--dx-display); font-weight: 500;
-    font-size: clamp(1.4rem, 2.6vw, 2.1rem); line-height: 1;
-    letter-spacing: -.04em; color: var(--forest);
-    font-variant-numeric: tabular-nums;
-}
-.dx-vital dd small {
-    display: block; margin-top: .4rem;
-    font-family: var(--dx-mono); font-size: .55rem; font-weight: 400;
-    letter-spacing: .1em; text-transform: uppercase; color: var(--mist);
-}
-.dx-vital--tone dd { color: var(--tone); }
+.dx-vital dt { font-family: var(--dx-mono); font-size: .55rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); margin-bottom: .5rem; }
+.dx-vital dd { font-family: var(--dx-display); font-weight: 500; font-size: clamp(1.4rem,2.6vw,2.1rem); line-height: 1; letter-spacing: -.04em; color: var(--forest); font-variant-numeric: tabular-nums; }
+.dx-vital dd small { display: block; margin-top: .4rem; font-family: var(--dx-mono); font-size: .55rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
+.dx-vital--tone dd { color: var(--t-ink); }
 
+/* ── 05 COMPOSITION ────────────────────────────────────────────────────── */
+.dx-mix { position: relative; padding: var(--pad) var(--gut); background: var(--parchment); }
+.dx-mix::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(46% 36% at 92% 6%, var(--t-wash), transparent 64%); }
+.dx-mix__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
+.dx-mix__head { margin-bottom: var(--stack); max-width: 52ch; }
+.dx-mix__stage { display: grid; grid-template-columns: minmax(0,.78fr) minmax(0,1fr); gap: clamp(1.75rem,5vw,4.5rem); align-items: start; }
+
+.dx-bag { position: sticky; top: calc(var(--head-h) + clamp(1.5rem,5vh,3rem)); display: grid; justify-items: center; }
+.dx-bag__art { width: min(100%, 300px); height: auto; overflow: visible; filter: drop-shadow(0 34px 46px rgba(32,52,33,.2)); }
+.dx-bag__shell { fill: rgba(255,255,255,.5); stroke: var(--t-line); stroke-width: 1.6; }
+.dx-bag__seam  { fill: none; stroke: var(--t-line); stroke-width: 1; stroke-dasharray: 5 4; }
+.dx-bag__tab   { fill: rgba(255,255,255,.6); stroke: var(--t-line); stroke-width: 1.6; }
+.dx-bag__hole  { fill: var(--parchment); stroke: var(--t-line); stroke-width: 1.4; }
+.dx-bag__tick  { stroke: color-mix(in oklab, var(--forest) 22%, transparent); stroke-width: 1.4; stroke-linecap: round; }
+.dx-bag__port  { fill: rgba(255,255,255,.7); stroke: var(--t-line); stroke-width: 1.5; }
+.dx-bag__spike { stroke: var(--t-line); stroke-width: 1.5; stroke-linecap: round; }
+.dx-bag__plate { fill: rgba(251,248,241,.93); stroke: var(--t-line); stroke-width: 1; }
+.dx-bag__no    { font-family: var(--dx-mono); font-size: 15px; font-weight: 500; fill: var(--t-ink); letter-spacing: 1px; }
+.dx-bag__title { font-family: var(--dx-display); font-size: 17px; font-weight: 600; fill: var(--forest); letter-spacing: -.4px; }
+.dx-bag__sub   { font-family: var(--dx-mono); font-size: 7px; fill: var(--mist); letter-spacing: 1.15px; }
+.dx-bag__rule  { stroke: var(--t-line); stroke-width: 1; }
+.dx-bag__gloss { fill: url(#dxGloss); }
+
+#dxMix stop:nth-child(1)  { stop-color: var(--f01); }
+#dxMix stop:nth-child(2)  { stop-color: var(--f02); }
+#dxMix stop:nth-child(3)  { stop-color: var(--f03); }
+#dxMix stop:nth-child(4)  { stop-color: var(--f04); }
+#dxMix stop:nth-child(5)  { stop-color: var(--f05); }
+#dxMix stop:nth-child(6)  { stop-color: var(--f06); }
+#dxMix stop:nth-child(7)  { stop-color: var(--f07); }
+#dxMix stop:nth-child(8)  { stop-color: var(--f08); }
+#dxMix stop:nth-child(9)  { stop-color: var(--f09); }
+#dxMix stop:nth-child(10) { stop-color: var(--f10); }
+
+.dx-bag__fluid { transform-box: fill-box; transform-origin: bottom; transform: scaleY(var(--fill)); }
+.dx-bag__line  { fill: color-mix(in oklab, var(--tone) 88%, #fff); transform-box: fill-box; transform-origin: bottom; transform: translateY(calc(var(--fill) * -361px)); opacity: clamp(0, calc(var(--fill) * 14), 1); }
+
+.dx-bag__gauge { display: none; width: 100%; height: 11px; border: 1px solid var(--t-line); border-radius: 999px; background: rgba(255,255,255,.5); overflow: hidden; }
+.dx-bag__gauge i { display: block; height: 100%; width: 100%; transform-origin: left; transform: scaleX(var(--fill)); background: linear-gradient(90deg, var(--f01), var(--f04), var(--f07), var(--f10)); }
+.dx-bag__pct { margin-top: .5rem; display: flex; justify-content: space-between; font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: var(--mist); }
+.dx-bag__pct b { color: var(--t-ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.dx-list { list-style: none; border-top: 1px solid var(--forest); }
+.dx-ing { position: relative; display: grid; grid-template-columns: 2.6rem minmax(0,1fr) auto; gap: clamp(.7rem,1.8vw,1.3rem); align-items: baseline; padding: clamp(1rem,2.2vh,1.4rem) 0; border-bottom: 1px solid var(--rule); }
+.dx-ing::after { content: ''; position: absolute; left: 0; bottom: -1px; height: 1px; width: 0; background: var(--tone); transition: width .9s var(--sp); }
+.dx-ing.dx-is-in::after { width: 100%; }
+.dx-ing__key { font-family: var(--dx-mono); font-size: .6rem; letter-spacing: .1em; color: var(--mist); }
+.dx-ing__name { font-family: var(--dx-display); font-weight: 500; font-size: clamp(1.15rem,2vw,1.5rem); line-height: 1.06; letter-spacing: -.032em; color: var(--forest); margin-bottom: .26rem; }
+.dx-ing__what { font-size: .89rem; line-height: 1.55; }
+.dx-ing__chip { width: 10px; height: 10px; border-radius: 50%; background: var(--bt, var(--tone)); transform: translateY(-.15rem); }
+.dx-ing.dx-is-in .dx-ing__chip { animation: dx-ping 1s var(--sp) .12s; }
+@keyframes dx-ping { from { box-shadow: 0 0 0 0 color-mix(in oklab, var(--bt) 60%, transparent); } to { box-shadow: 0 0 0 13px transparent; } }
+
+.dx-mix__close { margin-top: var(--stack); padding-left: clamp(1rem,2vw,1.6rem); border-left: 2px solid var(--tone); font-family: var(--dx-display); font-weight: 300; font-size: clamp(1.15rem,2.1vw,1.7rem); line-height: 1.3; letter-spacing: -.028em; color: var(--forest); max-width: 50ch; }
+.dx-mix__note { max-width: 78ch; margin-top: 1.3rem; font-size: .77rem; line-height: 1.66; color: var(--mist); }
+
+/* ── 06 COURSE ─────────────────────────────────────────────────────────── */
+.dx-course { position: relative; padding: var(--pad) var(--gut); background: var(--cream); }
+.dx-course__wrap { max-width: var(--maxw); margin: 0 auto; }
+.dx-course__head { margin-bottom: var(--stack); }
+.dx-weeks { --pin: 12px; --wgap: clamp(.5rem,1.2vw,1rem); position: relative; display: grid; grid-template-columns: repeat(6,1fr); gap: var(--wgap); padding-top: 2.6rem; margin-bottom: var(--stack); list-style: none; }
+.dx-weeks__rail { position: absolute; left: calc(var(--pin)/2); right: calc((100% - 5*var(--wgap))/6 - var(--pin)/2); top: .56rem; height: 1px; background: var(--rule); }
+.dx-weeks__fill { position: absolute; left: 0; top: -1px; height: 3px; width: 100%; background: var(--tone); transform-origin: left; transform: scaleX(var(--sweep)); }
+.dx-wk { position: relative; }
+.dx-wk__pin { position: absolute; left: 0; top: -2.6rem; width: var(--pin); height: var(--pin); border-radius: 50%; border: 1px solid var(--t-line); background: var(--cream); }
+.dx-wk.is-on .dx-wk__pin { border-color: var(--tone); background: var(--tone); }
+.dx-wk__no { display: block; font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--t-ink); margin-bottom: .35rem; }
+.dx-wk__what { font-family: var(--dx-display); font-weight: 500; font-size: clamp(.92rem,1.25vw,1.05rem); line-height: 1.12; letter-spacing: -.028em; color: var(--forest); }
+
+.dx-sum { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.85fr); gap: clamp(1.25rem,3vw,2.5rem); align-items: start; }
+.dx-sum__box { padding: clamp(1.4rem,3vw,2.2rem); border: 1px solid var(--t-line); border-radius: 4px; background: rgba(255,255,255,.72); box-shadow: 0 32px 66px -50px rgba(32,52,33,.5); }
+.dx-sum__for { font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .18em; text-transform: uppercase; color: var(--mist); margin-bottom: .45rem; }
+.dx-sum__name { font-family: var(--dx-display); font-weight: 500; font-size: clamp(1.4rem,2.6vw,2rem); line-height: 1.02; letter-spacing: -.038em; color: var(--forest); margin-bottom: clamp(1.1rem,2.4vw,1.6rem); }
+.dx-sum__rows { display: grid; gap: 1rem; }
+.dx-sum__row { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: baseline; gap: .3rem 1rem; }
+.dx-sum__row dt { font-family: var(--dx-mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); }
+.dx-sum__row dd { font-family: var(--dx-mono); font-weight: 500; font-size: clamp(1.1rem,1.9vw,1.45rem); color: var(--ink-soft); font-variant-numeric: tabular-nums; text-align: right; }
+.dx-sum__row.is-prog dd { color: var(--forest); }
+.dx-sum__bar { grid-column: 1/-1; display: block; height: 3px; border-radius: 999px; background: rgba(32,52,33,.07); overflow: hidden; }
+.dx-sum__bar i { display: block; height: 100%; border-radius: 999px; background: rgba(139,136,119,.4); transform-origin: left; transform: scaleX(var(--w,1)); transition: transform 1.1s var(--sp); }
+.dx-sum__row.is-prog .dx-sum__bar i { background: var(--tone); }
+.dx-sum__keep { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-top: clamp(1.1rem,2.4vw,1.6rem); padding-top: 1rem; border-top: 1px solid var(--rule); }
+.dx-sum__keep span { font-family: var(--dx-mono); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--t-ink); }
+.dx-sum__keep b { font-family: var(--dx-display); font-weight: 600; font-size: clamp(2rem,4vw,3rem); line-height: 1; letter-spacing: -.05em; color: var(--t-ink); font-variant-numeric: tabular-nums; }
+.dx-sum__why h3 { font-family: var(--dx-display); font-weight: 500; font-size: clamp(1.2rem,2.1vw,1.6rem); line-height: 1.08; letter-spacing: -.032em; color: var(--forest); margin-bottom: .8rem; }
+.dx-sum__why p { font-size: .94rem; line-height: 1.72; }
+.dx-sum__why p + p { margin-top: .85rem; }
+.dx-sum__fine { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px solid var(--rule); font-size: .79rem; line-height: 1.66; color: var(--mist); }
+
+/* ── 07 QUESTIONS ──────────────────────────────────────────────────────── */
+.dx-qs { position: relative; padding: var(--pad) var(--gut); background: var(--parchment); }
+.dx-qs__wrap { max-width: min(var(--maxw), 62rem); margin: 0 auto; }
+.dx-qs__head { margin-bottom: var(--stack); }
+.dx-qs__list { border-top: 1px solid var(--forest); }
+.dx-q { border-bottom: 1px solid var(--rule); }
+.dx-q__ask { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; padding: 1.15rem .2rem; cursor: pointer; list-style: none; font-family: var(--dx-display); font-weight: 500; font-size: clamp(1.05rem,1.55vw,1.3rem); line-height: 1.16; letter-spacing: -.03em; color: var(--forest); transition: color .35s var(--sp), padding-left .45s var(--sp); }
+.dx-q__ask::-webkit-details-marker { display: none; }
+.dx-q__ask:hover { color: var(--t-ink); padding-left: .5rem; }
+.dx-q__ask i { flex: 0 0 auto; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--t-line); font-size: .8rem; color: var(--t-ink); transition: transform .5s var(--sp), background .4s var(--sp), color .4s var(--sp); }
+.dx-q[open] .dx-q__ask { color: var(--t-ink); }
+.dx-q[open] .dx-q__ask i { transform: rotate(135deg); background: var(--tone); color: #fff; border-color: var(--tone); }
+.dx-q__ans { padding: 0 3rem 1.3rem .2rem; }
+.dx-q__ans p { font-size: .93rem; line-height: 1.76; max-width: 68ch; }
+.dx-q__ans p + p { margin-top: .75rem; }
+.dx-q[open] .dx-q__ans > * { animation: dx-ans .55s var(--sp) both; }
+@keyframes dx-ans { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* ── 08 BEGIN ──────────────────────────────────────────────────────────── */
+.dx-begin { position: relative; padding: var(--pad) var(--gut); background: var(--cream); overflow: clip; }
+.dx-begin::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(48% 38% at 90% 8%, var(--t-wash), transparent 64%); }
+.dx-begin__wrap { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.72fr); gap: clamp(1.75rem,5vw,4rem); align-items: center; max-width: var(--maxw); margin: 0 auto; }
+.dx-begin__lede { max-width: 44ch; font-size: clamp(.95rem,1.06vw,1.04rem); line-height: 1.72; margin-bottom: 1.6rem; }
+.dx-begin__acts { display: flex; flex-wrap: wrap; gap: .6rem; }
+.dx-begin__card { padding: clamp(1.3rem,3vw,1.9rem); border: 1px solid var(--t-line); border-radius: 4px; background: rgba(255,255,255,.84); box-shadow: 0 40px 78px -56px rgba(32,52,33,.6); }
+.dx-begin__card div { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: .75rem 0; border-bottom: 1px solid var(--rule); }
+.dx-begin__card div:last-child { border-bottom: 0; }
+.dx-begin__card dt { font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); }
+.dx-begin__card dd { font-family: var(--dx-mono); font-weight: 500; font-size: .93rem; color: var(--forest); font-variant-numeric: tabular-nums; text-align: right; }
+.dx-begin__card dd em { font-style: normal; color: var(--t-ink); }
+.dx-begin__legal { position: relative; z-index: 2; max-width: 84ch; margin: var(--stack) auto 0; padding-top: 1.3rem; border-top: 1px solid var(--rule); font-size: .76rem; line-height: 1.72; color: var(--mist); }
+.dx-begin__legal b { display: block; margin-bottom: .45rem; font-family: var(--dx-mono); font-size: .56rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--forest); }
+
+/* ── 09 THE OTHER NINE ─────────────────────────────────────────────────── */
+.dx-more { position: relative; padding: var(--pad) 0; background: var(--parchment); }
+.dx-more__wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gut); }
+.dx-more__top { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; margin-bottom: clamp(1.1rem,2.4vw,1.6rem); border-bottom: 1px solid var(--forest); }
+.dx-more__all { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--dx-mono); font-size: .6rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-ink); white-space: nowrap; transition: gap .35s var(--sp); }
+.dx-more__all:hover { gap: .9rem; }
+.dx-more__track { display: flex; gap: var(--gap); padding: .25rem var(--gut) 1.25rem; margin-inline: calc(var(--gut)*-1); list-style: none; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gut); overscroll-behavior-x: contain; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 3%, #000 95%, transparent); }
+.dx-more__track::-webkit-scrollbar { display: none; }
+.dx-more__track.is-drag { scroll-snap-type: none; cursor: grabbing; }
+.dx-nxt { --bt: var(--gold); flex: 0 0 auto; width: clamp(200px,20vw,250px); scroll-snap-align: start; display: flex; perspective: 800px; }
+.dx-nxt > a { display: block; width: 100%; padding: 1.1rem 1.1rem 1rem; background: #fff; border: 1px solid var(--rule); border-top: 2px solid var(--bt); border-radius: 4px; transform-style: preserve-3d; transition: box-shadow .45s var(--sp), border-color .45s var(--sp); }
+.dx-nxt > a:hover { box-shadow: 0 30px 52px -30px rgba(32,52,33,.4); border-color: color-mix(in oklab, var(--bt) 40%, transparent); }
+.dx-nxt__bag { width: 56px; margin: 0 auto .8rem; }
+.dx-nxt__bag img { width: 100%; height: auto; }
+.dx-nxt__no { display: block; font-family: var(--dx-mono); font-size: .54rem; letter-spacing: .14em; color: var(--bt); margin-bottom: .25rem; }
+.dx-nxt__name { display: block; font-family: var(--dx-display); font-weight: 500; font-size: 1rem; line-height: 1.08; letter-spacing: -.032em; color: var(--forest); margin-bottom: .3rem; }
+.dx-nxt__meta { display: block; font-family: var(--dx-mono); font-size: .58rem; color: var(--mist); font-variant-numeric: tabular-nums; }
+.dx-nxt__meta i { font-style: normal; color: var(--rule); margin: 0 .3rem; }
+
+/* ── 10 PROGRESS DOTS ──────────────────────────────────────────────────── */
+.dx-dots { position: fixed; right: clamp(.6rem,1.4vw,1.1rem); top: 50%; translate: 0 -50%; z-index: 900; display: grid; gap: .75rem; }
+.dx-dots a { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--rule); transition: background .4s var(--sp), scale .4s var(--sp); }
+.dx-dots a::after { content: attr(data-label); position: absolute; right: 16px; top: 50%; translate: 0 -50%; white-space: nowrap; font-family: var(--dx-mono); font-size: .54rem; letter-spacing: .12em; text-transform: uppercase; color: var(--t-ink); opacity: 0; transition: opacity .35s var(--sp), translate .35s var(--sp); pointer-events: none; }
+.dx-dots a:hover::after { opacity: 1; translate: -4px -50%; }
+.dx-dots a.is-on { background: var(--tone); scale: 1.7; }
+
+/* ── 11 RESPONSIVE ─────────────────────────────────────────────────────── */
+@media (max-width: 1180px) { .dx-dots { display: none; } }
+@media (max-width: 1080px) {
+    .dx-mix__stage { gap: 2rem; }
+    .dx-bag__art { width: min(100%, 240px); }
+    .dx-sum { grid-template-columns: 1fr; }
+}
 @media (max-width: 900px) {
     .dx-hero__wrap { grid-template-columns: 1fr; justify-items: start; }
-    .dx-hero__bag { order: -1; justify-self: center; width: clamp(160px, 42vw, 230px); }
-    .dx-vitals { grid-template-columns: repeat(2, 1fr); }
+    .dx-hero__bag { order: -1; justify-self: center; width: clamp(155px,40vw,220px); }
+    .dx-vitals { grid-template-columns: repeat(2,1fr); }
     .dx-vital:nth-child(3) { border-left: 0; padding-left: 0; }
     .dx-vital:nth-child(n+3) { border-top: 1px solid var(--rule); padding-top: .95rem; }
+    .dx-mix__stage { grid-template-columns: 1fr; gap: 1.1rem; }
+    .dx-bag { position: sticky; top: calc(var(--head-h) + .5rem); z-index: 5; justify-items: stretch; padding: .65rem .8rem; border: 1px solid var(--t-line); border-radius: 9px; background: color-mix(in oklab, var(--parchment) 94%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+    .dx-bag__art { display: none; }
+    .dx-bag__gauge { display: block; }
+    .dx-ing { grid-template-columns: 2.1rem minmax(0,1fr) auto; gap: .75rem; }
+    .dx-begin__wrap { grid-template-columns: 1fr; gap: 1.6rem; }
+    .dx-begin__lede { max-width: none; }
+    .dx-begin__acts { width: 100%; }
+}
+@media (max-width: 780px) {
+    .dx-weeks { grid-template-columns: 1fr; padding-top: 0; padding-left: 2.2rem; gap: 1rem; }
+    .dx-weeks__rail { left: .5rem; right: auto; top: .5rem; bottom: .5rem; width: 1px; height: auto; }
+    .dx-weeks__fill { width: 3px; height: 100%; left: -1px; transform-origin: top; transform: scaleY(var(--sweep)); }
+    .dx-wk__pin { left: -2.2rem; top: .05rem; }
+    .dx-wk__no { display: inline; margin-right: .5rem; }
+    .dx-wk__what { display: inline; }
 }
 @media (max-width: 640px) {
-    .dx-hero__name { font-size: clamp(2.6rem, 13vw, 3.8rem); }
+    .dx-h { font-size: clamp(2rem,9vw,2.8rem); }
+    .dx-lede { max-width: none; font-size: .95rem; }
+    .dx-btn { width: 100%; }
+    .dx-hero__name { font-size: clamp(2.5rem,13vw,3.7rem); }
     .dx-hero__dek { max-width: none; font-size: .96rem; }
     .dx-hero__acts { width: 100%; gap: .55rem; }
     .dx-vital dd { font-size: 1.35rem; }
-}
-
-
-/* =============================================================================
-   04 · THE COMPOSITION  (#composition)   ←  THE BAG FILLS
-   -----------------------------------------------------------------------------
-   Pure CSS. The ledger is a view-timeline; the fluid inside the sticky bag
-   scales against it. No observer, no scroll listener, no JavaScript at all —
-   the whole thing runs on the compositor.
-
-   The fluid is ONE element carrying a gradient of every component's tone, set
-   inline per page. That is what makes this tractable in CSS: ten independently
-   animated bands would need ten named timelines, one gradient needs none, and
-   it reads better besides — a mixed bag is mixed, not stratified.
-
-   DEFAULT STATE IS FULL. Everything below is written as though the animation
-   has already finished, and the motion is added inside @supports. A browser
-   without scroll timelines gets a full bag and a legible ledger.
-============================================================================= */
-.dx-mix {
-    position: relative;
-    padding: var(--dx-pad) var(--gut);
-    background: var(--parchment);
-}
-.dx-mix::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(50% 40% at 92% 4%,
-                color-mix(in oklab, var(--tone) 14%, transparent), transparent 62%);
-}
-.dx-mix__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
-.dx-mix__head { margin-bottom: var(--dx-stack); max-width: 52ch; }
-
-.dx-mix__stage {
-    display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr);
-    gap: clamp(1.75rem, 5vw, 4.5rem);
-    align-items: start;
-}
-
-/* ---------- the bag ----------
-   REBUILT AS SVG. It was a div with border-radius and a white blob for a
-   highlight, which is why it read as a toy. A real bag has a welded seam
-   inset from the edge, a hanger tab with a punched hole, unnumbered
-   graduations up one side, a printed label panel, twin ports at the base and
-   a narrow specular edge rather than a glow. All of that needs real geometry.
-
-   The fluid is an SVG <rect> clipped to the interior path and scaled on the
-   Y axis — transform-box: fill-box makes transform-origin resolve against the
-   rect's own box, so it grows from the bottom of the bag rather than the
-   bottom of the viewBox. It is still one compositor property.
-
-   Graduations are deliberately UNNUMBERED. Printing millilitres on it would
-   be stating a volume this practice has not published.                        */
-.dx-bag { position: sticky; top: calc(var(--head-h) + clamp(1.5rem, 5vh, 3rem)); display: grid; justify-items: center; }
-
-.dx-bag__art {
-    width: min(100%, 300px);
-    height: auto;
-    overflow: visible;
-    filter: drop-shadow(0 34px 46px rgba(32, 52, 33, .22));
-}
-
-/* the polycarbonate body */
-.dx-bag__shell { fill: rgba(255, 255, 255, .52); stroke: var(--rule-gold); stroke-width: 1.6; }
-/* the welded seam, inset from the edge — the single detail that most says
-   "medical" rather than "icon" */
-.dx-bag__seam  { fill: none; stroke: color-mix(in oklab, var(--tone) 34%, transparent); stroke-width: 1; stroke-dasharray: 5 4; }
-.dx-bag__tab   { fill: rgba(255, 255, 255, .6); stroke: var(--rule-gold); stroke-width: 1.6; }
-.dx-bag__hole  { fill: var(--parchment); stroke: var(--rule-gold); stroke-width: 1.4; }
-.dx-bag__tick  { stroke: color-mix(in oklab, var(--forest) 26%, transparent); stroke-width: 1.4; stroke-linecap: round; }
-.dx-bag__port  { fill: rgba(255, 255, 255, .7); stroke: var(--rule-gold); stroke-width: 1.5; }
-.dx-bag__spike { stroke: var(--rule-gold); stroke-width: 1.5; stroke-linecap: round; }
-
-/* the label panel */
-.dx-bag__plate { fill: rgba(251, 248, 241, .9); stroke: color-mix(in oklab, var(--tone) 28%, transparent); stroke-width: 1; }
-.dx-bag__no {
-    font-family: var(--dx-mono); font-size: 15px; font-weight: 500;
-    fill: var(--tone); letter-spacing: 1px;
-}
-.dx-bag__title {
-    font-family: var(--dx-display); font-size: 17px; font-weight: 600;
-    fill: var(--forest); letter-spacing: -.4px;
-}
-.dx-bag__sub {
-    font-family: var(--dx-mono); font-size: 7px; font-weight: 400;
-    fill: var(--mist); letter-spacing: 1.15px;
-}
-.dx-bag__rule { stroke: color-mix(in oklab, var(--tone) 30%, transparent); stroke-width: 1; }
-
-/* a narrow specular edge down the left face, not a glow */
-.dx-bag__gloss { fill: url(#dxGloss); }
-
-/* the fluid */
-.dx-bag__fluid {
-    transform-box: fill-box;
-    transform-origin: bottom;
-    transform: scaleY(1);          /* full by default — motion is added below */
-}
-/* the surface sitting on top of the column */
-.dx-bag__line {
-    fill: color-mix(in oklab, var(--tone) 80%, transparent);
-    transform-box: fill-box;
-    transform-origin: bottom;
-}
-
-/* the phone gauge — the same information, a tenth of the height */
-.dx-bag__gauge {
-    display: none;
-    width: 100%; height: 11px;
-    border: 1px solid var(--rule-gold); border-radius: 999px;
-    background: rgba(255, 255, 255, .5);
-    overflow: hidden;
-}
-.dx-bag__gauge i {
-    display: block; width: 100%; height: 100%;
-    background: var(--mix-h, var(--tone));
-    transform-origin: left;
-}
-
-/* ---------- the ledger ---------- */
-.dx-list { list-style: none; border-top: 1px solid var(--forest); }
-.dx-ing {
-    display: grid; grid-template-columns: 2.6rem minmax(0, 1fr) auto;
-    gap: clamp(.7rem, 1.8vw, 1.3rem); align-items: baseline;
-    padding: clamp(1rem, 2.2vh, 1.4rem) 0;
-    border-bottom: 1px solid var(--rule);
-}
-.dx-ing__key {
-    font-family: var(--dx-mono); font-size: .6rem; font-weight: 400;
-    letter-spacing: .1em; color: var(--mist);
-}
-.dx-ing__name {
-    font-family: var(--dx-display); font-weight: 500;
-    font-size: clamp(1.15rem, 2vw, 1.5rem);
-    line-height: 1.08; letter-spacing: -.03em; color: var(--forest);
-    margin-bottom: .28rem;
-}
-.dx-ing__what { font-size: .89rem; line-height: 1.58; color: var(--ink-soft); }
-.dx-ing__chip {
-    width: 9px; height: 9px; border-radius: 50%;
-    background: var(--bt, var(--tone));
-    transform: translateY(-.15rem);
-}
-
-.dx-mix__close {
-    margin-top: var(--dx-stack);
-    padding-left: clamp(1rem, 2vw, 1.6rem);
-    border-left: 2px solid var(--tone);
-    font-family: var(--dx-display); font-weight: 300;
-    font-size: clamp(1.15rem, 2.1vw, 1.7rem); line-height: 1.32;
-    letter-spacing: -.025em; color: var(--forest);
-    max-width: 50ch;
-}
-.dx-mix__note { max-width: 78ch; margin-top: 1.3rem; font-size: .77rem; line-height: 1.68; color: var(--mist); }
-
-/* ---------- THE MOTION ----------
-   Added only where scroll timelines exist. Everything above already reads
-   correctly without it. */
-@supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-
-        /* the ledger is the clock the bag runs on */
-        .dx-mix__stage { timeline-scope: --ledger; }
-        .dx-list { view-timeline: --ledger block; }
-
-        .dx-bag__fluid {
-            animation: dx-fill linear both;
-            animation-timeline: --ledger;
-            /* starts as the list reaches the lower third of the viewport and
-               finishes as its last row clears the middle */
-            animation-range: entry 62% exit 38%;
-        }
-        @keyframes dx-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-
-        /* the surface rides the top of the column */
-        .dx-bag__line {
-            animation: dx-surface linear both;
-            animation-timeline: --ledger;
-            animation-range: entry 62% exit 38%;
-        }
-        /* the interior runs y 54 to 420, so the surface travels 361 units to
-           finish level with the top of a full bag */
-        @keyframes dx-surface {
-            from { transform: translateY(0); opacity: 0; }
-            3%   { opacity: 1; }
-            to   { transform: translateY(-361px); opacity: 1; }
-        }
-
-        /* EACH ROW ARRIVES ONCE AND STAYS.
-           This was a dim-and-undim: only the row crossing the middle of the
-           screen was legible and the other nine sat at 32% opacity, which is
-           why the list read as greyed out in every screenshot. A reveal that
-           holds is what was wanted — the row enters, lands, and remains
-           readable for as long as it is on screen. */
-        .dx-ing {
-            animation: dx-arrive linear both;
-            animation-timeline: view();
-            animation-range: entry 8% entry 58%;
-        }
-        @keyframes dx-arrive {
-            from { opacity: 0; transform: translateY(26px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        /* the chip and the numeral trail the row very slightly, so a row
-           assembles rather than sliding in as one block */
-        .dx-ing__key, .dx-ing__chip {
-            animation: dx-arrive-late linear both;
-            animation-timeline: view();
-            animation-range: entry 16% entry 72%;
-        }
-        @keyframes dx-arrive-late {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-    }
-}
-
-/* ---------- composition · 1080 ---------- */
-@media (max-width: 1080px) {
-    .dx-mix__stage { gap: 2rem; }
-    .dx-bag__body { width: min(100%, 240px); }
-}
-
-/* ---------- composition · 900: the bag becomes a gauge ---------- */
-@media (max-width: 900px) {
-    .dx-mix__stage { grid-template-columns: 1fr; gap: 1.25rem; }
-    .dx-bag {
-        position: sticky; top: calc(var(--head-h) + .5rem); z-index: 5;
-        justify-items: stretch;
-        padding: .65rem .8rem;
-        border: 1px solid var(--rule-gold); border-radius: 8px;
-        background: rgba(251,248,241,.96);
-        -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-    }
-    /* the drawn bag is a tall object and a phone has no room for it — it
-       becomes a gauge, and the SVG stands down entirely */
-    .dx-bag__art { display: none; }
-    .dx-bag__gauge { display: block; }
-
-    @supports (animation-timeline: view()) {
-        @media (prefers-reduced-motion: no-preference) {
-            .dx-bag__gauge i {
-                animation: dx-gauge linear both;
-                animation-timeline: --ledger;
-                animation-range: entry 62% exit 38%;
-            }
-            @keyframes dx-gauge { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-        }
-    }
-    .dx-ing { grid-template-columns: 2.1rem minmax(0, 1fr) auto; gap: .75rem; }
-}
-
-/* ---------- composition · 640 ---------- */
-@media (max-width: 640px) {
     .dx-mix__head { max-width: none; }
     .dx-ing { padding-block: .9rem; }
     .dx-ing__name { font-size: 1.1rem; }
     .dx-ing__what { font-size: .87rem; }
     .dx-mix__close { font-size: 1.1rem; max-width: none; }
-}
-
-
-/* =============================================================================
-   05 · THE COURSE  (#course)
-   Six weeks is a real sequence, so it is numbered. The rule draws itself
-   against its own view-timeline; the money is static text, because a number
-   that counts up is a number you cannot read while it is counting.
-============================================================================= */
-.dx-course { position: relative; padding: var(--dx-pad) var(--gut); background: var(--cream); }
-.dx-course__wrap { max-width: var(--maxw); margin: 0 auto; }
-.dx-course__head { margin-bottom: var(--dx-stack); }
-
-.dx-weeks {
-    --wk-gap: clamp(.5rem, 1.2vw, 1rem);
-    --wk-pin: 12px;
-
-    position: relative;
-    display: grid; grid-template-columns: repeat(6, 1fr);
-    gap: var(--wk-gap);
-    padding-top: 2.6rem; margin-bottom: var(--dx-stack);
-    list-style: none;
-}
-/* THE RAIL ALIGNMENT, FIXED.
-   The rail ran the full width of the grid while the last pin sits at the LEFT
-   edge of the sixth column — so the line overshot the final marker by a whole
-   column and the timeline looked like it kept going after week six.
-
-   Six columns with five gaps makes each column (100% - 5g)/6 wide. The sixth
-   column therefore starts exactly one column-width in from the right edge, so
-   the rail has to stop there, plus half a pin to reach the pin's centre. Both
-   ends are now anchored to a pin centre rather than to the container. */
-.dx-weeks__rail {
-    position: absolute;
-    left: calc(var(--wk-pin) / 2);
-    right: calc((100% - 5 * var(--wk-gap)) / 6 - var(--wk-pin) / 2);
-    top: .56rem; height: 1px;
-    background: var(--rule);
-}
-.dx-weeks__fill {
-    position: absolute; left: 0; top: -1px; height: 3px; width: 100%;
-    transform-origin: left;
-    background: var(--tone);
-}
-.dx-wk { position: relative; }
-.dx-wk__pin {
-    position: absolute; left: 0; top: -2.6rem;
-    width: var(--wk-pin, 12px); height: var(--wk-pin, 12px); border-radius: 50%;
-    border: 1px solid var(--tone); background: var(--tone);
-}
-.dx-wk__no {
-    display: block;
-    font-family: var(--dx-mono); font-size: .56rem; font-weight: 400;
-    letter-spacing: .14em; text-transform: uppercase; color: var(--tone);
-    margin-bottom: .35rem;
-}
-.dx-wk__what {
-    font-family: var(--dx-display); font-weight: 500;
-    font-size: clamp(.92rem, 1.25vw, 1.05rem); line-height: 1.14;
-    letter-spacing: -.025em; color: var(--forest);
-}
-
-@supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-        .dx-weeks { timeline-scope: --weeks; view-timeline: --weeks block; }
-        .dx-weeks__fill {
-            animation: dx-draw linear both;
-            animation-timeline: --weeks; animation-range: cover 18% cover 54%;
-        }
-        @keyframes dx-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
-        /* THE OFF-BY-ONE, FIXED. The old ranges mixed `entry` and `cover`
-           phases — `cover 8%` sits BEFORE `entry 78%` on a short element, so
-           the range was inverted and week one's pin never completed. That is
-           the hollow first marker in the screenshot. Every range below is now
-           in one phase and strictly increasing, and each pin lands just as the
-           rule arrives at it. */
-        .dx-wk__pin {
-            animation: dx-pin linear both;
-            animation-timeline: --weeks;
-        }
-        /* :nth-child(2) is week one — the rail span is the first child */
-        .dx-wk:nth-child(2) .dx-wk__pin { animation-range: cover 20% cover 24%; }
-        .dx-wk:nth-child(3) .dx-wk__pin { animation-range: cover 26% cover 30%; }
-        .dx-wk:nth-child(4) .dx-wk__pin { animation-range: cover 32% cover 36%; }
-        .dx-wk:nth-child(5) .dx-wk__pin { animation-range: cover 38% cover 42%; }
-        .dx-wk:nth-child(6) .dx-wk__pin { animation-range: cover 44% cover 48%; }
-        .dx-wk:nth-child(7) .dx-wk__pin { animation-range: cover 50% cover 54%; }
-        @keyframes dx-pin {
-            from { background: var(--cream); border-color: var(--rule-gold); transform: scale(.72); }
-            to   { background: var(--tone);  border-color: var(--tone);      transform: scale(1); }
-        }
-    }
-}
-
-/* ---------- the arithmetic ---------- */
-.dx-sum {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr);
-    gap: clamp(1.25rem, 3vw, 2.5rem); align-items: start;
-}
-.dx-sum__box {
-    padding: clamp(1.4rem, 3vw, 2.2rem);
-    border: 1px solid var(--rule-gold); border-radius: 4px;
-    background: rgba(255,255,255,.72);
-    box-shadow: 0 32px 66px -50px rgba(32,52,33,.5);
-}
-.dx-sum__for {
-    font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .18em;
-    text-transform: uppercase; color: var(--mist); margin-bottom: .45rem;
-}
-.dx-sum__name {
-    font-family: var(--dx-display); font-weight: 500;
-    font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.04;
-    letter-spacing: -.035em; color: var(--forest);
-    margin-bottom: clamp(1.1rem, 2.4vw, 1.6rem);
-}
-.dx-sum__rows { display: grid; gap: 1rem; }
-.dx-sum__row { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: baseline; gap: .3rem 1rem; }
-.dx-sum__row dt {
-    font-family: var(--dx-mono); font-size: .58rem; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--mist);
-}
-.dx-sum__row dd { font-family: var(--dx-mono); font-weight: 500; font-size: clamp(1.1rem, 1.9vw, 1.45rem); color: var(--ink-soft); font-variant-numeric: tabular-nums; text-align: right; }
-.dx-sum__row.is-prog dd { color: var(--forest); }
-.dx-sum__bar { grid-column: 1 / -1; display: block; height: 3px; border-radius: 999px; background: rgba(32,52,33,.07); overflow: hidden; }
-.dx-sum__bar i { display: block; height: 100%; border-radius: 999px; background: rgba(139,136,119,.45); transform-origin: left; }
-.dx-sum__row.is-prog .dx-sum__bar i { background: var(--tone); }
-
-.dx-sum__keep {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
-    margin-top: clamp(1.1rem, 2.4vw, 1.6rem); padding-top: 1rem;
-    border-top: 1px solid var(--rule);
-}
-.dx-sum__keep span { font-family: var(--dx-mono); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--tone); }
-.dx-sum__keep b {
-    font-family: var(--dx-display); font-weight: 600;
-    font-size: clamp(2rem, 4vw, 3rem); line-height: 1; letter-spacing: -.045em;
-    color: var(--tone); font-variant-numeric: tabular-nums;
-}
-
-.dx-sum__why h3 {
-    font-family: var(--dx-display); font-weight: 500;
-    font-size: clamp(1.2rem, 2.1vw, 1.6rem); line-height: 1.1;
-    letter-spacing: -.03em; color: var(--forest); margin-bottom: .8rem;
-}
-.dx-sum__why p { font-size: .94rem; line-height: 1.74; }
-.dx-sum__why p + p { margin-top: .85rem; }
-.dx-sum__fine { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px solid var(--rule); font-size: .79rem; line-height: 1.68; color: var(--mist); }
-
-@media (max-width: 1080px) { .dx-sum { grid-template-columns: 1fr; } }
-@media (max-width: 780px) {
-    .dx-weeks { grid-template-columns: 1fr; padding-top: 0; padding-left: 2.2rem; gap: 1rem; }
-    .dx-weeks__rail { left: .5rem; right: auto; top: .5rem; bottom: .5rem; width: 1px; height: auto; }
-    .dx-weeks__fill { width: 3px; height: 100%; left: -1px; transform-origin: top; }
-    .dx-wk__pin { left: -2.2rem; top: .05rem; }
-    .dx-wk__no { display: inline; margin-right: .5rem; }
-    .dx-wk__what { display: inline; }
-    @supports (animation-timeline: view()) {
-        @media (prefers-reduced-motion: no-preference) {
-            @keyframes dx-draw { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-        }
-    }
-}
-@media (max-width: 640px) {
     .dx-sum__box { padding: 1.25rem 1.1rem; }
     .dx-sum__keep { flex-direction: column; align-items: flex-start; gap: .25rem; }
-}
-
-
-/* =============================================================================
-   06 · QUESTIONS  (#questions)
-   Native <details>. No script, so nothing here can fail, and every answer is
-   in the DOM for find-in-page whether or not it is open.
-============================================================================= */
-.dx-qs { position: relative; padding: var(--dx-pad) var(--gut); background: var(--parchment); }
-.dx-qs__wrap { max-width: min(var(--maxw), 62rem); margin: 0 auto; }
-.dx-qs__head { margin-bottom: var(--dx-stack); }
-.dx-qs__list { border-top: 1px solid var(--forest); }
-.dx-q { border-bottom: 1px solid var(--rule); }
-.dx-q__ask {
-    display: flex; align-items: center; justify-content: space-between; gap: 1.2rem;
-    padding: 1.15rem .2rem; cursor: pointer; list-style: none;
-    font-family: var(--dx-display); font-weight: 500;
-    font-size: clamp(1.05rem, 1.55vw, 1.3rem); line-height: 1.18;
-    letter-spacing: -.028em; color: var(--forest);
-    transition: color .35s var(--ease), padding-left .35s var(--ease);
-}
-.dx-q__ask::-webkit-details-marker { display: none; }
-.dx-q__ask:hover { color: var(--tone); padding-left: .45rem; }
-.dx-q__ask i {
-    flex: 0 0 auto; display: grid; place-items: center;
-    width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid var(--rule-gold); font-size: .8rem; color: var(--tone);
-    transition: transform .4s var(--ease), background .4s var(--ease), color .4s var(--ease);
-}
-.dx-q[open] .dx-q__ask { color: var(--tone); }
-.dx-q[open] .dx-q__ask i { transform: rotate(135deg); background: var(--tone); color: #fff; border-color: var(--tone); }
-.dx-q__ans { padding: 0 3rem 1.3rem .2rem; }
-.dx-q__ans p { font-size: .93rem; line-height: 1.78; max-width: 68ch; }
-.dx-q__ans p + p { margin-top: .75rem; }
-.dx-q__ans ul { margin-top: .75rem; display: grid; gap: .35rem; list-style: none; }
-.dx-q__ans li { position: relative; padding-left: 1.1rem; font-size: .91rem; line-height: 1.66; }
-.dx-q__ans li::before { content: ''; position: absolute; left: 0; top: .66em; width: 5px; height: 5px; border-radius: 50%; background: var(--tone); }
-
-@media (max-width: 640px) {
     .dx-q__ask { font-size: 1rem; padding-block: 1rem; min-height: 56px; }
     .dx-q__ans { padding-right: 1rem; }
+    .dx-nxt { width: 62vw; max-width: 220px; }
+}
+@media (max-width: 420px) {
+    .dx-hero__name { font-size: clamp(2.2rem,13.5vw,3rem); }
+    .dx-vital dt { font-size: .5rem; letter-spacing: .1em; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+    .dx-bag { position: static; }
+    .dx-hero { padding-top: calc(var(--head-h) + 1rem); }
+}
+@media (hover: none) {
+    .dx-nxt > a:hover { box-shadow: none; }
+    .dx-q__ask:hover { padding-left: .2rem; }
 }
 
-
-/* =============================================================================
-   07 · BEGIN  (#begin)
-============================================================================= */
-.dx-begin { position: relative; padding: var(--dx-pad) var(--gut); background: var(--cream); overflow: clip; }
-.dx-begin::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(52% 42% at 88% 6%,
-                color-mix(in oklab, var(--tone) 16%, transparent), transparent 62%);
-}
-.dx-begin__wrap {
-    position: relative; z-index: 2;
-    display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.72fr);
-    gap: clamp(1.75rem, 5vw, 4rem); align-items: center;
-    max-width: var(--maxw); margin: 0 auto;
-}
-.dx-begin__lede { max-width: 44ch; font-size: clamp(.95rem, 1.06vw, 1.04rem); line-height: 1.75; margin-bottom: 1.6rem; }
-.dx-begin__acts { display: flex; flex-wrap: wrap; gap: .6rem; }
-.dx-begin__card {
-    padding: clamp(1.3rem, 3vw, 1.9rem);
-    border: 1px solid var(--rule-gold); border-radius: 4px;
-    background: rgba(255,255,255,.82);
-    box-shadow: 0 40px 78px -56px rgba(32,52,33,.6);
-}
-.dx-begin__card div {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
-    padding: .75rem 0; border-bottom: 1px solid var(--rule);
-}
-.dx-begin__card div:last-child { border-bottom: 0; }
-.dx-begin__card dt { font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); }
-.dx-begin__card dd { font-family: var(--dx-mono); font-weight: 500; font-size: .93rem; color: var(--forest); font-variant-numeric: tabular-nums; text-align: right; }
-.dx-begin__card dd em { font-style: normal; color: var(--tone); }
-
-.dx-begin__legal {
-    position: relative; z-index: 2;
-    max-width: 84ch; margin: var(--dx-stack) auto 0;
-    padding-top: 1.3rem; border-top: 1px solid var(--rule);
-    font-size: .76rem; line-height: 1.74; color: var(--mist);
-}
-.dx-begin__legal b {
-    display: block; margin-bottom: .45rem;
-    font-family: var(--dx-mono); font-size: .56rem; font-weight: 500;
-    letter-spacing: .16em; text-transform: uppercase; color: var(--forest);
-}
-
-@media (max-width: 900px) {
-    .dx-begin__wrap { grid-template-columns: 1fr; gap: 1.6rem; }
-    .dx-begin__lede { max-width: none; }
-    .dx-begin__acts { width: 100%; }
-}
-
-
-/* =============================================================================
-   08 · THE OTHER NINE  (#more)
-   Every card here carries a view-transition-name, so the morph works in both
-   directions: menu page into a drip, and drip into the next drip.
-   A plain snap rail — the site's Rail engine is no longer needed for it.
-============================================================================= */
-.dx-more { position: relative; padding: var(--dx-pad) 0; background: var(--parchment); }
-.dx-more__wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gut); }
-.dx-more__top {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    flex-wrap: wrap; gap: 1rem;
-    padding-bottom: 1rem; margin-bottom: clamp(1.1rem, 2.4vw, 1.6rem);
-    border-bottom: 1px solid var(--forest);
-}
-.dx-more__all {
-    display: inline-flex; align-items: center; gap: .5rem;
-    font-family: var(--dx-mono); font-size: .6rem; font-weight: 500;
-    letter-spacing: .14em; text-transform: uppercase; color: var(--tone);
-    white-space: nowrap;
-    transition: gap .35s var(--ease);
-}
-.dx-more__all:hover { gap: .9rem; }
-
-.dx-more__track {
-    display: flex; align-items: stretch; gap: var(--dx-gap);
-    padding: .25rem var(--gut) 1.25rem;
-    margin-inline: calc(var(--gut) * -1);
-    list-style: none;
-    overflow-x: auto; overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gut);
-    overscroll-behavior-x: contain;
-    scrollbar-width: none;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 95%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 3%, #000 95%, transparent);
-}
-.dx-more__track::-webkit-scrollbar { display: none; }
-
-.dx-nxt { --bt: var(--gold); flex: 0 0 auto; width: clamp(200px, 20vw, 250px); scroll-snap-align: start; display: flex; }
-.dx-nxt > a {
-    display: grid; grid-template-rows: auto auto; align-content: start;
-    width: 100%; padding: 1.1rem 1.1rem 1rem;
-    background: #fff;
-    border: 1px solid var(--rule); border-top: 2px solid var(--bt);
-    border-radius: 4px;
-    transition: transform .45s var(--ease), box-shadow .45s var(--ease), border-color .45s var(--ease);
-}
-.dx-nxt > a:hover {
-    transform: translateY(-5px);
-    border-color: color-mix(in oklab, var(--bt) 40%, transparent);
-    box-shadow: 0 28px 48px -28px rgba(32,52,33,.36);
-}
-.dx-nxt__bag { justify-self: center; width: 56px; margin-bottom: .8rem; }
-.dx-nxt__bag img { width: 100%; height: auto; }
-.dx-nxt__no { display: block; font-family: var(--dx-mono); font-size: .54rem; letter-spacing: .14em; color: var(--bt); margin-bottom: .25rem; }
-.dx-nxt__name {
-    display: block;
-    font-family: var(--dx-display); font-weight: 500; font-size: 1rem;
-    line-height: 1.1; letter-spacing: -.03em; color: var(--forest); margin-bottom: .3rem;
-}
-.dx-nxt__meta { display: block; font-family: var(--dx-mono); font-size: .58rem; color: var(--mist); font-variant-numeric: tabular-nums; }
-.dx-nxt__meta i { font-style: normal; color: var(--rule); margin: 0 .3rem; }
-
-@media (max-width: 640px) { .dx-nxt { width: 62vw; max-width: 220px; } }
-
-@media (prefers-reduced-motion: reduce) {
-    .dx-more__track {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        margin-inline: 0; padding-inline: 0; overflow: visible;
-        -webkit-mask-image: none; mask-image: none;
-    }
-    .dx-nxt { width: 100%; max-width: none; }
-}
-
-
-/* =============================================================================
-   09 · MOTION & FOCUS
-============================================================================= */
+/* ── 12 A11Y ───────────────────────────────────────────────────────────── */
 .page-drip :focus-visible { outline: 2px solid var(--tone); outline-offset: 3px; border-radius: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
-    .dx-nxt > a, .dx-btn, .dx-q__ask { transition: none; }
+    html.dx-on [data-anim], html.dx-on .dx-char { opacity: 1 !important; transform: none !important; }
+    .dx-bag__fluid { transform: scaleY(1); }
+    .dx-bag__line { opacity: 1; transform: translateY(-361px); }
+    .dx-bag__gauge i, .dx-weeks__fill { transform: none; }
+    .dx-wk .dx-wk__pin { border-color: var(--tone); background: var(--tone); }
+    .dx-ing::after { width: 100%; transition: none; }
+    .dx-brow::after { width: 26px; transition: none; }
+    .dx-ing.dx-is-in .dx-ing__chip { animation: none; }
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    .dx-more__track { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); margin-inline: 0; padding-inline: 0; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+    .dx-nxt { width: 100%; max-width: none; }
 }
