@@ -565,12 +565,23 @@ class Mark {
         const slug = document.body.dataset.drip;
         if (!slug) return;
 
-        const tail = '/drips/' + slug;
-        const hits = (a) => {
-            const href = (a.getAttribute('href') || '').split('#')[0].split('?')[0]
-                .replace(/\/index\.html?$/i, '').replace(/\/+$/, '');
-            return href.endsWith(tail);
-        };
+        /* Compare the LAST PATH SEGMENT, so every URL shape the site might be
+           built with lands on the same answer:
+               /drips/liver-support/              -> liver-support
+               /drips/liver-support/index.html    -> liver-support
+               /drips/liver-support.html          -> liver-support
+           data-drip must therefore match the segment the NAV LINKS use, not
+           the filename on disk — those are allowed to differ, and on this site
+           they do. */
+        const seg = (url) => (url || '').split('#')[0].split('?')[0]
+            .replace(/\/index\.html?$/i, '/')
+            .replace(/\.html?$/i, '')
+            .replace(/\/+$/, '')
+            .split('/').pop()
+            .toLowerCase();
+
+        const want = seg(slug) || slug.toLowerCase();
+        const hits = (a) => seg(a.getAttribute('href')) === want;
 
         $$('.hd-item, .menu__sub-item').forEach((a) => {
             if (!hits(a)) return;
