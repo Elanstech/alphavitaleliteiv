@@ -201,7 +201,6 @@ class Hero {
         this.anims = $$('.dx-anim', this.el ?? document);
         this.tube  = $('#dxTube');
         this.drop  = $('#dxDrop');
-        this.pool  = $('#dxPool');
         this.loop  = null;
     }
 
@@ -234,7 +233,9 @@ class Hero {
     /** the drop has to travel exactly the length of the tube, and the tube is
      *  a clamp() that changes with the viewport */
     measure() {
-        const h = this.tube ? this.tube.offsetHeight : 100;
+        // the drop forms 6px inside the chamber, so it has that much less tube
+        // to cross before it reaches the pool
+        const h = (this.tube ? this.tube.offsetHeight : 100) - 6;
         this.el.style.setProperty('--dx-drop', h + 'px');
         this.travel = h;
     }
@@ -245,14 +246,7 @@ class Hero {
         // the CSS keyframe was the fallback; GSAP owns it from here
         this.drop.style.animation = 'none';
 
-        const ripple = () => {
-            if (!this.pool) return;
-            this.pool.classList.remove('is-hit');
-            void this.pool.offsetWidth;          // restart the ripple keyframes
-            this.pool.classList.add('is-hit');
-        };
-
-        this.loop = gsap.timeline({ repeat: -1, repeatDelay: .55, onRepeat: ripple });
+        this.loop = gsap.timeline({ repeat: -1, repeatDelay: .5 });
         this.loop
             .set(this.drop, { y: 0, scale: .5, opacity: 0 })
             .to(this.drop, { opacity: 1, scale: 1, duration: .22, ease: 'power2.out' })
@@ -547,6 +541,56 @@ class More {
 }
 
 
+
+/* =============================================================================
+   MARK — the nav row for the drip you are on
+   -----------------------------------------------------------------------------
+   Trail in script.js already does this, and does it well, but it matches on
+   location.pathname against the resolved href of each link. That is exact and
+   correct — and it silently produces NOTHING the moment the site is not served
+   from its own root. Opened as a file, or previewed from a subfolder, `here`
+   comes back as /users/…/drips/liver-support while every link resolves to
+   /drips/liver-support, so no row matches and no row lights.
+
+   This runs after Trail (drips.js is the second module in the document) and
+   marks by SLUG instead, taken from data-drip on <body>. A slug has no prefix
+   to get wrong, so the highlight is identical on file://, on localhost, in a
+   staging subfolder and in production.
+
+   Additive only: where Trail already worked, this sets the same classes again
+   and changes nothing.
+============================================================================= */
+class Mark {
+    init() {
+        const slug = document.body.dataset.drip;
+        if (!slug) return;
+
+        const tail = '/drips/' + slug;
+        const hits = (a) => {
+            const href = (a.getAttribute('href') || '').split('#')[0].split('?')[0]
+                .replace(/\/index\.html?$/i, '').replace(/\/+$/, '');
+            return href.endsWith(tail);
+        };
+
+        $$('.hd-item, .menu__sub-item').forEach((a) => {
+            if (!hits(a)) return;
+            a.classList.add('is-here');
+            a.setAttribute('aria-current', 'page');
+        });
+
+        // the parent of the trail: Infusions stays lit as the section you are
+        // in, so it gets the class but never aria-current
+        $$('.head__drop > .head__link').forEach((a) => a.classList.add('is-here'));
+        $('.menu__drop > summary')?.classList.add('is-here');
+
+        // open the accordion so the lit row is visible on the first tap of the
+        // burger rather than one tap further in
+        const det = $('.menu__drop');
+        if (det) det.open = true;
+    }
+}
+
+
 /* =============================================================================
    REVEAL — generic, for anything the modules above do not own
 ============================================================================= */
@@ -589,6 +633,7 @@ const modules = {
     bag:    new Bag(),
     course: new Course(),
     more:   new More(),
+    mark:   new Mark(),
     reveal: new Reveal(),
 };
 
