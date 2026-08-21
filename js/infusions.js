@@ -12,6 +12,7 @@
      COMPOUNDS   the component index, and where each one appears
      Hero        masked lines, the counters
      Ticker      the running index under the hero
+     Bar         the console — pins under the header and rides up with it
      Cabinet     view · chair time · order · pricing, all through Flip
      Tilt        cards lean toward the pointer (fine pointers only)
      DripLine    the gold line beside the menu, drawn by scroll
@@ -42,6 +43,16 @@ const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
 const debounce = (fn, ms = 150) => {
     let t;
     return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+};
+
+/** Run a handler at most once per frame. */
+const onFrame = (fn) => {
+    let queued = false;
+    return (...args) => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => { fn(...args); queued = false; });
+    };
 };
 
 /** $2,430 · $445.50 — cents only when there are cents. */
@@ -279,6 +290,69 @@ class Ticker {
 
 
 /* =============================================================================
+   BAR — the console
+   -----------------------------------------------------------------------------
+   The console is position:sticky, but a fixed offset is wrong on this site: the
+   site header condenses at 40px and retreats entirely on the way down, so a bar
+   parked at the full header height floats with a gap under it half the time.
+
+   --ivx-top is written here instead, from the header's own state, and the CSS
+   transitions to it — the console tucks under the header while it is showing
+   and rides up to the top edge the moment it leaves. `is-stuck` fires when the
+   bar has actually reached its offset, which is what tightens the padding and
+   lifts the shadow off the cards behind it.
+
+   Below 900px the CSS makes the bar static and this all becomes inert.
+============================================================================= */
+class Bar {
+    constructor() {
+        this.el   = $('#ivxBar');
+        this.head = $('#head');
+        this.mq   = window.matchMedia('(min-width: 901px)');
+        this.gap  = 8;
+        this.top  = 0;
+    }
+
+    init() {
+        if (!this.el) return;
+
+        this.sync();
+        this.watch();
+
+        if (this.head) {
+            new MutationObserver(() => this.sync())
+                .observe(this.head, { attributes: true, attributeFilter: ['class'] });
+        }
+
+        window.addEventListener('resize', debounce(() => this.sync(), 160));
+    }
+
+    /** where the console should park right now */
+    sync() {
+        if (!this.mq.matches) { this.top = 0; return; }
+
+        const hidden = this.head?.classList.contains('is-hidden');
+        const h = this.head ? this.head.offsetHeight : 0;
+
+        this.top = hidden ? 10 : h + this.gap;
+        this.el.style.setProperty('--ivx-top', this.top + 'px');
+    }
+
+    /** has it reached that park yet */
+    watch() {
+        const read = onFrame(() => {
+            if (!this.mq.matches) { this.el.classList.remove('is-stuck'); return; }
+            const top = this.el.getBoundingClientRect().top;
+            this.el.classList.toggle('is-stuck', top <= this.top + 1);
+        });
+
+        window.addEventListener('scroll', read, { passive: true });
+        read();
+    }
+}
+
+
+/* =============================================================================
    THE CABINET  (#cabinet)
    -----------------------------------------------------------------------------
    Four controls, one state object, one code path. View, chair time and order
@@ -351,8 +425,7 @@ class Cabinet {
 
     /* ---------- chair time ---------- */
     bands() {
-        const btns = $$('[data-band]');
-        btns.forEach((b) => {
+        $$('[data-band]').forEach((b) => {
             b.addEventListener('click', () => {
                 const next = b.dataset.band;
                 if (next === this.at.band) return;
@@ -441,12 +514,14 @@ class Cabinet {
    TILT — the cards lean toward the pointer
    The lean is written to the INNER element: the Flip engine owns x and y on the
    card itself, and two writers on one transform would fight every time the
-   layout changes. Fine pointers only, and never in the ledger.
+   layout changes. Fine pointers only, never in the ledger, and never once the
+   grid is one column wide.
 ============================================================================= */
 class Tilt {
     constructor() {
         this.grid  = $('#ivxGrid');
         this.cards = this.grid ? $$('.ivx-card', this.grid) : [];
+        this.mq    = window.matchMedia('(min-width: 781px)');
         this.LEAN  = 7;
     }
 
@@ -460,7 +535,7 @@ class Tilt {
             const up = gsap.quickTo(inner, 'y', { duration: .5, ease: 'power3' });
             let box = null;
 
-            const flat = () => this.grid.classList.contains('is-ledger');
+            const flat = () => !this.mq.matches || this.grid.classList.contains('is-ledger');
 
             card.addEventListener('pointerenter', () => {
                 box = card.getBoundingClientRect();
@@ -516,6 +591,7 @@ class DripLine {
 class Compounds {
     constructor() {
         this.scene = $('.ivx-idx');
+        this.rail  = $('#ivxKeys');
         this.keys  = $$('.ivx-key');
         this.panel = $('#ivxPanel');
         this.ghost = $('#ivxGhost');
@@ -553,6 +629,12 @@ class Compounds {
         this.at = i;
 
         this.keys.forEach((k, n) => k.classList.toggle('is-on', n === i));
+
+        // below 900px the keys are a sideways rail — keep the live one on screen
+        const key = this.keys[i];
+        if (key.scrollIntoView && this.rail && this.rail.scrollWidth > this.rail.clientWidth) {
+            key.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+        }
 
         this.name.textContent = c.name;
         this.what.textContent = c.what;
@@ -658,6 +740,7 @@ class Program {
 const modules = {
     hero:      new Hero(),
     ticker:    new Ticker(),
+    bar:       new Bar(),
     cabinet:   new Cabinet(),
     tilt:      new Tilt(),
     dripLine:  new DripLine(),
@@ -717,4 +800,4 @@ if (document.readyState === 'loading') {
 }
 
 // handy in the console while the ten protocol pages get built
-window.AVEIX = { modules, boot, MENU, COMPOUNDS, Flip, helpers: { $, $$, clamp, money, countTo, debounce } };
+window.AVEIX = { modules, boot, MENU, COMPOUNDS, Flip, helpers: { $, $$, clamp, money, countTo, debounce, onFrame } };
