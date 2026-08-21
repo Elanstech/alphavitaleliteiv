@@ -8,6 +8,7 @@
      Helpers
      Scroll      one listener, one rAF, every subscriber
      Nav         the single smooth-scroll path — every button and anchor
+     Trail       "you are here" — the active nav state, derived from the URL
      Preloader   hairline draws with the load, curtain lifts onto the film
      Header      condense · retreat on the way down · return on the way up
      Menu        parchment page, circular reveal, scroll lock, escape
@@ -150,6 +151,99 @@ const Nav = {
             if (window.location.hash !== href) history.pushState(null, '', href);
             else window.dispatchEvent(new HashChangeEvent('hashchange'));
         });
+    },
+};
+
+
+/* =============================================================================
+   TRAIL — "you are here", derived from the URL
+   -----------------------------------------------------------------------------
+   The markup already carries `is-here` on the right link for index.html and
+   infusions.html, so the correct item is lit with JavaScript off. What the
+   markup cannot do is the ten drip pages: /drips/liver-support/ has to light
+   its own row inside the flyout AND keep "Infusions" lit as the parent of the
+   trail. Hand-editing that into ten files is ten chances to get it wrong, and
+   eleven more the next time the menu changes. Read the path instead, once, and
+   every page that exists — or gets built later — is correct by construction.
+
+   THE MATCHING. Paths are normalised before they are compared, because the
+   same page is reachable as /htmls/infusions.html, /htmls/infusions and
+   /htmls/infusions/ depending on the host, and a trailing-slash mismatch is
+   the classic reason an active state "randomly" stops working on deploy.
+
+   Nav order across the site: Home · Infusions (flyout) · Dr. Aronov ·
+   Research · Contact.
+============================================================================= */
+const Trail = {
+    /** '/Drips/Liver-Support/' · '/htmls/infusions.html' · '/index.html'
+     *  all collapse to one comparable shape. */
+    clean(p) {
+        let s = (p || '/').toLowerCase().split('#')[0].split('?')[0];
+        s = s.replace(/\/index\.html?$/, '/');   // /index.html   -> /
+        s = s.replace(/\.html?$/, '');           // /a/b.html     -> /a/b
+        s = s.replace(/\/+$/, '');               // /a/b/         -> /a/b
+        return s || '/';
+    },
+
+    /** the normalised path an anchor points at, or null if it leaves the site */
+    path(a) {
+        const href = a.getAttribute('href') || '';
+        if (!href || /^(https?:|tel:|mailto:|#)/i.test(href)) return null;
+        try { return this.clean(new URL(href, window.location.href).pathname); }
+        catch { return null; }
+    },
+
+    mark(el, exact) {
+        el.classList.add('is-here');
+        if (exact) el.setAttribute('aria-current', 'page');
+    },
+
+    init() {
+        const here    = this.clean(window.location.pathname);
+        const tops    = [...$$('.head__link'), ...$$('.menu__nav > a')];
+        const items   = [...$$('.hd-item'), ...$$('.menu__sub-item'), ...$$('.menu__sub-all')];
+        const parents = $$('.head__drop > .head__link');
+        const summary = $('.menu__drop > summary');
+        const details = $('.menu__drop');
+
+        if (!tops.length && !items.length) return;
+
+        // start from nothing, so a stale class in the markup cannot leave two
+        // items lit at once
+        [...tops, ...items].forEach((el) => {
+            el.classList.remove('is-here');
+            el.removeAttribute('aria-current');
+        });
+        summary?.classList.remove('is-here');
+
+        /* 1 · the exact page, wherever it appears in either menu.
+              Any /drips/ URL counts as being inside the infusion menu even if
+              no row matches it — that covers a protocol page that is not on
+              the ten-item shortlist. */
+        let inMenu = here.startsWith('/drips/');
+
+        items.forEach((a) => {
+            if (this.path(a) !== here) return;
+            this.mark(a, true);
+            inMenu = true;
+        });
+
+        tops.forEach((a) => {
+            if (this.path(a) !== here) return;
+            this.mark(a, true);
+        });
+
+        /* 2 · the parent of the trail. "Infusions" stays lit on every drip
+              page and on the menu page itself — it is the section you are in,
+              not the page you are on, so it gets the class without
+              aria-current. */
+        if (inMenu) {
+            parents.forEach((a) => this.mark(a, false));
+            if (summary) this.mark(summary, false);
+            // open the accordion so the lit row is visible the moment the
+            // burger is tapped, rather than one tap further in
+            if (details) details.open = true;
+        }
     },
 };
 
@@ -1819,6 +1913,7 @@ class Reveal {
 ============================================================================= */
 const modules = {
     nav:        Nav,
+    trail:      Trail,
     preloader:  new Preloader(),
     header:     new Header(),
     menu:       new Menu(),
@@ -1923,4 +2018,4 @@ if (document.readyState === 'loading') {
 }
 
 // handy in the console while the rest of the pages get built
-window.AVE = { modules, boot, DRIPS, ASKS, Rail, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
+window.AVE = { modules, boot, Trail, DRIPS, ASKS, Rail, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
