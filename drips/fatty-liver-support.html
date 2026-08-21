@@ -221,22 +221,111 @@
 
     <div class="dx-mix__stage">
 
+      <!-- THE BAG.
+           Drawn, not styled. The shell, the welded seam, the hanger tab and
+           its punched hole, the graduations, the label plate and the twin
+           ports are all real geometry — a rounded div with a highlight on it
+           reads as an icon, which is exactly what it looked like.
+
+           The fluid is a <rect> clipped to the interior path. Its gradient is
+           the ten component tones, bottom to top, in the same order and the
+           same proportions as the ledger beside it. Change the ledger, change
+           these stops.
+
+           Graduations carry no numbers on purpose: printing millilitres would
+           state a volume this practice has not published. -->
       <div class="dx-bag">
-        <span class="dx-bag__eye" aria-hidden="true"></span>
-        <span class="dx-bag__hang" aria-hidden="true"></span>
+        <svg class="dx-bag__art" viewBox="0 0 240 476" role="img"
+             aria-label="The Fatty Liver Support IV bag, showing its ten components">
 
-        <div class="dx-bag__body">
-          <span class="dx-bag__fluid" aria-hidden="true" style="
-            --mix: linear-gradient(0deg, #7FA08C 0%, #8FBE9B 33%, #9AA98C 40%, #C9A94E 48%, #5F7A55 57%, #6E8A5E 66%, #4F7D5E 76%, #B8873C 84%, #D9982A 91%, #E7CB86 100%);
-            --mix-h: linear-gradient(90deg, #7FA08C 0%, #8FBE9B 33%, #9AA98C 40%, #C9A94E 48%, #5F7A55 57%, #6E8A5E 66%, #4F7D5E 76%, #B8873C 84%, #D9982A 91%, #E7CB86 100%);
-          "></span>
-          <span class="dx-bag__scale" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
-          </span>
-        </div>
+          <defs>
+            <!-- bottom to top, matching the ledger -->
+            <linearGradient id="dxMix" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%"   stop-color="#7FA08C"/>
+              <stop offset="33%"  stop-color="#8FBE9B"/>
+              <stop offset="40%"  stop-color="#9AA98C"/>
+              <stop offset="48%"  stop-color="#C9A94E"/>
+              <stop offset="57%"  stop-color="#5F7A55"/>
+              <stop offset="66%"  stop-color="#6E8A5E"/>
+              <stop offset="76%"  stop-color="#4F7D5E"/>
+              <stop offset="84%"  stop-color="#B8873C"/>
+              <stop offset="91%"  stop-color="#D9982A"/>
+              <stop offset="100%" stop-color="#E7CB86"/>
+            </linearGradient>
 
-        <span class="dx-bag__port" aria-hidden="true"></span>
+            <linearGradient id="dxGloss" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%"   stop-color="#fff" stop-opacity=".85"/>
+              <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+            </linearGradient>
+
+            <!-- the interior, inset from the shell by the seam -->
+            <clipPath id="dxInside">
+              <path d="M40,90 C40,68 54,54 76,54 L164,54 C186,54 200,68 200,90
+                       L206,382 C207,404 193,420 171,420 L69,420
+                       C47,420 33,404 34,382 Z"/>
+            </clipPath>
+          </defs>
+
+          <!-- hanger tab and its hole -->
+          <path class="dx-bag__tab" d="M98,6 L142,6 C146,6 149,9 150,13 L154,44 L86,44 L90,13 C91,9 94,6 98,6 Z"/>
+          <ellipse class="dx-bag__hole" cx="120" cy="26" rx="13" ry="7"/>
+
+          <!-- the shell -->
+          <path class="dx-bag__shell"
+                d="M32,86 C32,60 48,44 76,44 L164,44 C192,44 208,60 208,86
+                   L214,384 C215,410 199,428 171,428 L69,428
+                   C41,428 25,410 26,384 Z"/>
+
+          <!-- the fluid, clipped to the interior -->
+          <g clip-path="url(#dxInside)">
+            <rect class="dx-bag__fluid" x="30" y="54" width="180" height="366" fill="url(#dxMix)"/>
+            <rect class="dx-bag__line" x="34" y="417" width="172" height="2"/>
+          </g>
+
+          <!-- the welded seam -->
+          <path class="dx-bag__seam"
+                d="M40,90 C40,68 54,54 76,54 L164,54 C186,54 200,68 200,90
+                   L206,382 C207,404 193,420 171,420 L69,420
+                   C47,420 33,404 34,382 Z"/>
+
+          <!-- graduations, unnumbered -->
+          <g class="dx-bag__tick">
+            <line x1="182" y1="120" x2="200" y2="120"/>
+            <line x1="189" y1="152" x2="200" y2="152"/>
+            <line x1="182" y1="184" x2="201" y2="184"/>
+            <line x1="189" y1="216" x2="201" y2="216"/>
+            <line x1="182" y1="248" x2="202" y2="248"/>
+            <line x1="190" y1="280" x2="202" y2="280"/>
+            <line x1="183" y1="312" x2="203" y2="312"/>
+            <line x1="190" y1="344" x2="203" y2="344"/>
+            <line x1="183" y1="376" x2="204" y2="376"/>
+          </g>
+
+          <!-- the printed label -->
+          <g>
+            <rect class="dx-bag__plate" x="52" y="192" width="136" height="98" rx="4"/>
+            <text class="dx-bag__no"    x="66" y="218">No. VII</text>
+            <line class="dx-bag__rule"  x1="66" y1="228" x2="174" y2="228"/>
+            <text class="dx-bag__title" x="66" y="250">Fatty Liver</text>
+            <text class="dx-bag__title" x="66" y="268">Support IV</text>
+            <text class="dx-bag__sub"   x="66" y="282">PHYSICIAN COMPOUNDED</text>
+          </g>
+
+          <!-- the specular edge -->
+          <g clip-path="url(#dxInside)">
+            <rect class="dx-bag__gloss" x="48" y="72" width="13" height="330" rx="6.5"/>
+          </g>
+
+          <!-- twin ports and the spike line -->
+          <path class="dx-bag__port" d="M100,428 L114,428 L112,452 L102,452 Z"/>
+          <path class="dx-bag__port" d="M126,428 L140,428 L138,452 L128,452 Z"/>
+          <line class="dx-bag__spike" x1="133" y1="452" x2="133" y2="470"/>
+        </svg>
+
+        <!-- the phone gauge; the drawn bag stands down below 900px -->
+        <span class="dx-bag__gauge" aria-hidden="true" style="
+          --mix-h: linear-gradient(90deg, #7FA08C 0%, #8FBE9B 33%, #9AA98C 40%, #C9A94E 48%, #5F7A55 57%, #6E8A5E 66%, #4F7D5E 76%, #B8873C 84%, #D9982A 91%, #E7CB86 100%);
+        "><i></i></span>
       </div>
 
       <ol class="dx-list">
