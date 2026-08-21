@@ -1,665 +1,358 @@
 /* =============================================================================
-   ALPHA VITAL ELITE IV — DRIPS.CSS
+   ALPHA VITAL ELITE IV — DRIPS.CSS   ·   REBUILD
    The ten /drips/<slug>/ protocol pages. Loads AFTER /styles.css and inherits
-   every color, rule, header, footer and dock token from its :root.
+   the palette, header, footer and dock from its :root.
 
-   ONE SHEET FOR ALL TEN. A drip page carries no page-specific CSS whatsoever —
-   the only thing that changes between them is --tone, set once on <body>, and
-   the ingredient band heights, set inline on each band. Adding infusion number
-   eleven is an HTML file and nothing else.
+   WHAT CHANGED FROM THE FIRST BUILD, AND WHY
+   ------------------------------------------
+   1 · TYPE. Funnel Display (condensed, confident at size) over Onest (quiet
+       body) with JetBrains Mono for every figure. No serif anywhere. The home
+       page is Prata, the menu page is Fraunces — both serif-led — so a third
+       serif would have read as a slightly-wrong version of the brand instead
+       of a distinct voice. Mono for doses and prices is functional, not
+       decorative: unambiguous 0/O and 1/l on a page listing amounts.
 
-   Every class is dx- prefixed, and every section owns its own responsive rules
-   at the bottom of its own block — same discipline as the main sheet.
+   2 · MOTION IS NOW CSS, NOT JAVASCRIPT. animation-timeline runs on the
+       compositor. The bag fill, the ledger highlight, the week markers and the
+       progress rule were ~450 lines of IntersectionObserver and GSAP; they are
+       now keyframes. Everything is written REVEALED BY DEFAULT and the motion
+       is added inside @supports, so a browser without scroll timelines shows a
+       complete, static, correct page rather than a broken one.
 
-     00 · TOKENS & RHYTHM
-     01 · ATOMS              eyebrow · rule · buttons · tags · figures
-     02 · THE LINE           the gold IV line that threads the whole page
-     03 · HERO               #top      the bag, hanging, dripping
-     04 · THE VITALS         the mono strip under the hero
-     05 · THE PREMISE        #premise
-     06 · THE COMPOSITION    #composition   ← the signature. Dark field.
-     07 · THE COURSE         #course        six weeks, and the arithmetic
-     08 · CONSIDERED FOR     #fit
-     09 · QUESTIONS          #questions
-     10 · BEGIN              #begin
-     11 · THE OTHER NINE     #more
-     12 · MOTION & FOCUS
+   3 · THE SIGNATURE IS THE MORPH. Cross-document view transitions carry the
+       bag from the card you clicked into the hero of the page you land on.
+       See section 01.
 
-   BREAKPOINTS, same as the site: 1280 · 1180 · 1080 · 900 · 780 · 640 · 420
+   4 · FEWER SECTIONS. Six, not nine.
+
+     00 · TYPE & TOKENS
+     01 · VIEW TRANSITIONS      the morph
+     02 · ATOMS
+     03 · HERO                  #top
+     04 · THE COMPOSITION       #composition   ← the bag fills, in pure CSS
+     05 · THE COURSE            #course
+     06 · QUESTIONS             #questions
+     07 · BEGIN                 #begin
+     08 · THE OTHER NINE        #more
+     09 · MOTION & FOCUS
+
+   BREAKPOINTS, same as the site: 1180 · 1080 · 900 · 780 · 640 · 420
 ============================================================================= */
 
 
 /* =============================================================================
-   00 · TOKENS & RHYTHM
-   Section padding and the gap between a head and its content are tokens, not
-   per-section guesses — that is what holds the vertical rhythm identical from
-   the hero to the footer at every width.
+   00 · TYPE & TOKENS
 ============================================================================= */
 .page-drip {
-    /* three voices, none of them used on the home page or the menu page.
-       Instrument Serif is cut sharp and tight where Prata is Didone-round and
-       Fraunces is soft — it reads clinical without reading cold. */
-    --dx-display: 'Instrument Serif', 'Prata', Georgia, serif;
-    --dx-sans:    'Schibsted Grotesk', var(--ui), sans-serif;
-    --dx-mono:    'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --dx-display: 'Funnel Display', 'Instrument Sans', sans-serif;
+    --dx-body:    'Onest', var(--ui), sans-serif;
+    --dx-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
-    /* the infusion's own accent. Every page overrides this one line. */
+    /* the infusion's own accent — the ONLY token that changes between pages */
     --tone: var(--gold);
 
-    /* the night register — only the composition section uses it */
-    --dx-well:  #0E1710;
-    --dx-well2: #16241A;
-    --dx-lift:  rgba(246, 241, 231, .07);
-    --dx-edge:  rgba(246, 241, 231, .16);
-
-    /* rhythm */
-    --dx-pad:   clamp(4rem, 9vw, 7.5rem);
-    --dx-stack: clamp(2rem, 4.5vw, 3.25rem);
-    --dx-gap:   clamp(.85rem, 1.5vw, 1.4rem);
-
-    /* the line lives at this inset on every section that shows it */
-    --dx-spine: clamp(1rem, 3.4vw, 3.25rem);
+    --dx-pad:   clamp(3.5rem, 8vw, 6.5rem);
+    --dx-stack: clamp(1.75rem, 4vw, 2.75rem);
+    --dx-gap:   clamp(.8rem, 1.4vw, 1.25rem);
 
     background: var(--cream);
-    font-family: var(--dx-sans);
+    font-family: var(--dx-body);
     font-size: clamp(.95rem, 1.02vw, 1.02rem);
-    line-height: 1.72;
+    line-height: 1.68;
     color: var(--ink-soft);
 }
 
-@media (max-width: 900px) {
-    .page-drip { --dx-pad: clamp(3rem, 7vw, 4.5rem); --dx-stack: 1.75rem; --dx-gap: 1rem; }
-}
-@media (max-width: 640px) {
-    .page-drip { --dx-pad: 2.9rem; --dx-stack: 1.5rem; --dx-gap: .9rem; }
-}
-
-/* anchor targets clear the fixed header */
 .page-drip section[id] { scroll-margin-top: calc(var(--head-h) + 1rem); }
 
-/* entrance states, only once scripting has confirmed itself */
-.dx-js .dx-anim   { opacity: 0; }
-.dx-js .dx-cut__in { transform: translateY(110%); }
-
-
-/* =============================================================================
-   01 · ATOMS
-============================================================================= */
-
-/* ---------- eyebrow ---------- */
-.dx-brow {
-    display: inline-flex; align-items: center; gap: .6rem;
-    font-family: var(--dx-mono); font-size: .62rem; font-weight: 500;
-    letter-spacing: .26em; text-transform: uppercase; color: var(--gold-deep);
-    margin-bottom: 1.1rem;
-}
-.dx-brow i { font-size: 1.35em; letter-spacing: 0; color: var(--tone); }
-.dx-brow--light { color: var(--gold-lite); }
-
-/* ---------- section title ---------- */
-.dx-h {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(2.1rem, 5.2vw, 4.2rem);
-    line-height: 1.02; letter-spacing: -.02em; color: var(--forest);
-    margin-bottom: 1.15rem;
-}
-.dx-h em { font-style: italic; color: var(--gold-deep); }
-.dx-h--light { color: var(--cream); }
-.dx-h--light em { color: var(--gold-lite); }
-
-.dx-lede {
-    max-width: 58ch;
-    font-size: clamp(.95rem, 1.08vw, 1.06rem); line-height: 1.78;
-    color: var(--ink-soft);
-    padding-left: 1.2rem; border-left: 1px solid var(--rule-gold);
-}
-.dx-lede--light { color: var(--cream-dim); border-left-color: var(--dx-edge); }
-.dx-lede strong { color: var(--forest); font-weight: 600; }
-
-/* ---------- buttons ---------- */
-.dx-btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
-    min-height: 54px; padding: .9rem 1.7rem;
-    border: 1px solid var(--forest); border-radius: 999px;
-    font-family: var(--dx-mono); font-size: .64rem; font-weight: 500;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--forest);
-    white-space: nowrap;
-    transition: background .45s var(--ease), color .45s var(--ease),
-                border-color .45s var(--ease);
-}
-.dx-btn i { font-size: 1.3em; transition: transform .45s var(--ease); }
-.dx-btn--solid { background: var(--forest); color: var(--cream); }
-.dx-btn:hover { background: var(--tone); border-color: var(--tone); color: #fff; }
-.dx-btn--solid:hover { color: #fff; }
-.dx-btn:hover i { transform: translateX(3px); }
-.dx-btn--light { border-color: var(--gold); color: var(--gold-lite); }
-.dx-btn--light:hover { background: var(--gold); border-color: var(--gold); color: var(--forest-deep); }
-
-/* ---------- the figure: every number on the page is set this way ---------- */
+/* every figure on the page is set this way */
 .dx-fig {
     font-family: var(--dx-mono); font-weight: 500;
     font-variant-numeric: tabular-nums lining-nums;
-    letter-spacing: -.01em;
+    letter-spacing: -.04em;
 }
 
-/* ---------- the masked line, for titles that cut in ---------- */
-.dx-cut { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
-.dx-cut__in { display: block; }
 
-/* ---------- atoms · 640 ---------- */
+/* =============================================================================
+   01 · VIEW TRANSITIONS  —  THE SIGNATURE
+   -----------------------------------------------------------------------------
+   Click Fatty Liver on the menu page and the bag IMAGE ITSELF travels from
+   that card into this page's hero. Not a fade, not a reload — the browser
+   snapshots both documents and morphs the shared element between them.
+
+   HOW IT IS WIRED. Every bag on the site carries a view-transition-name of the
+   form bag-<slug>, set inline in the markup. The card on infusions.html and the
+   hero on /drips/liver-support/ share the name bag-liver-support, so the
+   browser knows they are the same object. Names must be unique per document,
+   which they are: a drip page's hero is the only element with its own slug, and
+   the "other nine" rail never contains the page it is on.
+
+   The header, footer and dock are named too, so they hold still instead of
+   cross-fading with everything else.
+
+   REQUIRES the matching @view-transition rule on the page you navigate FROM.
+   Firefox does not ship cross-document transitions yet, so it simply performs
+   an ordinary navigation — there is no fallback to write.
+============================================================================= */
+@view-transition { navigation: auto; }
+
+/* the furniture stays put across the navigation */
+.head { view-transition-name: site-head; }
+.foot { view-transition-name: site-foot; }
+.totop { view-transition-name: site-totop; }
+.fab   { view-transition-name: site-fab; }
+
+/* the bag travels on its own curve — heavier and slower than the page fade,
+   so the eye follows the object rather than the background */
+::view-transition-group(.bag) {
+    animation-duration: .62s;
+    animation-timing-function: cubic-bezier(.62, .05, .2, 1);
+}
+::view-transition-old(.bag),
+::view-transition-new(.bag) {
+    /* the two snapshots have different aspect ratios; without this the bag
+       squashes on the way across */
+    height: 100%; width: auto;
+    object-fit: contain;
+}
+
+/* everything that is not the bag or the furniture gets a short, quiet fade */
+::view-transition-group(root) { animation-duration: .38s; }
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) { animation: none !important; }
+}
+
+
+/* =============================================================================
+   02 · ATOMS
+============================================================================= */
+.dx-brow {
+    display: inline-flex; align-items: center; gap: .55rem;
+    font-family: var(--dx-mono); font-size: .6rem; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--tone);
+    margin-bottom: 1rem;
+}
+.dx-brow i { font-size: 1.3em; letter-spacing: 0; }
+
+/* Funnel Display is condensed, so it wants negative tracking and a tight
+   leading or it reads loose at size */
+.dx-h {
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(2.1rem, 5vw, 4rem);
+    line-height: .98; letter-spacing: -.035em; color: var(--forest);
+    margin-bottom: 1.1rem;
+    text-wrap: balance;
+}
+.dx-h em { font-style: normal; color: var(--tone); }
+
+.dx-lede {
+    max-width: 56ch;
+    font-size: clamp(.95rem, 1.06vw, 1.04rem); line-height: 1.75;
+    color: var(--ink-soft);
+}
+
+.dx-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+    min-height: 54px; padding: .9rem 1.6rem;
+    border: 1px solid var(--forest); border-radius: 3px;
+    font-family: var(--dx-mono); font-size: .66rem; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--forest);
+    white-space: nowrap;
+    transition: background .4s var(--ease), color .4s var(--ease),
+                border-color .4s var(--ease);
+}
+.dx-btn i { font-size: 1.25em; transition: transform .4s var(--ease); }
+.dx-btn--solid { background: var(--forest); color: var(--cream); }
+.dx-btn:hover { background: var(--tone); border-color: var(--tone); color: #fff; }
+.dx-btn:hover i { transform: translateX(3px); }
+
 @media (max-width: 640px) {
-    .dx-brow { font-size: .57rem; letter-spacing: .2em; margin-bottom: .9rem; }
-    .dx-h { font-size: clamp(1.95rem, 8.5vw, 2.7rem); }
-    .dx-lede { font-size: .94rem; padding-left: 1rem; max-width: none; }
+    .dx-h { font-size: clamp(2rem, 9vw, 2.8rem); }
+    .dx-lede { max-width: none; font-size: .95rem; }
     .dx-btn { width: 100%; }
 }
 
 
 /* =============================================================================
-   02 · THE LINE
-   -----------------------------------------------------------------------------
-   THE SIGNATURE. One gold line enters the page behind the header, runs the
-   whole document at --dx-spine, and FILLS as you scroll — the page is being
-   infused while you read it.
-
-   It is a fixed-position element rather than one per section, so the fluid is
-   continuous instead of restarting at every block. --dx-run is written by the
-   Line module in drips.js and is simply how far down the document you are.
-
-   Hidden below 1280px: at that width the spine has nowhere to sit that is not
-   either under the content or off the screen, and a decorative rule is the
-   first thing that should go.
-============================================================================= */
-.dx-line {
-    position: fixed; z-index: 3;
-    left: var(--dx-spine);
-    top: 0; bottom: 0;
-    /* 2px, not 1px. At 1px the empty tube and the filled tube were the same
-       optical weight and the whole thing read as a decorative hairline rather
-       than as a column of fluid with a level in it. */
-    width: 2px;
-    border-radius: 999px;
-    background: rgba(32, 52, 33, .11);
-    pointer-events: none;
-}
-.dx-line__fluid {
-    position: absolute; left: 0; top: 0; width: 100%;
-    height: calc(var(--dx-run, 0) * 100%);
-    border-radius: 999px;
-    /* solid tone almost all the way up, softening only in the last few pixels
-       under the bead — a gradient that fades across the whole column is what
-       made this invisible */
-    background: linear-gradient(180deg,
-                color-mix(in oklab, var(--tone) 55%, transparent) 0%,
-                var(--tone) 6%,
-                var(--tone) 100%);
-    box-shadow: 0 0 10px color-mix(in oklab, var(--tone) 40%, transparent);
-}
-/* the meniscus — the bead riding the top of the fluid */
-.dx-line__bead {
-    position: absolute; left: 50%; top: calc(var(--dx-run, 0) * 100%);
-    width: 12px; height: 12px; margin: -6px 0 0 -6px;
-    border-radius: 50%;
-    background: var(--tone);
-    box-shadow: 0 0 0 4px var(--cream),
-                0 0 0 5px color-mix(in oklab, var(--tone) 35%, transparent),
-                0 0 22px color-mix(in oklab, var(--tone) 75%, transparent);
-}
-/* the ports — one per section, positioned from the DOM by the Line module */
-.dx-line__port {
-    position: absolute; left: 50%;
-    width: 9px; height: 9px; margin-left: -4.5px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(32, 52, 33, .2);
-    background: var(--cream);
-    transition: background .5s var(--ease), transform .5s var(--ease),
-                border-color .5s var(--ease), box-shadow .5s var(--ease);
-}
-.dx-line__port.is-passed {
-    background: var(--cream);
-    border-color: var(--tone);
-    border-width: 3px;
-    transform: scale(1.25);
-    box-shadow: 0 0 12px color-mix(in oklab, var(--tone) 50%, transparent);
-}
-
-@media (max-width: 1280px) {
-    .dx-line { display: none; }
-}
-
-
-/* =============================================================================
    03 · HERO  (#top)
-   -----------------------------------------------------------------------------
-   The bag hangs from the top of the page and drips. That is the whole idea and
-   everything else in the hero is set quietly around it.
-
-   The name is set in Instrument Serif at a size that would be vulgar in a sans
-   and is merely confident in a high-contrast serif.
+   The bag is the largest thing on the screen because the bag is what arrived
+   from the previous page. The type sits under it, not beside it.
 ============================================================================= */
 .dx-hero {
     position: relative;
-    min-height: 100svh;
-    display: flex; flex-direction: column;
-    padding: calc(var(--head-h) + clamp(1.25rem, 3.5vh, 2.5rem)) var(--gut) 0;
+    padding: calc(var(--head-h) + clamp(1.5rem, 4vh, 3rem)) var(--gut) 0;
     background: var(--cream);
     overflow: hidden;
 }
-.dx-hero__glow {
-    position: absolute; inset: 0; pointer-events: none;
+.dx-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
     background:
-        radial-gradient(58% 52% at 78% 6%,
-            color-mix(in oklab, var(--tone) 22%, transparent), transparent 62%),
-        radial-gradient(50% 44% at 2% 88%, rgba(143, 190, 155, .22), transparent 60%),
-        radial-gradient(120% 55% at 50% 0%, rgba(255, 255, 255, .72), transparent 56%);
-}
-/* a very faint grid, the graph paper an anesthesia record is printed on */
-.dx-hero__grid {
-    position: absolute; inset: 0; pointer-events: none;
-    background-image:
-        linear-gradient(rgba(32, 52, 33, .05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(32, 52, 33, .05) 1px, transparent 1px);
-    background-size: 88px 88px;
-    -webkit-mask-image: radial-gradient(110% 78% at 50% 100%, #000 6%, transparent 74%);
-            mask-image: radial-gradient(110% 78% at 50% 100%, #000 6%, transparent 74%);
+        radial-gradient(46% 40% at 76% 12%,
+            color-mix(in oklab, var(--tone) 20%, transparent), transparent 64%),
+        radial-gradient(120% 46% at 50% 0%, rgba(255,255,255,.7), transparent 56%);
 }
 
-.dx-hero__stage {
+.dx-hero__wrap {
     position: relative; z-index: 2;
-    flex: 1;
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .62fr);
+    display: grid; grid-template-columns: minmax(0, 1fr) auto;
     gap: clamp(1.5rem, 4vw, 4rem); align-items: center;
-    width: 100%; max-width: var(--maxw); margin: 0 auto;
-    padding: clamp(1.5rem, 4vh, 3rem) 0;
+    max-width: var(--maxw); margin: 0 auto;
+    padding-bottom: clamp(2rem, 5vh, 3.5rem);
 }
 
-/* ---------- the words ---------- */
-.dx-hero__kick {
-    display: inline-flex; align-items: center; gap: .7rem;
-    font-family: var(--dx-mono); font-size: .63rem;
-    letter-spacing: .24em; text-transform: uppercase; color: var(--ink-soft);
-    margin-bottom: clamp(1.1rem, 3vh, 1.9rem);
+.dx-hero__no {
+    display: block;
+    font-family: var(--dx-mono); font-size: .62rem; font-weight: 500;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--tone);
+    margin-bottom: 1.1rem;
 }
-.dx-hero__kick i { font-size: 1.35em; color: var(--tone); }
-.dx-hero__kick b {
-    font-weight: 500; color: var(--tone);
-    padding-right: .7rem; margin-right: .1rem;
-    border-right: 1px solid var(--rule);
-}
+.dx-hero__no b { font-weight: 500; color: var(--ink-soft); }
 
 .dx-hero__name {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(3rem, 8.2vw, 7.4rem);
-    line-height: .92; letter-spacing: -.032em; color: var(--forest);
-    margin-bottom: clamp(1.25rem, 3.5vh, 2rem);
+    font-family: var(--dx-display); font-weight: 600;
+    font-size: clamp(3rem, 8.6vw, 7.6rem);
+    line-height: .88; letter-spacing: -.045em; color: var(--forest);
+    margin-bottom: clamp(1.25rem, 3vh, 1.9rem);
+    text-wrap: balance;
 }
-.dx-hero__name em { font-style: italic; color: var(--gold-deep); }
+.dx-hero__name em { font-style: normal; font-weight: 300; color: var(--tone); }
 
 .dx-hero__dek {
-    max-width: 44ch;
-    font-size: clamp(.98rem, 1.12vw, 1.1rem); line-height: 1.76;
-    color: var(--ink-soft);
-    padding-left: 1.2rem; border-left: 1px solid var(--rule-gold);
-    margin-bottom: clamp(1.5rem, 4vh, 2.25rem);
+    max-width: 42ch;
+    font-size: clamp(.98rem, 1.1vw, 1.08rem); line-height: 1.72;
+    margin-bottom: clamp(1.5rem, 3.5vh, 2rem);
 }
-.dx-hero__acts { display: flex; flex-wrap: wrap; gap: .7rem; }
+.dx-hero__acts { display: flex; flex-wrap: wrap; gap: .6rem; }
 
-/* ---------- the bag ----------
-   The pole runs off the top of the section, so the bag reads as hanging from
-   something above the page rather than floating in it. */
-.dx-rig { position: relative; display: grid; place-items: center; justify-self: center; }
+/* the bag. view-transition-name is set inline in the markup. */
+.dx-hero__bag {
+    justify-self: center;
+    width: clamp(200px, 27vw, 360px);
+    filter: drop-shadow(0 40px 50px rgba(32,52,33,.24));
+}
+.dx-hero__bag img { width: 100%; height: auto; }
 
-.dx-rig__pole {
-    position: absolute; left: 50%; top: -46vh; height: 46vh; width: 1px;
-    background: linear-gradient(180deg, transparent, var(--rule-gold));
-}
-.dx-rig__hook {
-    position: absolute; left: 50%; top: -14px; z-index: 3;
-    width: 15px; height: 15px; margin-left: -7.5px;
-    border: 1px solid var(--gold); border-radius: 50%;
-    background: var(--cream);
-}
-
-.dx-rig__bag {
-    position: relative; z-index: 2;
-    /* bigger. The bag is the product and it was competing with the headline at
-       268px — at this size it wins its half of the hero outright. */
-    width: clamp(210px, 26vw, 330px);
-    filter: drop-shadow(0 38px 48px rgba(32, 52, 33, .26));
-}
-/* the pool of light the bag hangs in, so it reads as lit rather than pasted */
-.dx-rig__bag::before {
-    content: ''; position: absolute; z-index: -1;
-    left: 50%; top: 46%; width: 150%; aspect-ratio: 1;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: radial-gradient(circle,
-                color-mix(in oklab, var(--tone) 20%, transparent), transparent 62%);
-}
-.dx-rig__bag img { width: 100%; height: auto; }
-
-/* the drip chamber and the line running out of the bag into the pool */
-.dx-rig__tube {
-    position: relative;
-    width: 2px; height: clamp(92px, 14vh, 150px);
-    margin-top: -.25rem;
-    background: linear-gradient(180deg,
-                color-mix(in oklab, var(--tone) 45%, transparent), var(--rule-gold));
-    border-radius: 999px;
-}
-/* the drip chamber the drop forms in — the part of an IV line people actually
-   watch. Without it the drop appeared out of nowhere on a bare rule. */
-.dx-rig__chamber {
-    position: absolute; left: 50%; top: -2px; z-index: 1;
-    width: 26px; height: 42px; margin-left: -13px;
-    border: 1px solid var(--rule-gold);
-    border-radius: 4px 4px 9px 9px;
-    background: linear-gradient(180deg,
-                rgba(255, 255, 255, .8), color-mix(in oklab, var(--tone) 10%, transparent));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9);
-}
-.dx-rig__drop {
-    position: absolute; left: 50%; top: 6px; z-index: 2;
-    width: 11px; height: 14px; margin-left: -5.5px;
-    box-shadow: 0 0 12px color-mix(in oklab, var(--tone) 55%, transparent);
-    border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
-    background: var(--tone);
-    opacity: 0;
-}
-/* the CSS fallback: if GSAP never arrives the drop still falls */
-.dx-js .dx-rig__drop { animation: none; }
-.dx-rig__drop { animation: dx-fall 2.6s cubic-bezier(.55, 0, .85, .35) infinite; }
-@keyframes dx-fall {
-    0%        { opacity: 0; transform: translateY(0) scale(.5); }
-    12%       { opacity: 1; transform: translateY(0) scale(1); }
-    92%, 100% { opacity: 0; transform: translateY(var(--dx-drop, 100px)) scale(.86); }
-}
-
-/* ---------- hero · short viewports ---------- */
-@media (min-width: 981px) and (max-height: 900px) {
-    .dx-hero__name { font-size: clamp(2.6rem, 6vw, 5rem); }
-    .dx-hero__stage { padding-block: 1.25rem; }
-    .dx-rig__bag { width: clamp(150px, 17vw, 210px); }
-    .dx-rig__tube { height: 62px; }
-}
-
-/* ---------- hero · 1080 ---------- */
-@media (max-width: 1080px) {
-    .dx-hero__stage { gap: 2rem; }
-    .dx-hero__dek { max-width: none; }
-}
-
-/* ---------- hero · 900: the bag moves above the words ---------- */
-@media (max-width: 900px) {
-    .dx-hero { min-height: 0; padding-top: calc(var(--head-h) + 1.75rem); }
-    .dx-hero__stage {
-        grid-template-columns: 1fr;
-        padding-block: 2rem 2.5rem;
-        gap: 1.75rem;
-    }
-    .dx-rig { order: -1; }
-    .dx-rig__pole { top: -18vh; height: 18vh; }
-    .dx-rig__bag { width: clamp(150px, 40vw, 210px); }
-    .dx-rig__tube { height: 62px; }
-}
-
-/* ---------- hero · 640 ---------- */
-@media (max-width: 640px) {
-    .dx-hero__kick { font-size: .56rem; letter-spacing: .16em; }
-    .dx-hero__name { font-size: clamp(2.5rem, 12.5vw, 3.7rem); }
-    .dx-hero__dek { font-size: .95rem; padding-left: 1rem; }
-    .dx-hero__acts { width: 100%; gap: .6rem; }
-    .dx-hero__grid { display: none; }
-}
-
-/* ---------- hero · 420 ---------- */
-@media (max-width: 420px) {
-    .dx-hero__name { font-size: clamp(2.2rem, 13vw, 3rem); }
-    .dx-rig__bag { width: 44vw; }
-}
-
-
-/* =============================================================================
-   04 · THE VITALS
-   The four numbers a patient actually wants before anything else: how long,
-   what it costs, what it costs in a course, and how often. Set in mono, on one
-   rule, at the foot of the hero — a monitor readout, not a pricing table.
-============================================================================= */
+/* ---------- the vitals ----------
+   Dividers are borders on the cells. They were a background showing through
+   grid gaps in the last build, which painted a solid bar across the container's
+   own padding. */
 .dx-vitals {
     position: relative; z-index: 2;
     display: grid; grid-template-columns: repeat(4, 1fr);
-    width: 100%; max-width: var(--maxw); margin: 0 auto;
-    padding-bottom: clamp(1.25rem, 3vh, 2rem);
+    max-width: var(--maxw); margin: 0 auto;
+    padding-bottom: clamp(1.5rem, 4vh, 2.5rem);
     border-top: 1px solid var(--forest);
 }
-/* THE GREY BAND, FIXED. The dividers used to be a --rule background showing
-   through 1px grid gaps. That works right up until the container has padding
-   of its own — the padded strip has no cell over it, so the rule colour paints
-   straight across the full width as a solid bar under the row. Dividers are
-   borders on the cells now, which cannot bleed anywhere. */
 .dx-vital {
-    padding: clamp(.9rem, 2vh, 1.35rem) clamp(.6rem, 1.5vw, 1.25rem) 0;
+    padding: clamp(.9rem, 2vh, 1.3rem) clamp(.7rem, 1.5vw, 1.25rem) 0;
     border-left: 1px solid var(--rule);
 }
 .dx-vital:first-child { border-left: 0; padding-left: 0; }
 .dx-vital dt {
-    font-family: var(--dx-mono); font-size: .53rem;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
-    margin-bottom: .45rem;
+    font-family: var(--dx-mono); font-size: .55rem; font-weight: 400;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--mist);
+    margin-bottom: .5rem;
 }
 .dx-vital dd {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(1.3rem, 2.5vw, 2.05rem); line-height: 1.05;
-    letter-spacing: -.02em; color: var(--forest);
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1.4rem, 2.6vw, 2.1rem); line-height: 1;
+    letter-spacing: -.04em; color: var(--forest);
     font-variant-numeric: tabular-nums;
 }
 .dx-vital dd small {
-    display: block; margin-top: .3rem;
-    font-family: var(--dx-mono); font-size: .55rem; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--tone);
+    display: block; margin-top: .4rem;
+    font-family: var(--dx-mono); font-size: .55rem; font-weight: 400;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--mist);
 }
-.dx-vital--tone dd { color: var(--gold-deep); }
+.dx-vital--tone dd { color: var(--tone); }
 
-/* ---------- vitals · 900 ---------- */
 @media (max-width: 900px) {
+    .dx-hero__wrap { grid-template-columns: 1fr; justify-items: start; }
+    .dx-hero__bag { order: -1; justify-self: center; width: clamp(160px, 42vw, 230px); }
     .dx-vitals { grid-template-columns: repeat(2, 1fr); }
-    .dx-vital { padding-bottom: .9rem; }
-    /* on two columns the third cell starts a new row and must lose its rule */
     .dx-vital:nth-child(3) { border-left: 0; padding-left: 0; }
-    .dx-vital:nth-child(n+3) { border-top: 1px solid var(--rule); padding-top: .9rem; }
+    .dx-vital:nth-child(n+3) { border-top: 1px solid var(--rule); padding-top: .95rem; }
 }
-
-/* ---------- vitals · 420 ---------- */
-@media (max-width: 420px) {
-    .dx-vital dd { font-size: 1.2rem; }
-    .dx-vital dt { font-size: .48rem; letter-spacing: .14em; }
-}
-
-
-/* =============================================================================
-   05 · THE PREMISE  (#premise)
-   One statement, set large, with the honest caveat sitting right beside it
-   rather than buried at the bottom of the page. Deliberately short — the
-   composition is the reason anyone scrolled.
-============================================================================= */
-.dx-premise {
-    position: relative;
-    padding: var(--dx-pad) var(--gut);
-    background: var(--parchment);
-}
-.dx-premise::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(58% 44% at 88% 0%, rgba(231, 203, 134, .24), transparent 62%);
-}
-.dx-premise__wrap {
-    position: relative; z-index: 2;
-    max-width: var(--maxw); margin: 0 auto;
-}
-.dx-premise__say {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(1.6rem, 3.6vw, 3rem);
-    line-height: 1.2; letter-spacing: -.02em; color: var(--forest);
-    max-width: 22ch;
-    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
-}
-.dx-premise__say em { font-style: italic; color: var(--gold-deep); }
-
-.dx-premise__grid {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(1.5rem, 4vw, 3.5rem);
-    padding-top: clamp(1.5rem, 3vw, 2.25rem);
-    border-top: 1px solid var(--rule);
-}
-.dx-premise__grid p { font-size: clamp(.95rem, 1.06vw, 1.04rem); line-height: 1.8; }
-.dx-premise__grid p + p { margin-top: 1.1rem; }
-.dx-premise__grid strong { color: var(--forest); font-weight: 600; }
-
-/* the "each session provides" ledger */
-.dx-gives { list-style: none; display: grid; gap: 0; }
-.dx-gives li {
-    display: grid; grid-template-columns: 2.2rem minmax(0, 1fr);
-    gap: .9rem; align-items: baseline;
-    padding: .85rem 0;
-    border-bottom: 1px solid var(--rule);
-    font-size: .93rem; line-height: 1.7;
-}
-.dx-gives li:first-child { border-top: 1px solid var(--rule); }
-.dx-gives li i {
-    font-family: var(--dx-mono); font-style: normal; font-size: .6rem;
-    letter-spacing: .1em; color: var(--tone);
-}
-.dx-gives li b { color: var(--forest); font-weight: 600; }
-
-/* ---------- premise · 900 ---------- */
-@media (max-width: 900px) {
-    .dx-premise__grid { grid-template-columns: 1fr; gap: 1.75rem; }
-    .dx-premise__say { max-width: none; }
-}
-
-/* ---------- premise · 640 ---------- */
 @media (max-width: 640px) {
-    .dx-premise__say { font-size: clamp(1.45rem, 7vw, 2rem); }
-    .dx-gives li { grid-template-columns: 1.8rem minmax(0, 1fr); gap: .7rem; font-size: .9rem; }
+    .dx-hero__name { font-size: clamp(2.6rem, 13vw, 3.8rem); }
+    .dx-hero__dek { max-width: none; font-size: .96rem; }
+    .dx-hero__acts { width: 100%; gap: .55rem; }
+    .dx-vital dd { font-size: 1.35rem; }
 }
 
 
 /* =============================================================================
-   06 · THE COMPOSITION  (#composition)   ←  THE SIGNATURE
+   04 · THE COMPOSITION  (#composition)   ←  THE BAG FILLS
    -----------------------------------------------------------------------------
-   REVISED. This was a dark section carrying ten paragraphs. Two things were
-   wrong with that and both were mine:
+   Pure CSS. The ledger is a view-timeline; the fluid inside the sticky bag
+   scales against it. No observer, no scroll listener, no JavaScript at all —
+   the whole thing runs on the compositor.
 
-   1. THE FIELD. A near-black block in the middle of a cream site does not read
-      as "specimen under light", it reads as a different website. The one dark
-      surface on this brand is the footer, and it earns that by being the end.
-      Back to parchment.
+   The fluid is ONE element carrying a gradient of every component's tone, set
+   inline per page. That is what makes this tractable in CSS: ten independently
+   animated bands would need ten named timelines, one gradient needs none, and
+   it reads better besides — a mixed bag is mixed, not stratified.
 
-   2. THE TEXT. Ten components with a paragraph each is roughly nine hundred
-      words stacked beside an object nobody can look at while they read. The
-      bag was supposed to be the subject and the prose buried it.
-
-   So: the bag is now the largest thing in the section, and every component is
-   ONE line. The long-form chemistry moved to the questions further down, where
-   somebody who wants it can go and get it. Nothing here is over twenty words.
-
-   THE MECHANIC IS UNCHANGED and still the point: a sticky bag, a scroll-driven
-   fill, one band per component in that component's own tone. No pin, no scrub —
-   scaled bands are one compositor property, which is what keeps it smooth on a
-   phone.
-
-   NOTE: no `overflow` on .dx-mix or its wrap. Any clipping ancestor silently
-   kills position: sticky on the bag.
+   DEFAULT STATE IS FULL. Everything below is written as though the animation
+   has already finished, and the motion is added inside @supports. A browser
+   without scroll timelines gets a full bag and a legible ledger.
 ============================================================================= */
 .dx-mix {
     position: relative;
     padding: var(--dx-pad) var(--gut);
     background: var(--parchment);
-    color: var(--ink-soft);
 }
 .dx-mix::before {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    background:
-        radial-gradient(52% 46% at 20% 6%,
-            color-mix(in oklab, var(--tone) 14%, transparent), transparent 62%),
-        radial-gradient(120% 50% at 50% 0%, rgba(255, 255, 255, .7), transparent 56%);
+    background: radial-gradient(50% 40% at 92% 4%,
+                color-mix(in oklab, var(--tone) 14%, transparent), transparent 62%);
 }
 .dx-mix__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
-.dx-mix__head { margin-bottom: var(--dx-stack); max-width: 54ch; }
+.dx-mix__head { margin-bottom: var(--dx-stack); max-width: 52ch; }
 
-/* the bag gets the wider column now — it is the thing being described */
 .dx-mix__stage {
-    display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1fr);
-    gap: clamp(1.75rem, 5vw, 5rem);
+    display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr);
+    gap: clamp(1.75rem, 5vw, 4.5rem);
     align-items: start;
 }
 
-/* ---------- the bag ----------
-   Built from a div, not an SVG: an SVG rect animating its height is a layout
-   and paint every frame; a scaled band is neither. */
-.dx-bag {
-    position: sticky; top: calc(var(--head-h) + clamp(1.5rem, 5vh, 3rem));
-    display: grid; justify-items: center;
-}
-
+/* ---------- the bag ---------- */
+.dx-bag { position: sticky; top: calc(var(--head-h) + clamp(1.5rem, 5vh, 3rem)); display: grid; justify-items: center; }
 .dx-bag__eye {
-    width: 15px; height: 15px; margin-bottom: -7.5px;
+    width: 14px; height: 14px; margin-bottom: -7px;
     border: 1px solid var(--rule-gold); border-radius: 50%;
     background: var(--parchment);
 }
-.dx-bag__hang {
-    width: 1px; height: clamp(30px, 5vh, 52px);
-    background: linear-gradient(180deg, transparent, var(--rule-gold));
-}
+.dx-bag__hang { width: 1px; height: clamp(26px, 4vh, 44px); background: linear-gradient(180deg, transparent, var(--rule-gold)); }
 
 .dx-bag__body {
     position: relative;
-    width: min(100%, 330px);
+    width: min(100%, 300px);
     aspect-ratio: 43 / 74;
     border: 1px solid var(--rule-gold);
-    /* squarer shoulders than base — the shape of a bag hanging with fluid in
-       it. A plain rounded rectangle reads as a phone. */
     border-radius: 18px 18px 30px 30px / 13px 13px 38px 38px;
-    background: rgba(255, 255, 255, .55);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9),
-                0 40px 70px -46px rgba(32, 52, 33, .5);
+    background: rgba(255,255,255,.5);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 38px 66px -46px rgba(32,52,33,.5);
     overflow: hidden;
 }
-/* the highlight down the left face — what makes it read as plastic */
 .dx-bag__body::after {
     content: ''; position: absolute; left: 9%; top: 5%; bottom: 7%; width: 12%;
-    border-radius: 999px; z-index: 4; pointer-events: none;
-    background: linear-gradient(180deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, .1));
+    border-radius: 999px; z-index: 3; pointer-events: none;
+    background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.1));
 }
-
-.dx-bag__stack {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column-reverse;
-    z-index: 1;
+/* --mix is the stack of component tones, written inline in the markup */
+.dx-bag__fluid {
+    position: absolute; inset: 0; z-index: 1;
+    background: var(--mix, var(--tone));
+    transform-origin: bottom;
+    transform: scaleY(1);          /* full by default — see the note above */
 }
-.dx-band {
-    flex: 0 0 var(--h, 10%);
-    background: color-mix(in oklab, var(--bt, var(--tone)) 42%, transparent);
-    transform: scaleY(0); transform-origin: bottom;
-    transition: transform .8s var(--ease), background .6s var(--ease);
-}
-.dx-band.is-in     { transform: scaleY(1); }
-.dx-band.is-active { background: color-mix(in oklab, var(--bt, var(--tone)) 88%, transparent); }
-
-/* the surface line sitting on top of the fluid */
-.dx-bag__meniscus {
-    position: absolute; left: 0; right: 0; z-index: 3;
-    bottom: calc(var(--dx-fill, 0) * 100%);
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--tone), transparent);
-    transition: bottom .8s var(--ease);
-}
-
-/* graduations up the right edge — the detail that makes it a medical object */
 .dx-bag__scale {
     position: absolute; right: 0; top: 8%; bottom: 10%; z-index: 4;
-    display: flex; flex-direction: column; justify-content: space-between;
-    align-items: flex-end; padding-right: 8px;
-    pointer-events: none;
+    display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end;
+    padding-right: 8px; pointer-events: none;
 }
 .dx-bag__scale span { display: block; width: 11px; height: 1px; background: var(--rule); }
 .dx-bag__scale span:nth-child(odd) { width: 19px; }
@@ -667,677 +360,433 @@
 .dx-bag__port {
     width: 24px; height: 14px; margin-top: -1px;
     border: 1px solid var(--rule-gold); border-top: 0;
-    border-radius: 0 0 5px 5px;
-    background: var(--parchment);
-}
-.dx-bag__drip {
-    width: 1px; height: clamp(24px, 4vh, 42px);
-    background: linear-gradient(180deg, var(--rule-gold), transparent);
+    border-radius: 0 0 5px 5px; background: var(--parchment);
 }
 
-.dx-bag__read {
-    display: flex; align-items: baseline; gap: .5rem;
-    margin-top: .4rem;
-    font-family: var(--dx-mono); font-size: .55rem;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
-}
-.dx-bag__read b {
-    font-size: 1.35rem; font-weight: 500; letter-spacing: -.02em;
-    color: var(--tone); font-variant-numeric: tabular-nums;
-}
-
-/* ---------- the ledger ----------
-   One line each. If a component needs a paragraph it goes in the questions. */
-.dx-mix__list { list-style: none; border-top: 1px solid var(--forest); }
-
+/* ---------- the ledger ---------- */
+.dx-list { list-style: none; border-top: 1px solid var(--forest); }
 .dx-ing {
-    display: grid; grid-template-columns: 2.8rem minmax(0, 1fr) auto;
-    gap: clamp(.8rem, 2vw, 1.4rem); align-items: baseline;
-    padding: clamp(1rem, 2.4vh, 1.5rem) 0;
+    display: grid; grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+    gap: clamp(.7rem, 1.8vw, 1.3rem); align-items: baseline;
+    padding: clamp(1rem, 2.2vh, 1.4rem) 0;
     border-bottom: 1px solid var(--rule);
-    transition: padding-left .5s var(--ease);
 }
-.dx-ing.is-active { padding-left: .7rem; }
-
 .dx-ing__key {
-    font-family: var(--dx-mono); font-size: .6rem; font-weight: 500;
-    letter-spacing: .12em; color: var(--mist);
-    transition: color .5s var(--ease);
+    font-family: var(--dx-mono); font-size: .6rem; font-weight: 400;
+    letter-spacing: .1em; color: var(--mist);
 }
-.dx-ing.is-active .dx-ing__key { color: var(--bt, var(--tone)); }
-
 .dx-ing__name {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(1.2rem, 2.1vw, 1.6rem);
-    line-height: 1.12; letter-spacing: -.02em; color: var(--forest);
-    margin-bottom: .3rem;
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    line-height: 1.08; letter-spacing: -.03em; color: var(--forest);
+    margin-bottom: .28rem;
 }
-.dx-ing__what { font-size: .9rem; line-height: 1.6; color: var(--ink-soft); }
-
-/* the swatch: the row's own colour, so the band in the bag is identifiable */
+.dx-ing__what { font-size: .89rem; line-height: 1.58; color: var(--ink-soft); }
 .dx-ing__chip {
     width: 9px; height: 9px; border-radius: 50%;
     background: var(--bt, var(--tone));
-    opacity: .3;
     transform: translateY(-.15rem);
-    transition: opacity .5s var(--ease), box-shadow .5s var(--ease);
-}
-.dx-ing.is-active .dx-ing__chip {
-    opacity: 1;
-    box-shadow: 0 0 0 4px color-mix(in oklab, var(--bt, var(--tone)) 20%, transparent);
 }
 
 .dx-mix__close {
     margin-top: var(--dx-stack);
-    padding-left: clamp(1rem, 2vw, 1.75rem);
+    padding-left: clamp(1rem, 2vw, 1.6rem);
     border-left: 2px solid var(--tone);
-    font-family: var(--dx-display); font-style: italic; font-weight: 400;
-    font-size: clamp(1.1rem, 1.9vw, 1.55rem); line-height: 1.45;
-    color: var(--forest);
-    max-width: 56ch;
+    font-family: var(--dx-display); font-weight: 300;
+    font-size: clamp(1.15rem, 2.1vw, 1.7rem); line-height: 1.32;
+    letter-spacing: -.025em; color: var(--forest);
+    max-width: 50ch;
 }
-.dx-mix__note {
-    max-width: 80ch; margin-top: 1.4rem;
-    font-size: .78rem; line-height: 1.7; color: var(--mist);
+.dx-mix__note { max-width: 78ch; margin-top: 1.3rem; font-size: .77rem; line-height: 1.68; color: var(--mist); }
+
+/* ---------- THE MOTION ----------
+   Added only where scroll timelines exist. Everything above already reads
+   correctly without it. */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+
+        /* the ledger is the clock the bag runs on */
+        .dx-mix__stage { timeline-scope: --ledger; }
+        .dx-list { view-timeline: --ledger block; }
+
+        .dx-bag__fluid {
+            animation: dx-fill linear both;
+            animation-timeline: --ledger;
+            /* start when the list is a third of the way up the viewport and
+               finish as its last row clears the middle */
+            animation-range: entry 62% exit 38%;
+        }
+        @keyframes dx-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+        /* each row lifts as it crosses the middle band of the screen */
+        .dx-ing {
+            animation: dx-lit linear both;
+            animation-timeline: view();
+            animation-range: cover 32% cover 68%;
+        }
+        @keyframes dx-lit {
+            0%   { opacity: .32; }
+            46%, 54% { opacity: 1; }
+            100% { opacity: .32; }
+        }
+    }
 }
 
 /* ---------- composition · 1080 ---------- */
 @media (max-width: 1080px) {
     .dx-mix__stage { gap: 2rem; }
-    .dx-bag__body { width: min(100%, 260px); }
+    .dx-bag__body { width: min(100%, 240px); }
 }
 
-/* ---------- composition · 900, THE HINGE ----------
-   The sticky bag becomes a slim horizontal gauge riding at the top of the
-   section. Same information, a tenth of the height, and no tall sticky object
-   fighting a phone's collapsing address bar. */
+/* ---------- composition · 900: the bag becomes a gauge ---------- */
 @media (max-width: 900px) {
     .dx-mix__stage { grid-template-columns: 1fr; gap: 1.25rem; }
-
     .dx-bag {
         position: sticky; top: calc(var(--head-h) + .5rem); z-index: 5;
         justify-items: stretch;
-        padding: .7rem .85rem;
-        border: 1px solid var(--rule-gold); border-radius: 10px;
-        background: rgba(251, 248, 241, .96);
+        padding: .65rem .8rem;
+        border: 1px solid var(--rule-gold); border-radius: 8px;
+        background: rgba(251,248,241,.96);
         -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-        box-shadow: 0 18px 34px -28px rgba(32, 52, 33, .4);
     }
-    .dx-bag__hang, .dx-bag__eye, .dx-bag__port,
-    .dx-bag__drip, .dx-bag__scale { display: none; }
-
-    .dx-bag__body {
-        width: 100%; aspect-ratio: auto; height: 12px;
-        border-radius: 999px; box-shadow: none;
-    }
+    .dx-bag__eye, .dx-bag__hang, .dx-bag__port, .dx-bag__scale { display: none; }
+    .dx-bag__body { width: 100%; aspect-ratio: auto; height: 11px; border-radius: 999px; box-shadow: none; }
     .dx-bag__body::after { display: none; }
-    .dx-bag__stack { flex-direction: row; }
-    .dx-band {
-        flex: 0 0 var(--h, 10%);
-        transform: scaleX(0); transform-origin: left;
-        transition: transform .6s var(--ease), background .5s var(--ease);
+    /* the gradient turns on its side with the gauge */
+    .dx-bag__fluid { background: var(--mix-h, var(--mix, var(--tone))); transform-origin: left; }
+
+    @supports (animation-timeline: view()) {
+        @media (prefers-reduced-motion: no-preference) {
+            @keyframes dx-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        }
     }
-    .dx-band.is-in { transform: scaleX(1); }
-    .dx-bag__meniscus { display: none; }
-
-    .dx-bag__read { margin-top: .5rem; justify-content: space-between; }
-    .dx-bag__read b { font-size: 1.05rem; }
-
-    .dx-ing { grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: .8rem; }
+    .dx-ing { grid-template-columns: 2.1rem minmax(0, 1fr) auto; gap: .75rem; }
 }
 
 /* ---------- composition · 640 ---------- */
 @media (max-width: 640px) {
-    .dx-ing { padding-block: .95rem; }
-    .dx-ing__name { font-size: 1.15rem; }
-    .dx-ing__what { font-size: .88rem; }
-    .dx-mix__close { font-size: 1.05rem; }
-    .dx-mix__note { font-size: .73rem; }
-}
-
-/* ---------- composition · reduced motion ----------
-   Every band is simply already in. Nobody who asked the OS to stop moving
-   things should have to scroll a list to find out what is in the bag. */
-@media (prefers-reduced-motion: reduce) {
-    .dx-band { transform: none !important; }
-    .dx-ing { padding-left: 0 !important; }
-    .dx-ing__chip { opacity: 1; }
-    .dx-bag { position: static; }
+    .dx-mix__head { max-width: none; }
+    .dx-ing { padding-block: .9rem; }
+    .dx-ing__name { font-size: 1.1rem; }
+    .dx-ing__what { font-size: .87rem; }
+    .dx-mix__close { font-size: 1.1rem; max-width: none; }
 }
 
 
 /* =============================================================================
-   07 · THE COURSE  (#course)
-   Six weeks and the arithmetic behind them. The six markers are a real
-   sequence — one infusion per week — so they are numbered. Everything else on
-   this page that is not a sequence is not.
+   05 · THE COURSE  (#course)
+   Six weeks is a real sequence, so it is numbered. The rule draws itself
+   against its own view-timeline; the money is static text, because a number
+   that counts up is a number you cannot read while it is counting.
 ============================================================================= */
-.dx-course {
-    position: relative;
-    padding: var(--dx-pad) var(--gut);
-    background: var(--cream);
-}
-.dx-course::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background:
-        radial-gradient(56% 42% at 6% 4%, rgba(231, 203, 134, .26), transparent 60%),
-        radial-gradient(52% 40% at 94% 96%, rgba(143, 190, 155, .12), transparent 60%);
-}
-.dx-course__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
+.dx-course { position: relative; padding: var(--dx-pad) var(--gut); background: var(--cream); }
+.dx-course__wrap { max-width: var(--maxw); margin: 0 auto; }
 .dx-course__head { margin-bottom: var(--dx-stack); }
 
-/* ---------- the six weeks ---------- */
 .dx-weeks {
     position: relative;
     display: grid; grid-template-columns: repeat(6, 1fr);
-    gap: clamp(.6rem, 1.5vw, 1.25rem);
-    padding-top: 2.9rem;
-    margin-bottom: var(--dx-stack);
+    gap: clamp(.5rem, 1.2vw, 1rem);
+    padding-top: 2.6rem; margin-bottom: var(--dx-stack);
     list-style: none;
 }
-.dx-weeks__rail {
-    position: absolute; left: 0; right: 0; top: .62rem; height: 1px;
-    background: var(--rule);
-}
+.dx-weeks__rail { position: absolute; left: 0; right: 0; top: .56rem; height: 1px; background: var(--rule); }
 .dx-weeks__fill {
-    position: absolute; left: 0; top: -1px; height: 3px; width: 0%;
-    background: linear-gradient(90deg,
-                color-mix(in oklab, var(--tone) 35%, transparent), var(--tone));
-    box-shadow: 0 0 14px color-mix(in oklab, var(--tone) 55%, transparent);
+    position: absolute; left: 0; top: -1px; height: 3px; width: 100%;
+    transform-origin: left;
+    background: var(--tone);
 }
-
 .dx-wk { position: relative; }
 .dx-wk__pin {
-    position: absolute; left: 0; top: -2.9rem;
-    width: 13px; height: 13px; border-radius: 50%;
-    border: 1px solid var(--rule-gold);
-    background: var(--cream);
-    transition: background .5s var(--ease), transform .5s var(--ease),
-                box-shadow .5s var(--ease), border-color .5s var(--ease);
-}
-.dx-wk.is-on .dx-wk__pin {
-    background: var(--tone); border-color: var(--tone); transform: scale(1.3);
-    box-shadow: 0 0 0 5px color-mix(in oklab, var(--tone) 16%, transparent);
+    position: absolute; left: 0; top: -2.6rem;
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 1px solid var(--tone); background: var(--tone);
 }
 .dx-wk__no {
     display: block;
-    font-family: var(--dx-mono); font-size: .56rem; font-weight: 500;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
-    margin-bottom: .4rem;
-    transition: color .5s var(--ease);
+    font-family: var(--dx-mono); font-size: .56rem; font-weight: 400;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--tone);
+    margin-bottom: .35rem;
 }
-.dx-wk.is-on .dx-wk__no { color: var(--gold-deep); }
 .dx-wk__what {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(.95rem, 1.3vw, 1.1rem); line-height: 1.2;
-    letter-spacing: -.01em; color: var(--forest);
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(.92rem, 1.25vw, 1.05rem); line-height: 1.14;
+    letter-spacing: -.025em; color: var(--forest);
+}
+
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .dx-weeks { timeline-scope: --weeks; view-timeline: --weeks block; }
+        .dx-weeks__fill {
+            animation: dx-draw linear both;
+            animation-timeline: --weeks; animation-range: entry 78% cover 42%;
+        }
+        @keyframes dx-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+        .dx-wk__pin {
+            animation: dx-pin linear both;
+            animation-timeline: --weeks; animation-range: entry 78% cover 42%;
+        }
+        /* each pin lands as the rule reaches it — the delay is the position */
+        .dx-wk:nth-child(2) .dx-wk__pin { animation-range: entry 78% cover 8%; }
+        .dx-wk:nth-child(3) .dx-wk__pin { animation-range: entry 78% cover 15%; }
+        .dx-wk:nth-child(4) .dx-wk__pin { animation-range: entry 78% cover 24%; }
+        .dx-wk:nth-child(5) .dx-wk__pin { animation-range: entry 78% cover 31%; }
+        .dx-wk:nth-child(6) .dx-wk__pin { animation-range: entry 78% cover 38%; }
+        .dx-wk:nth-child(7) .dx-wk__pin { animation-range: entry 78% cover 45%; }
+        @keyframes dx-pin {
+            0%, 92% { background: var(--cream); border-color: var(--rule-gold); transform: scale(.8); }
+            100%    { background: var(--tone);  border-color: var(--tone);      transform: scale(1); }
+        }
+    }
 }
 
 /* ---------- the arithmetic ---------- */
 .dx-sum {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr);
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr);
     gap: clamp(1.25rem, 3vw, 2.5rem); align-items: start;
 }
-
 .dx-sum__box {
-    position: relative;
-    padding: clamp(1.5rem, 3vw, 2.4rem);
-    border: 1px solid var(--rule-gold); border-radius: 5px;
-    background: rgba(255, 255, 255, .74);
-    box-shadow: 0 34px 70px -50px rgba(32, 52, 33, .5);
+    padding: clamp(1.4rem, 3vw, 2.2rem);
+    border: 1px solid var(--rule-gold); border-radius: 4px;
+    background: rgba(255,255,255,.72);
+    box-shadow: 0 32px 66px -50px rgba(32,52,33,.5);
 }
 .dx-sum__for {
-    font-family: var(--dx-mono); font-size: .55rem;
-    letter-spacing: .22em; text-transform: uppercase; color: var(--mist);
-    margin-bottom: .5rem;
+    font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--mist); margin-bottom: .45rem;
 }
 .dx-sum__name {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(1.45rem, 2.7vw, 2.05rem);
-    line-height: 1.08; letter-spacing: -.025em; color: var(--forest);
-    margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1.4rem, 2.6vw, 2rem); line-height: 1.04;
+    letter-spacing: -.035em; color: var(--forest);
+    margin-bottom: clamp(1.1rem, 2.4vw, 1.6rem);
 }
-
-.dx-sum__rows { display: grid; gap: 1.1rem; }
-.dx-sum__row {
-    display: grid; grid-template-columns: minmax(0, 1fr) auto;
-    align-items: baseline; gap: .35rem 1rem;
-}
+.dx-sum__rows { display: grid; gap: 1rem; }
+.dx-sum__row { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: baseline; gap: .3rem 1rem; }
 .dx-sum__row dt {
-    font-family: var(--dx-mono); font-size: .58rem;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
+    font-family: var(--dx-mono); font-size: .58rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--mist);
 }
-.dx-sum__row dd {
-    font-family: var(--dx-mono); font-weight: 500;
-    font-size: clamp(1.15rem, 2vw, 1.5rem);
-    color: var(--ink-soft); font-variant-numeric: tabular-nums; text-align: right;
-}
+.dx-sum__row dd { font-family: var(--dx-mono); font-weight: 500; font-size: clamp(1.1rem, 1.9vw, 1.45rem); color: var(--ink-soft); font-variant-numeric: tabular-nums; text-align: right; }
 .dx-sum__row.is-prog dd { color: var(--forest); }
-.dx-sum__bar {
-    grid-column: 1 / -1;
-    display: block; height: 3px; border-radius: 999px;
-    background: rgba(32, 52, 33, .07); overflow: hidden;
-}
-.dx-sum__bar i {
-    display: block; height: 100%; width: 0%; border-radius: 999px;
-    background: rgba(139, 136, 119, .5);
-    transition: width .9s var(--ease);
-}
-.dx-sum__row.is-prog .dx-sum__bar i {
-    background: linear-gradient(90deg,
-                color-mix(in oklab, var(--tone) 45%, transparent), var(--tone));
-}
+.dx-sum__bar { grid-column: 1 / -1; display: block; height: 3px; border-radius: 999px; background: rgba(32,52,33,.07); overflow: hidden; }
+.dx-sum__bar i { display: block; height: 100%; border-radius: 999px; background: rgba(139,136,119,.45); transform-origin: left; }
+.dx-sum__row.is-prog .dx-sum__bar i { background: var(--tone); }
 
 .dx-sum__keep {
     display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
-    margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
-    padding-top: 1.1rem; border-top: 1px solid var(--rule);
-}
-.dx-sum__keep span {
-    font-family: var(--dx-mono); font-size: .58rem;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep);
-}
-.dx-sum__keep b {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(2rem, 4vw, 3rem); line-height: 1;
-    color: var(--gold-deep); font-variant-numeric: tabular-nums;
-}
-
-/* the side column: why a course rather than one bag */
-.dx-sum__why h3 {
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(1.3rem, 2.3vw, 1.75rem); line-height: 1.15;
-    letter-spacing: -.02em; color: var(--forest); margin-bottom: .9rem;
-}
-.dx-sum__why p { font-size: .95rem; line-height: 1.78; }
-.dx-sum__why p + p { margin-top: .9rem; }
-.dx-sum__fine {
-    margin-top: 1.25rem; padding-top: 1rem;
+    margin-top: clamp(1.1rem, 2.4vw, 1.6rem); padding-top: 1rem;
     border-top: 1px solid var(--rule);
-    font-size: .8rem; line-height: 1.7; color: var(--mist);
+}
+.dx-sum__keep span { font-family: var(--dx-mono); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--tone); }
+.dx-sum__keep b {
+    font-family: var(--dx-display); font-weight: 600;
+    font-size: clamp(2rem, 4vw, 3rem); line-height: 1; letter-spacing: -.045em;
+    color: var(--tone); font-variant-numeric: tabular-nums;
 }
 
-/* ---------- course · 1080 ---------- */
-@media (max-width: 1080px) {
-    .dx-sum { grid-template-columns: 1fr; }
+.dx-sum__why h3 {
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1.2rem, 2.1vw, 1.6rem); line-height: 1.1;
+    letter-spacing: -.03em; color: var(--forest); margin-bottom: .8rem;
 }
+.dx-sum__why p { font-size: .94rem; line-height: 1.74; }
+.dx-sum__why p + p { margin-top: .85rem; }
+.dx-sum__fine { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px solid var(--rule); font-size: .79rem; line-height: 1.68; color: var(--mist); }
 
-/* ---------- course · 780: the weeks go vertical ---------- */
+@media (max-width: 1080px) { .dx-sum { grid-template-columns: 1fr; } }
 @media (max-width: 780px) {
-    .dx-weeks {
-        grid-template-columns: 1fr;
-        padding-top: 0; padding-left: 2.4rem;
-        gap: 1.1rem;
-    }
-    .dx-weeks__rail { left: .56rem; right: auto; top: .5rem; bottom: .5rem; width: 1px; height: auto; }
-    .dx-weeks__fill { width: 3px; height: 0%; left: -1px; top: 0; }
-    .dx-wk__pin { left: -2.4rem; top: .1rem; }
-    .dx-wk__no { display: inline; margin-right: .6rem; }
+    .dx-weeks { grid-template-columns: 1fr; padding-top: 0; padding-left: 2.2rem; gap: 1rem; }
+    .dx-weeks__rail { left: .5rem; right: auto; top: .5rem; bottom: .5rem; width: 1px; height: auto; }
+    .dx-weeks__fill { width: 3px; height: 100%; left: -1px; transform-origin: top; }
+    .dx-wk__pin { left: -2.2rem; top: .05rem; }
+    .dx-wk__no { display: inline; margin-right: .5rem; }
     .dx-wk__what { display: inline; }
+    @supports (animation-timeline: view()) {
+        @media (prefers-reduced-motion: no-preference) {
+            @keyframes dx-draw { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+        }
+    }
 }
-
-/* ---------- course · 640 ---------- */
 @media (max-width: 640px) {
-    .dx-sum__box { padding: 1.35rem 1.15rem; }
-    .dx-sum__name { font-size: 1.4rem; }
-    .dx-sum__row dd { font-size: 1.15rem; }
-    .dx-sum__keep { flex-direction: column; align-items: flex-start; gap: .3rem; }
-    .dx-sum__keep b { font-size: 2.1rem; }
-}
-
-/* ---------- course · reduced motion ---------- */
-@media (prefers-reduced-motion: reduce) {
-    .dx-weeks__fill { width: 100% !important; height: 100% !important; }
-    .dx-wk .dx-wk__pin { background: var(--tone); border-color: var(--tone); }
+    .dx-sum__box { padding: 1.25rem 1.1rem; }
+    .dx-sum__keep { flex-direction: column; align-items: flex-start; gap: .25rem; }
 }
 
 
 /* =============================================================================
-   08 · CONSIDERED FOR  (#fit)
-   Never "who this is for" — eligibility is decided at screening and the copy
-   must not imply otherwise. These are the reasons people ask about it.
+   06 · QUESTIONS  (#questions)
+   Native <details>. No script, so nothing here can fail, and every answer is
+   in the DOM for find-in-page whether or not it is open.
 ============================================================================= */
-.dx-fit {
-    position: relative;
-    padding: var(--dx-pad) var(--gut);
-    background: var(--parchment);
-}
-.dx-fit__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
-.dx-fit__head { margin-bottom: var(--dx-stack); }
-
-.dx-fit__grid {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--dx-gap); list-style: none;
-}
-.dx-fit__item {
-    position: relative;
-    padding: clamp(1.35rem, 2.4vw, 1.9rem) clamp(1.1rem, 1.9vw, 1.5rem);
-    border: 1px solid var(--rule); border-top: 2px solid var(--tone);
-    border-radius: 4px; background: rgba(255, 255, 255, .68);
-    transition: transform .5s var(--ease), box-shadow .5s var(--ease);
-}
-.dx-fit__item:hover { transform: translateY(-5px); box-shadow: 0 32px 56px -40px rgba(32, 52, 33, .5); }
-.dx-fit__item i { display: block; font-size: 1.7rem; color: var(--tone); margin-bottom: .8rem; line-height: 1; }
-.dx-fit__item h3 {
-    font-family: var(--dx-display); font-weight: 400; font-size: 1.2rem;
-    line-height: 1.18; letter-spacing: -.015em; color: var(--forest); margin-bottom: .5rem;
-}
-.dx-fit__item p { font-size: .9rem; line-height: 1.7; color: var(--ink-soft); }
-
-.dx-fit__bar {
-    display: flex; align-items: center; gap: clamp(.9rem, 2vw, 1.5rem);
-    margin-top: var(--dx-stack);
-    padding: clamp(1.1rem, 2.2vw, 1.5rem);
-    border: 1px solid var(--rule-gold); border-left: 3px solid var(--gold);
-    border-radius: 3px; background: rgba(193, 150, 63, .08);
-}
-.dx-fit__bar > i { flex: 0 0 auto; font-size: 1.8rem; color: var(--gold-deep); line-height: 1; }
-.dx-fit__bar p { font-size: .93rem; line-height: 1.72; }
-.dx-fit__bar b { color: var(--forest); font-weight: 600; }
-
-/* ---------- fit · 900 ---------- */
-@media (max-width: 900px) {
-    .dx-fit__grid { grid-template-columns: 1fr; }
-    .dx-fit__item { padding: 1.25rem 1.1rem; }
-    .dx-fit__bar { flex-direction: column; align-items: flex-start; gap: .8rem; }
-}
-
-
-/* =============================================================================
-   09 · QUESTIONS  (#questions)
-   Native <details>. No JavaScript, so nothing here can fail, every answer is
-   in the DOM whether or not it is open, and find-in-page reaches all of it.
-============================================================================= */
-.dx-qs {
-    position: relative;
-    padding: var(--dx-pad) var(--gut);
-    background: var(--cream);
-}
-.dx-qs::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(58% 44% at 8% 0%, rgba(231, 203, 134, .22), transparent 60%);
-}
-.dx-qs__wrap {
-    position: relative; z-index: 2;
-    max-width: min(var(--maxw), 64rem); margin: 0 auto;
-}
+.dx-qs { position: relative; padding: var(--dx-pad) var(--gut); background: var(--parchment); }
+.dx-qs__wrap { max-width: min(var(--maxw), 62rem); margin: 0 auto; }
 .dx-qs__head { margin-bottom: var(--dx-stack); }
-
 .dx-qs__list { border-top: 1px solid var(--forest); }
 .dx-q { border-bottom: 1px solid var(--rule); }
 .dx-q__ask {
-    display: flex; align-items: center; justify-content: space-between; gap: 1.25rem;
-    padding: 1.2rem .25rem;
-    cursor: pointer; list-style: none;
-    font-family: var(--dx-display); font-weight: 400;
-    font-size: clamp(1.05rem, 1.6vw, 1.35rem); line-height: 1.25;
-    letter-spacing: -.015em; color: var(--forest);
+    display: flex; align-items: center; justify-content: space-between; gap: 1.2rem;
+    padding: 1.15rem .2rem; cursor: pointer; list-style: none;
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1.05rem, 1.55vw, 1.3rem); line-height: 1.18;
+    letter-spacing: -.028em; color: var(--forest);
     transition: color .35s var(--ease), padding-left .35s var(--ease);
 }
 .dx-q__ask::-webkit-details-marker { display: none; }
-.dx-q__ask:hover { color: var(--gold-deep); padding-left: .5rem; }
+.dx-q__ask:hover { color: var(--tone); padding-left: .45rem; }
 .dx-q__ask i {
-    flex: 0 0 auto;
-    display: grid; place-items: center;
-    width: 30px; height: 30px; border-radius: 50%;
-    border: 1px solid var(--rule-gold);
-    font-size: .85rem; color: var(--gold-deep);
+    flex: 0 0 auto; display: grid; place-items: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--rule-gold); font-size: .8rem; color: var(--tone);
     transition: transform .4s var(--ease), background .4s var(--ease), color .4s var(--ease);
 }
-.dx-q[open] .dx-q__ask { color: var(--gold-deep); }
+.dx-q[open] .dx-q__ask { color: var(--tone); }
 .dx-q[open] .dx-q__ask i { transform: rotate(135deg); background: var(--tone); color: #fff; border-color: var(--tone); }
+.dx-q__ans { padding: 0 3rem 1.3rem .2rem; }
+.dx-q__ans p { font-size: .93rem; line-height: 1.78; max-width: 68ch; }
+.dx-q__ans p + p { margin-top: .75rem; }
+.dx-q__ans ul { margin-top: .75rem; display: grid; gap: .35rem; list-style: none; }
+.dx-q__ans li { position: relative; padding-left: 1.1rem; font-size: .91rem; line-height: 1.66; }
+.dx-q__ans li::before { content: ''; position: absolute; left: 0; top: .66em; width: 5px; height: 5px; border-radius: 50%; background: var(--tone); }
 
-.dx-q__ans { padding: 0 3.5rem 1.4rem .25rem; }
-.dx-q__ans p { font-size: .94rem; line-height: 1.8; max-width: 70ch; }
-.dx-q__ans p + p { margin-top: .8rem; }
-.dx-q__ans ul { margin-top: .8rem; display: grid; gap: .4rem; list-style: none; }
-.dx-q__ans li {
-    position: relative; padding-left: 1.2rem;
-    font-size: .92rem; line-height: 1.7;
-}
-.dx-q__ans li::before {
-    content: ''; position: absolute; left: 0; top: .68em;
-    width: 5px; height: 5px; border-radius: 50%; background: var(--tone);
-}
-
-/* ---------- questions · 640 ---------- */
 @media (max-width: 640px) {
-    .dx-q__ask { font-size: 1rem; gap: .85rem; padding-block: 1.05rem; min-height: 58px; }
-    .dx-q__ask i { width: 27px; height: 27px; }
+    .dx-q__ask { font-size: 1rem; padding-block: 1rem; min-height: 56px; }
     .dx-q__ans { padding-right: 1rem; }
-    .dx-q__ans p { font-size: .91rem; }
 }
 
 
 /* =============================================================================
-   10 · BEGIN  (#begin)
-   The close. One statement, two actions, and the disclaimer set quietly
-   underneath rather than shouted in a box — it is required, not decorative.
+   07 · BEGIN  (#begin)
 ============================================================================= */
-.dx-begin {
-    position: relative;
-    padding: var(--dx-pad) var(--gut);
-    background: var(--parchment);
-    overflow: clip;
-}
+.dx-begin { position: relative; padding: var(--dx-pad) var(--gut); background: var(--cream); overflow: clip; }
 .dx-begin::before {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    background:
-        radial-gradient(60% 46% at 90% 4%,
-            color-mix(in oklab, var(--tone) 18%, transparent), transparent 62%),
-        radial-gradient(52% 40% at 2% 94%, rgba(143, 190, 155, .14), transparent 60%);
+    background: radial-gradient(52% 42% at 88% 6%,
+                color-mix(in oklab, var(--tone) 16%, transparent), transparent 62%);
 }
 .dx-begin__wrap {
     position: relative; z-index: 2;
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .78fr);
-    gap: clamp(1.75rem, 5vw, 4.5rem); align-items: center;
+    display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.72fr);
+    gap: clamp(1.75rem, 5vw, 4rem); align-items: center;
     max-width: var(--maxw); margin: 0 auto;
 }
-.dx-begin__say .dx-h { max-width: 18ch; }
-.dx-begin__lede {
-    max-width: 46ch; font-size: clamp(.95rem, 1.08vw, 1.05rem);
-    line-height: 1.78; color: var(--ink-soft); margin-bottom: 1.75rem;
-}
-.dx-begin__acts { display: flex; flex-wrap: wrap; gap: .7rem; }
-
-/* the card: the four numbers again, at the moment of decision */
+.dx-begin__lede { max-width: 44ch; font-size: clamp(.95rem, 1.06vw, 1.04rem); line-height: 1.75; margin-bottom: 1.6rem; }
+.dx-begin__acts { display: flex; flex-wrap: wrap; gap: .6rem; }
 .dx-begin__card {
-    padding: clamp(1.35rem, 3vw, 2rem);
-    border: 1px solid var(--rule-gold); border-radius: 5px;
-    background: rgba(255, 255, 255, .8);
-    box-shadow: 0 40px 80px -55px rgba(32, 52, 33, .6);
+    padding: clamp(1.3rem, 3vw, 1.9rem);
+    border: 1px solid var(--rule-gold); border-radius: 4px;
+    background: rgba(255,255,255,.82);
+    box-shadow: 0 40px 78px -56px rgba(32,52,33,.6);
 }
-.dx-begin__card dl { display: grid; gap: 0; }
 .dx-begin__card div {
     display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
-    padding: .8rem 0; border-bottom: 1px solid var(--rule);
+    padding: .75rem 0; border-bottom: 1px solid var(--rule);
 }
 .dx-begin__card div:last-child { border-bottom: 0; }
-.dx-begin__card dt {
-    font-family: var(--dx-mono); font-size: .55rem;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
-}
-.dx-begin__card dd {
-    font-family: var(--dx-mono); font-weight: 500; font-size: .95rem;
-    color: var(--forest); font-variant-numeric: tabular-nums; text-align: right;
-}
-.dx-begin__card dd em { font-style: normal; color: var(--gold-deep); }
+.dx-begin__card dt { font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); }
+.dx-begin__card dd { font-family: var(--dx-mono); font-weight: 500; font-size: .93rem; color: var(--forest); font-variant-numeric: tabular-nums; text-align: right; }
+.dx-begin__card dd em { font-style: normal; color: var(--tone); }
 
 .dx-begin__legal {
     position: relative; z-index: 2;
-    max-width: 86ch; margin: var(--dx-stack) auto 0;
-    padding-top: 1.4rem; border-top: 1px solid var(--rule);
-    font-size: .76rem; line-height: 1.75; color: var(--mist);
+    max-width: 84ch; margin: var(--dx-stack) auto 0;
+    padding-top: 1.3rem; border-top: 1px solid var(--rule);
+    font-size: .76rem; line-height: 1.74; color: var(--mist);
 }
 .dx-begin__legal b {
-    display: block; margin-bottom: .5rem;
-    font-family: var(--dx-mono); font-size: .55rem; font-weight: 500;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--forest);
+    display: block; margin-bottom: .45rem;
+    font-family: var(--dx-mono); font-size: .56rem; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--forest);
 }
 
-/* ---------- begin · 900 ---------- */
 @media (max-width: 900px) {
-    .dx-begin__wrap { grid-template-columns: 1fr; gap: 1.75rem; }
-    .dx-begin__say .dx-h, .dx-begin__lede { max-width: none; }
+    .dx-begin__wrap { grid-template-columns: 1fr; gap: 1.6rem; }
+    .dx-begin__lede { max-width: none; }
     .dx-begin__acts { width: 100%; }
-}
-
-/* ---------- begin · 640 ---------- */
-@media (max-width: 640px) {
-    .dx-begin__card { padding: 1.2rem 1.1rem; }
-    .dx-begin__legal { font-size: .72rem; }
 }
 
 
 /* =============================================================================
-   11 · THE OTHER NINE  (#more)
-   A native snap rail, driven by the site's own Rail engine from script.js.
-   Not a new carousel — the same one the shelf and the evidence rail use.
+   08 · THE OTHER NINE  (#more)
+   Every card here carries a view-transition-name, so the morph works in both
+   directions: menu page into a drip, and drip into the next drip.
+   A plain snap rail — the site's Rail engine is no longer needed for it.
 ============================================================================= */
-.dx-more {
-    position: relative;
-    padding: var(--dx-pad) 0;
-    background: var(--cream);
-    overflow: clip;
-}
-.dx-more__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gut); }
+.dx-more { position: relative; padding: var(--dx-pad) 0; background: var(--parchment); }
+.dx-more__wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gut); }
 .dx-more__top {
     display: flex; align-items: flex-end; justify-content: space-between;
     flex-wrap: wrap; gap: 1rem;
-    padding-bottom: 1rem; margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
-    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1rem; margin-bottom: clamp(1.1rem, 2.4vw, 1.6rem);
+    border-bottom: 1px solid var(--forest);
 }
 .dx-more__all {
-    display: inline-flex; align-items: center; gap: .6rem;
+    display: inline-flex; align-items: center; gap: .5rem;
     font-family: var(--dx-mono); font-size: .6rem; font-weight: 500;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--gold-deep);
+    letter-spacing: .14em; text-transform: uppercase; color: var(--tone);
     white-space: nowrap;
-    transition: color .35s var(--ease), gap .35s var(--ease);
+    transition: gap .35s var(--ease);
 }
-.dx-more__all:hover { color: var(--forest); gap: .95rem; }
+.dx-more__all:hover { gap: .9rem; }
 
-/* the track breaks the gutter so cards run off both edges — a card sliced by
-   the viewport edge is the affordance that says there is more */
-.dx-more__rail {
-    margin-inline: calc(var(--gut) * -1);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 94%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 3%, #000 94%, transparent);
-}
 .dx-more__track {
-    display: flex; align-items: stretch;
-    gap: clamp(.85rem, 1.6vw, 1.35rem);
-    padding: .5rem var(--gut) 1.5rem;
+    display: flex; align-items: stretch; gap: var(--dx-gap);
+    padding: .25rem var(--gut) 1.25rem;
+    margin-inline: calc(var(--gut) * -1);
     list-style: none;
     overflow-x: auto; overflow-y: hidden;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--gut);
-    -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
     scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 95%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 3%, #000 95%, transparent);
 }
 .dx-more__track::-webkit-scrollbar { display: none; }
-.dx-more__track.is-dragging { scroll-snap-type: none; cursor: grabbing; }
 
-.dx-nxt { --bt: var(--gold); flex: 0 0 auto; width: clamp(232px, 23vw, 288px); scroll-snap-align: start; display: flex; }
+.dx-nxt { --bt: var(--gold); flex: 0 0 auto; width: clamp(200px, 20vw, 250px); scroll-snap-align: start; display: flex; }
 .dx-nxt > a {
-    position: relative;
-    display: grid; grid-template-columns: 44px minmax(0, 1fr);
-    gap: .9rem; align-items: center;
-    width: 100%; padding: 1rem 1.1rem;
+    display: grid; grid-template-rows: auto auto; align-content: start;
+    width: 100%; padding: 1.1rem 1.1rem 1rem;
     background: #fff;
     border: 1px solid var(--rule); border-top: 2px solid var(--bt);
     border-radius: 4px;
-    box-shadow: 0 18px 34px -28px rgba(32, 52, 33, .3);
-    transition: transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
+    transition: transform .45s var(--ease), box-shadow .45s var(--ease), border-color .45s var(--ease);
 }
 .dx-nxt > a:hover {
     transform: translateY(-5px);
     border-color: color-mix(in oklab, var(--bt) 40%, transparent);
-    box-shadow: 0 30px 52px -28px rgba(32, 52, 33, .38);
+    box-shadow: 0 28px 48px -28px rgba(32,52,33,.36);
 }
-.dx-nxt img { width: 44px; height: auto; }
-.dx-nxt__no {
-    display: block;
-    font-family: var(--dx-mono); font-size: .54rem; letter-spacing: .16em;
-    color: var(--bt); margin-bottom: .25rem;
-}
-/* these are <span>s inside a grid cell — without display:block their
-   margins are dropped on the floor and the three lines run together */
-.dx-nxt > a > span { display: block; min-width: 0; }
+.dx-nxt__bag { justify-self: center; width: 56px; margin-bottom: .8rem; }
+.dx-nxt__bag img { width: 100%; height: auto; }
+.dx-nxt__no { display: block; font-family: var(--dx-mono); font-size: .54rem; letter-spacing: .14em; color: var(--bt); margin-bottom: .25rem; }
 .dx-nxt__name {
     display: block;
-    font-family: var(--dx-display); font-weight: 400; font-size: 1.02rem;
-    line-height: 1.16; letter-spacing: -.015em; color: var(--forest); margin-bottom: .3rem;
+    font-family: var(--dx-display); font-weight: 500; font-size: 1rem;
+    line-height: 1.1; letter-spacing: -.03em; color: var(--forest); margin-bottom: .3rem;
 }
-.dx-nxt__meta {
-    display: block;
-    font-family: var(--dx-mono); font-size: .6rem; letter-spacing: .05em;
-    color: var(--mist); font-variant-numeric: tabular-nums;
-}
-.dx-nxt__meta i { font-style: normal; color: var(--rule); margin: 0 .35rem; }
+.dx-nxt__meta { display: block; font-family: var(--dx-mono); font-size: .58rem; color: var(--mist); font-variant-numeric: tabular-nums; }
+.dx-nxt__meta i { font-style: normal; color: var(--rule); margin: 0 .3rem; }
 
-/* rail furniture, same grammar as the rest of the site */
-.dx-more__bar {
-    display: flex; align-items: center; gap: clamp(.85rem, 2.5vw, 1.75rem);
-    max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gut);
-}
-.dx-more__count {
-    font-family: var(--dx-mono); font-weight: 500; font-size: .72rem;
-    font-variant-numeric: tabular-nums; letter-spacing: .06em;
-    color: var(--ink-soft); white-space: nowrap;
-}
-.dx-more__count b { color: var(--gold-deep); font-size: 1.3rem; }
-.dx-more__count span { opacity: .45; margin: 0 .1rem; }
-.dx-more__meter { flex: 1; height: 1px; background: var(--rule); position: relative; }
-.dx-more__meter i {
-    position: absolute; inset: 0 auto 0 0; width: 0%;
-    background: linear-gradient(90deg, transparent, var(--tone));
-    transition: width .45s var(--ease);
-}
-.dx-more__arrows { display: flex; gap: .4rem; flex: 0 0 auto; }
-.dx-more__arrow {
-    display: grid; place-items: center;
-    width: 46px; height: 46px; border-radius: 50%;
-    border: 1px solid var(--rule-gold);
-    background: rgba(255, 255, 255, .8);
-    color: var(--forest); font-size: 1.1rem;
-    transition: background .3s var(--ease), color .3s var(--ease),
-                border-color .3s var(--ease), opacity .3s var(--ease);
-}
-.dx-more__arrow:hover { background: var(--forest); color: var(--cream); border-color: var(--forest); }
-.dx-more__arrow[disabled] { opacity: .3; pointer-events: none; }
+@media (max-width: 640px) { .dx-nxt { width: 62vw; max-width: 220px; } }
 
-/* ---------- more · 640 ---------- */
-@media (max-width: 640px) {
-    .dx-nxt { width: min(78vw, 280px); }
-    .dx-more__count { font-size: .64rem; }
-    .dx-more__count b { font-size: 1.05rem; }
-}
-
-/* ---------- more · reduced motion: the rail becomes a grid ---------- */
 @media (prefers-reduced-motion: reduce) {
-    .dx-more__rail { -webkit-mask-image: none; mask-image: none; margin-inline: 0; }
     .dx-more__track {
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 1rem; padding-inline: 0; overflow: visible;
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        margin-inline: 0; padding-inline: 0; overflow: visible;
+        -webkit-mask-image: none; mask-image: none;
     }
-    .dx-nxt { width: 100%; }
-    .dx-more__bar { display: none; }
+    .dx-nxt { width: 100%; max-width: none; }
 }
 
 
 /* =============================================================================
-   12 · MOTION & FOCUS
+   09 · MOTION & FOCUS
 ============================================================================= */
-.page-drip :focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 3px;
-    border-radius: 3px;
-}
+.page-drip :focus-visible { outline: 2px solid var(--tone); outline-offset: 3px; border-radius: 3px; }
+
 @media (prefers-reduced-motion: reduce) {
-    .dx-anim { opacity: 1 !important; }
-    .dx-cut__in { transform: none !important; }
-    .dx-rig__drop { animation: none !important; opacity: .8; }
-    .dx-line__bead { box-shadow: none; }
-    .dx-fit__item, .dx-nxt > a, .dx-btn { transition: none; }
+    .dx-nxt > a, .dx-btn, .dx-q__ask { transition: none; }
 }
