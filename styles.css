@@ -659,6 +659,81 @@ html.is-locked .head { transform: none; }
 @media (max-width: 1240px) {
     .head__tel { display: none; }
 }
+
+.head__link.is-here { color: var(--gold-deep); }
+.head__link.is-here::after { transform: scaleX(1); }
+ 
+/* the caret picks up the accent too, so "Infusions" reads as lit even when
+   the flyout is shut */
+.head__drop .head__link.is-here .head__dcaret { color: var(--gold); }
+ 
+/* ---------- desktop flyout · the drip you are actually reading ----------
+   A left spine in the infusion's own tone, not a border: .hd-item is a
+   three-column grid and an extra box on the left edge would shift every
+   column. box-shadow paints outside the layout entirely.                    */
+.hd-item.is-here {
+    background: color-mix(in oklab, var(--tone) 12%, transparent);
+    box-shadow: inset 3px 0 0 var(--tone);
+    padding-left: .75rem;
+}
+.hd-item.is-here i { color: var(--tone); }
+.hd-item.is-here span { color: var(--forest); font-weight: 600; }
+.hd-item.is-here b { color: var(--forest); }
+/* the hover rule below it also sets padding-left — hold the active row still */
+.hd-item.is-here:hover { padding-left: .75rem; }
+ 
+/* ---------- mobile menu · the row for the current page ---------- */
+.menu__nav > a.is-here em,
+.menu__drop summary.is-here em { color: var(--gold-deep); }
+ 
+.menu__nav > a.is-here i,
+.menu__drop summary.is-here i { color: var(--gold); }
+ 
+/* a filled coin after the name — the same dot language the sublist uses */
+.menu__nav > a.is-here em::after,
+.menu__drop summary.is-here em::after {
+    content: '';
+    display: inline-block;
+    width: .34em; height: .34em;
+    margin-left: .5em;
+    border-radius: 50%;
+    background: var(--gold);
+    vertical-align: .32em;
+}
+ 
+/* ---------- mobile menu · the drip inside the accordion ---------- */
+.menu__sub-item.is-here,
+.menu__sub-all.is-here {
+    color: var(--forest);
+    font-weight: 600;
+    padding-left: .55rem;
+    box-shadow: inset 2px 0 0 var(--tone, var(--gold));
+}
+.menu__sub-item.is-here i { color: var(--tone); }
+.menu__sub-item.is-here::after {
+    content: '';
+    width: 6px; height: 6px;
+    margin-left: auto;
+    align-self: center;
+    border-radius: 50%;
+    background: var(--tone);
+}
+.menu__sub-all.is-here { background: rgba(193, 150, 63, .08); }
+ 
+/* ---------- accessibility fallback ----------
+   If a page ships without the class but with aria-current — a CMS export, a
+   template someone edits later — it still lights up. */
+.head__link[aria-current="page"] { color: var(--gold-deep); }
+.head__link[aria-current="page"]::after { transform: scaleX(1); }
+ 
+/* ---------- five desktop items now, not four ----------
+   Home pushed the nav wider. Tighten the gap one step earlier so the rail
+   does not crowd the phone number before the 1080 breakpoint takes the nav
+   away entirely. */
+@media (max-width: 1180px) {
+    .head__nav { gap: clamp(1rem, 1.8vw, 1.6rem); }
+    .head__link { font-size: .78rem; letter-spacing: .1em; }
+}
  
 /* ---------- header · 1080: the nav (and the flyout with it) stands down ---------- */
 @media (max-width: 1080px) {
