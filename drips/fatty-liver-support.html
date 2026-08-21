@@ -134,6 +134,14 @@
 </div>
 
 
+<nav class="dx-dots" aria-label="Sections">
+  <a href="#top" data-label="Top" class="is-on"></a>
+  <a href="#composition" data-label="Formulation"></a>
+  <a href="#course" data-label="The course"></a>
+  <a href="#questions" data-label="Questions"></a>
+  <a href="#begin" data-label="Begin"></a>
+</nav>
+
 <main id="main">
 
 <!-- ==============================================================
@@ -150,25 +158,25 @@
   <div class="dx-hero__wrap">
 
     <div>
-      <p class="dx-hero__no">Infusion <b>No. VII</b> &middot; Liver Support</p>
+      <p class="dx-hero__no" data-anim="slide"><s></s><b>No. VII</b> Liver Support</p>
 
-      <h1 class="dx-hero__name">Fatty Liver<br><em>Support</em> IV</h1>
+      <h1 class="dx-hero__name" id="dxName" data-split>Fatty Liver <em>Support</em> IV</h1>
 
-      <p class="dx-hero__dek">
+      <p class="dx-hero__dek" data-anim="rise" data-delay="420">
         Glycine and taurine, the amino acids the liver uses to prepare bile, with
         N-acetylcysteine feeding the pathway your body builds glutathione from.
         Ten components. Three hours. One physician in the room the whole time.
       </p>
 
-      <div class="dx-hero__acts">
-        <a class="dx-btn dx-btn--solid" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
+      <div class="dx-hero__acts" data-anim="rise" data-delay="520">
+        <a class="dx-btn dx-btn--solid" data-mag="0.24" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="dx-btn" href="#composition"><span>Read the bag</span><i class="ph ph-arrow-down"></i></a>
       </div>
     </div>
 
-    <figure class="dx-hero__bag">
+    <figure class="dx-hero__bag" data-anim="scale" data-delay="120" data-par="0.05">
       <img src="/assets/drips/liversupport.png"
            alt="The Fatty Liver Support IV infusion bag"
            width="524" height="1478" fetchpriority="high" decoding="async"
@@ -178,19 +186,19 @@
   </div>
 
   <dl class="dx-vitals">
-    <div class="dx-vital">
+    <div data-anim="pop" data-group="90" class="dx-vital">
       <dt>Chair time</dt>
       <dd>3 h 00<small>Estimated</small></dd>
     </div>
-    <div class="dx-vital">
+    <div data-anim="pop" data-group="90" class="dx-vital">
       <dt>Per session</dt>
-      <dd>$850<small>Single infusion</small></dd>
+      <dd><span data-count="850">$0</span><small>Single infusion</small></dd>
     </div>
-    <div class="dx-vital dx-vital--tone">
+    <div data-anim="pop" data-group="90" class="dx-vital dx-vital--tone">
       <dt>In the program</dt>
-      <dd>$765<small>Effective, per session</small></dd>
+      <dd><span data-count="765">$0</span><small>Effective, per session</small></dd>
     </div>
-    <div class="dx-vital">
+    <div data-anim="pop" data-group="90" class="dx-vital">
       <dt>Recommended</dt>
       <dd>1 &times; weekly<small>For six weeks</small></dd>
     </div>
@@ -211,9 +219,9 @@
   <div class="dx-mix__wrap">
 
     <header class="dx-mix__head">
-      <p class="dx-brow"><i class="ph-duotone ph-flask"></i> The formulation</p>
-      <h2 class="dx-h">Everything in it,<br>and <em>nothing else</em>.</h2>
-      <p class="dx-lede">
+      <p class="dx-brow" data-anim="rise"><i class="ph-duotone ph-flask"></i> The formulation</p>
+      <h2 class="dx-h" data-anim="rise">Everything in it,<br>and <em>nothing else</em>.</h2>
+      <p class="dx-lede" data-anim="rise">
         No proprietary blend, no undisclosed filler. Ten components, each one named,
         each one mixed by the physician who administers it.
       </p>
@@ -234,23 +242,23 @@
 
            Graduations carry no numbers on purpose: printing millilitres would
            state a volume this practice has not published. -->
-      <div class="dx-bag">
+      <div class="dx-bag" id="dxBag">
         <svg class="dx-bag__art" viewBox="0 0 240 476" role="img"
              aria-label="The Fatty Liver Support IV bag, showing its ten components">
 
           <defs>
             <!-- bottom to top, matching the ledger -->
             <linearGradient id="dxMix" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0%"   stop-color="#7FA08C"/>
-              <stop offset="33%"  stop-color="#8FBE9B"/>
-              <stop offset="40%"  stop-color="#9AA98C"/>
-              <stop offset="48%"  stop-color="#C9A94E"/>
-              <stop offset="57%"  stop-color="#5F7A55"/>
-              <stop offset="66%"  stop-color="#6E8A5E"/>
-              <stop offset="76%"  stop-color="#4F7D5E"/>
-              <stop offset="84%"  stop-color="#B8873C"/>
-              <stop offset="91%"  stop-color="#D9982A"/>
-              <stop offset="100%" stop-color="#E7CB86"/>
+              <stop offset="0%"/>
+              <stop offset="33%"/>
+              <stop offset="40%"/>
+              <stop offset="48%"/>
+              <stop offset="57%"/>
+              <stop offset="66%"/>
+              <stop offset="76%"/>
+              <stop offset="84%"/>
+              <stop offset="91%"/>
+              <stop offset="100%"/>
             </linearGradient>
 
             <linearGradient id="dxGloss" x1="0" y1="0" x2="1" y2="0">
@@ -323,13 +331,12 @@
         </svg>
 
         <!-- the phone gauge; the drawn bag stands down below 900px -->
-        <span class="dx-bag__gauge" aria-hidden="true" style="
-          --mix-h: linear-gradient(90deg, #7FA08C 0%, #8FBE9B 33%, #9AA98C 40%, #C9A94E 48%, #5F7A55 57%, #6E8A5E 66%, #4F7D5E 76%, #B8873C 84%, #D9982A 91%, #E7CB86 100%);
-        "><i></i></span>
+        <span class="dx-bag__gauge" aria-hidden="true"><i></i></span>
+        <p class="dx-bag__pct"><span>Composition</span><span><b id="dxPct">0</b>%</span></p>
       </div>
 
-      <ol class="dx-list">
-        <li class="dx-ing" style="--bt:#7FA08C">
+      <ol class="dx-list" id="dxList">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#7FA08C">
           <span class="dx-ing__key">01</span>
           <div>
             <h3 class="dx-ing__name">Hydration fluid</h3>
@@ -337,7 +344,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#8FBE9B">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#8FBE9B">
           <span class="dx-ing__key">02</span>
           <div>
             <h3 class="dx-ing__name">Magnesium</h3>
@@ -345,7 +352,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#9AA98C">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#9AA98C">
           <span class="dx-ing__key">03</span>
           <div>
             <h3 class="dx-ing__name">Trace minerals</h3>
@@ -353,7 +360,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#C9A94E">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#C9A94E">
           <span class="dx-ing__key">04</span>
           <div>
             <h3 class="dx-ing__name">Vitamin B complex</h3>
@@ -361,7 +368,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#5F7A55">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#5F7A55">
           <span class="dx-ing__key">05</span>
           <div>
             <h3 class="dx-ing__name">Glycine</h3>
@@ -369,7 +376,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#6E8A5E">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#6E8A5E">
           <span class="dx-ing__key">06</span>
           <div>
             <h3 class="dx-ing__name">Taurine</h3>
@@ -377,7 +384,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#4F7D5E">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#4F7D5E">
           <span class="dx-ing__key">07</span>
           <div>
             <h3 class="dx-ing__name">N-Acetylcysteine</h3>
@@ -385,7 +392,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#B8873C">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#B8873C">
           <span class="dx-ing__key">08</span>
           <div>
             <h3 class="dx-ing__name">Alpha-lipoic acid</h3>
@@ -393,7 +400,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#D9982A">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#D9982A">
           <span class="dx-ing__key">09</span>
           <div>
             <h3 class="dx-ing__name">Vitamin C</h3>
@@ -401,7 +408,7 @@
           </div>
           <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
-        <li class="dx-ing" style="--bt:#E7CB86">
+        <li class="dx-ing" data-anim="rise" data-group="55" style="--bt:#E7CB86">
           <span class="dx-ing__key">10</span>
           <div>
             <h3 class="dx-ing__name">Glutathione</h3>
@@ -412,12 +419,12 @@
       </ol>
     </div>
 
-    <p class="dx-mix__close">
+    <p class="dx-mix__close" data-anim="rise">
       Nutritional tools involved in the liver&rsquo;s normal work &mdash; not a substitute
       for doing that work.
     </p>
 
-    <p class="dx-mix__note">
+    <p class="dx-mix__note" data-anim="rise">
       Component descriptions state what a compound is involved in, not what an infusion will
       do for you. Supportive ingredients are selected and finalized by Dr.&nbsp;Aronov during
       physician screening, based on your individual history and clinical appropriateness.
@@ -434,9 +441,9 @@
   <div class="dx-course__wrap">
 
     <header class="dx-course__head">
-      <p class="dx-brow"><i class="ph-duotone ph-repeat"></i> The six-week program</p>
-      <h2 class="dx-h">Liver health is not a<br><em>one-day detox</em>.</h2>
-      <p class="dx-lede">
+      <p class="dx-brow" data-anim="rise"><i class="ph-duotone ph-repeat"></i> The six-week program</p>
+      <h2 class="dx-h" data-anim="rise">Liver health is not a<br><em>one-day detox</em>.</h2>
+      <p class="dx-lede" data-anim="rise">
         Your liver works around the clock, and one infusion cannot reverse months or years
         of metabolic stress. One session provides the materials. Six weeks provides repeated
         occasions to use them &mdash; and six chances for Dr.&nbsp;Aronov to review how you
@@ -444,42 +451,42 @@
       </p>
     </header>
 
-    <ol class="dx-weeks">
+    <ol class="dx-weeks" id="dxWeeks">
       <span class="dx-weeks__rail" aria-hidden="true"><i class="dx-weeks__fill"></i></span>
-      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 01</span><span class="dx-wk__what">First infusion, slowest rate</span></li>
-      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 02</span><span class="dx-wk__what">Tolerance reviewed</span></li>
-      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 03</span><span class="dx-wk__what">Rate adjusted if appropriate</span></li>
-      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 04</span><span class="dx-wk__what">Midpoint check-in</span></li>
-      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 05</span><span class="dx-wk__what">Response discussed</span></li>
-      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 06</span><span class="dx-wk__what">Reassessment, and what comes next</span></li>
+      <li class="dx-wk" data-anim="pop" data-group="70"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 01</span><span class="dx-wk__what">First infusion, slowest rate</span></li>
+      <li class="dx-wk" data-anim="pop" data-group="70"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 02</span><span class="dx-wk__what">Tolerance reviewed</span></li>
+      <li class="dx-wk" data-anim="pop" data-group="70"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 03</span><span class="dx-wk__what">Rate adjusted if appropriate</span></li>
+      <li class="dx-wk" data-anim="pop" data-group="70"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 04</span><span class="dx-wk__what">Midpoint check-in</span></li>
+      <li class="dx-wk" data-anim="pop" data-group="70"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 05</span><span class="dx-wk__what">Response discussed</span></li>
+      <li class="dx-wk" data-anim="pop" data-group="70"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Week 06</span><span class="dx-wk__what">Reassessment, and what comes next</span></li>
     </ol>
 
     <div class="dx-sum">
 
-      <div class="dx-sum__box">
+      <div class="dx-sum__box" data-anim="pop">
         <p class="dx-sum__for">Six sessions of</p>
         <h3 class="dx-sum__name">Fatty Liver Support IV</h3>
 
         <dl class="dx-sum__rows">
           <div class="dx-sum__row">
             <dt>Purchased individually</dt>
-            <dd>$5,100</dd>
-            <span class="dx-sum__bar" aria-hidden="true"><i style="width:100%"></i></span>
+            <dd data-count="5100">$0</dd>
+            <span class="dx-sum__bar" aria-hidden="true"><i data-w="1"></i></span>
           </div>
           <div class="dx-sum__row is-prog">
             <dt>Program investment pricing</dt>
-            <dd>$4,590</dd>
-            <span class="dx-sum__bar" aria-hidden="true"><i style="width:90%"></i></span>
+            <dd data-count="4590">$0</dd>
+            <span class="dx-sum__bar" aria-hidden="true"><i data-w="0.9"></i></span>
           </div>
         </dl>
 
         <p class="dx-sum__keep">
           <span>Program saving &mdash; 10%</span>
-          <b>$510</b>
+          <b data-count="510">$0</b>
         </p>
       </div>
 
-      <div class="dx-sum__why">
+      <div class="dx-sum__why" data-anim="rise" data-delay="120">
         <h3>Why a course, and not a single bag</h3>
         <p>
           A single infusion may replenish nutrients. Weekly support across six weeks provides
@@ -510,13 +517,13 @@
   <div class="dx-qs__wrap">
 
     <header class="dx-qs__head">
-      <p class="dx-brow"><i class="ph-duotone ph-question"></i> Before you get in touch</p>
-      <h2 class="dx-h">Questions about<br><em>this infusion</em>.</h2>
+      <p class="dx-brow" data-anim="rise"><i class="ph-duotone ph-question"></i> Before you get in touch</p>
+      <h2 class="dx-h" data-anim="rise">Questions about<br><em>this infusion</em>.</h2>
     </header>
 
     <div class="dx-qs__list">
 
-      <details class="dx-q">
+      <details class="dx-q" data-anim="slide" data-group="45">
         <summary class="dx-q__ask">Will this treat my fatty liver?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__ans">
           <p>No. This is supportive care, offered solely as adjunctive wellness support. It is not intended to diagnose, treat, cure, mitigate, prevent or reverse any disease or medical condition, and it has not been evaluated by the FDA for those purposes.</p>
@@ -524,28 +531,28 @@
         </div>
       </details>
 
-      <details class="dx-q">
+      <details class="dx-q" data-anim="slide" data-group="45">
         <summary class="dx-q__ask">Why does it take three hours?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__ans">
           <p>The rate is set slow deliberately. This is the longest infusion on the menu and carries the most components. Dr.&nbsp;Aronov sets the flow rate at the start, adjusts it through the session, and stays in the room until it is finished.</p>
         </div>
       </details>
 
-      <details class="dx-q">
+      <details class="dx-q" data-anim="slide" data-group="45">
         <summary class="dx-q__ask">Can I book a single session instead of the program?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__ans">
           <p>Yes. A single session is $850. The six-week program exists because liver support is not a one-day event, but nothing obliges you to start with six. Programs are offered only where Dr.&nbsp;Aronov considers repeat sessions appropriate for you.</p>
         </div>
       </details>
 
-      <details class="dx-q">
+      <details class="dx-q" data-anim="slide" data-group="45">
         <summary class="dx-q__ask">I am already under a specialist&rsquo;s care. Does that rule me out?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__ans">
           <p>No, but it changes how carefully she coordinates. Dr.&nbsp;Aronov will review your medications and will want your treating physician&rsquo;s written approval before anything is scheduled. Nothing here replaces the treatment you are already on.</p>
         </div>
       </details>
 
-      <details class="dx-q">
+      <details class="dx-q" data-anim="slide" data-group="45">
         <summary class="dx-q__ask">What happens before I can book?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__ans">
           <p>You send your medical history, current medications and allergies. Dr.&nbsp;Aronov reads it herself and decides whether IV therapy is appropriate for you and which formulation fits. Nothing is booked and nothing is charged at that stage.</p>
@@ -553,14 +560,14 @@
         </div>
       </details>
 
-      <details class="dx-q">
+      <details class="dx-q" data-anim="slide" data-group="45">
         <summary class="dx-q__ask">Who actually gives the infusion?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__ans">
           <p>Dr.&nbsp;Aronov does, personally. She reviews your history, calculates the doses, prepares the medications, spikes the bag, sets the flow rate, and stays with you until it is finished. There is no technician and nothing is delegated.</p>
         </div>
       </details>
 
-      <details class="dx-q">
+      <details class="dx-q" data-anim="slide" data-group="45">
         <summary class="dx-q__ask">What if I am not eligible?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__ans">
           <p>Not everyone is. If IV therapy is not appropriate for you, Dr.&nbsp;Aronov will say so and tell you why.</p>
@@ -579,22 +586,22 @@
   <div class="dx-begin__wrap">
 
     <div>
-      <p class="dx-brow"><i class="ph-duotone ph-seal-check"></i> By physician review only</p>
-      <h2 class="dx-h">Send your history.<br>She reads it <em>herself</em>.</h2>
-      <p class="dx-begin__lede">
+      <p class="dx-brow" data-anim="rise"><i class="ph-duotone ph-seal-check"></i> By physician review only</p>
+      <h2 class="dx-h" data-anim="rise">Send your history.<br>She reads it <em>herself</em>.</h2>
+      <p class="dx-begin__lede" data-anim="rise">
         Medical history, current medications, allergies. A few minutes. Nothing is booked and
         nothing is charged at that stage &mdash; and if this is not the right infusion for you,
         she will tell you which one is, or that none of them are.
       </p>
-      <div class="dx-begin__acts">
-        <a class="dx-btn dx-btn--solid" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
+      <div class="dx-begin__acts" data-anim="rise" data-delay="120">
+        <a class="dx-btn dx-btn--solid" data-mag="0.24" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="dx-btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
       </div>
     </div>
 
-    <dl class="dx-begin__card">
+    <dl class="dx-begin__card" data-anim="pop" data-delay="140">
       <div><dt>Infusion</dt><dd>Fatty Liver Support IV</dd></div>
       <div><dt>Chair time</dt><dd>3 h 00</dd></div>
       <div><dt>Single session</dt><dd>$850</dd></div>
@@ -606,7 +613,7 @@
 
   </div>
 
-  <p class="dx-begin__legal">
+  <p class="dx-begin__legal" data-anim="rise">
     <b>Important disclaimer</b>
     Fatty Liver Support IV Infusion is offered solely as an adjunctive wellness support program
     intended to support general wellness, hydration, nutritional balance, oxidative balance and
@@ -634,15 +641,15 @@
   <div class="dx-more__wrap">
     <header class="dx-more__top">
       <div>
-        <p class="dx-brow"><i class="ph-duotone ph-squares-four"></i> The rest of the menu</p>
-        <h2 class="dx-h" style="font-size:clamp(1.6rem,3.2vw,2.4rem);margin:0">The other <em>nine</em>.</h2>
+        <p class="dx-brow" data-anim="rise"><i class="ph-duotone ph-squares-four"></i> The rest of the menu</p>
+        <h2 class="dx-h" data-anim="rise" style="font-size:clamp(1.6rem,3.2vw,2.4rem);margin:0">The other <em>nine</em>.</h2>
       </div>
       <a class="dx-more__all" href="/htmls/infusions.html"><span>The full menu</span><i class="ph ph-arrow-right"></i></a>
     </header>
 
-    <ol class="dx-more__track">
+    <ol class="dx-more__track" id="dxTrack">
 
-      <li class="dx-nxt" style="--bt:#5B7098">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#5B7098">
         <a href="/drips/healthy-aging/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/glynac.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-healthy-aging; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">I</span>
@@ -651,7 +658,7 @@
         </a>
       </li>
 
-      <li class="dx-nxt" style="--bt:#D9982A">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#D9982A">
         <a href="/drips/immune-support/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/immuneoboost.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-immune-support; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">II</span>
@@ -660,7 +667,7 @@
         </a>
       </li>
 
-      <li class="dx-nxt" style="--bt:#B34E37">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#B34E37">
         <a href="/drips/muscle-recovery/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/liquixo.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-muscle-recovery; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">III</span>
@@ -669,7 +676,7 @@
         </a>
       </li>
 
-      <li class="dx-nxt" style="--bt:#4F7D5E">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#4F7D5E">
         <a href="/drips/antioxidant-support/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/antioxidant.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-antioxidant-support; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">IV</span>
@@ -678,7 +685,7 @@
         </a>
       </li>
 
-      <li class="dx-nxt" style="--bt:#7FA08C">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#7FA08C">
         <a href="/drips/glutathione-iv-therapy/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/glutathione.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-glutathione-iv-therapy; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">V</span>
@@ -687,7 +694,7 @@
         </a>
       </li>
 
-      <li class="dx-nxt" style="--bt:#8C6239">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#8C6239">
         <a href="/drips/joint-skin-wellness/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/jointsupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-joint-skin-wellness; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">VI</span>
@@ -696,7 +703,7 @@
         </a>
       </li>
 
-      <li class="dx-nxt" style="--bt:#35707F">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#35707F">
         <a href="/drips/recovery-support/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/revive.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-recovery-support; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">VIII</span>
@@ -705,7 +712,7 @@
         </a>
       </li>
 
-      <li class="dx-nxt" style="--bt:#7A5F98">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#7A5F98">
         <a href="/drips/mind-focus-support/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/brainwellness.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-mind-focus-support; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">IX</span>
@@ -714,7 +721,7 @@
         </a>
       </li>
 
-      <li class="dx-nxt" style="--bt:#C1963F">
+      <li class="dx-nxt" data-anim="tilt" data-group="65" style="--bt:#C1963F">
         <a href="/drips/customized-infusion/">
           <figure class="dx-nxt__bag"><img src="/assets/drips/customized.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-customized-infusion; view-transition-class: bag"></figure>
           <span class="dx-nxt__no">X</span>
