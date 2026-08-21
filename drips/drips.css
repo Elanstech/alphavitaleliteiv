@@ -318,49 +318,84 @@
     align-items: start;
 }
 
-/* ---------- the bag ---------- */
-.dx-bag { position: sticky; top: calc(var(--head-h) + clamp(1.5rem, 5vh, 3rem)); display: grid; justify-items: center; }
-.dx-bag__eye {
-    width: 14px; height: 14px; margin-bottom: -7px;
-    border: 1px solid var(--rule-gold); border-radius: 50%;
-    background: var(--parchment);
-}
-.dx-bag__hang { width: 1px; height: clamp(26px, 4vh, 44px); background: linear-gradient(180deg, transparent, var(--rule-gold)); }
+/* ---------- the bag ----------
+   REBUILT AS SVG. It was a div with border-radius and a white blob for a
+   highlight, which is why it read as a toy. A real bag has a welded seam
+   inset from the edge, a hanger tab with a punched hole, unnumbered
+   graduations up one side, a printed label panel, twin ports at the base and
+   a narrow specular edge rather than a glow. All of that needs real geometry.
 
-.dx-bag__body {
-    position: relative;
+   The fluid is an SVG <rect> clipped to the interior path and scaled on the
+   Y axis — transform-box: fill-box makes transform-origin resolve against the
+   rect's own box, so it grows from the bottom of the bag rather than the
+   bottom of the viewBox. It is still one compositor property.
+
+   Graduations are deliberately UNNUMBERED. Printing millilitres on it would
+   be stating a volume this practice has not published.                        */
+.dx-bag { position: sticky; top: calc(var(--head-h) + clamp(1.5rem, 5vh, 3rem)); display: grid; justify-items: center; }
+
+.dx-bag__art {
     width: min(100%, 300px);
-    aspect-ratio: 43 / 74;
-    border: 1px solid var(--rule-gold);
-    border-radius: 18px 18px 30px 30px / 13px 13px 38px 38px;
-    background: rgba(255,255,255,.5);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 38px 66px -46px rgba(32,52,33,.5);
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 34px 46px rgba(32, 52, 33, .22));
+}
+
+/* the polycarbonate body */
+.dx-bag__shell { fill: rgba(255, 255, 255, .52); stroke: var(--rule-gold); stroke-width: 1.6; }
+/* the welded seam, inset from the edge — the single detail that most says
+   "medical" rather than "icon" */
+.dx-bag__seam  { fill: none; stroke: color-mix(in oklab, var(--tone) 34%, transparent); stroke-width: 1; stroke-dasharray: 5 4; }
+.dx-bag__tab   { fill: rgba(255, 255, 255, .6); stroke: var(--rule-gold); stroke-width: 1.6; }
+.dx-bag__hole  { fill: var(--parchment); stroke: var(--rule-gold); stroke-width: 1.4; }
+.dx-bag__tick  { stroke: color-mix(in oklab, var(--forest) 26%, transparent); stroke-width: 1.4; stroke-linecap: round; }
+.dx-bag__port  { fill: rgba(255, 255, 255, .7); stroke: var(--rule-gold); stroke-width: 1.5; }
+.dx-bag__spike { stroke: var(--rule-gold); stroke-width: 1.5; stroke-linecap: round; }
+
+/* the label panel */
+.dx-bag__plate { fill: rgba(251, 248, 241, .9); stroke: color-mix(in oklab, var(--tone) 28%, transparent); stroke-width: 1; }
+.dx-bag__no {
+    font-family: var(--dx-mono); font-size: 15px; font-weight: 500;
+    fill: var(--tone); letter-spacing: 1px;
+}
+.dx-bag__title {
+    font-family: var(--dx-display); font-size: 17px; font-weight: 600;
+    fill: var(--forest); letter-spacing: -.4px;
+}
+.dx-bag__sub {
+    font-family: var(--dx-mono); font-size: 7px; font-weight: 400;
+    fill: var(--mist); letter-spacing: 1.15px;
+}
+.dx-bag__rule { stroke: color-mix(in oklab, var(--tone) 30%, transparent); stroke-width: 1; }
+
+/* a narrow specular edge down the left face, not a glow */
+.dx-bag__gloss { fill: url(#dxGloss); }
+
+/* the fluid */
+.dx-bag__fluid {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    transform: scaleY(1);          /* full by default — motion is added below */
+}
+/* the surface sitting on top of the column */
+.dx-bag__line {
+    fill: color-mix(in oklab, var(--tone) 80%, transparent);
+    transform-box: fill-box;
+    transform-origin: bottom;
+}
+
+/* the phone gauge — the same information, a tenth of the height */
+.dx-bag__gauge {
+    display: none;
+    width: 100%; height: 11px;
+    border: 1px solid var(--rule-gold); border-radius: 999px;
+    background: rgba(255, 255, 255, .5);
     overflow: hidden;
 }
-.dx-bag__body::after {
-    content: ''; position: absolute; left: 9%; top: 5%; bottom: 7%; width: 12%;
-    border-radius: 999px; z-index: 3; pointer-events: none;
-    background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.1));
-}
-/* --mix is the stack of component tones, written inline in the markup */
-.dx-bag__fluid {
-    position: absolute; inset: 0; z-index: 1;
-    background: var(--mix, var(--tone));
-    transform-origin: bottom;
-    transform: scaleY(1);          /* full by default — see the note above */
-}
-.dx-bag__scale {
-    position: absolute; right: 0; top: 8%; bottom: 10%; z-index: 4;
-    display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end;
-    padding-right: 8px; pointer-events: none;
-}
-.dx-bag__scale span { display: block; width: 11px; height: 1px; background: var(--rule); }
-.dx-bag__scale span:nth-child(odd) { width: 19px; }
-
-.dx-bag__port {
-    width: 24px; height: 14px; margin-top: -1px;
-    border: 1px solid var(--rule-gold); border-top: 0;
-    border-radius: 0 0 5px 5px; background: var(--parchment);
+.dx-bag__gauge i {
+    display: block; width: 100%; height: 100%;
+    background: var(--mix-h, var(--tone));
+    transform-origin: left;
 }
 
 /* ---------- the ledger ---------- */
@@ -412,22 +447,51 @@
         .dx-bag__fluid {
             animation: dx-fill linear both;
             animation-timeline: --ledger;
-            /* start when the list is a third of the way up the viewport and
-               finish as its last row clears the middle */
+            /* starts as the list reaches the lower third of the viewport and
+               finishes as its last row clears the middle */
             animation-range: entry 62% exit 38%;
         }
         @keyframes dx-fill { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 
-        /* each row lifts as it crosses the middle band of the screen */
-        .dx-ing {
-            animation: dx-lit linear both;
-            animation-timeline: view();
-            animation-range: cover 32% cover 68%;
+        /* the surface rides the top of the column */
+        .dx-bag__line {
+            animation: dx-surface linear both;
+            animation-timeline: --ledger;
+            animation-range: entry 62% exit 38%;
         }
-        @keyframes dx-lit {
-            0%   { opacity: .32; }
-            46%, 54% { opacity: 1; }
-            100% { opacity: .32; }
+        /* the interior runs y 54 to 420, so the surface travels 361 units to
+           finish level with the top of a full bag */
+        @keyframes dx-surface {
+            from { transform: translateY(0); opacity: 0; }
+            3%   { opacity: 1; }
+            to   { transform: translateY(-361px); opacity: 1; }
+        }
+
+        /* EACH ROW ARRIVES ONCE AND STAYS.
+           This was a dim-and-undim: only the row crossing the middle of the
+           screen was legible and the other nine sat at 32% opacity, which is
+           why the list read as greyed out in every screenshot. A reveal that
+           holds is what was wanted — the row enters, lands, and remains
+           readable for as long as it is on screen. */
+        .dx-ing {
+            animation: dx-arrive linear both;
+            animation-timeline: view();
+            animation-range: entry 8% entry 58%;
+        }
+        @keyframes dx-arrive {
+            from { opacity: 0; transform: translateY(26px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        /* the chip and the numeral trail the row very slightly, so a row
+           assembles rather than sliding in as one block */
+        .dx-ing__key, .dx-ing__chip {
+            animation: dx-arrive-late linear both;
+            animation-timeline: view();
+            animation-range: entry 16% entry 72%;
+        }
+        @keyframes dx-arrive-late {
+            from { opacity: 0; }
+            to   { opacity: 1; }
         }
     }
 }
@@ -449,15 +513,19 @@
         background: rgba(251,248,241,.96);
         -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     }
-    .dx-bag__eye, .dx-bag__hang, .dx-bag__port, .dx-bag__scale { display: none; }
-    .dx-bag__body { width: 100%; aspect-ratio: auto; height: 11px; border-radius: 999px; box-shadow: none; }
-    .dx-bag__body::after { display: none; }
-    /* the gradient turns on its side with the gauge */
-    .dx-bag__fluid { background: var(--mix-h, var(--mix, var(--tone))); transform-origin: left; }
+    /* the drawn bag is a tall object and a phone has no room for it — it
+       becomes a gauge, and the SVG stands down entirely */
+    .dx-bag__art { display: none; }
+    .dx-bag__gauge { display: block; }
 
     @supports (animation-timeline: view()) {
         @media (prefers-reduced-motion: no-preference) {
-            @keyframes dx-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+            .dx-bag__gauge i {
+                animation: dx-gauge linear both;
+                animation-timeline: --ledger;
+                animation-range: entry 62% exit 38%;
+            }
+            @keyframes dx-gauge { from { transform: scaleX(0); } to { transform: scaleX(1); } }
         }
     }
     .dx-ing { grid-template-columns: 2.1rem minmax(0, 1fr) auto; gap: .75rem; }
@@ -484,13 +552,31 @@
 .dx-course__head { margin-bottom: var(--dx-stack); }
 
 .dx-weeks {
+    --wk-gap: clamp(.5rem, 1.2vw, 1rem);
+    --wk-pin: 12px;
+
     position: relative;
     display: grid; grid-template-columns: repeat(6, 1fr);
-    gap: clamp(.5rem, 1.2vw, 1rem);
+    gap: var(--wk-gap);
     padding-top: 2.6rem; margin-bottom: var(--dx-stack);
     list-style: none;
 }
-.dx-weeks__rail { position: absolute; left: 0; right: 0; top: .56rem; height: 1px; background: var(--rule); }
+/* THE RAIL ALIGNMENT, FIXED.
+   The rail ran the full width of the grid while the last pin sits at the LEFT
+   edge of the sixth column — so the line overshot the final marker by a whole
+   column and the timeline looked like it kept going after week six.
+
+   Six columns with five gaps makes each column (100% - 5g)/6 wide. The sixth
+   column therefore starts exactly one column-width in from the right edge, so
+   the rail has to stop there, plus half a pin to reach the pin's centre. Both
+   ends are now anchored to a pin centre rather than to the container. */
+.dx-weeks__rail {
+    position: absolute;
+    left: calc(var(--wk-pin) / 2);
+    right: calc((100% - 5 * var(--wk-gap)) / 6 - var(--wk-pin) / 2);
+    top: .56rem; height: 1px;
+    background: var(--rule);
+}
 .dx-weeks__fill {
     position: absolute; left: 0; top: -1px; height: 3px; width: 100%;
     transform-origin: left;
@@ -499,7 +585,7 @@
 .dx-wk { position: relative; }
 .dx-wk__pin {
     position: absolute; left: 0; top: -2.6rem;
-    width: 12px; height: 12px; border-radius: 50%;
+    width: var(--wk-pin, 12px); height: var(--wk-pin, 12px); border-radius: 50%;
     border: 1px solid var(--tone); background: var(--tone);
 }
 .dx-wk__no {
@@ -519,24 +605,30 @@
         .dx-weeks { timeline-scope: --weeks; view-timeline: --weeks block; }
         .dx-weeks__fill {
             animation: dx-draw linear both;
-            animation-timeline: --weeks; animation-range: entry 78% cover 42%;
+            animation-timeline: --weeks; animation-range: cover 18% cover 54%;
         }
         @keyframes dx-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
+        /* THE OFF-BY-ONE, FIXED. The old ranges mixed `entry` and `cover`
+           phases — `cover 8%` sits BEFORE `entry 78%` on a short element, so
+           the range was inverted and week one's pin never completed. That is
+           the hollow first marker in the screenshot. Every range below is now
+           in one phase and strictly increasing, and each pin lands just as the
+           rule arrives at it. */
         .dx-wk__pin {
             animation: dx-pin linear both;
-            animation-timeline: --weeks; animation-range: entry 78% cover 42%;
+            animation-timeline: --weeks;
         }
-        /* each pin lands as the rule reaches it — the delay is the position */
-        .dx-wk:nth-child(2) .dx-wk__pin { animation-range: entry 78% cover 8%; }
-        .dx-wk:nth-child(3) .dx-wk__pin { animation-range: entry 78% cover 15%; }
-        .dx-wk:nth-child(4) .dx-wk__pin { animation-range: entry 78% cover 24%; }
-        .dx-wk:nth-child(5) .dx-wk__pin { animation-range: entry 78% cover 31%; }
-        .dx-wk:nth-child(6) .dx-wk__pin { animation-range: entry 78% cover 38%; }
-        .dx-wk:nth-child(7) .dx-wk__pin { animation-range: entry 78% cover 45%; }
+        /* :nth-child(2) is week one — the rail span is the first child */
+        .dx-wk:nth-child(2) .dx-wk__pin { animation-range: cover 20% cover 24%; }
+        .dx-wk:nth-child(3) .dx-wk__pin { animation-range: cover 26% cover 30%; }
+        .dx-wk:nth-child(4) .dx-wk__pin { animation-range: cover 32% cover 36%; }
+        .dx-wk:nth-child(5) .dx-wk__pin { animation-range: cover 38% cover 42%; }
+        .dx-wk:nth-child(6) .dx-wk__pin { animation-range: cover 44% cover 48%; }
+        .dx-wk:nth-child(7) .dx-wk__pin { animation-range: cover 50% cover 54%; }
         @keyframes dx-pin {
-            0%, 92% { background: var(--cream); border-color: var(--rule-gold); transform: scale(.8); }
-            100%    { background: var(--tone);  border-color: var(--tone);      transform: scale(1); }
+            from { background: var(--cream); border-color: var(--rule-gold); transform: scale(.72); }
+            to   { background: var(--tone);  border-color: var(--tone);      transform: scale(1); }
         }
     }
 }
