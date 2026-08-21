@@ -1,30 +1,33 @@
 /* =============================================================================
    ALPHA VITAL ELITE IV — INFUSIONS.CSS
    The /htmls/infusions.html page. Loads AFTER /styles.css and inherits every
-   color, rule and layout token from its :root. Nothing here is redefined that
-   the site sheet already owns.
+   color, rule and layout token from its :root.
 
    Every class is ivx- prefixed, and every section owns its own responsive
    rules at the bottom of its own block — same discipline as the main sheet.
 
-     00 · TOKENS
+     00 · TOKENS & RHYTHM
      01 · ATOMS              eyebrow · folio · buttons · chips · segmented
      02 · HERO               #top
-     03 · THE CABINET        #cabinet — head, console, line
-     04 · THE CARD           cabinet view
-     05 · THE LEDGER         row view
-     06 · THE COMPOUND INDEX #compounds
-     07 · THE PROGRAM        #program
-     08 · IN EVERY RATE      #included
-     09 · BEGIN              #begin
-     10 · MOTION & FOCUS
+     03 · THE CONSOLE        the sticky control bar
+     04 · THE CABINET        #cabinet — head, line, grid
+     05 · THE CARD           cabinet view
+     06 · THE LEDGER         row view
+     07 · THE COMPOUND INDEX #compounds
+     08 · THE PROGRAM        #program
+     09 · IN EVERY RATE      #included
+     10 · BEGIN              #begin
+     11 · MOTION & FOCUS
 
-   BREAKPOINTS, same as the site: 1280 · 1080 · 900 · 640 · 420
+   BREAKPOINTS, same as the site: 1280 · 1180 · 1080 · 900 · 780 · 640 · 420
 ============================================================================= */
 
 
 /* =============================================================================
-   00 · TOKENS
+   00 · TOKENS & RHYTHM
+   Section padding and the gap between a section head and its content are
+   tokens, not per-section guesses — that is what keeps the vertical rhythm
+   identical from the hero to the footer at every width.
 ============================================================================= */
 .page-infusions {
     /* three voices, none of them used elsewhere on the site */
@@ -35,16 +38,35 @@
     /* every card, chip and panel reads its accent from here */
     --tone: var(--gold);
 
+    /* rhythm */
+    --pad-y:  clamp(4rem, 9vw, 7rem);
+    --stack:  clamp(2rem, 4.5vw, 3rem);
+    --gap:    clamp(.85rem, 1.5vw, 1.35rem);
+    --lab-w:  auto;
+
     /* local surfaces */
     --card:      #FFFFFF;
     --card-edge: rgba(32, 52, 33, .13);
-    --sink:      rgba(32, 52, 33, .04);
+    --sink:      rgba(32, 52, 33, .05);
 
     background: var(--cream);
     font-family: var(--fx-sans);
     font-size: clamp(0.95rem, 1.02vw, 1.02rem);
     line-height: 1.7;
 }
+
+@media (max-width: 900px) {
+    .page-infusions { --pad-y: clamp(3rem, 7vw, 4.25rem); --stack: 1.75rem; --gap: 1rem; --lab-w: 5.4rem; }
+}
+@media (max-width: 640px) {
+    .page-infusions { --pad-y: 2.85rem; --stack: 1.5rem; --gap: .9rem; }
+}
+@media (max-width: 420px) {
+    .page-infusions { --pad-y: 2.5rem; --lab-w: 4.5rem; }
+}
+
+/* anchor targets clear the fixed header */
+.page-infusions section[id] { scroll-margin-top: calc(var(--head-h) + 1rem); }
 
 /* entrance states, only when scripting is on */
 .has-js .ivx-anim     { opacity: 0; }
@@ -71,7 +93,7 @@
     box-shadow: 0 0 0 4px rgba(193, 150, 63, .18);
 }
 
-/* ---------- folio: the thin line across the top of the hero ---------- */
+/* ---------- folio ---------- */
 .ivx-folio {
     position: relative; z-index: 2;
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
@@ -80,6 +102,7 @@
     font-family: var(--fx-mono); font-size: .6rem;
     letter-spacing: .26em; text-transform: uppercase; color: var(--ink-soft);
 }
+.ivx-folio span { white-space: nowrap; }
 .ivx-folio__mid { color: var(--gold-deep); }
 
 /* ---------- buttons ---------- */
@@ -101,7 +124,8 @@
 
 /* ---------- chip ---------- */
 .ivx-chip {
-    padding: .55rem .95rem; min-height: 38px;
+    flex: 0 0 auto;
+    padding: .55rem .95rem; min-height: 40px;
     border: 1px solid var(--rule); border-radius: 999px;
     background: rgba(255, 255, 255, .62);
     font-family: var(--fx-mono); font-size: .58rem; font-weight: 500;
@@ -113,9 +137,14 @@
 .ivx-chip:hover { border-color: var(--gold); color: var(--forest); transform: translateY(-2px); }
 .ivx-chip.is-on { background: var(--forest); border-color: var(--forest); color: var(--cream); }
 
-/* ---------- segmented control ---------- */
+/* ---------- segmented control ----------
+   grid-auto-columns:1fr is load-bearing. The thumb is half the track minus the
+   inset, so both options MUST be the same width — with intrinsic widths the
+   thumb sat under the wrong label and ran past the right edge on the longer
+   one ("Program −10%"). */
 .ivx-seg {
-    position: relative; display: inline-grid; grid-auto-flow: column;
+    position: relative;
+    display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
     padding: 4px; border: 1px solid var(--rule); border-radius: 999px;
     background: rgba(255, 255, 255, .72);
 }
@@ -131,7 +160,7 @@
 .ivx-seg button {
     position: relative; z-index: 2;
     display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
-    padding: .55rem 1rem; min-height: 38px; border-radius: 999px;
+    padding: .55rem 1rem; min-height: 40px; border-radius: 999px;
     font-family: var(--fx-mono); font-size: .58rem; font-weight: 500;
     letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft);
     white-space: nowrap; transition: color .45s var(--ease);
@@ -140,12 +169,18 @@
 .ivx-seg button.is-on { color: var(--cream); }
 .ivx-seg--gold.is-b button.is-on { color: var(--forest-deep); }
 
+/* ---------- atoms · 900: thumb-sized targets ---------- */
+@media (max-width: 900px) {
+    .ivx-chip, .ivx-seg button { min-height: 44px; }
+}
+
 /* ---------- atoms · 640 ---------- */
 @media (max-width: 640px) {
     .ivx-folio { font-size: .52rem; letter-spacing: .14em; }
     .ivx-folio__mid { display: none; }
     .ivx-btn { width: 100%; }
-    .ivx-eyebrow { font-size: .58rem; letter-spacing: .22em; }
+    .ivx-eyebrow { font-size: .58rem; letter-spacing: .22em; margin-bottom: .9rem; }
+    .ivx-chip, .ivx-seg button { font-size: .55rem; letter-spacing: .1em; padding-inline: .85rem; }
 }
 
 
@@ -212,6 +247,7 @@
     line-height: 1.78; color: var(--ink-soft);
 }
 .ivx-hero__facts { display: flex; gap: clamp(1.5rem, 3.5vw, 3rem); }
+.ivx-hero__facts div { min-width: 0; }
 .ivx-hero__facts dt {
     font-family: var(--fx-mono); font-size: .54rem; letter-spacing: .2em;
     text-transform: uppercase; color: var(--mist); margin-bottom: .4rem;
@@ -250,45 +286,154 @@
     .ivx-hero__title { font-size: clamp(2.6rem, 6.4vw, 5.4rem); }
     .ivx-hero__stage { padding-block: 1.5rem; }
     .ivx-hero__base { margin-top: 1.5rem; padding-top: 1.2rem; }
+    .ivx-hero__acts { margin-top: 1.25rem; }
 }
 
 /* ---------- hero · 1080 ---------- */
 @media (max-width: 1080px) {
     .ivx-hero__dek { max-width: none; }
+    .ivx-hero__base { gap: 2rem; }
 }
 
-/* ---------- hero · 900 ---------- */
+/* ---------- hero · 900: the facts drop under the paragraph ---------- */
 @media (max-width: 900px) {
-    .ivx-hero { min-height: 0; padding-top: calc(var(--head-h) + 2.5rem); }
+    .ivx-hero { min-height: 0; padding-top: calc(var(--head-h) + 2.25rem); }
+    .ivx-hero__stage { padding-block: 2.25rem 2.75rem; }
     .ivx-hero__base { grid-template-columns: 1fr; align-items: start; gap: 1.75rem; }
-    .ivx-hero__facts { width: 100%; justify-content: space-between; gap: 1rem; }
+    .ivx-hero__facts { width: 100%; justify-content: flex-start; gap: 2.25rem; }
 }
 
 /* ---------- hero · 640 ---------- */
 @media (max-width: 640px) {
-    .ivx-hero__kicker { font-size: .56rem; letter-spacing: .16em; line-height: 1.6; align-items: flex-start; }
-    .ivx-hero__kicker .ivx-pip { margin-top: .45em; }
+    .ivx-hero__kicker {
+        align-items: flex-start; font-size: .56rem; letter-spacing: .16em; line-height: 1.7;
+    }
+    .ivx-hero__kicker .ivx-pip { margin-top: .5em; }
     .ivx-hero__title { font-size: clamp(2.5rem, 12vw, 3.6rem); }
     .ivx-hero__dek { font-size: .94rem; }
-    .ivx-hero__acts { width: 100%; }
-    .ivx-ticker__set { font-size: .6rem; letter-spacing: .18em; }
+    .ivx-hero__facts { justify-content: space-between; gap: 1rem; }
+    .ivx-hero__facts dd { font-size: 1.8rem; }
+    .ivx-hero__acts { width: 100%; gap: .6rem; }
+    .ivx-ticker__set { font-size: .58rem; letter-spacing: .18em; padding-block: .8rem; }
     .ivx-hero__weave { display: none; }
 }
 
 /* ---------- hero · 420 ---------- */
 @media (max-width: 420px) {
-    .ivx-hero__title { font-size: clamp(2.2rem, 13vw, 3rem); }
-    .ivx-hero__facts dd { font-size: 1.6rem; }
+    .ivx-hero__title { font-size: clamp(2.15rem, 13vw, 2.9rem); }
+    .ivx-hero__facts dd { font-size: 1.55rem; }
+    .ivx-hero__facts dt { font-size: .5rem; letter-spacing: .14em; }
 }
 
 
 /* =============================================================================
-   03 · THE CABINET  (#cabinet)
-   Head, the sticky console, and the line that draws as you read.
+   03 · THE CONSOLE
+   Sticky on anything wider than a tablet. --ivx-top is written by the Bar
+   module: it tracks the site header, so the console tucks under the bar when
+   the header is showing and rides up to the top edge once it retreats. It is
+   a plain block on phones, where a pinned toolbar would eat a third of the
+   screen.
+============================================================================= */
+.ivx-bar {
+    --ivx-top: calc(var(--head-h) + .5rem);
+
+    position: sticky; top: var(--ivx-top); z-index: 6;
+    max-width: var(--maxw); margin: var(--stack) auto clamp(1.25rem, 2.5vw, 1.75rem);
+    padding: .75rem .95rem;
+    border: 1px solid var(--rule); border-radius: 14px;
+    background: rgba(251, 248, 241, .86);
+    -webkit-backdrop-filter: blur(16px) saturate(1.12);
+            backdrop-filter: blur(16px) saturate(1.12);
+    box-shadow: 0 22px 44px -40px rgba(32, 52, 33, .55);
+    transition: top .5s var(--ease), padding .45s var(--ease),
+                border-color .45s var(--ease), box-shadow .45s var(--ease);
+}
+.ivx-bar.is-stuck {
+    padding-block: .6rem;
+    border-color: var(--rule-gold);
+    box-shadow: 0 26px 48px -28px rgba(32, 52, 33, .38);
+}
+
+.ivx-bar__row {
+    display: flex; align-items: center;
+    gap: .55rem clamp(.9rem, 2vw, 1.75rem);
+}
+.ivx-bar__row--chips {
+    margin-top: .7rem; padding-top: .7rem;
+    border-top: 1px solid var(--rule);
+}
+.ivx-bar__set { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+.ivx-bar__set--end { margin-left: auto; }
+.ivx-bar__rail { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+
+.ivx-bar__lab {
+    flex: 0 0 auto;
+    font-family: var(--fx-mono); font-size: .54rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--mist);
+    margin-right: .35rem; white-space: nowrap;
+}
+.ivx-bar__count {
+    flex: 0 0 auto; margin: 0 auto;
+    font-family: var(--fx-mono); font-size: .58rem;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
+    white-space: nowrap;
+}
+.ivx-bar__count b {
+    font-size: 1.15rem; font-weight: 600; color: var(--gold-deep);
+    font-variant-numeric: tabular-nums; margin-right: .2rem;
+}
+
+/* ---------- console · 1180: the chip rails start scrolling ---------- */
+@media (max-width: 1180px) {
+    .ivx-bar__row--chips { flex-wrap: wrap; }
+    .ivx-bar__set--end { margin-left: 0; }
+    .ivx-bar__row--chips .ivx-bar__set { flex: 1 1 100%; }
+    .ivx-bar__rail {
+        flex: 1 1 auto;
+        overflow-x: auto; overscroll-behavior-x: contain;
+        scrollbar-width: none; padding-block: 2px;
+        -webkit-mask-image: linear-gradient(90deg, #000 90%, transparent);
+                mask-image: linear-gradient(90deg, #000 90%, transparent);
+    }
+    .ivx-bar__rail::-webkit-scrollbar { display: none; }
+}
+
+/* ---------- console · 900: unpinned, one control per line ---------- */
+@media (max-width: 900px) {
+    .ivx-bar {
+        position: static;
+        padding: .85rem;
+        border-radius: 10px;
+        -webkit-backdrop-filter: none; backdrop-filter: none;
+        background: rgba(251, 248, 241, .96);
+    }
+    .ivx-bar__row { flex-wrap: wrap; gap: .55rem; }
+    .ivx-bar__row--top .ivx-bar__set,
+    .ivx-bar__row--chips .ivx-bar__set { flex: 1 1 100%; flex-wrap: nowrap; }
+    .ivx-bar__lab { min-width: var(--lab-w); margin-right: 0; }
+    .ivx-seg { flex: 1 1 auto; }
+    .ivx-bar__count {
+        order: 3; flex: 1 1 100%; margin: .15rem 0 0;
+        padding-left: calc(var(--lab-w) + .4rem);
+        text-align: left;
+    }
+    .ivx-bar__count b { font-size: 1rem; }
+}
+
+/* ---------- console · 420 ---------- */
+@media (max-width: 420px) {
+    .ivx-bar { padding: .75rem .7rem; }
+    .ivx-bar__lab { font-size: .5rem; letter-spacing: .14em; }
+    .ivx-bar__count { font-size: .52rem; }
+}
+
+
+/* =============================================================================
+   04 · THE CABINET  (#cabinet)
 ============================================================================= */
 .ivx-cab {
     position: relative;
-    padding: clamp(4rem, 9vw, 7rem) var(--gut) clamp(3.5rem, 8vw, 6rem);
+    padding: var(--pad-y) var(--gut);
     background: var(--parchment);
 }
 .ivx-cab::before {
@@ -301,7 +446,7 @@
 /* the IV line, drawn by scroll */
 .ivx-line {
     position: absolute; left: clamp(.9rem, 2.2vw, 2.4rem);
-    top: clamp(4rem, 9vw, 7rem); bottom: clamp(3.5rem, 8vw, 6rem);
+    top: var(--pad-y); bottom: var(--pad-y);
     width: 1px; background: var(--rule);
 }
 .ivx-line__fill {
@@ -328,43 +473,7 @@
     padding-left: 1.2rem; border-left: 1px solid var(--rule-gold);
 }
 
-/* ---------- the console ---------- */
-.ivx-bar {
-    position: sticky; top: calc(var(--head-h) + .5rem); z-index: 6;
-    max-width: var(--maxw); margin: clamp(2rem, 4.5vw, 3rem) auto clamp(1.5rem, 3vw, 2rem);
-    padding: .75rem .95rem;
-    border: 1px solid var(--rule); border-radius: 14px;
-    background: rgba(251, 248, 241, .84);
-    -webkit-backdrop-filter: blur(16px) saturate(1.1);
-            backdrop-filter: blur(16px) saturate(1.1);
-    box-shadow: 0 22px 44px -38px rgba(32, 52, 33, .7);
-}
-.ivx-bar__row {
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: .6rem clamp(1rem, 2.5vw, 2rem);
-}
-.ivx-bar__row--chips {
-    margin-top: .7rem; padding-top: .7rem;
-    border-top: 1px solid var(--rule);
-}
-.ivx-bar__set { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
-.ivx-bar__set--end { margin-left: auto; }
-.ivx-bar__lab {
-    font-family: var(--fx-mono); font-size: .54rem; letter-spacing: .2em;
-    text-transform: uppercase; color: var(--mist); margin-right: .35rem; white-space: nowrap;
-}
-.ivx-bar__count {
-    margin: 0 auto;
-    font-family: var(--fx-mono); font-size: .58rem;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
-    white-space: nowrap;
-}
-.ivx-bar__count b {
-    font-size: 1.15rem; font-weight: 600; color: var(--gold-deep);
-    font-variant-numeric: tabular-nums; margin-right: .2rem;
-}
-
-/* ---------- the nothing-here line ---------- */
+/* the line the filter leaves behind when nothing matches */
 .ivx-cab__empty {
     display: none;
     max-width: var(--maxw); margin: 0 auto;
@@ -375,9 +484,10 @@
 }
 .ivx-cab__empty.is-on { display: block; }
 .ivx-cab__empty button {
+    display: inline-block; margin-left: .6rem; padding-bottom: .1rem;
     font-family: var(--fx-mono); font-style: normal; font-size: .6rem;
     letter-spacing: .18em; text-transform: uppercase; color: var(--gold-deep);
-    border-bottom: 1px solid var(--rule-gold); padding-bottom: .1rem; margin-left: .6rem;
+    border-bottom: 1px solid var(--rule-gold);
     transition: color .35s var(--ease), border-color .35s var(--ease);
 }
 .ivx-cab__empty button:hover { color: var(--forest); border-color: var(--forest); }
@@ -387,33 +497,24 @@
     .ivx-line { display: none; }
 }
 
-/* ---------- cabinet · 900 ---------- */
-@media (max-width: 900px) {
-    .ivx-bar { position: static; }
-    .ivx-bar__count { order: 3; width: 100%; margin: 0; text-align: left; }
-}
-
 /* ---------- cabinet · 640 ---------- */
 @media (max-width: 640px) {
-    .ivx-cab { padding-top: clamp(3rem, 7vw, 4.5rem); }
-    .ivx-cab__title { font-size: clamp(1.95rem, 8.5vw, 2.7rem); }
+    .ivx-cab__title { font-size: clamp(1.95rem, 8.5vw, 2.7rem); margin-bottom: 1rem; }
     .ivx-cab__lede { font-size: .94rem; padding-left: 1rem; }
-    .ivx-bar { padding: .8rem; border-radius: 10px; }
-    .ivx-bar__set--end { margin-left: 0; }
-    .ivx-chip, .ivx-seg button { font-size: .54rem; letter-spacing: .1em; padding-inline: .8rem; }
-    .ivx-bar__lab { width: 100%; margin: .2rem 0 .1rem; }
+    .ivx-cab__empty { font-size: 1.05rem; padding-block: 2.25rem; }
+    .ivx-cab__empty button { display: block; margin: .8rem auto 0; width: max-content; }
 }
 
 
 /* =============================================================================
-   04 · THE CARD  (cabinet view)
+   05 · THE CARD  (cabinet view)
    Fixed grid, fluid contents: the body flexes and the rate line is pushed to
    the bottom with margin-top:auto, so every rate in a row shares a baseline.
 ============================================================================= */
 .ivx-grid {
     position: relative; z-index: 2;
     display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(.85rem, 1.5vw, 1.35rem);
+    gap: var(--gap);
     max-width: var(--maxw); margin: 0 auto;
 }
 
@@ -540,29 +641,45 @@
 .ivx-grid.is-program .ivx-per span:nth-child(2) { display: inline; }
 .ivx-grid.is-program .ivx-card__rate b { color: var(--gold-deep); }
 
-/* ---------- card · 1180 ---------- */
+/* ---------- card · 1180: two up ---------- */
 @media (max-width: 1180px) {
     .ivx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* ---------- card · 640 ---------- */
-@media (max-width: 640px) {
+/* ---------- card · 900: the bag gives back some height ---------- */
+@media (max-width: 900px) {
+    .ivx-card__bag { padding-block: .35rem .9rem; }
+    .ivx-card__bag img { height: clamp(130px, 20vw, 165px); }
+    .ivx-card__in { padding: 1.05rem 1.05rem .95rem; }
+}
+
+/* ---------- card · 780: one up, and the tilt stands down ---------- */
+@media (max-width: 780px) {
     .ivx-grid { grid-template-columns: 1fr; }
     .ivx-card { perspective: none; }
-    .ivx-card__bag img { height: 165px; filter: none; }
-    .ivx-card__name { font-size: 1.2rem; }
-    .ivx-card__note { font-size: .88rem; }
+    .ivx-card__bag img { height: 170px; filter: none; }
+}
+
+/* ---------- card · 640 ---------- */
+@media (max-width: 640px) {
+    .ivx-card__name { font-size: 1.22rem; }
+    .ivx-card__note { font-size: .88rem; margin-bottom: .8rem; }
+    .ivx-card__foot { margin-top: 1rem; }
 }
 
 /* ---------- card · 420 ---------- */
 @media (max-width: 420px) {
+    .ivx-card__in { padding: 1rem .95rem .9rem; }
     .ivx-card__mix li { font-size: .5rem; padding: .26rem .45rem; }
     .ivx-card__no { font-size: 1.5rem; }
+    .ivx-card__bag img { height: 150px; }
+    .ivx-card__foot { flex-direction: column; align-items: flex-start; gap: .55rem; }
+    .ivx-card__rate { text-align: left; }
 }
 
 
 /* =============================================================================
-   05 · THE LEDGER  (row view)
+   06 · THE LEDGER  (row view)
    Same nodes, different arrangement. .ivx-card__top goes display:contents so
    the numeral and the arrow become grid items of the row instead of a header.
 ============================================================================= */
@@ -607,38 +724,43 @@
 .ivx-grid.is-ledger .ivx-per { margin: 0; }
 .ivx-grid.is-ledger .ivx-card__go { grid-column: 5; justify-self: end; }
 
-/* ---------- ledger · 900 ---------- */
-@media (max-width: 900px) {
+/* ---------- ledger · 1080 ---------- */
+@media (max-width: 1080px) {
     .ivx-grid.is-ledger .ivx-card__in {
         grid-template-columns: 2.2rem 38px minmax(0, 1fr) auto 2rem;
         gap: 1rem;
     }
     .ivx-grid.is-ledger .ivx-card__bag img { height: 36px; }
+    .ivx-grid.is-ledger .ivx-per { display: none; }
 }
 
-/* ---------- ledger · 640: the bag stands down, the row stacks ---------- */
-@media (max-width: 640px) {
+/* ---------- ledger · 780: the bag stands down, the rate drops below ---------- */
+@media (max-width: 780px) {
     .ivx-grid.is-ledger .ivx-card__in {
         grid-template-columns: 2rem minmax(0, 1fr) 2.2rem;
-        gap: .45rem .9rem; padding: 1rem .3rem;
+        gap: .5rem .9rem; padding: 1rem .35rem;
     }
     .ivx-grid.is-ledger .ivx-card__bag { display: none; }
-    .ivx-grid.is-ledger .ivx-card__no { grid-row: 1; }
-    .ivx-grid.is-ledger .ivx-card__body { grid-column: 2; }
+    .ivx-grid.is-ledger .ivx-card__no { grid-column: 1; grid-row: 1; }
+    .ivx-grid.is-ledger .ivx-card__body { grid-column: 2; align-items: flex-start; flex-direction: column; gap: .2rem; }
     .ivx-grid.is-ledger .ivx-card__go { grid-column: 3; grid-row: 1; }
     .ivx-grid.is-ledger .ivx-card__foot { grid-column: 2 / 4; gap: 1.25rem; }
     .ivx-grid.is-ledger .ivx-card__rate b { min-width: 0; text-align: left; }
 }
 
+/* ---------- ledger · 420 ---------- */
+@media (max-width: 420px) {
+    .ivx-grid.is-ledger .ivx-card__name { font-size: 1rem; }
+    .ivx-grid.is-ledger .ivx-card__foot { gap: .9rem; }
+}
+
 
 /* =============================================================================
-   06 · THE COMPOUND INDEX  (#compounds)
-   The keys on the left, one panel on the right. Every panel stays in the DOM;
-   only the text is rewritten, so nothing here can be lost to a failed script.
+   07 · THE COMPOUND INDEX  (#compounds)
 ============================================================================= */
 .ivx-idx {
     position: relative;
-    padding: clamp(4rem, 9vw, 7rem) var(--gut);
+    padding: var(--pad-y) var(--gut);
     background: var(--cream);
     overflow: clip;
 }
@@ -650,7 +772,7 @@
 }
 .ivx-idx__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
 
-.ivx-idx__head { margin-bottom: clamp(2rem, 4.5vw, 3rem); }
+.ivx-idx__head { margin-bottom: var(--stack); }
 .ivx-idx__title {
     font-family: var(--fx-display); font-optical-sizing: auto; font-weight: 400;
     font-size: clamp(2rem, 5vw, 4rem);
@@ -677,7 +799,7 @@
 .ivx-key {
     position: relative; width: 100%;
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    padding: .85rem .3rem; min-height: 52px;
+    padding: .85rem .3rem; min-height: 54px;
     border-bottom: 1px solid var(--rule);
     font-family: var(--fx-display); font-weight: 400; font-size: 1.05rem;
     letter-spacing: -.01em; color: var(--ink-soft); text-align: left;
@@ -686,10 +808,10 @@
 .ivx-key::before {
     content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
     background: var(--gold);
-    transform: scaleY(0); transform-origin: center;
-    transition: transform .45s var(--ease);
+    transform: scaleY(0); transition: transform .45s var(--ease);
 }
 .ivx-key b {
+    flex: 0 0 auto;
     font-family: var(--fx-mono); font-weight: 500; font-size: .62rem;
     letter-spacing: .12em; color: var(--mist);
     padding: .18rem .5rem; border: 1px solid var(--rule); border-radius: 999px;
@@ -741,7 +863,7 @@
 .ivx-panel__list li { --tone: var(--gold); }
 .ivx-panel__list a {
     display: flex; align-items: center; gap: .75rem;
-    padding: .6rem .8rem;
+    padding: .65rem .8rem; min-height: 46px;
     border: 1px solid var(--rule); border-left: 2px solid var(--tone);
     border-radius: 3px; background: rgba(255, 255, 255, .6);
     font-size: .92rem; color: var(--ink-soft);
@@ -754,60 +876,69 @@
 }
 .ivx-panel__list a:hover {
     transform: translateX(4px); color: var(--forest);
-    border-color: var(--tone); border-left-color: var(--tone);
-    background: #fff;
+    border-color: var(--tone); background: #fff;
+}
+
+.ivx-idx__legal {
+    max-width: 80ch; margin-top: var(--stack);
+    font-size: .76rem; line-height: 1.7; color: var(--mist);
 }
 
 /* ---------- index · 1080 ---------- */
 @media (max-width: 1080px) {
     .ivx-idx__lede { max-width: none; }
     .ivx-idx__stage { grid-template-columns: minmax(0, .95fr) minmax(0, 1fr); }
+    .ivx-key { font-size: 1rem; }
 }
 
-/* ---------- index · 900: keys become a wrapped chip rail ---------- */
+/* ---------- index · 900: the keys become one scrolling rail ---------- */
 @media (max-width: 900px) {
     .ivx-idx__stage { grid-template-columns: 1fr; gap: 1.5rem; }
     .ivx-idx__keys {
-        flex-direction: row; flex-wrap: wrap; gap: .4rem;
+        flex-direction: row; flex-wrap: nowrap; gap: .4rem;
         border-top: 0;
+        overflow-x: auto; overscroll-behavior-x: contain;
+        scrollbar-width: none; padding-bottom: .35rem;
+        margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut);
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 92%, transparent);
+                mask-image: linear-gradient(90deg, transparent, #000 4%, #000 92%, transparent);
     }
-    .ivx-idx__keys li { display: block; }
+    .ivx-idx__keys::-webkit-scrollbar { display: none; }
+    .ivx-idx__keys li { flex: 0 0 auto; }
     .ivx-key {
-        width: auto; min-height: 44px; gap: .55rem;
+        width: auto; min-height: 46px; gap: .55rem;
         padding: .5rem .9rem;
         border: 1px solid var(--rule); border-radius: 999px;
-        font-size: .95rem;
+        font-size: .95rem; white-space: nowrap;
     }
     .ivx-key::before { display: none; }
     .ivx-key:hover, .ivx-key.is-on { padding-left: .9rem; }
     .ivx-key.is-on { background: var(--forest); border-color: var(--forest); color: var(--cream); }
-    .ivx-key b { font-size: .55rem; padding: .12rem .4rem; }
+    .ivx-key.is-on b { background: var(--gold-lite); border-color: var(--gold-lite); }
+    .ivx-key b { font-size: .55rem; padding: .12rem .42rem; }
 }
 
 /* ---------- index · 640 ---------- */
 @media (max-width: 640px) {
-    .ivx-idx { padding-block: clamp(3rem, 7vw, 4.5rem); }
     .ivx-idx__title { font-size: clamp(1.9rem, 8.5vw, 2.6rem); }
     .ivx-idx__lede { font-size: .94rem; padding-left: 1rem; }
-    .ivx-key { font-size: .88rem; padding: .5rem .75rem; }
-    .ivx-panel { padding: 1.25rem 1.1rem; }
+    .ivx-key { font-size: .88rem; padding: .5rem .8rem; }
+    .ivx-panel { padding: 1.35rem 1.15rem; }
+    .ivx-panel__name { font-size: 1.7rem; }
     .ivx-panel__what { font-size: .93rem; }
-    .ivx-panel__list a { font-size: .87rem; }
+    .ivx-panel__list a { font-size: .87rem; gap: .5rem; }
+    .ivx-panel__list a i { min-width: 1.6rem; }
     .ivx-panel__ghost { font-size: 6rem; }
-}
-
-.ivx-idx__legal {
-    max-width: 80ch; margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
-    font-size: .76rem; line-height: 1.7; color: var(--mist);
+    .ivx-idx__legal { font-size: .72rem; }
 }
 
 
 /* =============================================================================
-   07 · THE PROGRAM  (#program)
+   08 · THE PROGRAM  (#program)
 ============================================================================= */
 .ivx-prog {
     position: relative;
-    padding: clamp(4rem, 9vw, 7rem) var(--gut);
+    padding: var(--pad-y) var(--gut);
     background: var(--parchment);
 }
 .ivx-prog::before {
@@ -816,7 +947,7 @@
 }
 .ivx-prog__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
 
-.ivx-prog__head { margin-bottom: clamp(2rem, 4.5vw, 3rem); }
+.ivx-prog__head { margin-bottom: var(--stack); }
 .ivx-prog__title {
     font-family: var(--fx-display); font-optical-sizing: auto; font-weight: 400;
     font-size: clamp(2rem, 5vw, 3.9rem);
@@ -839,7 +970,7 @@
 .ivx-pick {
     --tone: var(--gold);
     display: flex; align-items: center; gap: .8rem;
-    padding: .7rem .9rem; min-height: 48px;
+    padding: .7rem .9rem; min-height: 50px;
     border: 1px solid var(--rule); border-radius: 3px;
     background: rgba(255, 255, 255, .55);
     font-family: var(--fx-sans); font-size: .92rem; font-weight: 500;
@@ -848,13 +979,12 @@
                 color .4s var(--ease), transform .4s var(--ease);
 }
 .ivx-pick i {
+    flex: 0 0 auto;
     font-family: var(--fx-display); font-style: italic; font-size: .82rem;
     color: var(--tone); min-width: 1.7rem;
 }
 .ivx-pick:hover { transform: translateX(3px); border-color: var(--tone); color: var(--forest); background: #fff; }
-.ivx-pick.is-on {
-    background: var(--forest); border-color: var(--forest); color: var(--cream);
-}
+.ivx-pick.is-on { background: var(--forest); border-color: var(--forest); color: var(--cream); }
 .ivx-pick.is-on i { color: var(--gold-lite); }
 
 /* ---------- the arithmetic ---------- */
@@ -880,7 +1010,7 @@
 .ivx-math__rows { display: grid; gap: 1.1rem; }
 .ivx-math__row {
     display: grid; grid-template-columns: minmax(0, 1fr) auto;
-    align-items: baseline; gap: .3rem 1rem;
+    align-items: baseline; gap: .35rem 1rem;
 }
 .ivx-math__row dt {
     font-family: var(--fx-mono); font-size: .58rem;
@@ -924,32 +1054,46 @@
     font-size: .82rem; line-height: 1.7; color: var(--mist);
 }
 
-/* ---------- program · 900 ---------- */
+/* ---------- program · 900: the picker becomes a grid above the figures ---------- */
 @media (max-width: 900px) {
-    .ivx-prog__console { grid-template-columns: 1fr; }
-    .ivx-prog__picker { flex-direction: row; flex-wrap: wrap; }
-    .ivx-pick { flex: 1 1 auto; min-width: 8.5rem; font-size: .86rem; padding: .6rem .75rem; }
-    .ivx-pick:hover { transform: none; }
+    .ivx-prog__console { grid-template-columns: 1fr; gap: 1.25rem; }
     .ivx-prog__lede { max-width: none; }
+    .ivx-prog__picker {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: .4rem;
+    }
+    .ivx-pick {
+        gap: .5rem; padding: .6rem .7rem; font-size: .85rem; min-height: 48px;
+    }
+    .ivx-pick:hover { transform: none; }
+    .ivx-pick i { min-width: 1.3rem; font-size: .74rem; }
 }
 
 /* ---------- program · 640 ---------- */
 @media (max-width: 640px) {
-    .ivx-prog { padding-block: clamp(3rem, 7vw, 4.5rem); }
     .ivx-prog__title { font-size: clamp(1.9rem, 8.5vw, 2.6rem); }
-    .ivx-math { padding: 1.25rem 1.1rem; }
+    .ivx-prog__picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ivx-math { padding: 1.35rem 1.15rem; }
+    .ivx-math__name { font-size: 1.45rem; }
     .ivx-math__row dd { font-size: 1.15rem; }
-    .ivx-math__save { flex-direction: column; align-items: flex-start; gap: .3rem; }
-    .ivx-pick { min-width: 0; width: 100%; }
+    .ivx-math__save { flex-direction: column; align-items: flex-start; gap: .35rem; }
+    .ivx-math__save b { font-size: 2.1rem; }
+    .ivx-math__note { font-size: .78rem; }
+}
+
+/* ---------- program · 420 ---------- */
+@media (max-width: 420px) {
+    .ivx-prog__picker { grid-template-columns: 1fr; }
+    .ivx-pick { font-size: .88rem; }
 }
 
 
 /* =============================================================================
-   08 · IN EVERY RATE  (#included)
+   09 · IN EVERY RATE  (#included)
 ============================================================================= */
 .ivx-inc {
     position: relative;
-    padding: clamp(4rem, 9vw, 6.5rem) var(--gut);
+    padding: var(--pad-y) var(--gut);
     background: var(--cream);
 }
 .ivx-inc::before {
@@ -957,7 +1101,7 @@
     background: radial-gradient(60% 40% at 50% 0%, rgba(143, 190, 155, .16), transparent 62%);
 }
 .ivx-inc__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
-.ivx-inc__head { margin-bottom: clamp(2rem, 4.5vw, 3rem); }
+.ivx-inc__head { margin-bottom: var(--stack); }
 .ivx-inc__title {
     font-family: var(--fx-display); font-optical-sizing: auto; font-weight: 400;
     font-size: clamp(1.9rem, 4.4vw, 3.4rem);
@@ -967,7 +1111,7 @@
 
 .ivx-inc__grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: clamp(1rem, 2.5vw, 2rem); list-style: none;
+    gap: var(--gap); list-style: none;
 }
 .ivx-inc__item {
     position: relative;
@@ -991,21 +1135,22 @@
 /* ---------- included · 900 ---------- */
 @media (max-width: 900px) {
     .ivx-inc__grid { grid-template-columns: 1fr; }
+    .ivx-inc__item { padding: 1.35rem 1.15rem; }
+    .ivx-inc__item i { font-size: 1.6rem; margin-bottom: .7rem; }
 }
 
 /* ---------- included · 640 ---------- */
 @media (max-width: 640px) {
-    .ivx-inc { padding-block: clamp(3rem, 7vw, 4.5rem); }
     .ivx-inc__title { font-size: clamp(1.75rem, 8vw, 2.4rem); }
 }
 
 
 /* =============================================================================
-   09 · BEGIN  (#begin)
+   10 · BEGIN  (#begin)
 ============================================================================= */
 .ivx-begin {
     position: relative;
-    padding: clamp(3.5rem, 8vw, 6rem) var(--gut) clamp(4rem, 9vw, 6.5rem);
+    padding: var(--pad-y) var(--gut);
     background: var(--parchment);
     overflow: clip;
 }
@@ -1040,14 +1185,14 @@
 }
 
 .ivx-begin__legal {
-    max-width: 84ch; margin: clamp(2.5rem, 5vw, 4rem) auto 0;
+    max-width: 84ch; margin: var(--stack) auto 0;
     padding-top: 1.4rem; border-top: 1px solid var(--rule);
     font-size: .76rem; line-height: 1.75; color: var(--mist);
 }
 
-/* ---------- begin · 980 ---------- */
+/* ---------- begin · 980: the photo leads ---------- */
 @media (max-width: 980px) {
-    .ivx-begin__wrap { grid-template-columns: 1fr; }
+    .ivx-begin__wrap { grid-template-columns: 1fr; gap: 1.75rem; }
     .ivx-begin__shot { order: -1; }
     .ivx-begin__shot img { aspect-ratio: 16 / 10; }
     .ivx-begin__lede { max-width: none; }
@@ -1056,12 +1201,15 @@
 /* ---------- begin · 640 ---------- */
 @media (max-width: 640px) {
     .ivx-begin__title { font-size: clamp(1.8rem, 8vw, 2.5rem); }
-    .ivx-begin__acts { width: 100%; }
+    .ivx-begin__lede { font-size: .94rem; margin-bottom: 1.4rem; }
+    .ivx-begin__acts { width: 100%; gap: .6rem; }
+    .ivx-begin__shot img { aspect-ratio: 3 / 2; }
+    .ivx-begin__legal { font-size: .72rem; }
 }
 
 
 /* =============================================================================
-   10 · MOTION & FOCUS
+   11 · MOTION & FOCUS
 ============================================================================= */
 .page-infusions :focus-visible {
     outline: 2px solid var(--gold);
@@ -1073,5 +1221,5 @@
     .ivx-anim, .ivx-card { opacity: 1 !important; }
     .ivx-mask__in { transform: none !important; }
     .ivx-ticker { display: none; }
-    .ivx-card__in, .ivx-inc__item, .ivx-panel__list a, .ivx-pick { transition: none; }
+    .ivx-card__in, .ivx-inc__item, .ivx-panel__list a, .ivx-pick, .ivx-bar { transition: none; }
 }
