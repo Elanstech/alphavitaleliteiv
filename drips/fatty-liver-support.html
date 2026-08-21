@@ -30,8 +30,8 @@
 </noscript>
 
 <link rel="icon" type="image/png" href="/logo.png">
-<link rel="stylesheet" href="../styles.css">
-<link rel="stylesheet" href="drips.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/css/drips.css">
 </head>
 
 <!-- ==============================================================
@@ -41,7 +41,7 @@
      Liver Support is #5F7A55, matching the plate on the home page, the row
      in the header flyout and the card on the menu page.
      ============================================================== -->
-<body class="page-drip" style="--tone:#5F7A55">
+<body class="page-drip" data-drip="liver-support" style="--tone:#5F7A55">
 
 <!-- ==============================================================
      HEADER  (shared — identical markup on every page)
@@ -165,12 +165,6 @@
   <span class="dx-hero__glow" aria-hidden="true"></span>
   <span class="dx-hero__grid" aria-hidden="true"></span>
 
-  <p class="dx-hero__folio dx-anim">
-    <span>Est. Middle Village · Queens</span>
-    <span class="dx-hero__folio-mid">Infusion <b>No. VII</b> of ten</span>
-    <span>Appointments only</span>
-  </p>
-
   <div class="dx-hero__stage">
 
     <div class="dx-hero__say">
@@ -208,11 +202,9 @@
       </div>
 
       <div class="dx-rig__tube" id="dxTube" aria-hidden="true">
+        <span class="dx-rig__chamber"></span>
         <span class="dx-rig__drop" id="dxDrop"></span>
       </div>
-      <div class="dx-rig__pool" id="dxPool" aria-hidden="true"></div>
-
-      <p class="dx-rig__rate"><b>3 h 00</b> · rate set and adjusted by Dr. Aronov</p>
     </div>
 
   </div>
@@ -285,24 +277,28 @@
 
 <!-- ==============================================================
      03 · THE COMPOSITION  (#composition)   ←  THE SIGNATURE
-     The bag fills as the list is read. Each row declares its own share of
+     The bag fills as the ledger is read. Each row declares its own share of
      the bag with data-h and its own accent with data-tone; drips.js builds
-     the bands from those two attributes, so the bag and the list can never
+     the bands from those two attributes, so the bag and the ledger can never
      disagree about what is in it.
 
      data-h values are relative, not percentages — the script normalises
      them, so a formulation with three components fills exactly as well as
      this one with ten.
+
+     COPY RULE: one line per component, twenty words maximum. Anything that
+     needs a paragraph belongs in the questions further down. The bag is the
+     subject of this section; prose was burying it.
      ============================================================== -->
-<section class="dx-mix" id="composition" data-port="The composition">
+<section class="dx-mix" id="composition" data-port="The formulation">
   <div class="dx-mix__wrap">
 
     <header class="dx-mix__head">
-      <p class="dx-brow dx-brow--light"><i class="ph-duotone ph-flask"></i> What is in the bag</p>
-      <h2 class="dx-h dx-h--light">Ten components,<br>in <em>one order</em>.</h2>
-      <p class="dx-lede dx-lede--light">
-        Every component is named, and every line says what that component is involved in
-        &mdash; not what the infusion will do for you. Read down and watch the bag fill.
+      <p class="dx-brow"><i class="ph-duotone ph-flask"></i> The formulation</p>
+      <h2 class="dx-h">Everything in it,<br>and <em>nothing else</em>.</h2>
+      <p class="dx-lede">
+        No proprietary blend and no undisclosed filler. Ten components, each one named,
+        each one mixed by the physician who administers it.
       </p>
     </header>
 
@@ -328,141 +324,104 @@
         <p class="dx-bag__read"><b id="dxFill">0</b> <span>per cent composed</span></p>
       </div>
 
-      <!-- the list -->
+      <!-- the ledger -->
       <ol class="dx-mix__list">
 
         <li class="dx-ing" data-h="30" data-tone="#7FA08C">
           <span class="dx-ing__key">01</span>
           <div>
             <h3 class="dx-ing__name">Hydration fluid</h3>
-            <p class="dx-ing__what">
-              The carrier everything else arrives in, and supportive care in its own right.
-              It is also what makes a three-hour infusion a three-hour infusion &mdash; the
-              rate is set slow on purpose.
-            </p>
+            <p class="dx-ing__what">The carrier, and the reason this one runs three hours.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="7" data-tone="#8FBE9B">
           <span class="dx-ing__key">02</span>
           <div>
             <h3 class="dx-ing__name">Magnesium</h3>
-            <p class="dx-ing__what">
-              Supports hundreds of enzyme reactions, including cellular energy production,
-              protein synthesis, normal muscle and nerve function, and the body&rsquo;s own
-              production of glutathione. It provides the metabolic foundation that lets the
-              rest of the bag be processed and used.
-            </p>
+            <p class="dx-ing__what">Cofactor for energy production, protein synthesis, and the body&rsquo;s own glutathione.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="6" data-tone="#9AA98C">
           <span class="dx-ing__key">03</span>
           <div>
             <h3 class="dx-ing__name">Trace minerals</h3>
-            <p class="dx-ing__what">
-              Cofactors the rest of the formulation depends on. Zinc and copper are kept in
-              ratio deliberately, since excess zinc interferes with copper absorption.
-            </p>
-            <ul class="dx-ing__sub">
-              <li>Zinc</li><li>Copper</li><li>Manganese</li><li>Selenium</li>
-            </ul>
+            <p class="dx-ing__what">Zinc, copper, manganese, selenium. Zinc and copper held in ratio on purpose.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="9" data-tone="#C9A94E">
           <span class="dx-ing__key">04</span>
           <div>
             <h3 class="dx-ing__name">Vitamin B complex</h3>
-            <p class="dx-ing__what">
-              B1 through B12, involved in normal energy metabolism and amino-acid metabolism.
-              They help cells convert nutrients into usable energy, and support healthy
-              blood-cell formation and nervous-system function.
-            </p>
-            <ul class="dx-ing__sub">
-              <li>B1 Thiamine</li><li>B2 Riboflavin</li><li>B3 Niacinamide</li>
-              <li>B5 Dexpanthenol</li><li>B6 Pyridoxine</li><li>B12 Cyanocobalamin</li>
-            </ul>
+            <p class="dx-ing__what">B1 through B12 &mdash; involved in normal energy and amino-acid metabolism.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="10" data-tone="#5F7A55">
           <span class="dx-ing__key">05</span>
           <div>
             <h3 class="dx-ing__name">Glycine</h3>
-            <p class="dx-ing__what">
-              One of the amino acids the liver uses to prepare bile &mdash; the digestive fluid
-              that helps your body process fats. It is also the second building component of
-              glutathione, which is why it appears twice in the logic of this bag.
-            </p>
+            <p class="dx-ing__what">Used by the liver to prepare bile. Also a building block of glutathione.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="9" data-tone="#6E8A5E">
           <span class="dx-ing__key">06</span>
           <div>
             <h3 class="dx-ing__name">Taurine</h3>
-            <p class="dx-ing__what">
-              The other amino acid involved in the liver&rsquo;s normal bile work. Bile is how
-              fats get handled, which is the part of liver function this formulation is
-              built around.
-            </p>
+            <p class="dx-ing__what">The other amino acid involved in the liver&rsquo;s normal bile work.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="10" data-tone="#4F7D5E">
           <span class="dx-ing__key">07</span>
           <div>
             <h3 class="dx-ing__name">N-Acetylcysteine</h3>
-            <p class="dx-ing__what">
-              Supplies cysteine &mdash; one of the three amino acids the body needs to make
-              glutathione, and usually the one in shortest supply. With glycine already in
-              the bag, two of the three building blocks are present together.
-            </p>
+            <p class="dx-ing__what">Supplies cysteine &mdash; usually the scarcest of glutathione&rsquo;s three parts.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="7" data-tone="#B8873C">
           <span class="dx-ing__key">08</span>
           <div>
             <h3 class="dx-ing__name">Alpha-lipoic acid</h3>
-            <p class="dx-ing__what">
-              Participates in mitochondrial energy metabolism and in the interconnected
-              antioxidant network that includes vitamin C and glutathione &mdash; the three of
-              them recharge one another rather than working alone.
-            </p>
+            <p class="dx-ing__what">Mitochondrial energy metabolism, and the antioxidant network.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="6" data-tone="#D9982A">
           <span class="dx-ing__key">09</span>
           <div>
             <h3 class="dx-ing__name">Vitamin C</h3>
-            <p class="dx-ing__what">
-              An antioxidant that is also required for normal collagen production. Inside
-              this bag it is the third member of the antioxidant network, alongside
-              alpha-lipoic acid and glutathione.
-            </p>
+            <p class="dx-ing__what">An antioxidant, and required for normal collagen production.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
         <li class="dx-ing" data-h="6" data-tone="#E7CB86">
           <span class="dx-ing__key">10</span>
           <div>
             <h3 class="dx-ing__name">Glutathione</h3>
-            <p class="dx-ing__what">
-              A major antioxidant naturally produced inside the body&rsquo;s cells. It helps
-              maintain normal cellular redox balance and works with selenium-dependent
-              enzymes as part of the body&rsquo;s antioxidant defense system.
-            </p>
+            <p class="dx-ing__what">A major antioxidant made inside your cells. Here, given directly.</p>
           </div>
+          <span class="dx-ing__chip" aria-hidden="true"></span>
         </li>
 
       </ol>
     </div>
 
     <p class="dx-mix__close" data-reveal>
-      Think of this program as providing some of the nutritional tools involved in the
+      Think of this as providing some of the nutritional tools involved in the
       liver&rsquo;s normal work &mdash; not as doing that work for it.
     </p>
 
@@ -1008,7 +967,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="../script.js" type="module"></script>
-<script src="drips.js" type="module"></script>
+<script src="/script.js" type="module"></script>
+<script src="/js/drips.js" type="module"></script>
 </body>
 </html>
