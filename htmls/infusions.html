@@ -204,7 +204,7 @@
   </header>
 
   <div class="ivx-bar" id="ivxBar">
-    <div class="ivx-bar__row">
+    <div class="ivx-bar__row ivx-bar__row--top">
       <div class="ivx-bar__set">
         <span class="ivx-bar__lab">View</span>
         <div class="ivx-seg" id="ivxSegView">
@@ -216,7 +216,7 @@
 
       <p class="ivx-bar__count"><b id="ivxCount">10</b> <span>of ten showing</span></p>
 
-      <div class="ivx-bar__set">
+      <div class="ivx-bar__set ivx-bar__set--end">
         <span class="ivx-bar__lab">Pricing</span>
         <div class="ivx-seg ivx-seg--gold" id="ivxSegPrice">
           <span class="ivx-seg__thumb"></span>
@@ -229,17 +229,21 @@
     <div class="ivx-bar__row ivx-bar__row--chips">
       <div class="ivx-bar__set">
         <span class="ivx-bar__lab">Chair time</span>
-        <button type="button" class="ivx-chip is-on" data-band="all">All ten</button>
-        <button type="button" class="ivx-chip" data-band="short">Under an hour</button>
-        <button type="button" class="ivx-chip" data-band="mid">One to two hours</button>
-        <button type="button" class="ivx-chip" data-band="long">Two hours and over</button>
+        <div class="ivx-bar__rail">
+          <button type="button" class="ivx-chip is-on" data-band="all">All ten</button>
+          <button type="button" class="ivx-chip" data-band="short">Under an hour</button>
+          <button type="button" class="ivx-chip" data-band="mid">One to two hours</button>
+          <button type="button" class="ivx-chip" data-band="long">Two hours and over</button>
+        </div>
       </div>
 
       <div class="ivx-bar__set ivx-bar__set--end">
         <span class="ivx-bar__lab">Order by</span>
-        <button type="button" class="ivx-chip is-on" data-order="order">Menu</button>
-        <button type="button" class="ivx-chip" data-order="mins">Shortest</button>
-        <button type="button" class="ivx-chip" data-order="cost">Lowest rate</button>
+        <div class="ivx-bar__rail">
+          <button type="button" class="ivx-chip is-on" data-order="order">Menu</button>
+          <button type="button" class="ivx-chip" data-order="mins">Shortest</button>
+          <button type="button" class="ivx-chip" data-order="cost">Lowest rate</button>
+        </div>
       </div>
     </div>
   </div>
