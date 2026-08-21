@@ -4,21 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>The Infusion Menu — Alpha Vital Elite IV</title>
-<meta name="description" content="Ten physician-administered IV infusions in Middle Village, Queens. Compare formulation, chair time and price — then read the full protocol. Every session reviewed and given by Dr. Violeta Aronov, DO.">
+<meta name="description" content="Ten physician-administered IV infusions. Open each one for its composition, chair time and rate — every formulation reviewed and personally administered by Dr. Violeta Aronov, DO, in Middle Village, Queens.">
 <meta name="theme-color" content="#F6F1E7">
 <meta name="format-detection" content="telephone=yes">
-
-<script>document.documentElement.classList.add('has-js');</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preload" as="image" href="/logo.png" fetchpriority="high">
 
-<!-- site faces (shared header + footer) -->
+<!-- site fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
-<!-- this page's three voices -->
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Figtree:wght@300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- this page's two voices -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" media="print" onload="this.media='all'">
@@ -31,11 +29,17 @@
 <link rel="icon" type="image/png" href="/logo.png">
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../css/infusions.css">
+
+<noscript><style>
+  [data-rise], [data-reveal] { opacity: 1 !important; transform: none !important; }
+  .ix-slat__panel { grid-template-rows: 1fr !important; }
+  .ix-field, .ix-tape { display: none !important; }
+</style></noscript>
 </head>
 
-<body class="page-infusions">
+<body class="page-ix">
 
-<!-- ═══ HEADER (shared) ═══ -->
+<!-- ═══════════ HEADER (shared) ═══════════ -->
 <header class="head" id="head">
   <div class="head__rail">
 
@@ -45,7 +49,7 @@
 
     <nav class="head__nav" id="headNav">
       <div class="head__drop">
-        <a class="head__link is-here" href="/htmls/infusions.html" aria-current="page">
+        <a class="head__link is-here" href="infusions.html" aria-current="page">
           Infusions <i class="ph ph-caret-down head__dcaret"></i>
         </a>
         <div class="head__panel">
@@ -62,7 +66,7 @@
             <a class="hd-item" href="/drips/mind-focus-support/" style="--tone:#7A5F98"><i>IX</i><span>Stress &amp; Brain Wellness</span><b>$700</b></a>
             <a class="hd-item" href="/drips/customized-infusion/" style="--tone:#C1963F"><i>X</i><span>Customized IV Infusion</span><b>Consult</b></a>
           </div>
-          <a class="head__panel-foot" href="/htmls/infusions.html"><span>View the full menu</span><i class="ph ph-arrow-right"></i></a>
+          <a class="head__panel-foot" href="#cabinet"><span>Open the cabinet</span><i class="ph ph-arrow-right"></i></a>
         </div>
       </div>
 
@@ -83,7 +87,8 @@
   </div>
 </header>
 
-<!-- ═══ MOBILE MENU (shared) ═══ -->
+
+<!-- ═══════════ MOBILE MENU (shared) ═══════════ -->
 <div class="menu" id="menu">
   <div class="menu__inner">
     <nav class="menu__nav">
@@ -93,7 +98,7 @@
           <b class="menu__dcaret"><span class="ph ph-caret-down"></span></b>
         </summary>
         <div class="menu__sub">
-          <a class="menu__sub-all" href="/htmls/infusions.html"><span>The full menu</span><span class="ph ph-arrow-right"></span></a>
+          <a class="menu__sub-all" href="#cabinet"><span>The full menu</span><span class="ph ph-arrow-right"></span></a>
           <a class="menu__sub-item" href="/drips/healthy-aging/" style="--tone:#5B7098"><i>I</i>GLyNAC Longevity Restoration</a>
           <a class="menu__sub-item" href="/drips/immune-support/" style="--tone:#D9982A"><i>II</i>Immun-O-Boost IV Support</a>
           <a class="menu__sub-item" href="/drips/muscle-recovery/" style="--tone:#B34E37"><i>III</i>LIQUIXO Muscle Recovery</a>
@@ -122,414 +127,555 @@
 
 <main id="main">
 
-<!-- ═══ 01 · HERO ═══ -->
-<section class="inf-hero" id="top">
-  <span class="inf-hero__glow" aria-hidden="true"></span>
-  <span class="inf-hero__weave" aria-hidden="true"></span>
+<!-- ═══════════ 01 · THE OPENING ═══════════ -->
+<section class="ix-open" id="top">
+  <span class="ix-open__aura" id="ixAura"></span>
+  <span class="ix-open__veil"></span>
 
-  <div class="inf-hero__inner">
-    <p class="inf-hero__kicker inf-anim">
-      <span class="inf-pip"></span> The infusion menu · Middle Village, Queens
+  <div class="ix-open__stage ix-wrap">
+
+    <p class="ix-open__tag" data-rise style="--i:1">
+      <span>The Infusion Menu</span><i></i><span>Physician-administered</span><i></i><span>Middle Village, Queens</span>
     </p>
 
-    <h1 class="inf-hero__title">
-      <span class="inf-mask"><span class="inf-mask__in">Ten infusions.</span></span>
-      <span class="inf-mask"><span class="inf-mask__in inf-hero__two">Chosen <em>one at a time</em>.</span></span>
+    <h1 class="ix-open__title">
+      <span class="ix-line" style="--d:.10s"><span>Ten formulations.</span></span>
+      <span class="ix-line" style="--d:.22s"><span>One <em>physician.</em></span></span>
     </h1>
 
-    <div class="inf-hero__base">
-      <p class="inf-hero__dek inf-anim">
-        Nine signature formulations and one composed for a single person. Each is a starting
-        point rather than a prescription — Dr.&nbsp;Violeta Aronov, DO reads your history first,
-        decides whether IV therapy is appropriate, and gives every infusion herself.
+    <div class="ix-open__base" data-rise style="--i:4">
+      <p class="ix-open__dek">
+        Nine signature infusions and one composed for you alone. Each is a starting point, never a
+        promise — Dr.&nbsp;Violeta Aronov, DO reviews your history first, decides whether IV therapy is
+        appropriate, then mixes and administers every session herself.
       </p>
 
-      <dl class="inf-hero__facts inf-anim">
-        <div><dt>Signature</dt><dd data-count="9">0</dd></div>
-        <div><dt>Customized</dt><dd data-count="1">0</dd></div>
-        <div><dt>Consultation</dt><dd><i>$</i><span data-count="100">0</span></dd></div>
+      <dl class="ix-open__facts">
+        <div>
+          <dt>Formulations</dt>
+          <dd data-count="10">0</dd>
+        </div>
+        <div>
+          <dt>Chair time</dt>
+          <dd>30<span>min</span>—3<span>h</span></dd>
+        </div>
+        <div>
+          <dt>From</dt>
+          <dd><i>$</i><span data-count="125">0</span></dd>
+        </div>
       </dl>
     </div>
 
-    <a class="inf-hero__cue inf-anim" href="#cabinet">
-      <span>Open the menu</span><i class="ph ph-arrow-down"></i>
+    <a class="ix-open__cue" href="#cabinet" data-rise style="--i:6">
+      <span>Open the cabinet</span>
+      <i class="ph ph-arrow-down"></i>
     </a>
   </div>
 
-  <div class="inf-ticker" aria-hidden="true">
-    <div class="inf-ticker__row" id="infTicker">
-      <span class="inf-ticker__set">
-        GLyNAC Longevity <i>◆</i> Immun-O-Boost <i>◆</i> LIQUIXO Muscle Recovery <i>◆</i> Antioxidant ×3 Reset <i>◆</i>
-        Glutathione Injection <i>◆</i> Joint &amp; Skin Wellness <i>◆</i> Fatty Liver Support <i>◆</i>
-        Revive <i>◆</i> Stress &amp; Brain Wellness <i>◆</i> Customized Infusion <i>◆</i>
-      </span>
-      <span class="inf-ticker__set">
-        GLyNAC Longevity <i>◆</i> Immun-O-Boost <i>◆</i> LIQUIXO Muscle Recovery <i>◆</i> Antioxidant ×3 Reset <i>◆</i>
-        Glutathione Injection <i>◆</i> Joint &amp; Skin Wellness <i>◆</i> Fatty Liver Support <i>◆</i>
-        Revive <i>◆</i> Stress &amp; Brain Wellness <i>◆</i> Customized Infusion <i>◆</i>
-      </span>
+  <!-- the belt: every name, moving slowly. click one to open it -->
+  <div class="ix-tape" id="ixTape">
+    <div class="ix-tape__belt" id="ixBelt">
+      <div class="ix-tape__row">
+        <a href="#drip-01">GLyNAC Longevity Restoration</a><i></i>
+        <a href="#drip-02">Immun-O-Boost</a><i></i>
+        <a href="#drip-03">LIQUIXO Muscle Recovery</a><i></i>
+        <a href="#drip-04">Antioxidant ×3 Reset</a><i></i>
+        <a href="#drip-05">Glutathione Injection</a><i></i>
+        <a href="#drip-06">Joint &amp; Skin Wellness</a><i></i>
+        <a href="#drip-07">Fatty Liver Support</a><i></i>
+        <a href="#drip-08">Revive</a><i></i>
+        <a href="#drip-09">Stress &amp; Brain Wellness</a><i></i>
+        <a href="#drip-10">Customized Infusion</a><i></i>
+      </div>
+      <div class="ix-tape__row" aria-hidden="true">
+        <a tabindex="-1" href="#drip-01">GLyNAC Longevity Restoration</a><i></i>
+        <a tabindex="-1" href="#drip-02">Immun-O-Boost</a><i></i>
+        <a tabindex="-1" href="#drip-03">LIQUIXO Muscle Recovery</a><i></i>
+        <a tabindex="-1" href="#drip-04">Antioxidant ×3 Reset</a><i></i>
+        <a tabindex="-1" href="#drip-05">Glutathione Injection</a><i></i>
+        <a tabindex="-1" href="#drip-06">Joint &amp; Skin Wellness</a><i></i>
+        <a tabindex="-1" href="#drip-07">Fatty Liver Support</a><i></i>
+        <a tabindex="-1" href="#drip-08">Revive</a><i></i>
+        <a tabindex="-1" href="#drip-09">Stress &amp; Brain Wellness</a><i></i>
+        <a tabindex="-1" href="#drip-10">Customized Infusion</a><i></i>
+      </div>
     </div>
   </div>
 </section>
 
 
-<!-- ═══ 02 · THE CABINET ═══ -->
-<section class="inf-cab" id="cabinet">
-  <span class="inf-rail" aria-hidden="true"><i class="inf-rail__fill"><b></b></i></span>
+<!-- ═══════════ 02 · THE CABINET ═══════════ -->
+<section class="ix-cab" id="cabinet">
+  <div class="ix-wrap">
 
-  <header class="inf-cab__head">
-    <p class="inf-eyebrow">The cabinet</p>
-    <h2 class="inf-cab__title">Read the bag<br>before you <em>sit down</em>.</h2>
-    <p class="inf-cab__lede">
-      Every formulation on the menu, with its components, its chair time and its real rate.
-      Switch to the ledger to compare all ten at once, or open any one for the full protocol.
-    </p>
-  </header>
-
-  <!-- controls -->
-  <div class="inf-bar" id="infBar">
-    <div class="inf-bar__group">
-      <span class="inf-bar__lab">View</span>
-      <div class="inf-seg" id="segView">
-        <span class="inf-seg__thumb"></span>
-        <button type="button" class="is-on" data-view="cabinet"><i class="ph ph-squares-four"></i> Cabinet</button>
-        <button type="button" data-view="ledger"><i class="ph ph-rows"></i> Ledger</button>
+    <header class="ix-head">
+      <div>
+        <p class="ix-head__eyebrow" data-reveal><i class="ph-duotone ph-flask"></i> The cabinet</p>
+        <h2 class="ix-head__title" data-reveal>Ten doors.<br><em>Open one.</em></h2>
       </div>
-    </div>
-
-    <div class="inf-bar__group">
-      <span class="inf-bar__lab">Order by</span>
-      <button type="button" class="inf-chip is-on" data-sort="order">Menu</button>
-      <button type="button" class="inf-chip" data-sort="mins">Chair time</button>
-      <button type="button" class="inf-chip" data-sort="cost">Rate</button>
-    </div>
-
-    <div class="inf-bar__group">
-      <span class="inf-bar__lab">Pricing</span>
-      <div class="inf-seg inf-seg--gold" id="segPrice">
-        <span class="inf-seg__thumb"></span>
-        <button type="button" class="is-on" data-price="single">Single</button>
-        <button type="button" data-price="program">Program −10%</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- the ten -->
-  <div class="inf-grid" id="infGrid">
-
-    <article class="inf-card" data-order="1" data-mins="75" data-cost="450" style="--tone:#5B7098">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/healthy-aging/" aria-label="GLyNAC Longevity Restoration IV — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">I</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/glynac.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-infinity"></i> Healthy Aging</p>
-          <h3 class="inf-card__name">GLyNAC <em>Longevity Restoration</em></h3>
-          <p class="inf-card__note">Glycine and N-acetylcysteine — the two compounds the body uses to build its own glutathione.</p>
-          <ul class="inf-card__mix"><li>Glycine</li><li>N-Acetylcysteine</li><li>Hydration fluid</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 1 h 15</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="450" data-program="405">$450</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card" data-order="2" data-mins="150" data-cost="650" style="--tone:#D9982A">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/immune-support/" aria-label="Immun-O-Boost IV Support — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">II</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/immuneoboost.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-shield-check"></i> Immune Support</p>
-          <h3 class="inf-card__name">Immun-O-Boost <em>IV Support</em></h3>
-          <p class="inf-card__note">Immune support, hydration and recovery through the run-down months. Usually once a month.</p>
-          <ul class="inf-card__mix"><li>Vitamin C</li><li>Glutathione</li><li>Zinc</li><li class="is-more">+2</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 2 h 30</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="650" data-program="585">$650</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card" data-order="3" data-mins="45" data-cost="495" style="--tone:#B34E37">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/muscle-recovery/" aria-label="LIQUIXO Muscle Recovery IV — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">III</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/liquixo.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-barbell"></i> Muscle Recovery</p>
-          <h3 class="inf-card__name">LIQUIXO <em>Muscle Recovery</em></h3>
-          <p class="inf-card__note">Lean-muscle support through GLP-1 and weight-loss programs. A full twenty amino acid blend.</p>
-          <ul class="inf-card__mix"><li>20 Amino acids</li><li>Exosomes</li><li>Hydration fluid</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 45 min</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="495" data-program="445.50">$495</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card" data-order="4" data-mins="75" data-cost="500" style="--tone:#4F7D5E">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/antioxidant-support/" aria-label="Antioxidant ×3 Reset IV — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">IV</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/antioxidant.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-atom"></i> Antioxidant Support</p>
-          <h3 class="inf-card__name">Antioxidant <em>×3 Reset</em></h3>
-          <p class="inf-card__note">Vitamin C, glutathione and alpha-lipoic acid work in one network, recharging one another.</p>
-          <ul class="inf-card__mix"><li>Vitamin C</li><li>Glutathione</li><li>Alpha-lipoic acid</li><li class="is-more">+1</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 1 h 15</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="500" data-program="450">$500</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card" data-order="5" data-mins="30" data-cost="125" style="--tone:#7FA08C">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/glutathione-iv-therapy/" aria-label="Glutathione IV Injection — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">V</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/glutathione.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-drop"></i> Glutathione IV Therapy</p>
-          <h3 class="inf-card__name">Glutathione <em>IV Injection</em></h3>
-          <p class="inf-card__note">Concentrated antioxidant support, given as a slow push by the physician. Gradual by design.</p>
-          <ul class="inf-card__mix"><li>Glutathione</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 30 min visit</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="125" data-program="112.50">$125</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card" data-order="6" data-mins="150" data-cost="750" style="--tone:#8C6239">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/joint-skin-wellness/" aria-label="Joint and Skin Wellness IV — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">VI</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/jointsupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-bone"></i> Joint &amp; Skin Support</p>
-          <h3 class="inf-card__name">Joint &amp; Skin <em>Wellness</em></h3>
-          <p class="inf-card__note">Amino acids involved in normal collagen formation — type II for cartilage, I and III for skin.</p>
-          <ul class="inf-card__mix"><li>Collagen aminos</li><li>Magnesium</li><li>Vitamin C</li><li class="is-more">+6</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 2 h 30</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="750" data-program="675">$750</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card" data-order="7" data-mins="180" data-cost="850" style="--tone:#5F7A55">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/liver-support/" aria-label="Fatty Liver Support IV — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">VII</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/liversupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-leaf"></i> Liver Support</p>
-          <h3 class="inf-card__name">Fatty Liver <em>Support</em></h3>
-          <p class="inf-card__note">Glycine and taurine for the liver's bile work, with NAC feeding the glutathione pathway.</p>
-          <ul class="inf-card__mix"><li>Glycine</li><li>Taurine</li><li>N-Acetylcysteine</li><li class="is-more">+7</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 3 h</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="850" data-program="765">$850</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card" data-order="8" data-mins="135" data-cost="625" style="--tone:#35707F">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/recovery-support/" aria-label="Revive IV Support — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">VIII</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/revive.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-arrows-clockwise"></i> Recovery Support</p>
-          <h3 class="inf-card__name">Revive <em>IV Support</em></h3>
-          <p class="inf-card__note">Replenish, recharge, revive. Hydration and nutritional replenishment for depleted stretches.</p>
-          <ul class="inf-card__mix"><li>Electrolytes</li><li>B-Complex</li><li>Amino acids</li><li class="is-more">+4</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 2 h 15</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="625" data-program="562.50">$625</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card" data-order="9" data-mins="90" data-cost="700" style="--tone:#7A5F98">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/mind-focus-support/" aria-label="Stress and Brain Wellness IV — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">IX</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/brainwellness.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-brain"></i> Mind &amp; Focus Support</p>
-          <h3 class="inf-card__name">Stress &amp; Brain <em>Wellness</em></h3>
-          <p class="inf-card__note">Brain fuel for stress, mental burnout and demanding weeks — B vitamins, ALA and taurine.</p>
-          <ul class="inf-card__mix"><li>Vitamin B1 · B6 · B12</li><li>Taurine</li><li>Alpha-lipoic acid</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> 1 h 30</p>
-          <p class="inf-card__price">
-            <b class="inf-num" data-single="700" data-program="630">$700</b>
-            <em class="inf-per"><span>per session</span><span>in a program</span></em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-    <article class="inf-card inf-card--bespoke" data-order="10" data-mins="9999" data-cost="9999" style="--tone:#C1963F">
-      <div class="inf-card__in">
-        <a class="inf-card__hit" href="/drips/customized-infusion/" aria-label="Customized IV Infusion — view protocol"></a>
-        <header class="inf-card__top">
-          <span class="inf-card__no">X</span>
-          <span class="inf-card__go"><i class="ph ph-arrow-up-right"></i></span>
-        </header>
-        <div class="inf-card__vial"><img src="/assets/drips/customized.png" alt="" width="524" height="1478" loading="lazy" decoding="async"></div>
-        <div class="inf-card__body">
-          <p class="inf-card__cat"><i class="ph ph-pen-nib"></i> Customized</p>
-          <h3 class="inf-card__name">Customized <em>IV Infusion</em></h3>
-          <p class="inf-card__note">When no signature formulation is the right fit, she composes one for you alone.</p>
-          <ul class="inf-card__mix"><li>Based on your review</li><li>Private consultation</li></ul>
-        </div>
-        <footer class="inf-card__foot">
-          <p class="inf-card__time"><i class="ph ph-clock"></i> Determined for you</p>
-          <p class="inf-card__price">
-            <b>By consultation</b>
-            <em class="inf-per inf-per--fixed">quoted after screening</em>
-          </p>
-        </footer>
-      </div>
-    </article>
-
-  </div>
-
-  <p class="inf-cab__foot" data-reveal>
-    Program pricing runs ten percent below the single rate on every formulation.
-    The $100 consultation is applied toward your infusion if Dr.&nbsp;Aronov approves one.
-  </p>
-</section>
-
-
-<!-- ═══ 03 · WHAT EVERY SESSION INCLUDES ═══ -->
-<section class="inf-inc" id="included">
-  <div class="inf-inc__wrap">
-    <p class="inf-eyebrow inf-eyebrow--center" data-reveal>Included in every rate</p>
-    <h2 class="inf-inc__title" data-reveal>The same hands, <em>every time</em>.</h2>
-
-    <ul class="inf-inc__grid">
-      <li class="inf-inc__item">
-        <i class="ph-duotone ph-file-text"></i>
-        <h3>Your history, read first</h3>
-        <p>Medications, allergies and conditions reviewed by Dr.&nbsp;Aronov before anything is mixed or scheduled.</p>
-      </li>
-      <li class="inf-inc__item">
-        <i class="ph-duotone ph-flask"></i>
-        <h3>Doses calculated for you</h3>
-        <p>She weighs your physiology against the formulation, prepares the medications and spikes the bag herself.</p>
-      </li>
-      <li class="inf-inc__item">
-        <i class="ph-duotone ph-heartbeat"></i>
-        <h3>Watched to the last drop</h3>
-        <p>She sets the flow rate, adjusts it through the session, and stays in the room until it is finished.</p>
-      </li>
-    </ul>
-  </div>
-</section>
-
-
-<!-- ═══ 04 · BEGIN ═══ -->
-<section class="inf-begin" id="begin">
-  <div class="inf-begin__wrap">
-    <div class="inf-begin__say">
-      <p class="inf-eyebrow" data-reveal>Choosing one</p>
-      <h2 class="inf-begin__title" data-reveal>Not sure which is yours?<br><em>That is what the screening is for.</em></h2>
-      <p class="inf-begin__lede" data-reveal>
-        Tell her what is going on and she will tell you what fits — or that nothing here does.
-        Appointments only, and not every patient is eligible.
+      <p class="ix-head__lede" data-reveal>
+        Every panel carries the whole formulation, the chair time and the rate. Read it here,
+        then open the full protocol when one holds your attention.
       </p>
-      <div class="inf-begin__acts" data-reveal>
-        <a class="inf-btn inf-btn--solid" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener" data-magnetic>
-          <span>Begin screening</span><i class="ph ph-arrow-right"></i>
-        </a>
-        <a class="inf-btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
-      </div>
+    </header>
+
+    <div class="ix-sort" id="ixSort" data-reveal>
+      <span class="ix-sort__lab">Arrange by</span>
+      <button class="ix-sort__pill is-on" type="button" data-sort="order">Menu order</button>
+      <button class="ix-sort__pill" type="button" data-sort="min">Chair time <i class="ph ph-arrow-up"></i></button>
+      <button class="ix-sort__pill" type="button" data-sort="price">Rate <i class="ph ph-arrow-up"></i></button>
     </div>
 
-    <figure class="inf-begin__shot">
-      <img src="/infusion-room.jpg" alt="The infusion room at Alpha Vital Elite IV" loading="lazy" decoding="async">
-      <figcaption>79-01 Metropolitan Avenue · Middle Village</figcaption>
-    </figure>
-  </div>
+    <ol class="ix-rack" id="ixRack">
 
-  <p class="inf-begin__legal" data-reveal>
-    IV services provided by Alpha Vital Elite IV are offered solely as adjunctive wellness support. They are not
-    intended to diagnose, treat, cure, mitigate, prevent or reverse any disease, medical condition or aging process,
-    and have not been evaluated by the FDA for those purposes. Not a substitute for primary or specialty medical care.
-    Physician review and eligibility determination are required before scheduling. Individual results vary; no outcome
-    is guaranteed.
-  </p>
+      <!-- I -->
+      <li class="ix-slat" id="drip-01" style="--tone:#5B7098"
+          data-order="1" data-min="75" data-price="450"
+          data-name="GLyNAC Longevity Restoration" data-cat="Healthy Aging"
+          data-time="1 h 15" data-fee="$450" data-href="/drips/healthy-aging/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-01">
+          <span class="ix-slat__no">I</span>
+          <span class="ix-slat__spinal">GLyNAC Longevity Restoration</span>
+          <span class="ix-slat__brief">Healthy Aging · 1 h 15 · $450</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-01">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-infinity"></i> Healthy Aging</p>
+              <h3 class="ix-slat__name" data-bit>GLyNAC <em>Longevity Restoration</em></h3>
+              <p class="ix-slat__note" data-bit>Glycine and N-acetylcysteine — the two compounds the body uses as building components to produce glutathione internally.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition</p>
+                <p class="ix-slat__list">Hydration Fluid · Glycine · N-Acetylcysteine</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>1 h 15</dd></div>
+                <div><dt>Per session</dt><dd>$450</dd></div>
+                <div><dt>In program</dt><dd>$405 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/healthy-aging/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/glynac.png" alt="GLyNAC Longevity Restoration infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- II -->
+      <li class="ix-slat" id="drip-02" style="--tone:#D9982A"
+          data-order="2" data-min="150" data-price="650"
+          data-name="Immun-O-Boost IV Support" data-cat="Immune Support"
+          data-time="2 h 30" data-fee="$650" data-href="/drips/immune-support/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-02">
+          <span class="ix-slat__no">II</span>
+          <span class="ix-slat__spinal">Immun-O-Boost IV Support</span>
+          <span class="ix-slat__brief">Immune Support · 2 h 30 · $650</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-02">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-shield-check"></i> Immune Support</p>
+              <h3 class="ix-slat__name" data-bit>Immun-O-Boost <em>IV Support</em></h3>
+              <p class="ix-slat__note" data-bit>Immune system support, hydration, recovery and wellness optimization. Recommended once per month.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition</p>
+                <p class="ix-slat__list">B-Complex &amp; Minerals · Amino Acids · Vitamin C · Glutathione · Zinc</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>2 h 30</dd></div>
+                <div><dt>Per session</dt><dd>$650</dd></div>
+                <div><dt>In program</dt><dd>$585 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/immune-support/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/immuneoboost.png" alt="Immun-O-Boost IV Support infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- III -->
+      <li class="ix-slat" id="drip-03" style="--tone:#B34E37"
+          data-order="3" data-min="45" data-price="495"
+          data-name="LIQUIXO Muscle Recovery" data-cat="Muscle Recovery"
+          data-time="45 min" data-fee="$495" data-href="/drips/muscle-recovery/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-03">
+          <span class="ix-slat__no">III</span>
+          <span class="ix-slat__spinal">LIQUIXO Muscle Recovery</span>
+          <span class="ix-slat__brief">Muscle Recovery · 45 min · $495</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-03">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-barbell"></i> Muscle Recovery</p>
+              <h3 class="ix-slat__name" data-bit>LIQUIXO <em>Muscle Recovery</em></h3>
+              <p class="ix-slat__note" data-bit>Lean muscle and recovery support during GLP-1, GLP-2 and weight-loss programs — a full 20 amino acid blend.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition</p>
+                <p class="ix-slat__list">Hydration Fluid · 20 Amino Acids · Exosomes</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>45 min</dd></div>
+                <div><dt>Per session</dt><dd>$495</dd></div>
+                <div><dt>In program</dt><dd>$445.50 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/muscle-recovery/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/liquixo.png" alt="LIQUIXO Muscle Recovery infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- IV -->
+      <li class="ix-slat" id="drip-04" style="--tone:#4F7D5E"
+          data-order="4" data-min="75" data-price="500"
+          data-name="Antioxidant ×3 Reset" data-cat="Antioxidant Support"
+          data-time="75 min" data-fee="$500" data-href="/drips/antioxidant-support/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-04">
+          <span class="ix-slat__no">IV</span>
+          <span class="ix-slat__spinal">Antioxidant ×3 Reset</span>
+          <span class="ix-slat__brief">Antioxidant · 75 min · $500</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-04">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-atom"></i> Antioxidant Support</p>
+              <h3 class="ix-slat__name" data-bit>Antioxidant <em>×3 Reset</em></h3>
+              <p class="ix-slat__note" data-bit>Vitamin C, glutathione and alpha-lipoic acid work within the same antioxidant network, recharging one another.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition</p>
+                <p class="ix-slat__list">Hydration Fluid · Vitamin C · Glutathione · Alpha-Lipoic Acid</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>75 min</dd></div>
+                <div><dt>Per session</dt><dd>$500</dd></div>
+                <div><dt>In program</dt><dd>$450 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/antioxidant-support/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/antioxidant.png" alt="Antioxidant ×3 Reset infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- V -->
+      <li class="ix-slat" id="drip-05" style="--tone:#7FA08C"
+          data-order="5" data-min="30" data-price="125"
+          data-name="Glutathione IV Injection" data-cat="Glutathione IV Therapy"
+          data-time="30 min visit" data-fee="$125" data-href="/drips/glutathione-iv-therapy/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-05">
+          <span class="ix-slat__no">V</span>
+          <span class="ix-slat__spinal">Glutathione IV Injection</span>
+          <span class="ix-slat__brief">Glutathione · 30 min visit · $125</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-05">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-drop"></i> Glutathione IV Therapy</p>
+              <h3 class="ix-slat__name" data-bit>Glutathione <em>IV Injection</em></h3>
+              <p class="ix-slat__note" data-bit>Concentrated antioxidant support, given as a slow physician-administered push. Gradual by design.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition</p>
+                <p class="ix-slat__list">Glutathione</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>15 min push · 30 min visit</dd></div>
+                <div><dt>Per session</dt><dd>$125</dd></div>
+                <div><dt>In program</dt><dd>$112.50 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/glutathione-iv-therapy/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/glutathione.png" alt="Glutathione IV Injection" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- VI -->
+      <li class="ix-slat" id="drip-06" style="--tone:#8C6239"
+          data-order="6" data-min="150" data-price="750"
+          data-name="Joint &amp; Skin Wellness" data-cat="Joint &amp; Skin Support"
+          data-time="2 h 30" data-fee="$750" data-href="/drips/joint-skin-wellness/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-06">
+          <span class="ix-slat__no">VI</span>
+          <span class="ix-slat__spinal">Joint &amp; Skin Wellness</span>
+          <span class="ix-slat__brief">Joint &amp; Skin · 2 h 30 · $750</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-06">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-bone"></i> Joint Support &amp; Skin Health</p>
+              <h3 class="ix-slat__name" data-bit>Joint &amp; Skin <em>Wellness</em></h3>
+              <p class="ix-slat__note" data-bit>Amino acids involved in normal collagen formation — type II for cartilage, types I and III for skin.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition · nine components</p>
+                <p class="ix-slat__list">Hydration Fluid · Magnesium · Trace Minerals · B-Complex · Collagen Amino Acids · N-Acetylcysteine · Alpha-Lipoic Acid · Vitamin C · Glutathione</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>2 h 30</dd></div>
+                <div><dt>Per session</dt><dd>$750</dd></div>
+                <div><dt>In program</dt><dd>$675 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/joint-skin-wellness/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/jointsupport.png" alt="Joint &amp; Skin Wellness infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- VII -->
+      <li class="ix-slat" id="drip-07" style="--tone:#5F7A55"
+          data-order="7" data-min="180" data-price="850"
+          data-name="Fatty Liver Support" data-cat="Liver Support"
+          data-time="3 h" data-fee="$850" data-href="/drips/liver-support/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-07">
+          <span class="ix-slat__no">VII</span>
+          <span class="ix-slat__spinal">Fatty Liver Support</span>
+          <span class="ix-slat__brief">Liver Support · 3 h · $850</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-07">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-leaf"></i> Liver Support</p>
+              <h3 class="ix-slat__name" data-bit>Fatty Liver <em>Support</em></h3>
+              <p class="ix-slat__note" data-bit>Glycine and taurine, the amino acids the liver uses to prepare bile, with NAC for the glutathione pathway.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition · ten components</p>
+                <p class="ix-slat__list">Hydration Fluid · Magnesium · Trace Minerals · B-Complex · Glycine · Taurine · N-Acetylcysteine · Alpha-Lipoic Acid · Vitamin C · Glutathione</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>3 h</dd></div>
+                <div><dt>Per session</dt><dd>$850</dd></div>
+                <div><dt>In program</dt><dd>$765 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/liver-support/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/liversupport.png" alt="Fatty Liver Support infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- VIII -->
+      <li class="ix-slat" id="drip-08" style="--tone:#35707F"
+          data-order="8" data-min="135" data-price="625"
+          data-name="Revive IV Support" data-cat="Recovery Support"
+          data-time="2 h 15" data-fee="$625" data-href="/drips/recovery-support/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-08">
+          <span class="ix-slat__no">VIII</span>
+          <span class="ix-slat__spinal">Revive IV Support</span>
+          <span class="ix-slat__brief">Recovery · 2 h 15 · $625</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-08">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-arrows-clockwise"></i> Recovery Support</p>
+              <h3 class="ix-slat__name" data-bit>Revive <em>IV Support</em></h3>
+              <p class="ix-slat__note" data-bit>Replenish, recharge, revive. Hydration and nutritional replenishment for flexible, as-needed use.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition</p>
+                <p class="ix-slat__list">Hydration Fluid · B-Complex · Amino Acids · Electrolytes · Alpha-Lipoic Acid · Vitamin C · Glutathione</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>2 h 15</dd></div>
+                <div><dt>Per session</dt><dd>$625</dd></div>
+                <div><dt>In program</dt><dd>$562.50 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/recovery-support/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/revive.png" alt="Revive IV Support infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- IX -->
+      <li class="ix-slat" id="drip-09" style="--tone:#7A5F98"
+          data-order="9" data-min="90" data-price="700"
+          data-name="Stress &amp; Brain Wellness" data-cat="Mind &amp; Focus Support"
+          data-time="1 h 30" data-fee="$700" data-href="/drips/mind-focus-support/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-09">
+          <span class="ix-slat__no">IX</span>
+          <span class="ix-slat__spinal">Stress &amp; Brain Wellness</span>
+          <span class="ix-slat__brief">Mind &amp; Focus · 1 h 30 · $700</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-09">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-brain"></i> Mind &amp; Focus Support</p>
+              <h3 class="ix-slat__name" data-bit>Stress &amp; Brain <em>Wellness</em></h3>
+              <p class="ix-slat__note" data-bit>Brain fuel for stress, mental burnout and demanding lifestyles — vitamins supporting normal neurotransmitter production.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition</p>
+                <p class="ix-slat__list">Hydration Fluid · Vitamin B1 · Vitamin B6 · Vitamin B12 · Alpha-Lipoic Acid · Taurine</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>1 h 30</dd></div>
+                <div><dt>Per session</dt><dd>$700</dd></div>
+                <div><dt>In program</dt><dd>$630 <em>−10%</em></dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/mind-focus-support/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/brainwellness.png" alt="Stress &amp; Brain Wellness infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+      <!-- X -->
+      <li class="ix-slat" id="drip-10" style="--tone:#C1963F"
+          data-order="10" data-min="" data-price=""
+          data-name="Customized IV Infusion" data-cat="Customized"
+          data-time="Individually determined" data-fee="By consultation" data-href="/drips/customized-infusion/">
+        <button class="ix-slat__spine" type="button" aria-expanded="false" aria-controls="panel-10">
+          <span class="ix-slat__no">X</span>
+          <span class="ix-slat__spinal">Customized IV Infusion</span>
+          <span class="ix-slat__brief">Bespoke · By consultation</span>
+          <span class="ix-slat__mark"><i class="ph ph-plus"></i></span>
+        </button>
+        <div class="ix-slat__panel" id="panel-10">
+          <div class="ix-slat__inner">
+            <div class="ix-slat__text">
+              <p class="ix-slat__cat" data-bit><i class="ph ph-pen-nib"></i> Customized IV Infusion</p>
+              <h3 class="ix-slat__name" data-bit>Customized <em>IV Infusion</em></h3>
+              <p class="ix-slat__note" data-bit>When no signature infusion is the right fit, Dr. Aronov may compose one based on her clinical review.</p>
+              <div class="ix-slat__mix" data-bit>
+                <p class="ix-slat__lab">Composition</p>
+                <p class="ix-slat__list">Based on individual needs · Private consultation</p>
+              </div>
+              <dl class="ix-slat__rows" data-bit>
+                <div><dt>Chair time</dt><dd>Individually determined</dd></div>
+                <div><dt>Per session</dt><dd>By consultation</dd></div>
+                <div><dt>In program</dt><dd>Quoted after screening</dd></div>
+              </dl>
+              <div class="ix-slat__acts" data-bit>
+                <a class="ix-go" href="/drips/customized-infusion/"><span>View the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+                <a class="ix-alt" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">Begin screening</a>
+              </div>
+            </div>
+            <img class="ix-slat__bag" src="/assets/drips/customized.png" alt="Customized IV Infusion bag" width="524" height="1478" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </li>
+
+    </ol>
+
+    <p class="ix-rack__hint" data-reveal>
+      <i class="ph ph-hand-pointing"></i>
+      <span class="ix-rack__hint-lg">Hover a spine to open it. Click to keep it open.</span>
+      <span class="ix-rack__hint-sm">Tap a row to open it.</span>
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════ 03 · THE FIELD ═══════════ -->
+<section class="ix-field" id="field">
+  <div class="ix-wrap">
+
+    <header class="ix-head">
+      <div>
+        <p class="ix-head__eyebrow" data-reveal><i class="ph-duotone ph-chart-scatter"></i> The field</p>
+        <h2 class="ix-head__title" data-reveal>How long,<br><em>and how much.</em></h2>
+      </div>
+      <p class="ix-head__lede" data-reveal>
+        The two questions everybody asks before they call, answered in one picture. Every signature
+        infusion, plotted by the time it takes and what it costs.
+      </p>
+    </header>
+
+    <div class="ix-field__grid">
+      <div class="ix-plot">
+        <span class="ix-plot__axis ix-plot__axis--y">Rate</span>
+        <span class="ix-plot__axis ix-plot__axis--x">Chair time</span>
+        <div class="ix-plot__body" id="ixPlot"></div>
+      </div>
+
+      <aside class="ix-read" id="ixRead">
+        <p class="ix-read__lab">Selected</p>
+        <p class="ix-read__cat" id="ixReadCat">Healthy Aging</p>
+        <h3 class="ix-read__name" id="ixReadName">GLyNAC Longevity Restoration</h3>
+        <dl class="ix-read__rows">
+          <div><dt>Chair time</dt><dd id="ixReadTime">1 h 15</dd></div>
+          <div><dt>Per session</dt><dd id="ixReadFee">$450</dd></div>
+        </dl>
+        <a class="ix-read__go" id="ixReadGo" href="#drip-01">
+          <span>Open in the cabinet</span><i class="ph ph-arrow-up-left"></i>
+        </a>
+        <p class="ix-read__foot">The customized infusion sits outside the field — it is quoted after screening.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════ 04 · THE TERMS ═══════════ -->
+<section class="ix-terms" id="terms">
+  <div class="ix-wrap">
+    <div class="ix-terms__grid">
+
+      <p class="ix-terms__line" data-reveal>
+        Program pricing runs <b>ten percent below</b> the single rate on every formulation.
+        The <b>$100 consultation</b> is applied toward your infusion once approved.
+      </p>
+
+      <div class="ix-terms__call" data-reveal>
+        <p class="ix-terms__ask">Not sure which one is yours?</p>
+        <p class="ix-terms__say">Send your history. She reads it herself, and tells you which infusion fits — or that none of them do.</p>
+        <div class="ix-terms__acts">
+          <a class="ix-go ix-go--lg" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener" data-magnetic>
+            <span>Begin screening</span><i class="ph ph-arrow-right"></i>
+          </a>
+          <a class="ix-alt ix-alt--lg" href="tel:+19292010740">929 · 201 · 0740</a>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="ix-terms__legal" data-reveal>
+      IV services provided by Alpha Vital Elite IV are offered solely as adjunctive wellness support. They are not
+      intended to diagnose, treat, cure, mitigate, prevent or reverse any disease, medical condition or aging process,
+      and have not been evaluated by the FDA for those purposes. Not a substitute for primary or specialty medical care.
+      Appointments only; physician review and eligibility determination are required before scheduling. Not every
+      patient is eligible. Individual results vary; no outcome is guaranteed.
+    </p>
+  </div>
 </section>
 
 </main>
 
 
-<!-- ═══ FOOTER (shared) ═══ -->
+<!-- ═══════════ FOOTER (shared) ═══════════ -->
 <footer class="foot" id="contact">
   <span class="foot__glow"></span>
   <div class="foot__wrap">
@@ -629,7 +775,7 @@
 </footer>
 
 
-<!-- ═══ DOCK (shared) ═══ -->
+<!-- ═══════════ DOCK (shared) ═══════════ -->
 <button class="totop" id="toTop" type="button">
   <i class="ph ph-arrow-up"></i>
   <span>Top</span>
