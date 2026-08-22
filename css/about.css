@@ -377,15 +377,13 @@ html.ab-on [data-ab-split]           { opacity: 0; }
 .ab-ctrl__mute { border-color: var(--rule-gold); background: rgba(193, 150, 63, .1); color: var(--gold-deep); }
 .ab-ctrl__mute:hover { background: var(--gold); border-color: var(--gold); color: var(--forest-deep); }
 
-/* icon + word swap, driven by state classes on the player */
+/* icon + word swap, driven by state classes on the player. One pair of rules
+   for both buttons — the --a face is the resting state, --b is the active one. */
 .ab-ctrl .ab-ico--b { display: none; }
-.ab-player.is-playing ~ .ab-ctrl .ab-ctrl__play .ab-ico--a { display: none; }
-.ab-player.is-playing ~ .ab-ctrl .ab-ctrl__play .ab-ico--b { display: inline-flex; }
+.ab-player.is-playing ~ .ab-ctrl .ab-ctrl__play .ab-ico--a,
 .ab-player.is-loud    ~ .ab-ctrl .ab-ctrl__mute .ab-ico--a { display: none; }
-.ab-player.is-loud    ~ .ab-ctrl .ab-ctrl__mute .ab-ico--b { display: inline-flex; }
-.ab-ctrl__btn i.ab-ico--b { display: none; }
-.ab-player.is-playing ~ .ab-ctrl .ab-ctrl__play i.ab-ico--b,
-.ab-player.is-loud    ~ .ab-ctrl .ab-ctrl__mute i.ab-ico--b { display: block; }
+.ab-player.is-playing ~ .ab-ctrl .ab-ctrl__play .ab-ico--b,
+.ab-player.is-loud    ~ .ab-ctrl .ab-ctrl__mute .ab-ico--b { display: inline-block; }
 
 .ab-ctrl__track {
     position: relative; flex: 1; height: 3px; min-width: 40px;
