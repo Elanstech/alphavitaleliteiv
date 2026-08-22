@@ -25,14 +25,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<!-- fill is what the player controls are drawn in; deferred the same way the
+     home page defers it, so it never blocks first paint -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css"></noscript>
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+</noscript>
 
 <link rel="icon" type="image/png" href="/logo.png">
 
 <!-- SHARED sheet first, page sheet second — the page layer only ever adds -->
-<link rel="stylesheet" href="../styles.css">
-<link rel="stylesheet" href="/css/about.css">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/about/about.css">
 
 <!-- start states applied before first paint, so nothing flashes in and out
      before GSAP takes over. Scripting off or motion reduced: no hiding. -->
@@ -58,7 +64,7 @@
 
     <nav class="head__nav" id="headNav">
 
-      <a class="head__link" href="../index.html">Home</a>
+      <a class="head__link" href="/">Home</a>
 
       <div class="head__drop">
         <a class="head__link" href="/htmls/infusions.html">
@@ -69,7 +75,7 @@
           <p class="head__panel-eyebrow">The Infusion Menu</p>
 
           <div class="head__panel-grid">
-            <a class="hd-item" href="drips/glynac.html" style="--tone:#5B7098">
+            <a class="hd-item" href="/drips/glynac.html" style="--tone:#5B7098">
               <i>I</i><span>GLyNAC Longevity Restoration</span><b>$450</b>
             </a>
             <a class="hd-item" href="/drips/immun-o-boost.html" style="--tone:#D9982A">
@@ -107,9 +113,9 @@
         </div>
       </div>
 
-      <a class="head__link is-here" href="/htmls/about.html" aria-current="page">Dr.&nbsp;Aronov</a>
-      <a class="head__link" href="/htmls/research.html">Research</a>
-      <a class="head__link" href="/htmls/contact.html">Contact</a>
+      <a class="head__link is-here" href="/about/" aria-current="page">Dr.&nbsp;Aronov</a>
+      <a class="head__link" href="/research/">Research</a>
+      <a class="head__link" href="/contact/">Contact</a>
     </nav>
 
     <div class="head__actions">
@@ -129,7 +135,7 @@
   <div class="menu__inner">
     <nav class="menu__nav">
 
-      <a href="../index.html"><i>i.</i><em>Home</em></a>
+      <a href="/"><i>i.</i><em>Home</em></a>
 
       <details class="menu__drop">
         <summary>
@@ -153,9 +159,9 @@
         </div>
       </details>
 
-      <a class="is-here" href="/htmls/about.html" aria-current="page"><i>iii.</i><em>Dr. Aronov</em></a>
-      <a href="/htmls/research.html"><i>iv.</i><em>Research</em></a>
-      <a href="/htmls/contact.html"><i>v.</i><em>Contact</em></a>
+      <a class="is-here" href="/about/" aria-current="page"><i>iii.</i><em>Dr. Aronov</em></a>
+      <a href="/research/"><i>iv.</i><em>Research</em></a>
+      <a href="/contact/"><i>v.</i><em>Contact</em></a>
     </nav>
     <div class="menu__foot">
       <a class="btn btn--gold" href="/contact/"><span>Begin screening</span></a>
@@ -258,7 +264,7 @@
       <div>
         <p class="ab-eyebrow" data-ab="rise">In her own words</p>
         <h2 class="ab-h2" data-ab-split="lines">
-          Four minutes, <em>unedited.</em>
+          Two minutes, <em>unedited.</em>
         </h2>
       </div>
       <p class="ab-lede" data-ab="rise">
@@ -282,8 +288,8 @@
              the first frame decodes, so it is worth exporting one. -->
         <video id="abVideo"
                autoplay muted loop playsinline preload="metadata"
-               poster="/assets/gen-images/dr.aronov.png">
-          <source src="https://github.com/Elanstech/alphavitaleliteiv/releases/download/About/aboutvideo.mp4" type="video/mp4">
+               poster="/assets/video/dr-aronov-poster.jpg">
+          <source src="/assets/video/dr-aronov.mp4" type="video/mp4">
         </video>
       </div>
 
@@ -798,7 +804,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
 <!-- /script.js is shared: header, mobile menu, dock, nav state, smooth anchors -->
-<script src="../script.js" type="module"></script>
-<script src="/js/about.js" type="module"></script>
+<script src="/script.js" type="module"></script>
+<script src="/about/about.js" type="module"></script>
 </body>
 </html>
