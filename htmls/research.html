@@ -327,7 +327,7 @@
              the site cuts over. Move the PDF to /assets/research/ and change this
              to ../assets/research/vitamin-b6-b12-folate-cognitive-vitality.pdf -->
         <a class="btn btn--forest btn--lg"
-           href="../assets/gen-images/b6.pdf"
+           href="https://precisionmedicaliv.com/wp-content/themes/alphavital/assets/research/vitamin-b6-b12-folate-cognitive-vitality.pdf"
            target="_blank" rel="noopener" data-magnetic>
           <span>Download the PDF</span><i class="ph ph-download-simple"></i>
         </a>
@@ -347,22 +347,34 @@
 <!-- ============================= FILTER BAR ============================= -->
 <div class="rs-bar" id="rsBar">
   <div class="rs-wrap">
-    <div class="rs-bar__in">
-      <span class="rs-bar__lab">Filter</span>
-      <button class="rs-chip" type="button" data-all aria-pressed="true">All references <b>27</b></button>
-      <button class="rs-chip" type="button" data-tier="synthesis" style="--tone:var(--t-synthesis)" aria-pressed="false">Systematic review / meta-analysis <b>3</b></button>
-          <button class="rs-chip" type="button" data-tier="clinical" style="--tone:var(--t-clinical)" aria-pressed="false">Clinical study in people <b>5</b></button>
-          <button class="rs-chip" type="button" data-tier="review" style="--tone:var(--t-review)" aria-pressed="false">Peer-reviewed review <b>16</b></button>
-          <button class="rs-chip" type="button" data-tier="observation" style="--tone:var(--t-observation)" aria-pressed="false">Observational study <b>1</b></button>
-          <button class="rs-chip" type="button" data-tier="preclinical" style="--tone:var(--t-preclinical)" aria-pressed="false">Preclinical — animal or cell <b>2</b></button>
-      <button class="rs-chip" type="button" data-tx="glynac" aria-pressed="false">GLyNAC Longevity Restoration IV <b>4</b></button>
-          <button class="rs-chip" type="button" data-tx="immun-o-boost" aria-pressed="false">Immun-O-Boost IV Supportive Infusion <b>7</b></button>
-          <button class="rs-chip" type="button" data-tx="liquixo" aria-pressed="false">LIQUIXO Muscle Recovery IV <b>2</b></button>
-          <button class="rs-chip" type="button" data-tx="antioxidant" aria-pressed="false">Antioxidant ×3 Reset IV <b>5</b></button>
-          <button class="rs-chip" type="button" data-tx="glutathione" aria-pressed="false">Glutathione IV Injection <b>2</b></button>
-          <button class="rs-chip" type="button" data-tx="revive" aria-pressed="false">Revive IV Support <b>2</b></button>
-          <button class="rs-chip" type="button" data-tx="stress-brain" aria-pressed="false">Stress, Mental Burnout &amp; Brain Wellness IV <b>5</b></button>
+
+    <div class="rs-bar__row">
+      <span class="rs-bar__lab" id="labTier">Evidence tier</span>
+      <div class="rs-bar__set" role="group" aria-labelledby="labTier">
+            <button class="rs-chip" type="button" data-tier="synthesis" style="--tone:var(--t-synthesis)" aria-pressed="false">Systematic review / meta-analysis <b>3</b></button>
+            <button class="rs-chip" type="button" data-tier="clinical" style="--tone:var(--t-clinical)" aria-pressed="false">Clinical study in people <b>5</b></button>
+            <button class="rs-chip" type="button" data-tier="review" style="--tone:var(--t-review)" aria-pressed="false">Peer-reviewed review <b>16</b></button>
+            <button class="rs-chip" type="button" data-tier="observation" style="--tone:var(--t-observation)" aria-pressed="false">Observational study <b>1</b></button>
+            <button class="rs-chip" type="button" data-tier="preclinical" style="--tone:var(--t-preclinical)" aria-pressed="false">Preclinical — animal or cell <b>2</b></button>
+      </div>
+      <button class="rs-clear" type="button" data-all hidden>
+        <i class="ph ph-x"></i> Clear
+      </button>
     </div>
+
+    <div class="rs-bar__row">
+      <span class="rs-bar__lab" id="labTx">Infusion</span>
+      <div class="rs-bar__set" role="group" aria-labelledby="labTx">
+            <button class="rs-chip" type="button" data-tx="glynac" aria-pressed="false">GLyNAC Longevity Restoration IV <b>4</b></button>
+            <button class="rs-chip" type="button" data-tx="immun-o-boost" aria-pressed="false">Immun-O-Boost IV Supportive Infusion <b>7</b></button>
+            <button class="rs-chip" type="button" data-tx="liquixo" aria-pressed="false">LIQUIXO Muscle Recovery IV <b>2</b></button>
+            <button class="rs-chip" type="button" data-tx="antioxidant" aria-pressed="false">Antioxidant ×3 Reset IV <b>5</b></button>
+            <button class="rs-chip" type="button" data-tx="glutathione" aria-pressed="false">Glutathione IV Injection <b>2</b></button>
+            <button class="rs-chip" type="button" data-tx="revive" aria-pressed="false">Revive IV Support <b>2</b></button>
+            <button class="rs-chip" type="button" data-tx="stress-brain" aria-pressed="false">Stress, Mental Burnout &amp; Brain Wellness IV <b>5</b></button>
+      </div>
+    </div>
+
   </div>
 </div>
 
