@@ -49,6 +49,7 @@
 html.rs-on [data-rs]           { opacity: 0; will-change: transform, opacity; }
 html.rs-on [data-rs="rise"]    { transform: translate3d(0, 30px, 0); }
 html.rs-on [data-rs="pop"]     { transform: translate3d(0, 22px, 0) scale(.96); }
+html.rs-on [data-rs="scale"]   { transform: scale(.94); }
 html.rs-on [data-rs-split]     { opacity: 0; }
 html.rs-on .rs-line > span     { transform: translate3d(0, 105%, 0); }
 
@@ -199,6 +200,154 @@ html.rs-on .rs-line > span     { transform: translate3d(0, 105%, 0); }
 
 @media (max-width: 1000px) { .rs-tiers__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px)  { .rs-tiers__grid { grid-template-columns: 1fr; } }
+
+
+/* ── 04b FEATURED PAPER ──────────────────────────────────────────────────────
+   One document, given room. It sits between the tier legend and the library
+   because it IS the legend's argument in practice: a report that states what
+   the evidence does not show as plainly as what it does. */
+.rs-feat {
+    padding: clamp(3rem, 6vw, 5rem) 0;
+    background:
+        radial-gradient(80% 60% at 88% 10%, rgba(193,150,63,.12), transparent 60%),
+        var(--cream);
+    border-bottom: 1px solid var(--rule);
+}
+.rs-feat__in {
+    perspective: 1200px;
+    display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(1.75rem, 4vw, 4rem); align-items: start;
+}
+
+/* the document plate — type, not a screenshot, so it never depends on an asset */
+.rs-plate {
+    position: relative; padding: clamp(1.4rem, 2.4vw, 2rem);
+    background: #fff; border: 1px solid var(--rule);
+    box-shadow: 0 30px 56px -34px rgba(32,52,33,.42);
+    transform-style: preserve-3d;
+}
+.rs-plate::after {                       /* a turned corner */
+    content: ''; position: absolute; right: 0; bottom: 0;
+    border-width: 0 0 26px 26px; border-style: solid;
+    border-color: transparent transparent var(--parchment) transparent;
+    box-shadow: -2px -2px 5px rgba(32,52,33,.09);
+}
+.rs-plate__org {
+    display: block; padding-bottom: .8rem; border-bottom: 1px solid var(--rule);
+    font-family: var(--caps); font-size: .62rem;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--forest-mid);
+}
+.rs-plate__kicker {
+    display: block; margin-top: 1.1rem;
+    font-family: var(--data); font-weight: 600; font-size: .64rem;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--gold-deep);
+}
+.rs-plate__title {
+    margin-top: .5rem;
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.05rem, 1.7vw, 1.35rem); line-height: 1.28; color: var(--forest);
+}
+.rs-plate__rule { display: block; height: 1px; margin: 1.1rem 0; background: var(--rule); }
+.rs-plate__lines { display: grid; gap: .42rem; }
+.rs-plate__lines span { display: block; height: 6px; background: var(--parchment); }
+.rs-plate__lines span:nth-child(3) { width: 82%; }
+.rs-plate__lines span:nth-child(6) { width: 64%; }
+.rs-plate__foot {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; margin-top: 1.4rem; padding-top: .85rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--micro); font-size: .56rem;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--mist);
+}
+
+.rs-feat__body .rs-eyebrow { margin-bottom: 1.1rem; }
+.rs-feat__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.7rem, 3.2vw, 2.7rem);
+    line-height: 1.1; letter-spacing: -.018em; color: var(--forest);
+}
+.rs-feat__body > p { max-width: 62ch; margin-top: 1.15rem; font-size: clamp(.96rem, 1.1vw, 1.05rem); line-height: 1.75; }
+.rs-feat__ask {
+    margin-top: 1.6rem;
+    font-family: var(--caps); font-size: .95rem; color: var(--forest);
+}
+.rs-assoc {
+    display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .95rem; list-style: none;
+}
+.rs-assoc li {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .5rem .85rem;
+    border: 1px solid var(--rule); background: var(--parchment);
+    font-size: .84rem; color: var(--forest-mid);
+}
+.rs-assoc li::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold); flex: none;
+}
+
+.rs-meta {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem; margin-top: 1.9rem; padding-top: 1.3rem;
+    border-top: 1px solid var(--rule);
+}
+.rs-meta dt {
+    font-family: var(--micro); font-size: .58rem;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--gold-deep);
+}
+.rs-meta dd { margin-top: .4rem; font-size: .86rem; line-height: 1.55; color: var(--ink-soft); }
+
+.rs-feat__note {
+    max-width: 70ch; margin-top: 1.5rem;
+    font-family: var(--accent); font-style: italic;
+    font-size: .95rem; line-height: 1.7; color: var(--mist);
+}
+.rs-feat__acts { margin-top: 1.6rem; }
+
+@media (max-width: 900px) {
+    .rs-feat__in { grid-template-columns: 1fr; }
+    .rs-plate { max-width: 420px; }
+    .rs-meta { grid-template-columns: 1fr; gap: .95rem; }
+}
+
+
+/* ── 04c MISSING-REFERENCE FLAG ──────────────────────────────────────────────
+   TEMPORARY REVIEW SCAFFOLDING. Deliberately loud and deliberately off-palette
+   so it cannot be mistaken for design — it is there for Dr. Aronov's read-through
+   and comes OFF before launch. Delete the two .rs-gap sections in research.html
+   and this block to remove it. */
+.rs-gap {
+    padding-top: clamp(2.5rem, 5vw, 3.75rem);
+}
+.rs-gap__box {
+    border: 2px dashed #C0281F;
+    background: rgba(192, 40, 31, .05);
+    padding: clamp(1.25rem, 2.4vw, 1.9rem);
+}
+.rs-gap__tag {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .38rem .75rem; margin-bottom: 1rem;
+    background: #C0281F; color: #fff;
+    font-family: var(--micro); font-size: .6rem;
+    letter-spacing: .16em; text-transform: uppercase;
+}
+.rs-gap__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.3rem, 2.2vw, 1.8rem); line-height: 1.15; color: var(--forest);
+}
+.rs-gap__tags {
+    margin-top: .4rem; font-family: var(--accent); font-style: italic;
+    font-size: 1.02rem; color: var(--gold-deep);
+}
+.rs-gap__msg {
+    margin-top: 1rem; max-width: 62ch;
+    font-size: .92rem; line-height: 1.7; color: #8E1F18; font-weight: 500;
+}
+.rs-gap__msg a { color: #8E1F18; text-decoration: underline; }
+.rs-gap__go {
+    display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.1rem;
+    font-family: var(--caps); font-size: .74rem; letter-spacing: .1em; color: var(--forest-mid);
+    border-bottom: 1px solid var(--rule-gold); padding-bottom: .2rem;
+}
 
 
 /* ── 05 FILTER BAR ───────────────────────────────────────────────────────── */
