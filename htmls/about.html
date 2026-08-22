@@ -31,7 +31,7 @@
 <link rel="icon" type="image/png" href="/logo.png">
 
 <!-- SHARED sheet first, page sheet second — the page layer only ever adds -->
-<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="/css/about.css">
 
 <!-- start states applied before first paint, so nothing flashes in and out
@@ -256,12 +256,12 @@
 
     <div class="ab-film__head">
       <div>
-        <p class="ab-eyebrow ab-eyebrow--light" data-ab="rise">In her own words</p>
-        <h2 class="ab-h2 ab-h2--light" data-ab-split="lines">
+        <p class="ab-eyebrow" data-ab="rise">In her own words</p>
+        <h2 class="ab-h2" data-ab-split="lines">
           Two minutes, <em>unedited.</em>
         </h2>
       </div>
-      <p class="ab-lede ab-lede--light" data-ab="rise">
+      <p class="ab-lede" data-ab="rise">
         Rather than describe her practice for her, we filmed it. She explains what nearly twenty
         years in the operating room taught her about intravenous therapy, and why she built a
         practice where the physician never leaves the room.
@@ -277,36 +277,37 @@
 
         <!-- ▸ SWAP THIS SRC for the file from the previous designer.
              Host it the same way the home-page hero video is hosted (a GitHub
-             release asset) or drop it at /assets/video/. Keep the poster —
-             it is what shows before the first frame decodes. -->
+             release asset) or drop it at /assets/video/. It runs on its own —
+             muted, looping, no click required. The poster is what shows before
+             the first frame decodes, so it is worth exporting one. -->
         <video id="abVideo"
-               playsinline muted loop preload="metadata"
-               poster="/assets/gen-images/dr.aronov.png">
+               autoplay muted loop playsinline preload="metadata"
+               poster="/assets/video/dr-aronov-poster.jpg">
           <source src="/assets/video/dr-aronov.mp4" type="video/mp4">
         </video>
+      </div>
 
-        <div class="ab-player__veil">
-          <button class="ab-play" id="abPlay" type="button" aria-label="Play the film">
-            <i class="ph-fill ph-play"></i>
-          </button>
-        </div>
+      <!-- Controls sit BELOW the frame on the cream, not on top of her face.
+           The film runs by itself; the only thing anyone actually needs from
+           this row is the sound. -->
+      <div class="ab-ctrl" id="abCtrl">
+        <button class="ab-ctrl__btn ab-ctrl__mute" type="button" data-ab-mute aria-label="Turn sound on or off">
+          <i class="ph-fill ph-speaker-simple-slash ab-ico--a"></i>
+          <i class="ph-fill ph-speaker-simple-high ab-ico--b"></i>
+          <span class="ab-ctrl__word ab-ico--a">Sound on</span>
+          <span class="ab-ctrl__word ab-ico--b">Mute</span>
+        </button>
 
-        <div class="ab-ctrl">
-          <button class="ab-ctrl__btn ab-ctrl__play" type="button" data-ab-play aria-label="Play or pause">
-            <i class="ph-fill ph-play ab-ico--a"></i>
-            <i class="ph-fill ph-pause ab-ico--b"></i>
-          </button>
-          <button class="ab-ctrl__btn ab-ctrl__mute" type="button" data-ab-mute aria-label="Turn sound on or off">
-            <i class="ph-fill ph-speaker-simple-slash ab-ico--a"></i>
-            <i class="ph-fill ph-speaker-simple-high ab-ico--b"></i>
-          </button>
-          <span class="ab-ctrl__hint">Tap for sound</span>
-          <div class="ab-ctrl__track" id="abTrack" role="slider"
-               aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-            <span class="ab-ctrl__fill" id="abFill"></span>
-          </div>
-          <span class="ab-ctrl__time" id="abTime">0:00 / 0:00</span>
+        <button class="ab-ctrl__btn ab-ctrl__btn--icon ab-ctrl__play" type="button" data-ab-play aria-label="Play or pause">
+          <i class="ph-fill ph-pause ab-ico--b"></i>
+          <i class="ph-fill ph-play ab-ico--a"></i>
+        </button>
+
+        <div class="ab-ctrl__track" id="abTrack" role="slider"
+             aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+          <span class="ab-ctrl__fill" id="abFill"></span>
         </div>
+        <span class="ab-ctrl__time" id="abTime">0:00 / 0:00</span>
       </div>
 
       <div class="ab-film__cap">
@@ -377,15 +378,15 @@
 
       <!-- THE THREAD -->
       <div class="ab-thread" id="abThread" aria-hidden="true">
-        <svg class="ab-thread__svg" viewBox="0 0 44 1000" preserveAspectRatio="none">
-          <path class="ab-thread__base" id="abThreadBase" pathLength="1"
-                d="M22 0 C 6 180, 38 320, 22 500 C 6 680, 38 820, 22 1000"
-                vector-effect="non-scaling-stroke"></path>
-          <path class="ab-thread__draw" id="abThreadDraw" pathLength="1"
-                d="M22 0 C 6 180, 38 320, 22 500 C 6 680, 38 820, 22 1000"
-                vector-effect="non-scaling-stroke"></path>
-        </svg>
-        <span class="ab-thread__node" id="abThreadNode"></span>
+        <div class="ab-thread__rail" id="abThreadRail">
+          <svg class="ab-thread__svg" viewBox="0 0 44 1000" preserveAspectRatio="none">
+            <path class="ab-thread__base" pathLength="1"
+                  d="M22 0 C 6 180, 38 320, 22 500 C 6 680, 38 820, 22 1000"></path>
+            <path class="ab-thread__draw" id="abThreadDraw" pathLength="1"
+                  d="M22 0 C 6 180, 38 320, 22 500 C 6 680, 38 820, 22 1000"></path>
+          </svg>
+          <span class="ab-thread__node" id="abThreadNode"></span>
+        </div>
       </div>
 
       <!-- the stops -->
@@ -654,7 +655,7 @@
         information you provide herself, then determines whether IV therapy is appropriate.
       </p>
       <div class="foot__acts">
-        <a class="rx__btn rx__btn--solid" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
+        <a class="rx__btn rx__btn--solid" href="/contact/">
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="rx__btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
@@ -797,7 +798,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
 <!-- /script.js is shared: header, mobile menu, dock, nav state, smooth anchors -->
-<script src="/script.js" type="module"></script>
+<script src="../script.js" type="module"></script>
 <script src="/js/about.js" type="module"></script>
 </body>
 </html>
