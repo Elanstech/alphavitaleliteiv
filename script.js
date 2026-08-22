@@ -1043,20 +1043,24 @@ class Shelf {
             { opacity: 0, y: 24 },
             { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04 });
 
-        /* THE PINNED-FILTER BUG, FIXED.
-           The global ScrollTrigger.refresh() is blocked while the rail is
-           pinned (see boot()) — for good reason, a global refresh mid-pin is
-           what makes the shelf jump. So the filter's refresh never landed and
-           the section kept the scroll length of all ten cards.
+        /* THE FILTER → BLANK-SECTIONS BUG, FIXED.
+           Filtering changes the pin's scroll length, which changes the height
+           of the whole document — but refreshing ONLY this.st (the old code)
+           left every trigger BELOW the shelf holding start positions measured
+           against the ten-card page. Scroll on and those triggers fire at the
+           wrong scroll offsets or never fire at all, and since popIn parks its
+           targets at opacity 0 until its trigger fires, whole sections render
+           blank. Every trigger has to be remeasured, not just this one.
 
-           Refresh THIS trigger only, and do it from the top of the pin where
-           the scrub is at progress 0. Nothing else on the page is remeasured
-           and the pin is not mid-flight, so there is nothing to jump. */
-        if (this.st) {
-            const top = this.st.start;
-            if (window.scrollY > top) window.scrollTo({ top, behavior: 'auto' });
-            requestAnimationFrame(() => this.st?.refresh());
+           A GLOBAL refresh is only unsafe mid-pin, so first return to the top
+           of the pin (progress 0) where nothing is in flight, then refresh
+           everything on the next frame. This deliberately bypasses the
+           safeRefresh guard in boot(): that guard exists to block refreshes
+           that arrive at an arbitrary pin progress, and this one never does. */
+        if (this.st && window.scrollY > this.st.start) {
+            window.scrollTo({ top: this.st.start, behavior: 'auto' });
         }
+        requestAnimationFrame(() => ScrollTrigger.refresh());
     }
 }
 
@@ -1555,42 +1559,45 @@ class Dock {
    Menu, names and order per Dr. Aronov's 17 Aug email: nine signature
    infusions + one customized option. Quercetin and Curcumin removed.
 
+   Every slug below matches the real page the header flyout links to —
+   /drips/<name>.html — so a quiz result can never land on a 404.
+
    Copy rule for every `why` below: "supports" and "designed to complement".
    Never treats, cures, repairs, or guaranteed-outcome language.
 ============================================================================= */
 const DRIPS = [
-    { id:'healthyaging', name:'GLyNAC Longevity Restoration IV',  slug:'/drips/healthy-aging/',          img:'glynac',        time:'1 h 15',                     price:'$450', prog:'$405',    tag:'Healthy Aging',
+    { id:'healthyaging', name:'GLyNAC Longevity Restoration IV',  slug:'/drips/glynac.html',              img:'glynac',        time:'1 h 15',                     price:'$450', prog:'$405',    tag:'Healthy Aging',
       why:'The two compounds the body uses as building components to produce glutathione.' },
 
-    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immune-support/',         img:'immuneoboost',  time:'2 h 30',                     price:'$650', prog:'$585',    tag:'Immune Support',
+    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immun-o-boost.html',       img:'immuneoboost',  time:'2 h 30',                     price:'$650', prog:'$585',    tag:'Immune Support',
       why:'Immune system support, hydration, recovery and wellness optimization.' },
 
-    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/muscle-recovery/',        img:'liquixo',       time:'45 min',                     price:'$495', prog:'$445.50', tag:'Muscle Recovery',
-      why:'A full 20 amino acid blend with recovery nutrients, plus exosomes.' },
+    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/liquixo.html',             img:'liquixo',       time:'45 min',                     price:'$495', prog:'$445.50', tag:'Muscle Recovery',
+      why:'A full 20 amino acid blend with alpha-lipoic acid and exosomes.' },
 
-    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant-support/',    img:'antioxidant',   time:'75 min',                     price:'$500', prog:'$450',    tag:'Antioxidant Support',
+    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant.html',         img:'antioxidant',   time:'75 min',                     price:'$500', prog:'$450',    tag:'Antioxidant Support',
       why:'Three antioxidants in one network, recharging one another rather than working alone.' },
 
-    { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione-iv-therapy/', img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
+    { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione.html',         img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
       why:'Concentrated antioxidant support as a slow physician-administered push.' },
 
     // one infusion, two categories — the quiz can land on it from either route
-    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin-wellness/',    img:'jointsupport',  time:'2 h 30',                     price:'$750', prog:'$675',    tag:'Joint Support & Skin Health',
+    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin.html',          img:'jointsupport',  time:'2 h 30',                     price:'$750', prog:'$675',    tag:'Joint Support & Skin Health',
       why:'Amino acids involved in normal collagen formation, with antioxidant support around them.' },
 
-    { id:'liver',        name:'Fatty Liver Support IV',           slug:'/drips/liver-support/',          img:'liversupport',  time:'3 h',                        price:'$850', prog:'$765',    tag:'Liver Support',
+    { id:'liver',        name:'Fatty Liver Support IV',           slug:'/drips/fatty-liver-support.html', img:'liversupport',  time:'3 h',                        price:'$850', prog:'$765',    tag:'Liver Support',
       why:'Glycine and taurine for the liver’s normal bile work, with NAC for the glutathione pathway.' },
 
-    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/recovery-support/',       img:'revive',        time:'2 h 15',                     price:'$625', prog:'$562.50', tag:'Recovery Support',
+    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/revive.html',              img:'revive',        time:'2 h 15',                     price:'$625', prog:'$562.50', tag:'Recovery Support',
       why:'Hydration and nutritional replenishment for flexible, as-needed use.' },
 
     // name matches the plate exactly — it used to read "Stress, Mental Burnout
     // & Brain Wellness IV" here and "Stress & Brain Wellness IV" on the card,
     // so a quiz result and the shelf disagreed about what the thing is called
-    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/mind-focus-support/',     img:'brainwellness', time:'1 h 30',                     price:'$700', prog:'$630',    tag:'Mind & Focus Support',
+    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$700', prog:'$630',    tag:'Mind & Focus Support',
       why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
 
-    { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized-infusion/',    img:'customized',    time:'Individually determined',    price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
+    { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized.html',          img:'customized',    time:'Individually determined',    price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
       why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
 ];
 
@@ -1970,9 +1977,9 @@ const boot = () => {
         });
 
         /* Never refresh globally while the rail is pinned — queue it instead.
-           The shelf's own filter does NOT come through here: it refreshes its
-           single trigger directly, from the top of the pin, so it is never
-           blocked by this guard. */
+           The shelf's filter does NOT come through here: it first returns to
+           the top of the pin (progress 0), where a global refresh is safe,
+           and refreshes everything directly — see Shelf.applyFilter(). */
         let queued = null;
         const safeRefresh = () => {
             if (Shelf.pinned) {
