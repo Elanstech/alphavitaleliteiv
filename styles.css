@@ -442,6 +442,9 @@ ul { list-style: none; }
     font-family: var(--data); font-weight: 600;
     font-variant-numeric: tabular-nums lining-nums;
     font-size: .72rem; color: var(--mist);
+    /* the price is one unit — before the webfont settled it could wrap to a
+       second line and the whole row jumped. It never wraps. */
+    white-space: nowrap;
     transition: color .35s var(--ease);
 }
 .hd-item:hover {
@@ -761,7 +764,7 @@ html.is-locked .head { transform: none; }
 
 /* =============================================================================
    05 · HERO
-   Copy is Dr. Aronov's approved Edit #2 wording. The word-loop drives the
+   Copy is Dr. Aronov's current approved wording. The word-loop drives the
    "Infusions for ..." descriptor line beneath the headline, so the approved
    hero wording is never part of the moving text.
 ============================================================================= */
