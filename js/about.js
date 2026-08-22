@@ -341,12 +341,16 @@ const Film = {
        never fight a visitor who has pressed pause themselves */
     watch() {
         if (!('IntersectionObserver' in window)) return;
+        /* Play on ratio, not on the bare isIntersecting flag: a 16:9 frame is
+           tall enough that a strict threshold makes it stall in and out at the
+           edges of the viewport. Play from a quarter visible, stop under a
+           tenth — and never fight someone who pressed pause themselves. */
         const io = new IntersectionObserver((entries) => {
-            entries.forEach(({ isIntersecting }) => {
-                if (isIntersecting && !this.manual && !RM.matches) this.video.play().catch(() => {});
-                else if (!isIntersecting && !this.video.paused && this.video.muted) this.video.pause();
+            entries.forEach(({ intersectionRatio: r }) => {
+                if (r >= 0.25 && !this.manual && !RM.matches) this.video.play().catch(() => {});
+                else if (r < 0.1 && !this.video.paused && this.video.muted) this.video.pause();
             });
-        }, { threshold: 0.55 });
+        }, { threshold: [0, 0.1, 0.25, 0.5] });
         io.observe(this.player);
 
         // a backgrounded tab should not keep the file streaming
