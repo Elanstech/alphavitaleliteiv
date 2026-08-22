@@ -141,6 +141,7 @@ const Filter = {
 
         this.chips  = $$('.rs-chip', this.bar);
         this.all    = $('[data-all]', this.bar);
+        if (this.all) this.all.addEventListener('click', () => this.toggle(this.all));
         this.groups = $$('.rs-group');
         this.refs   = $$('.rs-ref');
         this.count  = $('#rsCount');
@@ -169,11 +170,10 @@ const Filter = {
     /** reflect state onto the chips */
     sync() {
         this.chips.forEach((c) => {
-            const on = c === this.all
-                ? (!this.tiers.size && !this.txs.size)
-                : (c.dataset.tier ? this.tiers.has(c.dataset.tier) : this.txs.has(c.dataset.tx));
+            const on = c.dataset.tier ? this.tiers.has(c.dataset.tier) : this.txs.has(c.dataset.tx);
             c.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
+        if (this.all) this.all.hidden = !this.tiers.size && !this.txs.size;
     },
 
     apply() {
@@ -236,6 +236,38 @@ const Filter = {
 };
 
 
+/* ── STICK ──────────────────────────────────────────────────────────────────
+   The filter bar pins under the header — but ../script.js condenses that
+   header at 40px and retreats it entirely on the way down. Pinning to a flat
+   78px therefore leaves the bar hanging with a gap above it. Rather than run a
+   second scroll listener, watch the class the shared Header already sets and
+   mirror it. One source of truth, and the two can never disagree. */
+const Stick = {
+    init() {
+        const bar  = $('#rsBar');
+        const head = $('#head');
+        if (!bar) return;
+
+        const HEIGHT  = 78;   // .head__rail
+        const STUCK_H = 64;   // .head.is-stuck .head__rail
+
+        const sync = () => {
+            const hidden = head?.classList.contains('is-hidden');
+            const stuck  = head?.classList.contains('is-stuck');
+            const top    = hidden ? 0 : (stuck ? STUCK_H : HEIGHT);
+            bar.style.setProperty('--rs-bar-top', `${top}px`);
+            bar.classList.toggle('is-pinned', bar.getBoundingClientRect().top <= top + 1);
+        };
+
+        sync();
+        if (head) new MutationObserver(sync)
+            .observe(head, { attributes: true, attributeFilter: ['class'] });
+        addEventListener('scroll', sync, { passive: true });
+        addEventListener('resize', sync);
+    },
+};
+
+
 /* ── PROGRESS ───────────────────────────────────────────────────────────── */
 const Plate = {
     /* the featured document leans toward the pointer. Fine pointers only —
@@ -279,6 +311,7 @@ const boot = () => {
     };
 
     run('filter', () => Filter.init());
+    run('stick',  () => Stick.init());
 
     if (!HAS_GSAP || RM.matches) { release(); return; }
 
