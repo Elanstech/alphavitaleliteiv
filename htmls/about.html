@@ -18,27 +18,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preload" as="image" href="/logo.png" fetchpriority="high">
-<link rel="preload" as="image" href="/assets/gen-images/dr.aronov.png" fetchpriority="high">
+<link rel="preload" as="image" href="../logo.png" fetchpriority="high">
+<link rel="preload" as="image" href="../assets/gen-images/dr.aronov.png" fetchpriority="high">
 
 <!-- the site faces only — this page adds no new typefaces on purpose -->
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
-<!-- fill is what the player controls are drawn in; deferred the same way the
-     home page defers it, so it never blocks first paint -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css" media="print" onload="this.media='all'">
-<noscript>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
-</noscript>
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css"></noscript>
 
-<link rel="icon" type="image/png" href="/logo.png">
+<link rel="icon" type="image/png" href="../logo.png">
 
 <!-- SHARED sheet first, page sheet second — the page layer only ever adds -->
-<link rel="stylesheet" href="/styles.css">
-<link rel="stylesheet" href="/about/about.css">
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../css/about.css">
 
 <!-- start states applied before first paint, so nothing flashes in and out
      before GSAP takes over. Scripting off or motion reduced: no hiding. -->
@@ -58,16 +52,16 @@
 <header class="head" id="head">
   <div class="head__rail">
 
-    <a class="head__mark" href="/">
-      <img src="/logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
+    <a class="head__mark" href="../index.html">
+      <img src="../logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
     </a>
 
     <nav class="head__nav" id="headNav">
 
-      <a class="head__link" href="/">Home</a>
+      <a class="head__link" href="../index.html">Home</a>
 
       <div class="head__drop">
-        <a class="head__link" href="/htmls/infusions.html">
+        <a class="head__link" href="infusions.html">
           Infusions <i class="ph ph-caret-down head__dcaret"></i>
         </a>
 
@@ -75,52 +69,52 @@
           <p class="head__panel-eyebrow">The Infusion Menu</p>
 
           <div class="head__panel-grid">
-            <a class="hd-item" href="/drips/glynac.html" style="--tone:#5B7098">
+            <a class="hd-item" href="../drips/glynac.html" style="--tone:#5B7098">
               <i>I</i><span>GLyNAC Longevity Restoration</span><b>$450</b>
             </a>
-            <a class="hd-item" href="/drips/immun-o-boost.html" style="--tone:#D9982A">
+            <a class="hd-item" href="../drips/immun-o-boost.html" style="--tone:#D9982A">
               <i>II</i><span>Immun-O-Boost IV Support</span><b>$650</b>
             </a>
-            <a class="hd-item" href="/drips/liquixo.html" style="--tone:#B34E37">
+            <a class="hd-item" href="../drips/liquixo.html" style="--tone:#B34E37">
               <i>III</i><span>LIQUIXO Muscle Recovery</span><b>$495</b>
             </a>
-            <a class="hd-item" href="/drips/antioxidant.html" style="--tone:#4F7D5E">
+            <a class="hd-item" href="../drips/antioxidant.html" style="--tone:#4F7D5E">
               <i>IV</i><span>Antioxidant &times;3 Reset</span><b>$500</b>
             </a>
-            <a class="hd-item" href="/drips/glutathione.html" style="--tone:#7FA08C">
+            <a class="hd-item" href="../drips/glutathione.html" style="--tone:#7FA08C">
               <i>V</i><span>Glutathione IV Injection</span><b>$125</b>
             </a>
-            <a class="hd-item" href="/drips/joint-skin.html" style="--tone:#8C6239">
+            <a class="hd-item" href="../drips/joint-skin.html" style="--tone:#8C6239">
               <i>VI</i><span>Joint &amp; Skin Wellness</span><b>$750</b>
             </a>
-            <a class="hd-item" href="/drips/fatty-liver-support.html" style="--tone:#5F7A55">
+            <a class="hd-item" href="../drips/fatty-liver-support.html" style="--tone:#5F7A55">
               <i>VII</i><span>Fatty Liver Support</span><b>$850</b>
             </a>
-            <a class="hd-item" href="/drips/revive.html" style="--tone:#35707F">
+            <a class="hd-item" href="../drips/revive.html" style="--tone:#35707F">
               <i>VIII</i><span>Revive IV Support</span><b>$625</b>
             </a>
-            <a class="hd-item" href="/drips/stress-brain.html" style="--tone:#7A5F98">
+            <a class="hd-item" href="../drips/stress-brain.html" style="--tone:#7A5F98">
               <i>IX</i><span>Stress &amp; Brain Wellness</span><b>$700</b>
             </a>
-            <a class="hd-item" href="/drips/customized.html" style="--tone:#C1963F">
+            <a class="hd-item" href="../drips/customized.html" style="--tone:#C1963F">
               <i>X</i><span>Customized IV Infusion</span><b>Consult</b>
             </a>
           </div>
 
-          <a class="head__panel-foot" href="/htmls/infusions.html">
+          <a class="head__panel-foot" href="infusions.html">
             <span>View the full menu</span><i class="ph ph-arrow-right"></i>
           </a>
         </div>
       </div>
 
-      <a class="head__link is-here" href="/about/" aria-current="page">Dr.&nbsp;Aronov</a>
-      <a class="head__link" href="/research/">Research</a>
-      <a class="head__link" href="/contact/">Contact</a>
+      <a class="head__link is-here" href="about.html" aria-current="page">Dr.&nbsp;Aronov</a>
+      <a class="head__link" href="research.html">Research</a>
+      <a class="head__link" href="contact.html">Contact</a>
     </nav>
 
     <div class="head__actions">
       <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
-      <a class="btn btn--forest head__cta" href="/contact/" data-magnetic><span>Begin screening</span></a>
+      <a class="btn btn--forest head__cta" href="contact.html" data-magnetic><span>Begin screening</span></a>
       <button class="head__burger" id="burger" type="button" aria-label="Menu">
         <span></span><span></span>
       </button>
@@ -135,7 +129,7 @@
   <div class="menu__inner">
     <nav class="menu__nav">
 
-      <a href="/"><i>i.</i><em>Home</em></a>
+      <a href="../index.html"><i>i.</i><em>Home</em></a>
 
       <details class="menu__drop">
         <summary>
@@ -143,28 +137,28 @@
           <b class="menu__dcaret"><span class="ph ph-caret-down"></span></b>
         </summary>
         <div class="menu__sub">
-          <a class="menu__sub-all" href="/htmls/infusions.html">
+          <a class="menu__sub-all" href="infusions.html">
             <span>The full menu</span><span class="ph ph-arrow-right"></span>
           </a>
-          <a class="menu__sub-item" href="/drips/glynac.html" style="--tone:#5B7098"><i>I</i>GLyNAC Longevity Restoration</a>
-          <a class="menu__sub-item" href="/drips/immun-o-boost.html" style="--tone:#D9982A"><i>II</i>Immun-O-Boost IV Support</a>
-          <a class="menu__sub-item" href="/drips/liquixo.html" style="--tone:#B34E37"><i>III</i>LIQUIXO Muscle Recovery</a>
-          <a class="menu__sub-item" href="/drips/antioxidant.html" style="--tone:#4F7D5E"><i>IV</i>Antioxidant &times;3 Reset</a>
-          <a class="menu__sub-item" href="/drips/glutathione.html" style="--tone:#7FA08C"><i>V</i>Glutathione IV Injection</a>
-          <a class="menu__sub-item" href="/drips/joint-skin.html" style="--tone:#8C6239"><i>VI</i>Joint &amp; Skin Wellness</a>
-          <a class="menu__sub-item" href="/drips/fatty-liver-support.html" style="--tone:#5F7A55"><i>VII</i>Fatty Liver Support</a>
-          <a class="menu__sub-item" href="/drips/revive.html" style="--tone:#35707F"><i>VIII</i>Revive IV Support</a>
-          <a class="menu__sub-item" href="/drips/stress-brain.html" style="--tone:#7A5F98"><i>IX</i>Stress &amp; Brain Wellness</a>
-          <a class="menu__sub-item" href="/drips/customized.html" style="--tone:#C1963F"><i>X</i>Customized IV Infusion</a>
+          <a class="menu__sub-item" href="../drips/glynac.html" style="--tone:#5B7098"><i>I</i>GLyNAC Longevity Restoration</a>
+          <a class="menu__sub-item" href="../drips/immun-o-boost.html" style="--tone:#D9982A"><i>II</i>Immun-O-Boost IV Support</a>
+          <a class="menu__sub-item" href="../drips/liquixo.html" style="--tone:#B34E37"><i>III</i>LIQUIXO Muscle Recovery</a>
+          <a class="menu__sub-item" href="../drips/antioxidant.html" style="--tone:#4F7D5E"><i>IV</i>Antioxidant &times;3 Reset</a>
+          <a class="menu__sub-item" href="../drips/glutathione.html" style="--tone:#7FA08C"><i>V</i>Glutathione IV Injection</a>
+          <a class="menu__sub-item" href="../drips/joint-skin.html" style="--tone:#8C6239"><i>VI</i>Joint &amp; Skin Wellness</a>
+          <a class="menu__sub-item" href="../drips/fatty-liver-support.html" style="--tone:#5F7A55"><i>VII</i>Fatty Liver Support</a>
+          <a class="menu__sub-item" href="../drips/revive.html" style="--tone:#35707F"><i>VIII</i>Revive IV Support</a>
+          <a class="menu__sub-item" href="../drips/stress-brain.html" style="--tone:#7A5F98"><i>IX</i>Stress &amp; Brain Wellness</a>
+          <a class="menu__sub-item" href="../drips/customized.html" style="--tone:#C1963F"><i>X</i>Customized IV Infusion</a>
         </div>
       </details>
 
-      <a class="is-here" href="/about/" aria-current="page"><i>iii.</i><em>Dr. Aronov</em></a>
-      <a href="/research/"><i>iv.</i><em>Research</em></a>
-      <a href="/contact/"><i>v.</i><em>Contact</em></a>
+      <a class="is-here" href="about.html" aria-current="page"><i>iii.</i><em>Dr. Aronov</em></a>
+      <a href="research.html"><i>iv.</i><em>Research</em></a>
+      <a href="contact.html"><i>v.</i><em>Contact</em></a>
     </nav>
     <div class="menu__foot">
-      <a class="btn btn--gold" href="/contact/"><span>Begin screening</span></a>
+      <a class="btn btn--gold" href="contact.html"><span>Begin screening</span></a>
       <a class="menu__tel" href="tel:+19292010740">929 · 201 · 0740</a>
       <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
@@ -215,7 +209,7 @@
 
       <figure class="ab-shot" data-ab="curtain">
         <div class="ab-shot__frame">
-          <img src="/assets/gen-images/dr.aronov.png"
+          <img src="../assets/gen-images/dr.aronov.png"
                alt="Dr. Violeta Aronov, DO, board-certified anesthesiologist and founder of Alpha Vital Elite IV"
                width="1000" height="1250" fetchpriority="high" decoding="async" data-ab-parallax>
         </div>
@@ -264,7 +258,7 @@
       <div>
         <p class="ab-eyebrow" data-ab="rise">In her own words</p>
         <h2 class="ab-h2" data-ab-split="lines">
-          Two minutes, <em>unedited.</em>
+          Four minutes, <em>unedited.</em>
         </h2>
       </div>
       <p class="ab-lede" data-ab="rise">
@@ -288,8 +282,8 @@
              the first frame decodes, so it is worth exporting one. -->
         <video id="abVideo"
                autoplay muted loop playsinline preload="metadata"
-               poster="/assets/video/dr-aronov-poster.jpg">
-          <source src="/assets/video/dr-aronov.mp4" type="video/mp4">
+               poster="/assets/gen-images/dr.aronov.png">
+          <source src="https://github.com/Elanstech/alphavitaleliteiv/releases/download/About/aboutvideo.mp4" type="video/mp4">
         </video>
       </div>
 
@@ -630,7 +624,7 @@
       </p>
 
       <div class="ab-begin__acts" data-ab="rise">
-        <a class="btn btn--forest btn--lg" href="/contact/" data-magnetic>
+        <a class="btn btn--forest btn--lg" href="contact.html" data-magnetic>
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="btn btn--line btn--lg" href="tel:+19292010740"><span>929 · 201 · 0740</span></a>
@@ -661,7 +655,7 @@
         information you provide herself, then determines whether IV therapy is appropriate.
       </p>
       <div class="foot__acts">
-        <a class="rx__btn rx__btn--solid" href="/contact/">
+        <a class="rx__btn rx__btn--solid" href="contact.html">
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="rx__btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
@@ -686,32 +680,32 @@
       <div class="foot__col">
         <h3 class="foot__h">Infusions</h3>
         <ul class="foot__list">
-          <li><a href="/drips/glynac.html">Healthy Aging</a></li>
-          <li><a href="/drips/immun-o-boost.html">Immune Support</a></li>
-          <li><a href="/drips/liquixo.html">Muscle Recovery</a></li>
-          <li><a href="/drips/antioxidant.html">Antioxidant Support</a></li>
-          <li><a href="/drips/glutathione.html">Glutathione IV Therapy</a></li>
+          <li><a href="../drips/glynac.html">Healthy Aging</a></li>
+          <li><a href="../drips/immun-o-boost.html">Immune Support</a></li>
+          <li><a href="../drips/liquixo.html">Muscle Recovery</a></li>
+          <li><a href="../drips/antioxidant.html">Antioxidant Support</a></li>
+          <li><a href="../drips/glutathione.html">Glutathione IV Therapy</a></li>
         </ul>
       </div>
 
       <div class="foot__col">
         <h3 class="foot__h">&nbsp;</h3>
         <ul class="foot__list">
-          <li><a href="/drips/joint-skin.html">Joint &amp; Skin Wellness</a></li>
-          <li><a href="/drips/fatty-liver-support.html">Liver Support</a></li>
-          <li><a href="/drips/revive.html">Recovery Support</a></li>
-          <li><a href="/drips/stress-brain.html">Mind &amp; Focus Support</a></li>
-          <li><a href="/drips/customized.html">Customized IV Infusion</a></li>
+          <li><a href="../drips/joint-skin.html">Joint &amp; Skin Wellness</a></li>
+          <li><a href="../drips/fatty-liver-support.html">Liver Support</a></li>
+          <li><a href="../drips/revive.html">Recovery Support</a></li>
+          <li><a href="../drips/stress-brain.html">Mind &amp; Focus Support</a></li>
+          <li><a href="../drips/customized.html">Customized IV Infusion</a></li>
         </ul>
       </div>
 
       <div class="foot__col">
         <h3 class="foot__h">The practice</h3>
         <ul class="foot__list">
-          <li><a href="/">Home</a></li>
-          <li><a href="/about/">About Dr. Aronov</a></li>
-          <li><a href="/research/">Research</a></li>
-          <li><a href="/contact/">Contact</a></li>
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="about.html">About Dr. Aronov</a></li>
+          <li><a href="research.html">Research</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -727,10 +721,10 @@
         outcome is guaranteed.
       </p>
       <ul class="foot__mini">
-        <li><a href="/policies/disclaimer.html">Disclaimer</a></li>
-        <li><a href="/policies/refund-policy.html">Refund Policy</a></li>
-        <li><a href="/policies/privacy-policy.html">Privacy Policy</a></li>
-        <li><a href="/policies/terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="../policies/disclaimer.html">Disclaimer</a></li>
+        <li><a href="../policies/refund-policy.html">Refund Policy</a></li>
+        <li><a href="../policies/privacy-policy.html">Privacy Policy</a></li>
+        <li><a href="../policies/terms.html">Terms &amp; Conditions</a></li>
       </ul>
     </div>
 
@@ -804,7 +798,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
 <!-- /script.js is shared: header, mobile menu, dock, nav state, smooth anchors -->
-<script src="/script.js" type="module"></script>
-<script src="/about/about.js" type="module"></script>
+<script src="../script.js" type="module"></script>
+<script src="../js/about.js" type="module"></script>
 </body>
 </html>
