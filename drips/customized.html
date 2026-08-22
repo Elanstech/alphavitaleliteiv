@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Customized IV Infusion — Alpha Vital Elite IV</title>
+<meta name="description" content="When no signature infusion is the right fit, Dr. Violeta Aronov, DO may compose a customized IV infusion based on her clinical review. By consultation, Middle Village, Queens.">
+<meta name="theme-color" content="#F6F1E7">
+<meta name="format-detection" content="telephone=yes">
+<link rel="canonical" href="https://www.precisionmedicaliv.com/drips/customized-infusion/">
+
+<!-- TEMPLATE FOR ALL TEN DRIPS.
+     Per page you change: data-drip + --tone on <body>, the hero block, the
+     vitals, the ledger rows, the course figures, the spec card, and which
+     nine cards sit at the bottom. Nothing else. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preload" as="image" href="/logo.png" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/drips/liversupport.png" fetchpriority="high">
+
+<!-- site faces: shared header, footer, dock -->
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
+<!-- drip faces: condensed display, quiet body, serif italic accent, mono data -->
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Onest:wght@300..700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css"></noscript>
+
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/drips/drips.css">
+
+<!-- start states applied before first paint, so nothing flashes in and out
+     before GSAP takes over. Scripting off or motion reduced: no hiding. -->
+<script>
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+    document.documentElement.classList.add('dx-on');
+</script>
+</head>
+
+<body class="page-drip" data-drip="customized-infusion" style="--tone:#C1963F">
+
+<a class="dx-skip" href="#main">Skip to content</a>
+<span class="dx-prog" aria-hidden="true"></span>
+
+
+<!-- ============ HEADER (shared) ============ -->
+<header class="head" id="head">
+  <div class="head__rail">
+
+    <a class="head__mark" href="/">
+      <img src="/logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
+    </a>
+
+    <nav class="head__nav" id="headNav">
+      <a class="head__link" href="/">Home</a>
+
+      <div class="head__drop">
+        <a class="head__link is-here" href="/htmls/infusions.html">
+          Infusions <i class="ph ph-caret-down head__dcaret"></i>
+        </a>
+        <div class="head__panel">
+          <p class="head__panel-eyebrow">The Infusion Menu</p>
+          <div class="head__panel-grid">
+            <a class="hd-item" href="/drips/healthy-aging/" style="--tone:#5B7098"><i>I</i><span>GLyNAC Longevity Restoration</span><b>$450</b></a>
+            <a class="hd-item" href="/drips/immune-support/" style="--tone:#D9982A"><i>II</i><span>Immun-O-Boost IV Support</span><b>$650</b></a>
+            <a class="hd-item" href="/drips/muscle-recovery/" style="--tone:#B34E37"><i>III</i><span>LIQUIXO Muscle Recovery</span><b>$495</b></a>
+            <a class="hd-item" href="/drips/antioxidant-support/" style="--tone:#4F7D5E"><i>IV</i><span>Antioxidant &times;3 Reset</span><b>$500</b></a>
+            <a class="hd-item" href="/drips/glutathione-iv-therapy/" style="--tone:#7FA08C"><i>V</i><span>Glutathione IV Injection</span><b>$125</b></a>
+            <a class="hd-item" href="/drips/joint-skin-wellness/" style="--tone:#8C6239"><i>VI</i><span>Joint &amp; Skin Wellness</span><b>$750</b></a>
+            <a class="hd-item" href="/drips/liver-support/" style="--tone:#5F7A55"><i>VII</i><span>Fatty Liver Support</span><b>$850</b></a>
+            <a class="hd-item" href="/drips/recovery-support/" style="--tone:#35707F"><i>VIII</i><span>Revive IV Support</span><b>$625</b></a>
+            <a class="hd-item" href="/drips/mind-focus-support/" style="--tone:#7A5F98"><i>IX</i><span>Stress &amp; Brain Wellness</span><b>$700</b></a>
+            <a class="hd-item is-here" href="/drips/customized-infusion/" style="--tone:#C1963F" aria-current="page"><i>X</i><span>Customized IV Infusion</span><b>Consult</b></a>
+          </div>
+          <a class="head__panel-foot" href="/htmls/infusions.html"><span>View the full menu</span><i class="ph ph-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <a class="head__link" href="/about/">Dr.&nbsp;Aronov</a>
+      <a class="head__link" href="/research/">Research</a>
+      <a class="head__link" href="/contact/">Contact</a>
+    </nav>
+
+    <div class="head__actions">
+      <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
+      <a class="btn btn--forest head__cta" href="/contact/" data-magnetic><span>Begin screening</span></a>
+      <button class="head__burger" id="burger" type="button" aria-label="Menu">
+        <span></span><span></span>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+
+<!-- ============ MOBILE MENU (shared) ============ -->
+<div class="menu" id="menu">
+  <div class="menu__inner">
+    <nav class="menu__nav">
+      <a href="/"><i>i.</i><em>Home</em></a>
+
+      <details class="menu__drop" open>
+        <summary class="is-here">
+          <i>ii.</i><em>Infusions</em>
+          <b class="menu__dcaret"><span class="ph ph-caret-down"></span></b>
+        </summary>
+        <div class="menu__sub">
+          <a class="menu__sub-all" href="/htmls/infusions.html"><span>The full menu</span><span class="ph ph-arrow-right"></span></a>
+          <a class="menu__sub-item" href="/drips/healthy-aging/" style="--tone:#5B7098"><i>I</i>GLyNAC Longevity Restoration</a>
+          <a class="menu__sub-item" href="/drips/immune-support/" style="--tone:#D9982A"><i>II</i>Immun-O-Boost IV Support</a>
+          <a class="menu__sub-item" href="/drips/muscle-recovery/" style="--tone:#B34E37"><i>III</i>LIQUIXO Muscle Recovery</a>
+          <a class="menu__sub-item" href="/drips/antioxidant-support/" style="--tone:#4F7D5E"><i>IV</i>Antioxidant &times;3 Reset</a>
+          <a class="menu__sub-item" href="/drips/glutathione-iv-therapy/" style="--tone:#7FA08C"><i>V</i>Glutathione IV Injection</a>
+          <a class="menu__sub-item" href="/drips/joint-skin-wellness/" style="--tone:#8C6239"><i>VI</i>Joint &amp; Skin Wellness</a>
+          <a class="menu__sub-item" href="/drips/liver-support/" style="--tone:#5F7A55"><i>VII</i>Fatty Liver Support</a>
+          <a class="menu__sub-item" href="/drips/recovery-support/" style="--tone:#35707F"><i>VIII</i>Revive IV Support</a>
+          <a class="menu__sub-item" href="/drips/mind-focus-support/" style="--tone:#7A5F98"><i>IX</i>Stress &amp; Brain Wellness</a>
+          <a class="menu__sub-item is-here" href="/drips/customized-infusion/" style="--tone:#C1963F" aria-current="page"><i>X</i>Customized IV Infusion</a>
+        </div>
+      </details>
+
+      <a href="/about/"><i>iii.</i><em>Dr. Aronov</em></a>
+      <a href="/research/"><i>iv.</i><em>Research</em></a>
+      <a href="/contact/"><i>v.</i><em>Contact</em></a>
+    </nav>
+    <div class="menu__foot">
+      <a class="btn btn--gold" href="/contact/"><span>Begin screening</span></a>
+      <a class="menu__tel" href="tel:+19292010740">929 · 201 · 0740</a>
+      <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
+    </div>
+  </div>
+</div>
+
+
+<nav class="dx-rail" aria-label="Sections">
+  <a href="#top" data-label="Top" class="is-on"></a>
+  <a href="#formulation" data-label="Formulation"></a>
+  <a href="#course" data-label="The course"></a>
+  <a href="#questions" data-label="Questions"></a>
+  <a href="#begin" data-label="Begin"></a>
+</nav>
+
+
+<main id="main">
+
+<!-- ============ 01 HERO ============ -->
+<section class="dx-hero" id="top">
+
+  <div class="dx-hero__wrap">
+
+    <div>
+      <p class="dx-hero__no"><s></s><b>No. X</b> Customized infusion</p>
+
+      <h1 class="dx-hero__name" id="dxName">Customized <em>Infusion</em></h1>
+
+      <p class="dx-hero__dek">When none of the nine signature infusions is the right fit, Dr.&nbsp;Aronov may compose one for you instead &mdash; built from her review of your history, medications and goals rather than from a menu.</p>
+
+      <p class="dx-hero__real">Supportive care, composed individually. Custom does not mean unlimited: she will decline anything she does not consider clinically appropriate.</p>
+
+      <div class="dx-hero__acts">
+        <a class="dx-btn dx-btn--solid" data-mag="0.22" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
+          <span>Begin screening</span><i class="ph ph-arrow-right"></i>
+        </a>
+        <a class="dx-btn" href="#formulation"><span>Read the bag</span><i class="ph ph-arrow-down"></i></a>
+      </div>
+    </div>
+
+    <figure class="dx-hero__bag">
+      <img src="/assets/drips/customized.png"
+           alt="The Customized IV Infusion infusion bag"
+           width="524" height="1478" fetchpriority="high" decoding="async"
+           style="view-transition-name: bag-customized-infusion; view-transition-class: bag">
+      <span class="dx-drip" aria-hidden="true"><i class="dx-drop"></i></span>
+    </figure>
+
+  </div>
+
+  <dl class="dx-vitals">
+    <div class="dx-vital">
+      <dt>Chair time</dt>
+      <dd>Individual<small>Set at screening</small></dd>
+    </div>
+    <div class="dx-vital">
+      <dt>Per session</dt>
+      <dd>By consult<small>Quoted after screening</small></dd>
+    </div>
+    <div class="dx-vital dx-vital--tone">
+      <dt>Composed by</dt>
+      <dd>Dr. Aronov<small>Personally, every time</small></dd>
+    </div>
+    <div class="dx-vital">
+      <dt>Consultation</dt>
+      <dd><span data-count="100">$0</span><small>Applied if approved</small></dd>
+    </div>
+  </dl>
+</section>
+
+
+<!-- ============ 02 FORMULATION ============ -->
+<section class="dx-mix" id="formulation">
+  <div class="dx-mix__wrap">
+
+    <header class="dx-mix__head">
+      <p class="dx-eyebrow" data-anim="rise"><i class="ph-duotone ph-flask"></i> The formulation <s></s></p>
+      <h2 class="dx-h" data-anim="rise">Everything in it,<br>and <em>nothing else</em>.</h2>
+      <p class="dx-lede" data-anim="rise" data-delay="90">
+        No proprietary blend, no undisclosed filler. Five component families, each one named,
+        each one selected by the physician who administers it.
+      </p>
+    </header>
+
+    <div class="dx-mix__stage">
+
+      <div class="dx-bag" id="dxBag">
+        <div class="dx-bag__inner">
+
+          <svg class="dx-bag__art" viewBox="0 0 240 476" role="img"
+               aria-label="The Customized IV Infusion bag and its components">
+
+            <defs>
+              <linearGradient id="dxMix" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" style="stop-color:var(--f01)"/>
+              <stop offset="25%" style="stop-color:var(--f03)"/>
+              <stop offset="50%" style="stop-color:var(--f06)"/>
+              <stop offset="75%" style="stop-color:var(--f08)"/>
+              <stop offset="100%" style="stop-color:var(--f10)"/>
+              </linearGradient>
+              <linearGradient id="dxGloss" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#fff" stop-opacity=".85"/>
+                <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+              </linearGradient>
+              <clipPath id="dxInside">
+                <path d="M40,90 C40,68 54,54 76,54 L164,54 C186,54 200,68 200,90
+                         L206,382 C207,404 193,420 171,420 L69,420
+                         C47,420 33,404 34,382 Z"/>
+              </clipPath>
+            </defs>
+
+            <path class="dx-bag__tab" d="M98,6 L142,6 C146,6 149,9 150,13 L154,44 L86,44 L90,13 C91,9 94,6 98,6 Z"/>
+            <ellipse class="dx-bag__hole" cx="120" cy="26" rx="13" ry="7"/>
+
+            <path class="dx-bag__shell"
+                  d="M32,86 C32,60 48,44 76,44 L164,44 C192,44 208,60 208,86
+                     L214,384 C215,410 199,428 171,428 L69,428
+                     C41,428 25,410 26,384 Z"/>
+
+            <g clip-path="url(#dxInside)">
+              <rect class="dx-bag__fluid" x="30" y="54" width="180" height="366" fill="url(#dxMix)"/>
+              <rect class="dx-bag__level" x="34" y="420" width="172" height="2"/>
+              <rect class="dx-bag__hi" x="34" y="0" width="172" height="36.6"/>
+            </g>
+
+            <path class="dx-bag__seam"
+                  d="M40,90 C40,68 54,54 76,54 L164,54 C186,54 200,68 200,90
+                     L206,382 C207,404 193,420 171,420 L69,420
+                     C47,420 33,404 34,382 Z"/>
+
+            <!-- graduations, unnumbered: printing millilitres would state a
+                 volume this practice has not published -->
+            <g class="dx-bag__tick">
+              <line x1="182" y1="120" x2="200" y2="120"/>
+              <line x1="189" y1="152" x2="200" y2="152"/>
+              <line x1="182" y1="184" x2="201" y2="184"/>
+              <line x1="189" y1="216" x2="201" y2="216"/>
+              <line x1="182" y1="248" x2="202" y2="248"/>
+              <line x1="190" y1="280" x2="202" y2="280"/>
+              <line x1="183" y1="312" x2="203" y2="312"/>
+              <line x1="190" y1="344" x2="203" y2="344"/>
+              <line x1="183" y1="376" x2="204" y2="376"/>
+            </g>
+
+            <g>
+              <rect class="dx-bag__plate" x="52" y="192" width="136" height="98" rx="4"/>
+              <text class="dx-bag__no"    x="66" y="218">No. X</text>
+              <line class="dx-bag__rule"  x1="66" y1="228" x2="174" y2="228"/>
+              <text class="dx-bag__title" x="66" y="250">Customized</text>
+              <text class="dx-bag__title" x="66" y="268">IV Infusion</text>
+              <text class="dx-bag__sub"   x="66" y="282">PHYSICIAN COMPOUNDED</text>
+            </g>
+
+            <g clip-path="url(#dxInside)">
+              <rect class="dx-bag__gloss" x="48" y="72" width="13" height="330" rx="6.5"/>
+            </g>
+
+            <path class="dx-bag__port" d="M100,428 L114,428 L112,452 L102,452 Z"/>
+            <path class="dx-bag__port" d="M126,428 L140,428 L138,452 L128,452 Z"/>
+            <line class="dx-bag__spike" x1="133" y1="452" x2="133" y2="470"/>
+          </svg>
+
+          <span class="dx-bag__gauge" aria-hidden="true"><i></i></span>
+          <p class="dx-bag__read"><span>Composition</span><span><b id="dxPct">0</b>%</span></p>
+
+        </div>
+      </div>
+
+      <ol class="dx-list" id="dxList">
+
+        <li class="dx-ing" style="--bt:var(--f01)">
+          <span class="dx-ing__key">01</span>
+          <div>
+            <h3 class="dx-ing__name">Hydration fluid</h3>
+            <p class="dx-ing__what">The carrier. Volume and rate are set for you.</p>
+            <span class="dx-ing__role">Carrier</span>
+          </div>
+          <span class="dx-ing__chip" aria-hidden="true"><i></i></span>
+          <span class="dx-ing__rule" aria-hidden="true"></span>
+        </li>
+
+        <li class="dx-ing" style="--bt:var(--f03)">
+          <span class="dx-ing__key">02</span>
+          <div>
+            <h3 class="dx-ing__name">Minerals</h3>
+            <p class="dx-ing__what">Magnesium, zinc, copper, manganese, selenium &mdash; selected and balanced individually.</p>
+            <span class="dx-ing__role">Minerals</span>
+          </div>
+          <span class="dx-ing__chip" aria-hidden="true"><i></i></span>
+          <span class="dx-ing__rule" aria-hidden="true"></span>
+        </li>
+
+        <li class="dx-ing" style="--bt:var(--f06)">
+          <span class="dx-ing__key">03</span>
+          <div>
+            <h3 class="dx-ing__name">Vitamins</h3>
+            <p class="dx-ing__what">B-complex, vitamin&nbsp;C. Included where her review supports it.</p>
+            <span class="dx-ing__role">Vitamins</span>
+          </div>
+          <span class="dx-ing__chip" aria-hidden="true"><i></i></span>
+          <span class="dx-ing__rule" aria-hidden="true"></span>
+        </li>
+
+        <li class="dx-ing" style="--bt:var(--f08)">
+          <span class="dx-ing__key">04</span>
+          <div>
+            <h3 class="dx-ing__name">Amino acids</h3>
+            <p class="dx-ing__what">Glycine, taurine, collagen aminos, the full twenty &mdash; depending on what fits.</p>
+            <span class="dx-ing__role">Amino acids</span>
+          </div>
+          <span class="dx-ing__chip" aria-hidden="true"><i></i></span>
+          <span class="dx-ing__rule" aria-hidden="true"></span>
+        </li>
+
+        <li class="dx-ing" style="--bt:var(--f10)">
+          <span class="dx-ing__key">05</span>
+          <div>
+            <h3 class="dx-ing__name">Antioxidants</h3>
+            <p class="dx-ing__what">Glutathione, alpha-lipoic acid, N-acetylcysteine, alone or together.</p>
+            <span class="dx-ing__role">Antioxidants</span>
+          </div>
+          <span class="dx-ing__chip" aria-hidden="true"><i></i></span>
+          <span class="dx-ing__rule" aria-hidden="true"></span>
+        </li>
+
+      </ol>
+    </div>
+
+    <p class="dx-mix__close dx-say">A shortlist she chooses from — not a menu you order from.</p>
+
+    <p class="dx-mix__fine" data-anim="rise">
+      Component descriptions state what a compound is involved in, not what an infusion will
+      do for you. Supportive ingredients are selected and finalized by Dr.&nbsp;Aronov during
+      physician screening, based on your individual history and clinical appropriateness.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ============ 03 THE COURSE ============ -->
+<section class="dx-course" id="course">
+  <div class="dx-course__wrap">
+
+    <header class="dx-course__head">
+      <p class="dx-eyebrow" data-anim="rise"><i class="ph-duotone ph-repeat"></i> How it is composed <s></s></p>
+      <h2 class="dx-h" data-anim="rise">Composed for you,<br>and only <em>after</em> review.</h2>
+      <p class="dx-lede" data-anim="rise" data-delay="90">There is no fixed protocol here, which is the point. What follows is the sequence every customized infusion goes through before anything is mixed.</p>
+    </header>
+
+    <ol class="dx-weeks" id="dxWeeks">
+      <span class="dx-weeks__rail" aria-hidden="true"><i class="dx-weeks__fill"></i></span>
+      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Step 01</span><span class="dx-wk__what">You send your history</span></li>
+      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Step 02</span><span class="dx-wk__what">She reviews it herself</span></li>
+      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Step 03</span><span class="dx-wk__what">Components selected</span></li>
+      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Step 04</span><span class="dx-wk__what">Doses calculated</span></li>
+      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Step 05</span><span class="dx-wk__what">Mixed and administered</span></li>
+      <li class="dx-wk"><span class="dx-wk__pin" aria-hidden="true"></span><span class="dx-wk__no">Step 06</span><span class="dx-wk__what">Reassessment, and what comes next</span></li>
+    </ol>
+
+    <div class="dx-sum">
+
+      <div class="dx-sum__why" data-anim="rise">
+        <h3>What a customized infusion is not</h3>
+        <p>
+          It is not a request form. Dr.&nbsp;Aronov selects every component herself, from the
+          same medical-grade, preservative-free stock the signature infusions are mixed from,
+          and she declines anything she does not consider clinically appropriate for you.
+        </p>
+        <p>
+          Pricing is quoted after screening, because the components, the volume and the chair
+          time are not known until she has reviewed your history.
+        </p>
+        <p class="dx-sum__fine">
+          The $100 consultation is required before scheduling and is applied toward your
+          infusion if Dr.&nbsp;Aronov approves one. Not every patient is eligible, and a
+          customized infusion is offered only where she considers one appropriate.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 04 QUESTIONS ============ -->
+<section class="dx-qs" id="questions">
+  <div class="dx-qs__wrap">
+
+    <header class="dx-qs__head">
+      <p class="dx-eyebrow" data-anim="rise"><i class="ph-duotone ph-question"></i> Before you get in touch <s></s></p>
+      <h2 class="dx-h" data-anim="rise">Questions about<br><em>this infusion</em>.</h2>
+    </header>
+
+    <div class="dx-qs__list">
+
+      <details class="dx-q" data-anim="slide">
+        <summary class="dx-q__ask">Can I ask for specific ingredients?<i class="ph ph-plus"></i></summary>
+        <div class="dx-q__wrap"><div class="dx-q__ans">
+          <p>You can tell her what you are looking for, and she will tell you what is clinically appropriate. This is supportive care, offered solely as adjunctive wellness support. It is not intended to diagnose, treat, cure, mitigate, prevent or reverse any disease or medical condition, and it has not been evaluated by the FDA for those purposes.</p>
+          <p>Customized means she composes it. It does not mean anything can be added on request, and she will decline what she does not consider appropriate.</p>
+        </div></div>
+      </details>
+
+      <details class="dx-q" data-anim="slide" data-delay="60">
+        <summary class="dx-q__ask">What does it cost?<i class="ph ph-plus"></i></summary>
+        <div class="dx-q__wrap"><div class="dx-q__ans">
+          <p>It is quoted after screening, because the components, the volume and the chair time are not known until she has reviewed you.</p>
+          <p>The $100 consultation is required first and is applied toward your infusion if she approves one.</p>
+        </div></div>
+      </details>
+
+      <details class="dx-q" data-anim="slide" data-delay="120">
+        <summary class="dx-q__ask">I am already under a specialist&rsquo;s care. Does that rule me out?<i class="ph ph-plus"></i></summary>
+        <div class="dx-q__wrap"><div class="dx-q__ans">
+          <p>No, but it changes how carefully she coordinates. Dr.&nbsp;Aronov will review your medications and will want your treating physician&rsquo;s written approval before anything is scheduled. Nothing here replaces the treatment you are already on.</p>
+        </div></div>
+      </details>
+
+      <details class="dx-q" data-anim="slide" data-delay="180">
+        <summary class="dx-q__ask">What happens before I can book?<i class="ph ph-plus"></i></summary>
+        <div class="dx-q__wrap"><div class="dx-q__ans">
+          <p>You send your medical history, current medications and allergies. Dr.&nbsp;Aronov reads it herself and decides whether IV therapy is appropriate for you and which formulation fits. Nothing is booked and nothing is charged at that stage.</p>
+          <p>The consultation is $100, is required before scheduling, and is applied toward your infusion if she approves one.</p>
+        </div></div>
+      </details>
+
+      <details class="dx-q" data-anim="slide" data-delay="240">
+        <summary class="dx-q__ask">Who actually gives the infusion?<i class="ph ph-plus"></i></summary>
+        <div class="dx-q__wrap"><div class="dx-q__ans">
+          <p>Dr.&nbsp;Aronov does, personally. She reviews your history, calculates the doses, prepares the medications, spikes the bag, sets the flow rate, and stays with you until it is finished. There is no technician and nothing is delegated.</p>
+        </div></div>
+      </details>
+
+      <details class="dx-q" data-anim="slide" data-delay="300">
+        <summary class="dx-q__ask">What if I am not eligible?<i class="ph ph-plus"></i></summary>
+        <div class="dx-q__wrap"><div class="dx-q__ans">
+          <p>Not everyone is. If IV therapy is not appropriate for you, Dr.&nbsp;Aronov will say so and tell you why.</p>
+        </div></div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 05 BEGIN ============ -->
+<section class="dx-begin" id="begin">
+  <div class="dx-begin__wrap">
+
+    <div>
+      <p class="dx-eyebrow" data-anim="rise"><i class="ph-duotone ph-seal-check"></i> By physician review only <s></s></p>
+      <h2 class="dx-h" data-anim="rise">Send your history.<br>She reads it <em>herself</em>.</h2>
+      <p class="dx-begin__lede" data-anim="rise" data-delay="90">
+        Medical history, current medications, allergies. A few minutes. Nothing is booked and
+        nothing is charged at that stage &mdash; and if this is not the right infusion for you,
+        she will tell you which one is, or that none of them are.
+      </p>
+      <div class="dx-begin__acts" data-anim="rise" data-delay="150">
+        <a class="dx-btn dx-btn--solid" data-mag="0.22" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
+          <span>Begin screening</span><i class="ph ph-arrow-right"></i>
+        </a>
+        <a class="dx-btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
+      </div>
+    </div>
+
+    <dl class="dx-card" data-anim="pop" data-delay="120">
+      <div><dt>Infusion</dt><dd>Customized IV Infusion</dd></div>
+      <div><dt>Chair time</dt><dd>Individually determined</dd></div>
+      <div><dt>Components</dt><dd><em>Selected at screening</em></dd></div>
+      <div><dt>Price</dt><dd><em>Quoted after screening</em></dd></div>
+      <div><dt>Consultation</dt><dd>$100, applied if approved</dd></div>
+      <div><dt>Where</dt><dd>Middle Village, Queens</dd></div>
+    </dl>
+
+  </div>
+
+  <p class="dx-legal" data-anim="rise">
+    <b>Important disclaimer</b>
+    Customized IV Infusion is offered solely as an adjunctive wellness support program
+    intended to support general wellness, hydration, nutritional balance, oxidative balance and
+    recovery support. These services are not intended to diagnose, treat, cure, mitigate, prevent
+    or reverse any disease, medical condition, inflammatory disorder or aging process.
+    Participation does not establish a guarantee of therapeutic benefit or clinical outcome.
+    Statements regarding antioxidants, oxidative stress, recovery, cellular wellness or longevity
+    are educational in nature only and have not been evaluated by the United States Food and Drug
+    Administration. Individual responses, experiences and outcomes may vary significantly from
+    person to person. These services are not a substitute for primary medical care, specialist
+    evaluation, prescription treatment, emergency care or medically necessary interventions. All
+    services are provided only after physician review, medical screening and determination of
+    clinical appropriateness.
+  </p>
+</section>
+
+
+<!-- ============ 06 THE OTHER NINE ============ -->
+<section class="dx-more" id="more">
+  <div class="dx-more__wrap">
+    <header class="dx-more__top">
+      <div>
+        <p class="dx-eyebrow" data-anim="rise"><i class="ph-duotone ph-squares-four"></i> The rest of the menu <s></s></p>
+        <h2 class="dx-h" data-anim="rise" style="font-size:clamp(1.6rem,3.2vw,2.4rem);margin:0">The other <em>nine</em>.</h2>
+      </div>
+      <a class="dx-more__all" href="/htmls/infusions.html"><span>The full menu</span><i class="ph ph-arrow-right"></i></a>
+    </header>
+
+    <ol class="dx-more__track" id="dxTrack">
+
+      <li class="dx-nxt" style="--bt:#5B7098">
+        <a href="/drips/healthy-aging/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/glynac.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-healthy-aging; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">I</span>
+          <span class="dx-nxt__name">GLyNAC Longevity Restoration</span>
+          <span class="dx-nxt__meta">1 h 15<i>·</i>$450</span>
+        </a>
+      </li>
+
+      <li class="dx-nxt" style="--bt:#D9982A">
+        <a href="/drips/immune-support/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/immuneoboost.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-immune-support; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">II</span>
+          <span class="dx-nxt__name">Immun-O-Boost IV Support</span>
+          <span class="dx-nxt__meta">2 h 30<i>·</i>$650</span>
+        </a>
+      </li>
+
+      <li class="dx-nxt" style="--bt:#B34E37">
+        <a href="/drips/muscle-recovery/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/liquixo.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-muscle-recovery; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">III</span>
+          <span class="dx-nxt__name">LIQUIXO Muscle Recovery</span>
+          <span class="dx-nxt__meta">45 min<i>·</i>$495</span>
+        </a>
+      </li>
+
+      <li class="dx-nxt" style="--bt:#4F7D5E">
+        <a href="/drips/antioxidant-support/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/antioxidant.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-antioxidant-support; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">IV</span>
+          <span class="dx-nxt__name">Antioxidant &times;3 Reset</span>
+          <span class="dx-nxt__meta">1 h 15<i>·</i>$500</span>
+        </a>
+      </li>
+
+      <li class="dx-nxt" style="--bt:#7FA08C">
+        <a href="/drips/glutathione-iv-therapy/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/glutathione.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-glutathione-iv-therapy; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">V</span>
+          <span class="dx-nxt__name">Glutathione IV Injection</span>
+          <span class="dx-nxt__meta">30 min<i>·</i>$125</span>
+        </a>
+      </li>
+
+      <li class="dx-nxt" style="--bt:#8C6239">
+        <a href="/drips/joint-skin-wellness/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/jointsupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-joint-skin-wellness; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">VI</span>
+          <span class="dx-nxt__name">Joint &amp; Skin Wellness</span>
+          <span class="dx-nxt__meta">2 h 30<i>·</i>$750</span>
+        </a>
+      </li>
+
+      <li class="dx-nxt" style="--bt:#5F7A55">
+        <a href="/drips/liver-support/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/liversupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-liver-support; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">VII</span>
+          <span class="dx-nxt__name">Fatty Liver Support</span>
+          <span class="dx-nxt__meta">3 h<i>·</i>$850</span>
+        </a>
+      </li>
+
+      <li class="dx-nxt" style="--bt:#35707F">
+        <a href="/drips/recovery-support/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/revive.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-recovery-support; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">VIII</span>
+          <span class="dx-nxt__name">Revive IV Support</span>
+          <span class="dx-nxt__meta">2 h 15<i>·</i>$625</span>
+        </a>
+      </li>
+
+      <li class="dx-nxt" style="--bt:#7A5F98">
+        <a href="/drips/mind-focus-support/">
+          <figure class="dx-nxt__bag"><img src="/assets/drips/brainwellness.png" alt="" width="524" height="1478" loading="lazy" decoding="async" style="view-transition-name: bag-mind-focus-support; view-transition-class: bag"></figure>
+          <span class="dx-nxt__no">IX</span>
+          <span class="dx-nxt__name">Stress &amp; Brain Wellness</span>
+          <span class="dx-nxt__meta">1 h 30<i>·</i>$700</span>
+        </a>
+      </li>
+
+    </ol>
+
+    <div class="dx-more__bar">
+      <p class="dx-more__count"><b id="dxNow">01</b> / <span id="dxTotal">09</span></p>
+      <span class="dx-more__meter"><i id="dxMeter"></i></span>
+      <div class="dx-more__arrows">
+        <button class="dx-arrow" id="dxPrev" type="button" aria-label="Previous infusions" disabled><i class="ph ph-arrow-left"></i></button>
+        <button class="dx-arrow" id="dxNext" type="button" aria-label="More infusions"><i class="ph ph-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ============ FOOTER (shared) ============ -->
+<footer class="foot" id="contact">
+  <span class="foot__glow"></span>
+  <div class="foot__wrap">
+
+    <div class="foot__call">
+      <p class="foot__eyebrow"><i class="ph-duotone ph-seal-check"></i> By physician review only</p>
+      <h2 class="foot__title">Every infusion begins<br>with a <em>physician</em>.</h2>
+      <p class="foot__lede">
+        Appointments only. Tell us what you are looking for and Dr.&nbsp;Aronov reviews the health
+        information you provide herself, then determines whether IV therapy is appropriate.
+      </p>
+      <div class="foot__acts">
+        <a class="rx__btn rx__btn--solid" href="https://api.leadconnectorhq.com/widget/form/sTCbIIOXdc4bTPyMwJHN" target="_blank" rel="noopener">
+          <span>Begin screening</span><i class="ph ph-arrow-right"></i>
+        </a>
+        <a class="rx__btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
+      </div>
+    </div>
+
+    <div class="foot__grid">
+      <div class="foot__col foot__col--wide">
+        <h3 class="foot__h">Visit</h3>
+        <address class="foot__addr">
+          Alpha Vital Elite IV<br>
+          79-01 Metropolitan Avenue<br>
+          Middle Village, NY 11379
+        </address>
+        <a class="foot__line" href="tel:+19292010740"><i class="ph ph-phone"></i> 929 · 201 · 0740</a>
+        <a class="foot__line" href="mailto:contact@precisionmedicaliv.com"><i class="ph ph-envelope-simple"></i> contact@precisionmedicaliv.com</a>
+        <a class="foot__line" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo"></i> Follow the practice</a>
+        <p class="foot__served">Serving Queens · Brooklyn · Long Island · Greater New York</p>
+      </div>
+
+      <div class="foot__col">
+        <h3 class="foot__h">Infusions</h3>
+        <ul class="foot__list">
+          <li><a href="/drips/healthy-aging/">Healthy Aging</a></li>
+          <li><a href="/drips/immune-support/">Immune Support</a></li>
+          <li><a href="/drips/muscle-recovery/">Muscle Recovery</a></li>
+          <li><a href="/drips/antioxidant-support/">Antioxidant Support</a></li>
+          <li><a href="/drips/glutathione-iv-therapy/">Glutathione IV Therapy</a></li>
+        </ul>
+      </div>
+
+      <div class="foot__col">
+        <h3 class="foot__h">&nbsp;</h3>
+        <ul class="foot__list">
+          <li><a href="/drips/joint-skin-wellness/">Joint &amp; Skin Wellness</a></li>
+          <li><a href="/drips/liver-support/">Liver Support</a></li>
+          <li><a href="/drips/recovery-support/">Recovery Support</a></li>
+          <li><a href="/drips/mind-focus-support/">Mind &amp; Focus Support</a></li>
+          <li><a href="/drips/customized-infusion/">Customized IV Infusion</a></li>
+        </ul>
+      </div>
+
+      <div class="foot__col">
+        <h3 class="foot__h">The practice</h3>
+        <ul class="foot__list">
+          <li><a href="/">Home</a></li>
+          <li><a href="/about/">About Dr. Aronov</a></li>
+          <li><a href="/#advantage">The IV advantage</a></li>
+          <li><a href="/#conditions">Chronic conditions</a></li>
+          <li><a href="/research/">Research</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot__legal">
+      <p>
+        IV services provided by Alpha Vital Elite IV are intended as supportive care and are
+        designed to complement&mdash;not replace&mdash;appropriate primary or specialty medical
+        treatment. They are not intended to diagnose, treat, cure, mitigate, prevent or reverse any
+        disease, medical condition or inflammatory disorder, and have not been evaluated by the FDA
+        for those purposes. Appointments only; physician review and eligibility determination are
+        required before scheduling. Not every patient is eligible. Individual results vary, and no
+        outcome is guaranteed.
+      </p>
+      <ul class="foot__mini">
+        <li><a href="/disclaimer/">Disclaimer</a></li>
+        <li><a href="/refund-policy/">Refund Policy</a></li>
+        <li><a href="/privacy-policy/">Privacy Policy</a></li>
+        <li><a href="/terms/">Terms &amp; Conditions</a></li>
+      </ul>
+    </div>
+
+    <p class="foot__mark">Alpha Vital Elite</p>
+
+    <div class="foot__bar">
+      <p class="foot__copy">© <span id="footYear">2026</span> Alpha Vital Elite IV. All rights reserved.</p>
+      <a class="credit" href="https://www.elanstechworld.com" target="_blank" rel="noopener">
+        <span class="credit__by">Designed &amp; built by</span>
+        <img class="credit__logo" src="https://www.elanstechworld.com/assets/images/Elanslogo.jpeg"
+             alt="Elan's Tech World" width="520" height="386" loading="lazy" decoding="async">
+      </a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ============ DOCK (shared) ============ -->
+<button class="totop" id="toTop" type="button">
+  <i class="ph ph-arrow-up"></i>
+  <span>Top</span>
+</button>
+
+<div class="fab" id="fab">
+  <ul class="fab__list" id="fabList">
+    <li><a class="fab__act" href="tel:+19292010740"><span class="fab__label">929 · 201 · 0740</span><span class="fab__ico"><i class="ph ph-phone"></i></span></a></li>
+    <li><a class="fab__act" href="mailto:contact@precisionmedicaliv.com"><span class="fab__label">Email the practice</span><span class="fab__ico"><i class="ph ph-envelope-simple"></i></span></a></li>
+    <li><a class="fab__act" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener"><span class="fab__label">Instagram</span><span class="fab__ico"><i class="ph ph-instagram-logo"></i></span></a></li>
+  </ul>
+  <button class="fab__toggle" id="fabToggle" type="button" aria-label="Quick actions">
+    <i class="ph ph-chat-circle-dots fab__i fab__i--open"></i>
+    <i class="ph ph-x fab__i fab__i--close"></i>
+  </button>
+</div>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Customized IV Infusion",
+  "serviceType": "Physician-administered intravenous nutritional support",
+  "url": "https://www.precisionmedicaliv.com/drips/customized-infusion/",
+  "provider": {
+    "@type": "MedicalBusiness",
+    "name": "Alpha Vital Elite IV",
+    "telephone": "+1-929-201-0740",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "79-01 Metropolitan Avenue",
+      "addressLocality": "Middle Village",
+      "addressRegion": "NY",
+      "postalCode": "11379",
+      "addressCountry": "US"
+    }
+  },
+  "areaServed": ["Queens", "Brooklyn", "Long Island", "New York"]
+}
+</script>
+
+<!-- GSAP must be on window before the module runs -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<!-- /script.js is shared: header, mobile menu, dock, nav state, smooth anchors -->
+<script src="/script.js" type="module"></script>
+<script src="/drips/drips.js" type="module"></script>
+</body>
+</html>
