@@ -9,12 +9,6 @@
 
 <!-- ============================================================
      FONTS
-     Prata            display serif — Didone contrast, cuts hard on video
-     Cormorant        italic accent — the living word, pull-quotes, plate notes
-     Marcellus        engraved caps — labels, matches the wordmark
-     Instrument Sans  body + UI
-     Syne             micro-labels — chips, category, actions
-     Archivo          tabular figures — prices, durations, the counter
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,16 +62,6 @@
 
 <!-- ==============================================================
      HEADER
-
-     NAV ORDER — Home · Infusions (flyout) · Dr. Aronov · Research · Contact
-     "The Practice" has been removed from both navs.
-
-     THE ACTIVE STATE. Every link carries `is-here` in the markup for the page
-     it belongs to, so the correct item is lit before a single byte of JS runs.
-     The Trail module in script.js then re-derives it from location.pathname,
-     which is what makes the ten drip pages work without hand-editing each one:
-     on /drips/liver-support/ it lights that row inside the flyout AND keeps
-     "Infusions" lit as the parent of the trail.
      ============================================================== -->
 <header class="head" id="head">
   <div class="head__rail">
@@ -158,9 +142,6 @@
 
 <!-- ==============================================================
      MOBILE MENU
-     Same five destinations, same active grammar. The row for the current
-     page turns gold and carries a dot; on a drip page the Infusions
-     accordion is opened by Trail so the lit row is visible without a tap.
      ============================================================== -->
 <div class="menu" id="menu">
   <div class="menu__inner">
@@ -168,9 +149,7 @@
 
       <a class="is-here" href="/" aria-current="page"><i>i.</i><em>Home</em></a>
 
-      <!-- INFUSIONS ACCORDION — native <details>, no JS. Tapping the row
-           opens the sublist; tapping any link inside still closes the menu
-           through the existing Menu class. -->
+      <!-- INFUSIONS ACCORDION — -->
       <details class="menu__drop">
         <summary>
           <i>ii.</i><em>Infusions</em>
@@ -210,8 +189,6 @@
 
 <!-- ==============================================================
      HERO
-     Copy is Dr. Aronov's approved Edit #2 wording. "Held to hospital
-     standards" and "hospital-level safety" are gone and stay gone.
      ============================================================== -->
 <section class="hero" id="hero">
 
@@ -241,8 +218,7 @@
       <span class="word" data-rise style="--i:4"><span>IV Care.</span></span>
     </h1>
 
-    <!-- Nine categories. Joint and Skin are ONE infusion and read as one
-         line, so the loop never implies a tenth signature formula. -->
+    <!-- Nine categories  -->
     <p class="hero__for" data-rise style="--i:5">
       <span class="hero__for-lead">Infusions for</span>
       <span class="loop" id="wordLoop">
@@ -293,11 +269,7 @@
 
 
 <!-- ==============================================================
-     THE SHELF  (#infusions)   —   CHAPTER I
-     Nine signature infusions + one customized option = ten plates.
-     Category names, order and formulations per Dr. Aronov's 17 Aug email.
-     Quercetin and Curcumin are off the menu. Language rule: "supports" and
-     "designed to complement" — never treats, cures, repairs, or guarantees.
+     THE SHELF 
      ============================================================== -->
 <section class="shelf" id="infusions">
   <span class="shelf__wash"></span>
@@ -333,10 +305,7 @@
     </div>
   </header>
 
-  <!-- FILTERS — desktop gets eleven pills; the phone gets the same eleven as
-       one select, because wrapped to five rows they pushed the whole page
-       down. Both write to the same Shelf.applyFilter(), so there is one
-       code path and the two can never disagree. -->
+  <!-- FILTERS —-->
   <div class="shelf__filters" data-reveal>
     <button class="shelf__pill is-on" type="button" data-filter="all"><i class="ph ph-squares-four"></i> Everything <sup>10</sup></button>
     <button class="shelf__pill" type="button" data-filter="healthyaging"><i class="ph ph-infinity"></i> Healthy Aging</button>
@@ -682,11 +651,7 @@
 
 
 <!-- ==============================================================
-     LIVING WITH A CHRONIC CONDITION  (#conditions)
-     A switcher, not a scroll. One condition on screen at a time so the
-     section stays short; every panel stays in the DOM. Type here is its own
-     register — Marcellus for the names, Syne for the rail, Archivo for the
-     figures, Cormorant for the mechanism.
+     LIVING WITH A CHRONIC CONDITION 
      ============================================================== -->
 <section class="chron" id="conditions">
   <span class="chron__field"></span>
@@ -714,8 +679,7 @@
       <button class="cnav__tab" type="button" data-cond="cond-mafld" style="--cond:#5F7A55"><i class="ph ph-leaf"></i><span>Fatty Liver Disease</span></button>
     </nav>
 
-    <!-- the pill rail scrolls out of sight on a phone, so the count and the
-         arrows make it obvious there are seven of these, not one -->
+    <!-- the pill rail -->
     <div class="cnav__pager">
       <p class="cnav__count"><b id="condNow">01</b> <span>/</span> <span id="condTotal">07</span> conditions</p>
       <div class="cnav__arrows">
@@ -977,9 +941,6 @@
 
 <!-- ==============================================================
      THE IV ADVANTAGE  (#advantage)
-     One stage with a switch: pick a road, watch it draw. Marcellus for the
-     stop names, Archivo for the counters, Cormorant for the caveat —
-     deliberately not the shelf's voice.
      ============================================================== -->
 <section class="adv" id="advantage">
   <span class="adv__field"></span>
@@ -1067,9 +1028,6 @@
 
 <!-- ==============================================================
      HOW A VISIT WORKS  (#visit)   —   CHAPTER II
-     Four beats, one rule, one honest line. Kept deliberately short — the
-     surrounding sections are long, and this one only has to make the
-     no-walk-ins policy feel like a reason rather than an obstacle.
      ============================================================== -->
 <section class="visit" id="visit">
   <span class="visit__field"></span>
@@ -1277,13 +1235,6 @@
 
 <!-- ==============================================================
      THE EVIDENCE  (#research)   —   CHAPTER IV
-     A horizontal reference rail. NO PIN — the shelf owns that gesture and one
-     pinned section per page is the rule. This rail is a native snap scroller
-     at every breakpoint, driven by arrows, drag and the keyboard.
-
-     COPY RULE — every takeaway states what a study LOOKED AT. Never what an
-     infusion will do for you. Three of these six are preclinical or
-     observational and say so on the card face.
      ============================================================== -->
 <section class="rsrch" id="research">
   <span class="rsrch__field"></span>
@@ -1443,17 +1394,6 @@
 
 <!-- ==============================================================
      FREQUENTLY ASKED  (#faq)
-     Native <details> / <summary> — no JavaScript at all, so this cannot
-     break, and every answer is in the DOM whether or not it is open.
-
-     EVERY ANSWER BELOW IS DRAWN FROM COPY ALREADY APPROVED ELSEWHERE ON THIS
-     PAGE — the hero disclaimer, the shelf stat block, the visit steps, the
-     chain of custody and the footer legal. Nothing here is new claim-making.
-
-     STILL NEEDS HER ANSWERS, then add each as a new <details>:
-        · Do you take insurance
-        · Do I need bloodwork first · Can I eat beforehand
-        · Does it hurt · Cancellation and rescheduling · Where do I park
      ============================================================== -->
 <section class="faq" id="faq">
   <div class="faq__wrap">
