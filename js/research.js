@@ -237,6 +237,28 @@ const Filter = {
 
 
 /* ── PROGRESS ───────────────────────────────────────────────────────────── */
+const Plate = {
+    /* the featured document leans toward the pointer. Fine pointers only —
+       on a touch screen it is a card that twitches for no reason. */
+    init() {
+        const el = $('[data-rs-tilt]');
+        if (!el || RM.matches) return;
+        if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+        const rx = gsap.quickTo(el, 'rotationX', { duration: .55, ease: 'power2.out' });
+        const ry = gsap.quickTo(el, 'rotationY', { duration: .55, ease: 'power2.out' });
+        const host = el.closest('.rs-feat') || el;
+
+        host.addEventListener('pointermove', (ev) => {
+            const r = el.getBoundingClientRect();
+            rx(-((ev.clientY - r.top) / r.height - .5) * 7);
+            ry(((ev.clientX - r.left) / r.width - .5) * 9);
+        });
+        host.addEventListener('pointerleave', () => { rx(0); ry(0); });
+    },
+};
+
+
 const Progress = {
     init() {
         const bar = $('#rsProg');
@@ -262,6 +284,7 @@ const boot = () => {
 
     run('reveal',   () => Reveal.init());
     run('counters', () => Counters.init());
+    run('plate',    () => Plate.init());
     run('progress', () => Progress.init());
 
     const fonts = document.fonts
