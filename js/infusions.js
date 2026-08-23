@@ -162,16 +162,16 @@ const Flip = {
    Names, numerals and slugs match the cards and the header flyout exactly.
 ============================================================================= */
 const MENU = {
-    healthyaging: { no: 'I',    name: 'GLyNAC Longevity Restoration', slug: '/drips/healthy-aging/',          tone: '#5B7098' },
-    immune:       { no: 'II',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immune-support/',         tone: '#D9982A' },
-    muscle:       { no: 'III',  name: 'LIQUIXO Muscle Recovery',      slug: '/drips/muscle-recovery/',        tone: '#B34E37' },
-    antioxidant:  { no: 'IV',   name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant-support/',    tone: '#4F7D5E' },
-    glutathione:  { no: 'V',    name: 'Glutathione IV Injection',     slug: '/drips/glutathione-iv-therapy/', tone: '#7FA08C' },
-    jointskin:    { no: 'VI',   name: 'Joint & Skin Wellness',        slug: '/drips/joint-skin-wellness/',    tone: '#8C6239' },
-    liver:        { no: 'VII',  name: 'Fatty Liver Support',          slug: '/drips/liver-support/',          tone: '#5F7A55' },
-    recovery:     { no: 'VIII', name: 'Revive IV Support',            slug: '/drips/recovery-support/',       tone: '#35707F' },
-    mind:         { no: 'IX',   name: 'Stress & Brain Wellness',      slug: '/drips/mind-focus-support/',     tone: '#7A5F98' },
-    custom:       { no: 'X',    name: 'Customized IV Infusion',       slug: '/drips/customized-infusion/',    tone: '#C1963F' },
+    healthyaging: { no: 'I',    name: 'GLyNAC Longevity Restoration', slug: '/drips/glynac.html',          tone: '#5B7098' },
+    immune:       { no: 'II',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immun-o-boost.html',         tone: '#D9982A' },
+    muscle:       { no: 'III',  name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo.html',        tone: '#B34E37' },
+    antioxidant:  { no: 'IV',   name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant.html',    tone: '#4F7D5E' },
+    glutathione:  { no: 'V',    name: 'Glutathione IV Injection',     slug: '/drips/glutathione.html', tone: '#7FA08C' },
+    jointskin:    { no: 'VI',   name: 'Joint & Skin Wellness',        slug: '/drips/joint-skin.html',    tone: '#8C6239' },
+    liver:        { no: 'VII',  name: 'Fatty Liver Support',          slug: '/drips/fatty-liver-support.html',          tone: '#5F7A55' },
+    recovery:     { no: 'VIII', name: 'Revive IV Support',            slug: '/drips/revive.html',       tone: '#35707F' },
+    mind:         { no: 'IX',   name: 'Stress & Brain Wellness',      slug: '/drips/stress-brain.html',     tone: '#7A5F98' },
+    custom:       { no: 'X',    name: 'Customized IV Infusion',       slug: '/drips/customized.html',    tone: '#C1963F' },
 };
 
 
@@ -591,14 +591,17 @@ class DripLine {
 class Compounds {
     constructor() {
         this.scene = $('.ivx-idx');
-        this.rail  = $('#ivxKeys');
-        this.keys  = $$('.ivx-key');
-        this.panel = $('#ivxPanel');
-        this.ghost = $('#ivxGhost');
-        this.name  = $('#ivxName');
-        this.what  = $('#ivxWhat');
-        this.list  = $('#ivxIn');
-        this.at    = 0;
+        this.rail  = $('#wlKeys');
+        this.keys  = $$('.wl__key');
+        this.bags  = $$('.wl__bag');
+        this.panel = $('#wlPanel');
+        this.name  = $('#wlName');
+        this.what  = $('#wlWhat');
+        this.count = $('#wlCount');
+        this.title = $('#ivxIdxTitle');
+        this.at    = -1;
+        this.WORDS = ['zero', 'one', 'two', 'three', 'four', 'five',
+                      'six', 'seven', 'eight', 'nine', 'ten'];
     }
 
     init() {
@@ -616,10 +619,73 @@ class Compounds {
             });
         });
 
+        this.light(COMPOUNDS[0], true);
+        this.at = 0;
+
         if (!GSAP_ON() || REDUCED) return;
-        popIn($$('.ivx-idx__head > *', this.scene), { y: 24, stagger: .08 }, '.ivx-idx__head', 'top 86%');
-        popIn([this.panel], { y: 30, duration: .9 }, '.ivx-idx__stage', 'top 84%');
-        popIn(this.keys, { y: 14, stagger: .04, duration: .5 }, '.ivx-idx__keys', 'top 88%');
+        this.reveal();
+    }
+
+    meters() { return $$('.wl__meter i', this.rail); }
+
+    /* ---------- which bags carry the live component ---------- */
+    light(c, instant = false) {
+        const has = new Set(c.in);
+
+        this.bags.forEach((b) => {
+            const on = has.has(b.dataset.id);
+            b.classList.toggle('is-in', on);
+            b.classList.toggle('is-past', !on);
+        });
+
+        if (instant || !LIVE()) return;
+
+        // the lit bags settle in sequence rather than all at once
+        const lit = this.bags.filter((b) => b.classList.contains('is-in'));
+        gsap.killTweensOf(lit);
+        gsap.fromTo(lit, { y: 4, scale: .97 },
+            { y: 0, scale: 1, duration: .55, ease: 'expo.out', stagger: .04, clearProps: 'all' });
+    }
+
+    /* ---------- scroll choreography ---------- */
+    reveal() {
+        const lines = $$('.ivx-idx__title span > i', this.scene);
+        if (lines.length) {
+            gsap.set(lines, { yPercent: 108 });
+            gsap.to(lines, {
+                yPercent: 0, duration: 1.05, ease: 'expo.out', stagger: .1,
+                scrollTrigger: { trigger: this.title, start: 'top 88%', once: true },
+            });
+        }
+
+        popIn($$('.ivx-eyebrow, .ivx-idx__lede', this.scene), { y: 20, stagger: .08 },
+            '.ivx-idx__head', 'top 86%');
+        popIn([this.panel], { y: 30, duration: .9 }, '.wl__panel', 'top 90%');
+
+        // the shelf loads left to right, like bags being set down
+        gsap.set(this.bags, { opacity: 0, y: 22 });
+        ScrollTrigger.create({
+            trigger: '.wl__bags', start: 'top 88%', once: true,
+            onEnter: () => gsap.to(this.bags, {
+                opacity: 1, y: 0, duration: .75, ease: 'expo.out',
+                stagger: .05, clearProps: 'transform',
+            }),
+        });
+
+        gsap.set(this.keys, { opacity: 0, x: -12 });
+        gsap.set(this.meters(), { scaleX: 0 });
+        ScrollTrigger.create({
+            trigger: this.rail, start: 'top 90%', once: true,
+            onEnter: () => {
+                gsap.to(this.keys, {
+                    opacity: 1, x: 0, duration: .6, ease: 'expo.out',
+                    stagger: .04, clearProps: 'transform',
+                });
+                gsap.to(this.meters(), {
+                    scaleX: 1, duration: 1.1, ease: 'expo.out', stagger: .04, delay: .1,
+                });
+            },
+        });
     }
 
     show(i) {
@@ -628,9 +694,20 @@ class Compounds {
         if (!c) return;
         this.at = i;
 
-        this.keys.forEach((k, n) => k.classList.toggle('is-on', n === i));
+        this.keys.forEach((k, x) => {
+            const on = x === i;
+            k.classList.toggle('is-on', on);
+            k.setAttribute('aria-selected', on ? 'true' : 'false');
+            k.tabIndex = on ? 0 : -1;
+        });
 
-        // below 900px the keys are a sideways rail — keep the live one on screen
+        this.panel.setAttribute('aria-labelledby', this.keys[i].id);
+
+        // the first lit bag lends the panel its tone
+        const first = this.bags.find((b) => b.dataset.id === c.in[0]);
+        const tone = first && first.style.getPropertyValue('--tone').trim();
+        if (tone) this.panel.style.setProperty('--tone', tone);
+
         const key = this.keys[i];
         if (key.scrollIntoView && this.rail && this.rail.scrollWidth > this.rail.clientWidth) {
             key.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
@@ -638,27 +715,61 @@ class Compounds {
 
         this.name.textContent = c.name;
         this.what.textContent = c.what;
-        if (this.ghost) this.ghost.textContent = c.ghost;
+        if (this.count) this.count.textContent = this.WORDS[c.in.length] || c.in.length;
 
-        this.list.innerHTML = c.in.map((id) => {
-            const d = MENU[id];
-            if (!d) return '';
-            return `<li style="--tone:${d.tone}">
-                        <a href="${d.slug}"><i>${d.no}</i> ${d.name}</a>
-                    </li>`;
-        }).join('');
+        this.light(c);
 
         if (!LIVE()) return;
-
-        gsap.killTweensOf([this.name, this.what, this.ghost, ...$$('li', this.list)]);
-        gsap.fromTo([this.name, this.what], { opacity: 0, y: 14 },
+        gsap.killTweensOf([this.name, this.what]);
+        gsap.fromTo([this.name, this.what], { opacity: 0, y: 12 },
             { opacity: 1, y: 0, duration: .5, ease: 'expo.out', stagger: .05 });
-        gsap.fromTo($$('li', this.list), { opacity: 0, x: 16 },
-            { opacity: 1, x: 0, duration: .45, ease: 'power3.out', stagger: .045, delay: .06 });
-        if (this.ghost) {
-            gsap.fromTo(this.ghost, { opacity: 0, scale: 1.14 },
-                { opacity: 1, scale: 1, duration: .8, ease: 'expo.out' });
-        }
+    }
+}
+
+
+/* =============================================================================
+   THE RACK — the ten hanging in the hero
+   -----------------------------------------------------------------------------
+   Each bag swings from its own hook on its own timing, so the row never reads
+   as one synchronised animation. The drop-in runs once on load; the sway runs
+   forever, and both are skipped outright under reduced motion.
+============================================================================= */
+class Rack {
+    constructor() {
+        this.el    = $('#ivxRack');
+        this.row   = $('#ivxRackRow');
+        this.lifts = $$('.rk__lift');
+    }
+
+    init() {
+        if (!this.el || !this.lifts.length || !LIVE()) return;
+
+        // the bags drop onto the wire, then never stop moving
+        gsap.set(this.lifts, { opacity: 0, y: -26, rotate: 0 });
+        gsap.to(this.lifts, {
+            opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .06,
+            scrollTrigger: { trigger: this.el, start: 'top 92%', once: true },
+            onComplete: () => this.sway(),
+        });
+
+        // the whole rail drifts a little against the scroll
+        gsap.to(this.row, {
+            yPercent: -6, ease: 'none',
+            scrollTrigger: { trigger: this.el, start: 'top bottom', end: 'bottom top', scrub: .8 },
+        });
+    }
+
+    sway() {
+        this.lifts.forEach((el, i) => {
+            const swing = 1.1 + (i % 3) * .35;          // never the same arc twice
+            gsap.to(el, {
+                rotate: swing, transformOrigin: '50% 0%',
+                duration: 2.6 + (i % 4) * .45,
+                ease: 'sine.inOut', yoyo: true, repeat: -1,
+                startAt: { rotate: -swing },
+                delay: i * .14,
+            });
+        });
     }
 }
 
@@ -744,6 +855,7 @@ const modules = {
     cabinet:   new Cabinet(),
     tilt:      new Tilt(),
     dripLine:  new DripLine(),
+    rack:      new Rack(),
     compounds: new Compounds(),
     program:   new Program(),
 };
