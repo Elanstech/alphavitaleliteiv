@@ -1566,35 +1566,35 @@ class Dock {
    Never treats, cures, repairs, or guaranteed-outcome language.
 ============================================================================= */
 const DRIPS = [
-    { id:'healthyaging', name:'GLyNAC Longevity Restoration IV',  slug:'/drips/glynac.html',              img:'glynac',        time:'1 h 15',                     price:'$450', prog:'$405',    tag:'Healthy Aging',
+    { id:'healthyaging', name:'GLyNAC Healthy Aging IV',  slug:'/drips/glynac.html',              img:'glynac',        time:'1 h 15',                     price:'$350', prog:'$405',    tag:'Healthy Aging',
       why:'The two compounds the body uses as building components to produce glutathione.' },
 
-    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immun-o-boost.html',       img:'immuneoboost',  time:'2 h 30',                     price:'$650', prog:'$585',    tag:'Immune Support',
+    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immun-o-boost.html',       img:'immuneoboost',  time:'2 h 30',                     price:'$550', prog:'$585',    tag:'Immune Support',
       why:'Immune system support, hydration, recovery and wellness optimization.' },
 
-    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/liquixo.html',             img:'liquixo',       time:'45 min',                     price:'$495', prog:'$445.50', tag:'Muscle Recovery',
+    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/liquixo.html',             img:'liquixo',       time:'45 min',                     price:'$395', prog:'$445.50', tag:'Muscle Recovery',
       why:'A full 20 amino acid blend with alpha-lipoic acid and exosomes.' },
 
-    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant.html',         img:'antioxidant',   time:'75 min',                     price:'$500', prog:'$450',    tag:'Antioxidant Support',
+    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant.html',         img:'antioxidant',   time:'75 min',                     price:'$400', prog:'$350',    tag:'Antioxidant Support',
       why:'Three antioxidants in one network, recharging one another rather than working alone.' },
 
-    { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione.html',         img:'glutathione',   time:'15 min push · 30 min visit', price:'$125', prog:'$112.50', tag:'Glutathione IV Therapy',
+    { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione.html',         img:'glutathione',   time:'15 min push · 30 min visit', price:'$100', prog:'$112.50', tag:'Glutathione IV Therapy',
       why:'Concentrated antioxidant support as a slow physician-administered push.' },
 
     // one infusion, two categories — the quiz can land on it from either route
-    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin.html',          img:'jointsupport',  time:'2 h 30',                     price:'$750', prog:'$675',    tag:'Joint Support & Skin Health',
+    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin.html',          img:'jointsupport',  time:'2 h 30',                     price:'$650', prog:'$675',    tag:'Joint Support & Skin Health',
       why:'Amino acids involved in normal collagen formation, with antioxidant support around them.' },
 
-    { id:'liver',        name:'Fatty Liver Support IV',           slug:'/drips/fatty-liver-support.html', img:'liversupport',  time:'3 h',                        price:'$850', prog:'$765',    tag:'Liver Support',
+    { id:'liver',        name:'Fatty Liver Support IV',           slug:'/drips/fatty-liver-support.html', img:'liversupport',  time:'3 h',                        price:'$650', prog:'$765',    tag:'Liver Support',
       why:'Glycine and taurine for the liver’s normal bile work, with NAC for the glutathione pathway.' },
 
-    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/revive.html',              img:'revive',        time:'2 h 15',                     price:'$625', prog:'$562.50', tag:'Recovery Support',
+    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/revive.html',              img:'revive',        time:'2 h 15',                     price:'$525', prog:'$562.50', tag:'Recovery Support',
       why:'Hydration and nutritional replenishment for flexible, as-needed use.' },
 
     // name matches the plate exactly — it used to read "Stress, Mental Burnout
     // & Brain Wellness IV" here and "Stress & Brain Wellness IV" on the card,
     // so a quiz result and the shelf disagreed about what the thing is called
-    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$700', prog:'$630',    tag:'Mind & Focus Support',
+    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$500', prog:'$630',    tag:'Mind & Focus Support',
       why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
 
     { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized.html',          img:'customized',    time:'Individually determined',    price:'By consultation', prog:'Quoted after screening', tag:'Customized IV Infusion',
@@ -1631,7 +1631,7 @@ const ASKS = [
         { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ recovery:5, immune:5, liver:4, jointskin:4 } },
     ]},
 
-    /* Joint & Skin ($750) and Liver ($850) used to carry no weight here — a
+    /* Joint & Skin ($650) and Liver ($650) used to carry no weight here — a
        deliberate hold from when neither had a confirmed price. Both are
        published now, and they are the two most expensive infusions on the
        menu, so the top band could never reach them. They belong in it. */
@@ -1827,7 +1827,7 @@ class Quiz {
 
         // the program row is only shown when there is a real figure for it
         const progRow = /^\$/.test(top.prog)
-            ? `<div class="rx__fact"><dt>In a program</dt><dd>${top.prog}</dd></div>`
+            ? ''
             : '';
 
         const altRow = alt
