@@ -3368,11 +3368,18 @@ body.is-ready .hero__title .word > span {
     border-top: 1px solid var(--rule-light);
 }
 .foot__legal p { font-size: .78rem; line-height: 1.75; color: rgba(246,241,231,.45); max-width: 78ch; }
-.foot__mini { list-style: none; display: flex; flex-wrap: wrap; gap: .35rem 1.25rem; }
+.foot__mini { list-style: none; display: flex; flex-wrap: wrap; gap: .8rem 1.25rem; }
 .foot__mini a {
     font-family: var(--micro); font-size: .58rem; font-weight: 600;
     letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
     white-space: nowrap; transition: color .35s var(--ease);
+    /* The type is ~9px, so an inline anchor gives an 11px-tall hit box and the
+       click misses as often as it lands. Pad the target out to a usable size
+       and pull the padding back off the layout with a matching negative
+       margin, so the plate looks exactly as it did. */
+    display: inline-block;
+    padding: .55rem .3rem;
+    margin: -.55rem -.3rem;
 }
 .foot__mini a:hover { color: var(--gold-lite); }
 
