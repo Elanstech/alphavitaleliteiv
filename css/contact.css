@@ -1,0 +1,392 @@
+/* =============================================================================
+   ALPHA VITAL ELITE IV — CONTACT.CSS
+   Layers on ../styles.css. Tokens, header, menu, buttons, footer and dock all
+   come from there and are NOT redefined.
+
+   THE ONE JOB THIS PAGE HAS — two doors, and nobody walks through the wrong
+   one. Screening is the only route to an appointment; the contact form answers
+   questions and books nothing. So the screening door is large, gold-edged and
+   first, the question door is quiet and second, and the contact form carries a
+   standing notice that it cannot book. Repetition is deliberate here: a person
+   who misreads this wastes a week waiting for a reply that was never coming.
+
+     00 TOKENS & SHELL   01 START STATES   02 ATOMS
+     03 MASTHEAD         04 THE TWO DOORS  05 SCREENING
+     06 QUESTIONS        07 VISIT          08 MOTION · A11Y · PRINT
+============================================================================= */
+
+
+/* ── 00 TOKENS & SHELL ───────────────────────────────────────────────────── */
+.page-contact {
+    --pad: clamp(3.5rem, 8vw, 7rem);
+    --cte: cubic-bezier(.16, 1, .3, 1);
+    --alert: #C0281F;
+
+    background: var(--cream);
+    color: var(--ink-soft);
+    -webkit-tap-highlight-color: transparent;
+}
+.page-contact section[id] { scroll-margin-top: calc(var(--head-h) + 1.5rem); }
+.page-contact :is(h1, h2, h3) { text-wrap: balance; }
+.page-contact :is(p, li, dd)  { text-wrap: pretty; }
+
+.ct-wrap {
+    width: 100%; max-width: var(--maxw);
+    margin-inline: auto; padding-inline: var(--gut);
+}
+.head { view-transition-name: site-head; }
+.foot { view-transition-name: site-foot; }
+
+
+/* ── 01 START STATES ─────────────────────────────────────────────────────── */
+html.ct-on [data-ct]        { opacity: 0; will-change: transform, opacity; }
+html.ct-on [data-ct="rise"] { transform: translate3d(0, 28px, 0); }
+html.ct-on [data-ct="pop"]  { transform: translate3d(0, 20px, 0) scale(.96); }
+html.ct-on [data-ct-split]  { opacity: 0; }
+html.ct-on .ct-line > span  { transform: translate3d(0, 105%, 0); }
+
+.ct-line { display: block; overflow: hidden; }
+.ct-line > span { display: block; will-change: transform; }
+
+
+/* ── 02 ATOMS ────────────────────────────────────────────────────────────── */
+.ct-prog {
+    position: fixed; inset: 0 0 auto 0; z-index: 1100;
+    height: 2px; background: var(--gold);
+    transform-origin: 0 50%; transform: scaleX(0); pointer-events: none;
+}
+.ct-skip {
+    position: absolute; left: -9999px; top: 0; z-index: 5000;
+    padding: .8rem 1.2rem; background: var(--forest); color: var(--cream);
+    font-family: var(--micro); font-size: .62rem;
+    letter-spacing: .14em; text-transform: uppercase;
+}
+.ct-skip:focus { left: .5rem; top: .5rem; }
+
+.ct-eyebrow {
+    display: flex; align-items: center; gap: .9rem;
+    font-family: var(--caps); font-size: .72rem;
+    letter-spacing: .26em; text-transform: uppercase;
+    color: var(--gold-deep); margin-bottom: 1.3rem;
+}
+.ct-eyebrow::before {
+    content: ''; width: clamp(24px, 5vw, 54px); height: 1px;
+    background: var(--rule-gold); flex: none;
+}
+.ct-h2 {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.8rem, 3.8vw, 3.1rem);
+    line-height: 1.08; letter-spacing: -.015em; color: var(--forest);
+}
+.ct-h2 em { font-family: var(--accent); font-style: italic; font-weight: 500; color: var(--gold-deep); }
+.ct-lede {
+    max-width: 64ch; margin-top: 1.2rem;
+    font-size: clamp(.98rem, 1.15vw, 1.1rem); line-height: 1.75;
+}
+
+
+/* ── 03 MASTHEAD ─────────────────────────────────────────────────────────── */
+.ct-top {
+    position: relative;
+    padding: calc(var(--head-h) + clamp(1.5rem, 5vh, 3rem)) 0 clamp(2rem, 4vw, 3rem);
+    background:
+        radial-gradient(85% 60% at 85% 0%, rgba(193,150,63,.13), transparent 62%),
+        var(--cream);
+    overflow: clip;
+}
+.ct-folio {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
+    padding-bottom: 1.1rem; border-bottom: 1px solid var(--rule);
+    font-family: var(--micro); font-size: .66rem;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+}
+.ct-folio__mid { color: var(--gold-deep); }
+
+.ct-top__grid {
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+    gap: clamp(1.5rem, 4vw, 4rem); align-items: end;
+    margin-top: clamp(2rem, 5vh, 3.25rem);
+}
+.ct-top__title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2.2rem, 5.6vw, 4.6rem);
+    line-height: 1.02; letter-spacing: -.025em; color: var(--forest);
+}
+.ct-top__title em {
+    display: block; font-family: var(--accent); font-style: italic;
+    font-weight: 500; color: var(--gold-deep);
+}
+@media (max-width: 900px) { .ct-top__grid { grid-template-columns: 1fr; gap: 1.6rem; } }
+@media (max-width: 560px) {
+    .ct-folio { font-size: .56rem; letter-spacing: .13em; }
+    .ct-folio__mid { order: 3; flex-basis: 100%; }
+}
+
+
+/* ── 04 THE TWO DOORS ────────────────────────────────────────────────────────
+   Deliberately unequal. The screening door is bigger, gold-edged and carries
+   the price; the question door is quiet and states its own limit up front. */
+.ct-doors {
+    padding: clamp(2rem, 4vw, 3rem) 0 var(--pad);
+    background: var(--cream);
+}
+.ct-doors__grid {
+    display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr);
+    gap: clamp(1rem, 2.4vw, 2rem);
+    align-items: stretch;
+}
+.ct-door {
+    position: relative; display: flex; flex-direction: column;
+    padding: clamp(1.6rem, 3vw, 2.5rem);
+    border: 1px solid var(--rule); background: var(--parchment);
+    transition: transform .5s var(--cte), box-shadow .5s var(--cte), border-color .5s var(--cte);
+}
+.ct-door--go {
+    border-color: var(--rule-gold);
+    background:
+        radial-gradient(80% 60% at 90% 6%, rgba(193,150,63,.14), transparent 62%),
+        var(--cream);
+    box-shadow: 0 26px 48px -34px rgba(32, 52, 33, .4);
+}
+.ct-door--go:hover { transform: translateY(-3px); box-shadow: 0 34px 60px -34px rgba(32, 52, 33, .45); }
+
+.ct-door__tag {
+    display: inline-flex; align-items: center; gap: .5rem; align-self: flex-start;
+    padding: .35rem .75rem; margin-bottom: 1.15rem;
+    font-family: var(--micro); font-size: .58rem;
+    letter-spacing: .16em; text-transform: uppercase;
+}
+.ct-door--go .ct-door__tag { background: var(--forest); color: var(--cream); }
+.ct-door--ask .ct-door__tag { border: 1px solid var(--rule); color: var(--mist); }
+
+.ct-door__name {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+    line-height: 1.12; letter-spacing: -.015em; color: var(--forest);
+}
+.ct-door__what { margin-top: .85rem; font-size: .95rem; line-height: 1.7; }
+.ct-door__acts { margin-top: auto; padding-top: 1.6rem; }
+
+/* the price anchor inside the screening door */
+.ct-price {
+    display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap;
+    margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--rule-gold);
+}
+.ct-price b {
+    font-family: var(--data); font-weight: 600;
+    font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1;
+    letter-spacing: -.03em; color: var(--forest);
+}
+.ct-price span { font-size: .88rem; line-height: 1.6; color: var(--ink-soft); max-width: 34ch; }
+
+/* the standing limit notice on the question door */
+.ct-limit {
+    margin-top: 1.2rem; padding: .85rem 1rem;
+    border-left: 3px solid var(--alert);
+    background: rgba(192, 40, 31, .05);
+    font-size: .86rem; line-height: 1.6; color: #8E1F18;
+}
+.ct-limit b { font-weight: 600; }
+
+@media (max-width: 880px) { .ct-doors__grid { grid-template-columns: 1fr; } }
+
+
+/* ── 05 SCREENING ────────────────────────────────────────────────────────── */
+.ct-screen {
+    padding: var(--pad) 0;
+    background: var(--parchment);
+    border-block: 1px solid var(--rule);
+}
+.ct-screen__head { max-width: 68ch; margin-bottom: clamp(2rem, 4.5vw, 3rem); }
+
+/* the three steps */
+.ct-steps {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: clamp(.9rem, 2vw, 1.5rem);
+    margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+    counter-reset: step;
+}
+.ct-step {
+    position: relative; padding: 1.4rem 1.25rem;
+    background: var(--cream); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+}
+.ct-step__no {
+    font-family: var(--data); font-weight: 600; font-size: .68rem;
+    letter-spacing: .12em; color: var(--gold-deep);
+}
+.ct-step__name {
+    margin-top: .5rem;
+    font-family: var(--caps); font-weight: 400; font-size: 1rem;
+    letter-spacing: .04em; color: var(--forest);
+}
+.ct-step__what { margin-top: .6rem; font-size: .86rem; line-height: 1.65; color: var(--mist); }
+
+@media (max-width: 780px) { .ct-steps { grid-template-columns: 1fr; } }
+
+/* the infusion picker */
+.ct-pick__lab {
+    display: block; margin-bottom: 1rem;
+    font-family: var(--caps); font-size: .95rem; color: var(--forest);
+}
+.ct-pick__note {
+    display: block; margin-bottom: 1.3rem; max-width: 62ch;
+    font-family: var(--accent); font-style: italic;
+    font-size: 1rem; line-height: 1.6; color: var(--gold-deep);
+}
+.ct-pick__grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: .7rem; list-style: none;
+}
+.ct-opt {
+    position: relative; display: flex; align-items: center; gap: .85rem;
+    width: 100%; padding: .95rem 1rem; text-align: left;
+    border: 1px solid var(--rule); background: var(--cream);
+    transition: border-color .35s var(--cte), background .35s var(--cte), transform .35s var(--cte);
+}
+.ct-opt:hover { border-color: var(--tone, var(--gold)); transform: translateY(-2px); }
+.ct-opt[aria-pressed="true"] {
+    border-color: var(--tone, var(--gold)); border-width: 2px;
+    background: color-mix(in oklab, var(--tone, var(--gold)) 8%, var(--cream));
+}
+.ct-opt__dot {
+    width: 10px; height: 10px; border-radius: 50%; flex: none;
+    background: var(--tone, var(--gold));
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--tone, var(--gold)) 18%, transparent);
+}
+.ct-opt__name { flex: 1; font-size: .89rem; line-height: 1.4; color: var(--forest); }
+.ct-opt__price {
+    font-family: var(--data); font-weight: 600; font-size: .78rem;
+    color: var(--mist); font-variant-numeric: tabular-nums;
+}
+.ct-opt[aria-pressed="true"] .ct-opt__price { color: var(--forest); }
+.ct-opt--any { border-style: dashed; }
+
+/* the go bar */
+.ct-go {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem 1.5rem; flex-wrap: wrap;
+    margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+    padding-top: clamp(1.4rem, 3vw, 2rem);
+    border-top: 1px solid var(--rule);
+}
+.ct-go__read { font-size: .92rem; line-height: 1.6; color: var(--mist); }
+.ct-go__read b { color: var(--forest); font-weight: 600; }
+
+/* the embed slot — where the Jotform screening form drops in */
+.ct-embed {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding: clamp(1.25rem, 2.4vw, 2rem);
+    border: 1px dashed var(--rule-gold);
+    background: var(--cream);
+}
+.ct-embed[hidden] { display: none; }
+.ct-embed__lab {
+    display: block; margin-bottom: 1rem;
+    font-family: var(--micro); font-size: .58rem;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--gold-deep);
+}
+.ct-embed iframe { width: 100%; border: 0; display: block; min-height: 900px; }
+
+
+/* ── 06 QUESTIONS ────────────────────────────────────────────────────────── */
+.ct-ask { padding: var(--pad) 0; background: var(--cream); }
+.ct-ask__grid {
+    display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+    gap: clamp(1.75rem, 4vw, 3.5rem); align-items: start;
+}
+.ct-ask__side { position: sticky; top: calc(var(--head-h) + 2rem); }
+
+/* the notice that repeats the page's whole point */
+.ct-notice {
+    padding: clamp(1.1rem, 2vw, 1.5rem);
+    border: 2px solid var(--alert);
+    background: rgba(192, 40, 31, .05);
+    margin-bottom: 1.75rem;
+}
+.ct-notice__tag {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .35rem .7rem; margin-bottom: .85rem;
+    background: var(--alert); color: #fff;
+    font-family: var(--micro); font-size: .58rem;
+    letter-spacing: .16em; text-transform: uppercase;
+}
+.ct-notice p { font-size: .92rem; line-height: 1.7; color: #8E1F18; }
+.ct-notice p + p { margin-top: .7rem; }
+.ct-notice b { font-weight: 600; }
+.ct-notice a { color: #8E1F18; text-decoration: underline; text-underline-offset: 3px; }
+
+.ct-form__slot {
+    padding: clamp(1.25rem, 2.4vw, 2rem);
+    border: 1px dashed var(--rule);
+    background: var(--parchment);
+}
+.ct-form__slot iframe { width: 100%; border: 0; display: block; min-height: 720px; }
+.ct-form__lab {
+    display: block; margin-bottom: 1rem;
+    font-family: var(--micro); font-size: .58rem;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+}
+
+@media (max-width: 900px) {
+    .ct-ask__grid { grid-template-columns: 1fr; }
+    .ct-ask__side { position: static; }
+}
+
+
+/* ── 07 VISIT ────────────────────────────────────────────────────────────── */
+.ct-visit {
+    padding: var(--pad) 0;
+    background: #16241A; position: relative; overflow: clip;
+}
+.ct-visit::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(100% 70% at 20% 0%, rgba(143,190,155,.07), transparent 62%);
+}
+.ct-visit__in { position: relative; z-index: 2; }
+.ct-visit .ct-h2 { color: var(--cream); }
+.ct-visit .ct-h2 em { color: var(--gold-lite); }
+.ct-visit .ct-eyebrow { color: var(--gold-lite); }
+
+.ct-visit__grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.25rem, 2.6vw, 2.25rem);
+    margin-top: clamp(2rem, 4.5vw, 3rem);
+}
+.ct-card {
+    padding: clamp(1.25rem, 2.2vw, 1.75rem);
+    border: 1px solid rgba(246, 241, 231, .14);
+    background: rgba(246, 241, 231, .03);
+}
+.ct-card i { font-size: 1.45rem; color: var(--gold); }
+.ct-card h3 {
+    margin: .85rem 0 .6rem;
+    font-family: var(--caps); font-weight: 400; font-size: .95rem;
+    letter-spacing: .06em; color: var(--cream);
+}
+.ct-card p, .ct-card address {
+    font-size: .88rem; line-height: 1.7; color: var(--cream-dim); font-style: normal;
+}
+.ct-card a { color: var(--gold-lite); }
+.ct-card a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 860px) { .ct-visit__grid { grid-template-columns: 1fr; } }
+
+
+/* ── 08 MOTION · A11Y · PRINT ────────────────────────────────────────────── */
+.page-contact :focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+    html.ct-on [data-ct],
+    html.ct-on [data-ct-split],
+    html.ct-on .ct-line > span { opacity: 1 !important; transform: none !important; }
+    .ct-prog { display: none; }
+    * { scroll-behavior: auto !important; }
+}
+
+@media print {
+    .ct-prog, .head, .menu, .fab, .totop, .ct-embed, .ct-form__slot { display: none !important; }
+    .page-contact, .ct-visit { background: #fff; color: #000; }
+    .ct-visit .ct-h2, .ct-card h3, .ct-card p, .ct-card address { color: #000 !important; }
+}
