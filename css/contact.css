@@ -173,12 +173,16 @@ html.ct-on .ct-line > span  { transform: translate3d(0, 105%, 0); }
     display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap;
     margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--rule-gold);
 }
-.ct-price b {
+.ct-price > b {
     font-family: var(--data); font-weight: 600;
     font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1;
     letter-spacing: -.03em; color: var(--forest);
 }
-.ct-price span { font-size: .88rem; line-height: 1.6; color: var(--ink-soft); max-width: 34ch; }
+.ct-price span { font-size: .88rem; line-height: 1.6; color: var(--ink-soft); max-width: 42ch; }
+.ct-price span b { font-family: inherit; font-size: inherit; color: var(--forest); font-weight: 600; }
+.ct-price span a, .ct-step__what a {
+    color: var(--gold-deep); text-decoration: underline; text-underline-offset: 3px;
+}
 
 /* the standing limit notice on the question door */
 .ct-limit {
