@@ -508,7 +508,11 @@ const boot = () => {
         ScrollTrigger.refresh();
     });
 
-    addEventListener('pageshow', (e) => { if (e.persisted) ScrollTrigger.refresh(); });
+    addEventListener('pageshow', (e) => {
+        const restored = e.persisted ||
+            performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
+        if (restored) ScrollTrigger.refresh(true);
+    });
     RM.addEventListener?.('change', () => location.reload());
 };
 
