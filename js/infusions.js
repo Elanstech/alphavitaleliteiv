@@ -163,7 +163,10 @@ class Hero {
     init() {
         if (!this.el) return;
         if (!LIVE()) { release(); return; }
+        FONTS.then(() => this.play());
+    }
 
+    play() {
         const first = $('.hr__line[data-split]', this.el);
         const chars = first ? splitChars(first) : [];
 
@@ -197,6 +200,16 @@ class Hero {
 
    Below 900px the CSS makes the bar static and this all becomes inert.
 ============================================================================= */
+/** Webfonts land after first paint and change every measurement on the page:
+ *  a character split made against the fallback face re-wraps the moment
+ *  Fraunces arrives, and a pin measured then is measured against the wrong
+ *  height. Everything that measures waits on this. Capped so a font that
+ *  never resolves cannot hold the page hostage. */
+const FONTS = Promise.race([
+    (document.fonts ? document.fonts.ready : Promise.resolve()).catch(() => {}),
+    new Promise((r) => setTimeout(r, 1400)),
+]);
+
 /** Cut an element into per-character spans, keeping words unbreakable so the
  *  line still wraps at word boundaries. Returns the spans to animate. */
 const splitChars = (el) => {
@@ -336,7 +349,10 @@ class Stage {
         if (!LIVE()) { this.panels.forEach((p) => p.classList.add('is-live')); return; }
 
         this.mq.addEventListener('change', () => this.build());
-        this.build();
+        FONTS.then(() => {
+            this.build();
+            ScrollTrigger.refresh();
+        });
     }
 
     build() {
@@ -367,11 +383,26 @@ class Stage {
         this.st = ScrollTrigger.create({
             trigger: this.pin,
             start: 'top top',
-            end: () => '+=' + (this.panels.length * window.innerHeight * .85),
+            // a full viewport of scroll per formulation, so a stop has room to
+            // be read rather than being crossed on the way to the next
+            end: () => '+=' + (this.panels.length * window.innerHeight * 1.15),
             pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
             scrub: false,
+
+            // settle on the middle of a stop instead of stranding the reader
+            // between two — this is what gives the name time to finish writing
+            snap: {
+                snapTo: (p) => {
+                    const n = this.panels.length;
+                    const i = clamp(Math.floor(p * n), 0, n - 1);
+                    return (i + .5) / n;
+                },
+                duration: { min: .25, max: .6 },
+                delay: .08,
+                ease: 'power2.inOut',
+            },
             onUpdate: (self) => {
                 const n = Math.min(
                     this.panels.length - 1,
@@ -434,7 +465,7 @@ class Stage {
         const o = { n: 0 };
         slot.textContent = '';
         gsap.to(o, {
-            n: text.length, duration: Math.min(.9, text.length * .028), ease: 'none',
+            n: text.length, duration: clamp(text.length * .045, .55, 1.5), ease: 'none',
             onUpdate: () => { slot.textContent = text.slice(0, Math.round(o.n)); },
             onComplete: () => { slot.textContent = text; },
         });
@@ -539,8 +570,12 @@ class Compounds {
             });
         }
 
-        popIn($$('.ivx-eyebrow, .ivx-idx__lede', this.scene), { y: 20, stagger: .08 },
-            '.ivx-idx__head', 'top 86%');
+        // these carry [data-rise], so their start state is already on them —
+        // tween TO the resting state rather than setting a second one
+        gsap.to($$('[data-rise]', this.scene), {
+            opacity: 1, y: 0, duration: .9, ease: 'expo.out', stagger: .08,
+            scrollTrigger: { trigger: '.ivx-idx__head', start: 'top 86%', once: true },
+        });
         popIn([this.panel], { y: 30, duration: .9 }, '.wl__panel', 'top 90%');
 
         // the shelf loads left to right, like bags being set down
