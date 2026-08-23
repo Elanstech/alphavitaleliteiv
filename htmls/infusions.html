@@ -8,7 +8,15 @@
 <meta name="theme-color" content="#F6F1E7">
 <meta name="format-detection" content="telephone=yes">
 
-<script>document.documentElement.classList.add('has-js');</script>
+<script>
+  /* Set synchronously so the start states in infusions.css land before first
+     paint. Never added when scripting is off or motion is reduced, so the page
+     is simply visible in those cases. */
+  document.documentElement.classList.add('has-js');
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('ivx-on');
+  }
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,195 +143,53 @@
      01 · HERO
      ============================================================== -->
 <section class="ivx-hero" id="top">
-  <span class="ivx-hero__glow" aria-hidden="true"></span>
-  <span class="ivx-hero__weave" aria-hidden="true"></span>
 
-  <p class="ivx-folio ivx-anim">
-    <span>Est. Middle Village &middot; Queens</span>
-    <span class="ivx-folio__mid">The Infusion Menu</span>
-    <span>Appointments only</span>
-  </p>
+  <div class="hr__field" aria-hidden="true">
+      <span class="hr__bloom" style="--c:#5B7098; --bx:11%; --by:9%; --bd:18s; --bi:-0.0s"></span>
+      <span class="hr__bloom" style="--c:#D9982A; --bx:34%; --by:46%; --bd:21s; --bi:-2.4s"></span>
+      <span class="hr__bloom" style="--c:#B34E37; --bx:57%; --by:7%; --bd:24s; --bi:-4.8s"></span>
+      <span class="hr__bloom" style="--c:#4F7D5E; --bx:80%; --by:44%; --bd:27s; --bi:-7.199999999999999s"></span>
+      <span class="hr__bloom" style="--c:#7FA08C; --bx:15%; --by:5%; --bd:30s; --bi:-9.6s"></span>
+      <span class="hr__bloom" style="--c:#8C6239; --bx:38%; --by:42%; --bd:33s; --bi:-12.0s"></span>
+      <span class="hr__bloom" style="--c:#5F7A55; --bx:61%; --by:3%; --bd:36s; --bi:-14.399999999999999s"></span>
+      <span class="hr__bloom" style="--c:#35707F; --bx:84%; --by:40%; --bd:39s; --bi:-16.8s"></span>
+      <span class="hr__bloom" style="--c:#7A5F98; --bx:19%; --by:1%; --bd:42s; --bi:-19.2s"></span>
+      <span class="hr__bloom" style="--c:#C1963F; --bx:42%; --by:38%; --bd:45s; --bi:-21.599999999999998s"></span>
+    <span class="hr__veil"></span>
+    <span class="hr__grain"></span>
+  </div>
 
-  <div class="ivx-hero__stage">
-    <p class="ivx-hero__kicker ivx-anim">
-      <span class="ivx-pip"></span> Nine signature formulations &middot; One composed for a single person
+  <div class="hr__wrap">
+    <p class="hr__folio">
+      <span>Middle Village &middot; Queens</span>
+      <span class="hr__dot" aria-hidden="true"></span>
+      <span>Physician administered</span>
+      <span class="hr__dot" aria-hidden="true"></span>
+      <span>Appointments only</span>
     </p>
 
-    <h1 class="ivx-hero__title">
-      <span class="ivx-mask"><span class="ivx-mask__in">Ten infusions.</span></span>
-      <span class="ivx-mask"><span class="ivx-mask__in ivx-hero__two">Chosen <em>one at a time</em>.</span></span>
+    <h1 class="hr__title">
+      <span class="hr__line" data-split>Ten infusions.</span>
+      <span class="hr__line hr__line--type">
+        <span class="hr__typed" id="hrTyped"></span><span class="hr__caret" aria-hidden="true"></span>
+        <span class="hr__sr">Chosen one at a time, given by one physician.</span>
+      </span>
     </h1>
 
-    <p class="ivx-hero__dek ivx-anim">
-      Every formulation here is a starting point, never a prescription. Dr.&nbsp;Violeta Aronov, DO
-      reads your history first, decides whether IV therapy is appropriate for you, and gives each
-      infusion herself.
+    <p class="hr__dek" data-rise>
+      Dr.&nbsp;Violeta Aronov, DO reads your history first, decides whether IV therapy is
+      appropriate, and gives every infusion herself.
     </p>
-  </div>
 
-  <!-- the rack: the ten, hanging -->
-  <div class="ivx-rack" id="ivxRack">
-    <p class="rk__lab" aria-hidden="true"><span>The ten</span><span>Tap a bag to open it</span></p>
-    <ul class="rk__row" id="ivxRackRow">
-      <li class="rk__slot" style="--tone:#5B7098; --lift:0px">
-        <a class="rk__bag" href="../drips/glynac.html" data-id="healthyaging" aria-label="GLyNAC Healthy Aging, $350">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/glynac.png" alt="" width="524" height="1478"
-                 loading="eager" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>I</i><b>GLyNAC</b><em>$350</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#D9982A; --lift:18px">
-        <a class="rk__bag" href="../drips/immun-o-boost.html" data-id="immune" aria-label="Immun-O-Boost IV Support, $550">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/immuneoboost.png" alt="" width="524" height="1478"
-                 loading="eager" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>II</i><b>Immun-O-Boost</b><em>$550</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#B34E37; --lift:6px">
-        <a class="rk__bag" href="../drips/liquixo.html" data-id="muscle" aria-label="LIQUIXO Muscle Recovery, $395">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/liquixo.png" alt="" width="524" height="1478"
-                 loading="eager" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>III</i><b>LIQUIXO</b><em>$395</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#4F7D5E; --lift:26px">
-        <a class="rk__bag" href="../drips/antioxidant.html" data-id="antioxidant" aria-label="Antioxidant ×3 Reset, $400">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/antioxidant.png" alt="" width="524" height="1478"
-                 loading="eager" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>IV</i><b>Antioxidant ×3</b><em>$400</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#7FA08C; --lift:10px">
-        <a class="rk__bag" href="../drips/glutathione.html" data-id="glutathione" aria-label="Glutathione IV Injection, $100">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/glutathione.png" alt="" width="524" height="1478"
-                 loading="eager" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>V</i><b>Glutathione</b><em>$100</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#8C6239; --lift:30px">
-        <a class="rk__bag" href="../drips/joint-skin.html" data-id="jointskin" aria-label="Joint &amp; Skin Wellness, $650">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/jointsupport.png" alt="" width="524" height="1478"
-                 loading="lazy" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>VI</i><b>Joint &amp; Skin</b><em>$650</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#5F7A55; --lift:4px">
-        <a class="rk__bag" href="../drips/fatty-liver-support.html" data-id="liver" aria-label="Fatty Liver Support, $650">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/liversupport.png" alt="" width="524" height="1478"
-                 loading="lazy" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>VII</i><b>Fatty Liver</b><em>$650</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#35707F; --lift:22px">
-        <a class="rk__bag" href="../drips/revive.html" data-id="recovery" aria-label="Revive IV Support, $525">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/revive.png" alt="" width="524" height="1478"
-                 loading="lazy" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>VIII</i><b>Revive</b><em>$525</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#7A5F98; --lift:12px">
-        <a class="rk__bag" href="../drips/stress-brain.html" data-id="mind" aria-label="Stress &amp; Brain Wellness, $500">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/brainwellness.png" alt="" width="524" height="1478"
-                 loading="lazy" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>IX</i><b>Stress &amp; Brain</b><em>$500</em>
-          </span>
-        </a>
-      </li>
-      <li class="rk__slot" style="--tone:#C1963F; --lift:28px">
-        <a class="rk__bag" href="../drips/customized.html" data-id="custom" aria-label="Customized IV Infusion, By review">
-          <span class="rk__wire" aria-hidden="true"></span>
-          <span class="rk__hook" aria-hidden="true"></span>
-          <span class="rk__lift">
-            <img src="../assets/drips/customized.png" alt="" width="524" height="1478"
-                 loading="lazy" decoding="async">
-          </span>
-          <span class="rk__tag">
-            <i>X</i><b>Customized</b><em>By review</em>
-          </span>
-        </a>
-      </li>
-    </ul>
-  </div>
-
-  <div class="ivx-hero__base">
-    <dl class="ivx-hero__facts ivx-anim">
-      <div><dt>Signature</dt><dd data-count="9">0</dd></div>
-      <div><dt>Customized</dt><dd data-count="1">0</dd></div>
-      <div><dt>Consultation</dt><dd><i>$</i><span data-count="100">0</span></dd></div>
-    </dl>
-
-    <div class="ivx-hero__acts ivx-anim">
-      <a class="ivx-btn ivx-btn--solid" href="#cabinet"><span>Open the menu</span><i class="ph ph-arrow-down"></i></a>
+    <div class="hr__acts" data-rise>
+      <a class="ivx-btn ivx-btn--solid" href="#menu"><span>See the ten</span><i class="ph ph-arrow-down"></i></a>
       <a class="ivx-btn" href="#compounds"><span>What is in the bag</span></a>
     </div>
   </div>
 
-  <div class="ivx-ticker" aria-hidden="true">
-    <div class="ivx-ticker__row" id="ivxTicker">
-      <span class="ivx-ticker__set">
-        GLyNAC Longevity <i>&#9670;</i> Immun-O-Boost <i>&#9670;</i> LIQUIXO Muscle Recovery <i>&#9670;</i> Antioxidant &times;3 Reset <i>&#9670;</i>
-        Glutathione Injection <i>&#9670;</i> Joint &amp; Skin Wellness <i>&#9670;</i> Fatty Liver Support <i>&#9670;</i>
-        Revive <i>&#9670;</i> Stress &amp; Brain Wellness <i>&#9670;</i> Customized Infusion <i>&#9670;</i>
-      </span>
-      <span class="ivx-ticker__set">
-        GLyNAC Longevity <i>&#9670;</i> Immun-O-Boost <i>&#9670;</i> LIQUIXO Muscle Recovery <i>&#9670;</i> Antioxidant &times;3 Reset <i>&#9670;</i>
-        Glutathione Injection <i>&#9670;</i> Joint &amp; Skin Wellness <i>&#9670;</i> Fatty Liver Support <i>&#9670;</i>
-        Revive <i>&#9670;</i> Stress &amp; Brain Wellness <i>&#9670;</i> Customized Infusion <i>&#9670;</i>
-      </span>
-    </div>
+  <div class="hr__drip" aria-hidden="true">
+    <span class="hr__stem"></span>
+    <span class="hr__drop"></span>
   </div>
 </section>
 
@@ -331,269 +197,216 @@
 <!-- ==============================================================
      02 · THE CABINET
      ============================================================== -->
-<section class="ivx-menu" id="cabinet">
-  <div class="mn__wrap">
-
-    <header class="mn__head">
-      <p class="ivx-eyebrow" data-reveal><i class="ph-duotone ph-list-dashes"></i> The menu</p>
-      <h2 class="mn__title" id="mnTitle">
-        <span><i>Ten formulations.</i></span><span><i>One <em>physician</em>.</i></span>
-      </h2>
-      <p class="mn__lede" data-reveal>
-        Every rate below is a single session, given by Dr.&nbsp;Aronov. Open any line for its
-        full formulation.
-      </p>
-    </header>
-
-    <div class="mn__bar">
-      <div class="mn__filters" role="group" aria-label="Filter by chair time">
-        <span class="mn__barlab">Chair time</span>
-        <button type="button" class="mn__chip is-on" data-band="all">All ten</button>
-        <button type="button" class="mn__chip" data-band="short">Under an hour</button>
-        <button type="button" class="mn__chip" data-band="mid">One to two hours</button>
-        <button type="button" class="mn__chip" data-band="long">Two hours and over</button>
-      </div>
-      <p class="mn__count"><b id="mnCount">10</b> <span>of ten showing</span></p>
-    </div>
-
-    <ol class="mn__list" id="mnList">
-      <li class="mn__row" data-id="healthyaging" data-order="1" data-mins="75"
-          data-cost="350" data-band="mid" style="--tone:#5B7098">
-        <a class="mn__link" href="../drips/glynac.html">
-          <span class="mn__no">I</span>
-
-          <span class="mn__body">
-            <span class="mn__name">GLyNAC Healthy Aging</span>
-            <span class="mn__note">Glycine and N-acetylcysteine — the two compounds the body uses to build its own glutathione.</span>
-            <ul class="mn__tags"><li>Glycine</li><li>N-Acetylcysteine</li><li>Hydration fluid</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>1 h 15</span>
-            <span class="mn__rate"><b>$350</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/glynac.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="immune" data-order="2" data-mins="150"
-          data-cost="550" data-band="long" style="--tone:#D9982A">
-        <a class="mn__link" href="../drips/immun-o-boost.html">
-          <span class="mn__no">II</span>
-
-          <span class="mn__body">
-            <span class="mn__name">Immun-O-Boost IV Support</span>
-            <span class="mn__note">Vitamin C, zinc and trace minerals alongside glutathione and the amino acids.</span>
-            <ul class="mn__tags"><li>Vitamin C</li><li>Zinc</li><li>Glutathione</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>2 h 30</span>
-            <span class="mn__rate"><b>$550</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/immuneoboost.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="muscle" data-order="3" data-mins="45"
-          data-cost="395" data-band="short" style="--tone:#B34E37">
-        <a class="mn__link" href="../drips/liquixo.html">
-          <span class="mn__no">III</span>
-
-          <span class="mn__body">
-            <span class="mn__name">LIQUIXO Muscle Recovery</span>
-            <span class="mn__note">Lean-muscle support during GLP-1 and weight-loss treatment. A full twenty amino acid blend.</span>
-            <ul class="mn__tags"><li>20 amino acids</li><li>Exosomes</li><li>Hydration fluid</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>45 min</span>
-            <span class="mn__rate"><b>$395</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/liquixo.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="antioxidant" data-order="4" data-mins="75"
-          data-cost="400" data-band="mid" style="--tone:#4F7D5E">
-        <a class="mn__link" href="../drips/antioxidant.html">
-          <span class="mn__no">IV</span>
-
-          <span class="mn__body">
-            <span class="mn__name">Antioxidant ×3 Reset</span>
-            <span class="mn__note">Vitamin C, glutathione and alpha-lipoic acid working as one network, recharging one another.</span>
-            <ul class="mn__tags"><li>Vitamin C</li><li>Glutathione</li><li>Alpha-lipoic acid</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>1 h 15</span>
-            <span class="mn__rate"><b>$400</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/antioxidant.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="glutathione" data-order="5" data-mins="30"
-          data-cost="100" data-band="short" style="--tone:#7FA08C">
-        <a class="mn__link" href="../drips/glutathione.html">
-          <span class="mn__no">V</span>
-
-          <span class="mn__body">
-            <span class="mn__name">Glutathione IV Injection</span>
-            <span class="mn__note">Concentrated antioxidant support, given as a slow push by the physician. Gradual by design.</span>
-            <ul class="mn__tags"><li>Glutathione</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>30 min</span>
-            <span class="mn__rate"><b>$100</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/glutathione.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="jointskin" data-order="6" data-mins="150"
-          data-cost="650" data-band="long" style="--tone:#8C6239">
-        <a class="mn__link" href="../drips/joint-skin.html">
-          <span class="mn__no">VI</span>
-
-          <span class="mn__body">
-            <span class="mn__name">Joint &amp; Skin Wellness</span>
-            <span class="mn__note">The collagen amino acids with vitamin C and the trace minerals normal repair depends on.</span>
-            <ul class="mn__tags"><li>Collagen aminos</li><li>Vitamin C</li><li>Trace minerals</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>2 h 30</span>
-            <span class="mn__rate"><b>$650</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/jointsupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="liver" data-order="7" data-mins="180"
-          data-cost="650" data-band="long" style="--tone:#5F7A55">
-        <a class="mn__link" href="../drips/fatty-liver-support.html">
-          <span class="mn__no">VII</span>
-
-          <span class="mn__body">
-            <span class="mn__name">Fatty Liver Support</span>
-            <span class="mn__note">Taurine, glycine and N-acetylcysteine, involved in the liver’s normal bile and clearance work.</span>
-            <ul class="mn__tags"><li>Taurine</li><li>Glycine</li><li>N-Acetylcysteine</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>3 h</span>
-            <span class="mn__rate"><b>$650</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/liversupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="recovery" data-order="8" data-mins="135"
-          data-cost="525" data-band="long" style="--tone:#35707F">
-        <a class="mn__link" href="../drips/revive.html">
-          <span class="mn__no">VIII</span>
-
-          <span class="mn__body">
-            <span class="mn__name">Revive IV Support</span>
-            <span class="mn__note">A broad rebuild — fluids, B-complex, amino acids and the antioxidant set together.</span>
-            <ul class="mn__tags"><li>B-Complex</li><li>Amino acids</li><li>Glutathione</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>2 h 15</span>
-            <span class="mn__rate"><b>$525</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/revive.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="mind" data-order="9" data-mins="90"
-          data-cost="500" data-band="mid" style="--tone:#7A5F98">
-        <a class="mn__link" href="../drips/stress-brain.html">
-          <span class="mn__no">IX</span>
-
-          <span class="mn__body">
-            <span class="mn__name">Stress &amp; Brain Wellness</span>
-            <span class="mn__note">Taurine and B-complex with alpha-lipoic acid, present in the brain in high concentration.</span>
-            <ul class="mn__tags"><li>Taurine</li><li>B-Complex</li><li>Alpha-lipoic acid</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>1 h 30</span>
-            <span class="mn__rate"><b>$500</b><span>per session</span></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/brainwellness.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-      <li class="mn__row" data-id="custom" data-order="10" data-mins="9999"
-          data-cost="0" data-band="open" style="--tone:#C1963F">
-        <a class="mn__link" href="../drips/customized.html">
-          <span class="mn__no">X</span>
-
-          <span class="mn__body">
-            <span class="mn__name">Customized IV Infusion</span>
-            <span class="mn__note">Built for one person after review. Nothing off the shelf, nothing assumed.</span>
-            <ul class="mn__tags"><li>By consultation</li></ul>
-          </span>
-
-          <span class="mn__meta">
-            <span class="mn__time"><i class="ph ph-clock" aria-hidden="true"></i>By review</span>
-            <span class="mn__rate"><em>By consult</em></span>
-          </span>
-
-          <span class="mn__bag" aria-hidden="true">
-            <img src="../assets/drips/customized.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
-          </span>
-
-          <span class="mn__go" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
-        </a>
-      </li>
-    </ol>
-
-    <p class="mn__empty" id="mnEmpty">
-      Nothing on the menu sits in that length.
-      <button type="button" data-band="all">Show all ten</button>
+<section class="ivx-stage" id="menu">
+  <div class="st__intro">
+    <p class="ivx-eyebrow" data-rise><i class="ph-duotone ph-list-dashes"></i> The menu</p>
+    <h2 class="st__head" data-split>One at a time.</h2>
+    <p class="st__lede" data-rise>
+      Ten formulations, each with its own reason to exist. Scroll to move through them,
+      or jump to any numeral.
     </p>
+  </div>
 
+  <div class="st__pin" id="stPin">
+    <div class="st__inner">
+      <ol class="st__rail" id="stRail" aria-label="Jump to an infusion">
+        <li><button type="button" class="st__mark is-on" data-go="0" style="--tone:#5B7098" aria-label="GLyNAC Healthy Aging"><i>I</i></button></li>
+        <li><button type="button" class="st__mark" data-go="1" style="--tone:#D9982A" aria-label="Immun-O-Boost IV Support"><i>II</i></button></li>
+        <li><button type="button" class="st__mark" data-go="2" style="--tone:#B34E37" aria-label="LIQUIXO Muscle Recovery"><i>III</i></button></li>
+        <li><button type="button" class="st__mark" data-go="3" style="--tone:#4F7D5E" aria-label="Antioxidant ×3 Reset"><i>IV</i></button></li>
+        <li><button type="button" class="st__mark" data-go="4" style="--tone:#7FA08C" aria-label="Glutathione IV Injection"><i>V</i></button></li>
+        <li><button type="button" class="st__mark" data-go="5" style="--tone:#8C6239" aria-label="Joint and Skin Wellness"><i>VI</i></button></li>
+        <li><button type="button" class="st__mark" data-go="6" style="--tone:#5F7A55" aria-label="Fatty Liver Support"><i>VII</i></button></li>
+        <li><button type="button" class="st__mark" data-go="7" style="--tone:#35707F" aria-label="Revive IV Support"><i>VIII</i></button></li>
+        <li><button type="button" class="st__mark" data-go="8" style="--tone:#7A5F98" aria-label="Stress and Brain Wellness"><i>IX</i></button></li>
+        <li><button type="button" class="st__mark" data-go="9" style="--tone:#C1963F" aria-label="Customized IV Infusion"><i>X</i></button></li>
+      </ol>
+
+      <div class="st__deck" id="stDeck">
+        <article class="st__panel is-live" id="stPanel-0" data-i="0" data-id="healthyaging" style="--tone:#5B7098">
+          <div class="st__text">
+            <p class="st__no"><i>I</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="GLyNAC Healthy Aging"><span></span></h3>
+            <p class="st__note">Glycine and N-acetylcysteine — the two compounds the body uses to build its own glutathione.</p>
+            <ul class="st__tags"><li>Glycine</li><li>N-Acetylcysteine</li><li>Hydration fluid</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>1 h 15</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="350">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/glynac.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/glynac.png" alt="" width="524" height="1478" loading="eager" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-1" data-i="1" data-id="immune" style="--tone:#D9982A">
+          <div class="st__text">
+            <p class="st__no"><i>II</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="Immun-O-Boost IV Support"><span></span></h3>
+            <p class="st__note">Vitamin C, zinc and trace minerals alongside glutathione and the amino acids.</p>
+            <ul class="st__tags"><li>Vitamin C</li><li>Zinc</li><li>Glutathione</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>2 h 30</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="550">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/immun-o-boost.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/immuneoboost.png" alt="" width="524" height="1478" loading="eager" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-2" data-i="2" data-id="muscle" style="--tone:#B34E37">
+          <div class="st__text">
+            <p class="st__no"><i>III</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="LIQUIXO Muscle Recovery"><span></span></h3>
+            <p class="st__note">Lean-muscle support during GLP-1 and weight-loss treatment. A full twenty amino acid blend.</p>
+            <ul class="st__tags"><li>20 amino acids</li><li>Exosomes</li><li>Hydration fluid</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>45 min</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="395">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/liquixo.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/liquixo.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-3" data-i="3" data-id="antioxidant" style="--tone:#4F7D5E">
+          <div class="st__text">
+            <p class="st__no"><i>IV</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="Antioxidant ×3 Reset"><span></span></h3>
+            <p class="st__note">Vitamin C, glutathione and alpha-lipoic acid working as one network, recharging one another.</p>
+            <ul class="st__tags"><li>Vitamin C</li><li>Glutathione</li><li>Alpha-lipoic acid</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>1 h 15</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="400">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/antioxidant.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/antioxidant.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-4" data-i="4" data-id="glutathione" style="--tone:#7FA08C">
+          <div class="st__text">
+            <p class="st__no"><i>V</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="Glutathione IV Injection"><span></span></h3>
+            <p class="st__note">Concentrated antioxidant support, given as a slow push by the physician. Gradual by design.</p>
+            <ul class="st__tags"><li>Glutathione</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>30 min</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="100">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/glutathione.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/glutathione.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-5" data-i="5" data-id="jointskin" style="--tone:#8C6239">
+          <div class="st__text">
+            <p class="st__no"><i>VI</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="Joint &amp; Skin Wellness"><span></span></h3>
+            <p class="st__note">The collagen amino acids with vitamin C and the trace minerals normal repair depends on.</p>
+            <ul class="st__tags"><li>Collagen aminos</li><li>Vitamin C</li><li>Trace minerals</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>2 h 30</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="650">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/joint-skin.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/jointsupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-6" data-i="6" data-id="liver" style="--tone:#5F7A55">
+          <div class="st__text">
+            <p class="st__no"><i>VII</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="Fatty Liver Support"><span></span></h3>
+            <p class="st__note">Taurine, glycine and N-acetylcysteine, involved in the liver’s normal bile and clearance work.</p>
+            <ul class="st__tags"><li>Taurine</li><li>Glycine</li><li>N-Acetylcysteine</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>3 h</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="650">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/fatty-liver-support.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/liversupport.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-7" data-i="7" data-id="recovery" style="--tone:#35707F">
+          <div class="st__text">
+            <p class="st__no"><i>VIII</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="Revive IV Support"><span></span></h3>
+            <p class="st__note">A broad rebuild — fluids, B-complex, amino acids and the antioxidant set together.</p>
+            <ul class="st__tags"><li>B-Complex</li><li>Amino acids</li><li>Glutathione</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>2 h 15</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="525">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/revive.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/revive.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-8" data-i="8" data-id="mind" style="--tone:#7A5F98">
+          <div class="st__text">
+            <p class="st__no"><i>IX</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="Stress &amp; Brain Wellness"><span></span></h3>
+            <p class="st__note">Taurine and B-complex with alpha-lipoic acid, present in the brain in high concentration.</p>
+            <ul class="st__tags"><li>Taurine</li><li>B-Complex</li><li>Alpha-lipoic acid</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>1 h 30</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><b data-cost="500">$0</b></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/stress-brain.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/brainwellness.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
+          </figure>
+        </article>
+        <article class="st__panel" id="stPanel-9" data-i="9" data-id="custom" style="--tone:#C1963F">
+          <div class="st__text">
+            <p class="st__no"><i>X</i><s></s><span>of ten</span></p>
+            <h3 class="st__name" data-name="Customized IV Infusion"><span></span></h3>
+            <p class="st__note">Built for one person after review. Nothing off the shelf, nothing assumed.</p>
+            <ul class="st__tags"><li>By consultation</li></ul>
+            <dl class="st__meta">
+              <div><dt>Chair time</dt><dd>By review</dd></div>
+              <div><dt>Per session</dt><dd class="st__rate"><em>By consult</em></dd></div>
+            </dl>
+            <a class="st__open" href="../drips/customized.html"><span>Open the protocol</span><i class="ph ph-arrow-up-right"></i></a>
+          </div>
+
+          <figure class="st__shot">
+            <span class="st__halo" aria-hidden="true"></span>
+            <img src="../assets/drips/customized.png" alt="" width="524" height="1478" loading="lazy" decoding="async">
+          </figure>
+        </article>
+      </div>
+
+      <p class="st__prog" aria-hidden="true"><span id="stProgFill"></span></p>
+    </div>
   </div>
 </section>
 
