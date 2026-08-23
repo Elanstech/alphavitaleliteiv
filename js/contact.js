@@ -32,8 +32,8 @@ const HAS_GSAP = typeof window.gsap !== 'undefined'
                  (no health fields on this one, ever)
    ───────────────────────────────────────────────────────────────────────── */
 const FORMS = {
-    screening: '',   // e.g. 'https://form.jotform.com/000000000000000'
-    ask:       '',   // e.g. 'https://form.jotform.com/111111111111111'
+    screening: '',                                            // still to build
+    ask:       'https://form.jotform.com/262338508765062',    // Contact Alpha Vital Elite IV
 };
 
 
@@ -160,8 +160,24 @@ const Picker = {
 const Embeds = {
     init() {
         const ask = $('#ctAskFrame');
-        if (ask && FORMS.ask) ask.src = FORMS.ask;
+        if (ask && FORMS.ask) { ask.src = FORMS.ask; this.autosize(ask); }
         else $('#ctFormSlot')?.setAttribute('hidden', '');
+    },
+
+    /* Jotform forms are taller than any height we could guess, and a fixed
+       height gives the iframe its own scrollbar inside the page — two nested
+       scroll areas, which is horrible on a trackpad and worse on a phone.
+       Jotform posts its real height to the parent, so listen for that and let
+       the frame grow instead. The CSS min-height covers us until it arrives. */
+    autosize(frame) {
+        window.addEventListener('message', (ev) => {
+            if (!/jotform\.com$/.test(new URL(ev.origin).hostname)) return;
+            const data = typeof ev.data === 'string' ? ev.data : '';
+            if (!data.startsWith('setHeight')) return;
+
+            const h = parseInt(data.split(':')[1], 10);
+            if (h > 0) frame.style.height = `${h}px`;
+        });
     },
 };
 
