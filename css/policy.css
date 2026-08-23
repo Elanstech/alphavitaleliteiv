@@ -1,0 +1,210 @@
+/* =============================================================================
+   ALPHA VITAL ELITE IV — POLICY.CSS
+   Shared by all four policy pages: refund, privacy, disclaimer, terms.
+   Layers on ../styles.css.
+
+   These pages are read by people who are worried, or annoyed, or looking for a
+   specific sentence to hold us to. So: no flourishes, generous measure, real
+   hierarchy, and a print stylesheet that produces something they can keep. The
+   only decorative move on the page is the gold rule under the title.
+
+     00 SHELL   01 MASTHEAD   02 CONTENTS   03 PROSE
+     04 CALLOUTS   05 EDITORIAL FLAGS   06 PRINT · A11Y
+============================================================================= */
+
+
+/* ── 00 SHELL ────────────────────────────────────────────────────────────── */
+.page-policy {
+    --measure: 68ch;
+    --pe: cubic-bezier(.16, 1, .3, 1);
+    --flag: #C0281F;
+
+    background: var(--cream);
+    color: var(--ink-soft);
+}
+.page-policy section[id],
+.page-policy h2[id] { scroll-margin-top: calc(var(--head-h) + 2rem); }
+.page-policy :is(h1, h2, h3) { text-wrap: balance; }
+.page-policy :is(p, li, dd) { text-wrap: pretty; }
+
+.pl-wrap {
+    width: 100%; max-width: var(--maxw);
+    margin-inline: auto; padding-inline: var(--gut);
+}
+.pl-skip {
+    position: absolute; left: -9999px; top: 0; z-index: 5000;
+    padding: .8rem 1.2rem; background: var(--forest); color: var(--cream);
+    font-family: var(--micro); font-size: .62rem;
+    letter-spacing: .14em; text-transform: uppercase;
+}
+.pl-skip:focus { left: .5rem; top: .5rem; }
+
+.head { view-transition-name: site-head; }
+.foot { view-transition-name: site-foot; }
+
+
+/* ── 01 MASTHEAD ─────────────────────────────────────────────────────────── */
+.pl-top {
+    padding: calc(var(--head-h) + clamp(1.5rem, 5vh, 3rem)) 0 clamp(1.75rem, 4vw, 2.75rem);
+    border-bottom: 1px solid var(--rule);
+    background: var(--cream);
+}
+.pl-crumb {
+    display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    font-family: var(--micro); font-size: .62rem;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
+}
+.pl-crumb a { color: var(--mist); }
+.pl-crumb a:hover { color: var(--gold-deep); }
+.pl-crumb i { font-size: .8rem; opacity: .6; }
+
+.pl-title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2rem, 4.6vw, 3.4rem);
+    line-height: 1.06; letter-spacing: -.02em; color: var(--forest);
+}
+.pl-title::after {
+    content: ''; display: block; width: 64px; height: 2px;
+    margin-top: 1.1rem; background: var(--gold);
+}
+.pl-dates {
+    display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.4rem;
+    font-family: var(--data); font-size: .76rem; color: var(--mist);
+}
+.pl-dates b { color: var(--forest); font-weight: 600; }
+
+
+/* ── 02 CONTENTS ─────────────────────────────────────────────────────────── */
+.pl-body {
+    display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(4rem, 8vw, 7rem);
+    align-items: start;
+}
+.pl-toc {
+    position: sticky; top: calc(var(--head-h) + 2rem);
+    padding-right: 1rem; border-right: 1px solid var(--rule);
+}
+.pl-toc__lab {
+    display: block; margin-bottom: 1rem;
+    font-family: var(--micro); font-size: .58rem;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--gold-deep);
+}
+.pl-toc ol { list-style: none; counter-reset: toc; }
+.pl-toc li { counter-increment: toc; }
+.pl-toc a {
+    display: flex; gap: .6rem; padding: .38rem 0;
+    font-size: .84rem; line-height: 1.45; color: var(--ink-soft);
+    transition: color .3s var(--pe);
+}
+.pl-toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--data); font-size: .68rem; color: var(--mist); flex: none;
+}
+.pl-toc a:hover, .pl-toc a.is-here { color: var(--gold-deep); }
+.pl-toc a.is-here::before { color: var(--gold-deep); }
+
+@media (max-width: 900px) {
+    .pl-body { grid-template-columns: 1fr; gap: 2rem; }
+    .pl-toc {
+        position: static; padding: 1.25rem; padding-right: 1.25rem;
+        border: 1px solid var(--rule); border-right: 1px solid var(--rule);
+        background: var(--parchment);
+    }
+    .pl-toc ol { columns: 2; column-gap: 1.5rem; }
+}
+@media (max-width: 560px) { .pl-toc ol { columns: 1; } }
+
+
+/* ── 03 PROSE ────────────────────────────────────────────────────────────── */
+.pl-prose { max-width: var(--measure); }
+.pl-prose > * + * { margin-top: 1.1rem; }
+
+.pl-prose h2 {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding-top: 1.5rem; border-top: 1px solid var(--rule);
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    line-height: 1.2; letter-spacing: -.01em; color: var(--forest);
+}
+.pl-prose h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.pl-prose h2 span {
+    display: block; margin-bottom: .45rem;
+    font-family: var(--data); font-weight: 600; font-size: .68rem;
+    letter-spacing: .12em; color: var(--gold-deep);
+}
+.pl-prose h3 {
+    margin-top: 1.8rem;
+    font-family: var(--caps); font-weight: 400; font-size: 1rem;
+    letter-spacing: .04em; color: var(--forest);
+}
+.pl-prose p { font-size: clamp(.95rem, 1.06vw, 1.02rem); line-height: 1.78; }
+.pl-prose strong { color: var(--forest); font-weight: 600; }
+.pl-prose a { color: var(--gold-deep); text-decoration: underline; text-underline-offset: 3px; }
+
+.pl-prose ul, .pl-prose ol { padding-left: 1.3rem; }
+.pl-prose li { font-size: clamp(.95rem, 1.06vw, 1.02rem); line-height: 1.75; margin-top: .55rem; }
+.pl-prose li::marker { color: var(--gold-deep); }
+
+/* a definition-style list for the "what is / is not refundable" spine */
+.pl-terms { border-top: 1px solid var(--rule); margin-top: 1.4rem; }
+.pl-terms > div {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    gap: .6rem 1.5rem;
+    padding: 1rem 0; border-bottom: 1px solid var(--rule);
+}
+.pl-terms dt {
+    font-family: var(--caps); font-size: .88rem;
+    letter-spacing: .03em; color: var(--forest);
+}
+.pl-terms dd { font-size: .93rem; line-height: 1.7; color: var(--ink-soft); }
+@media (max-width: 620px) { .pl-terms > div { grid-template-columns: 1fr; gap: .3rem; } }
+
+
+/* ── 04 CALLOUTS ─────────────────────────────────────────────────────────── */
+.pl-note {
+    padding: 1.15rem 1.35rem;
+    border-left: 3px solid var(--gold);
+    background: var(--parchment);
+}
+.pl-note p { font-size: .92rem; line-height: 1.72; }
+.pl-note p + p { margin-top: .7rem; }
+.pl-note b { color: var(--forest); }
+
+
+/* ── 05 EDITORIAL FLAGS ──────────────────────────────────────────────────────
+   TEMPORARY. Marks the clauses that are genuine business decisions rather than
+   boilerplate — the numbers nobody but the practice can supply. Loud and
+   off-palette so it can never be mistaken for design or shipped by accident.
+   Delete every .pl-flag in the HTML and this whole block before launch. */
+.pl-flag {
+    margin: 1.2rem 0;
+    padding: 1rem 1.2rem;
+    border: 2px dashed var(--flag);
+    background: rgba(192, 40, 31, .05);
+}
+.pl-flag__tag {
+    display: inline-flex; align-items: center; gap: .45rem; margin-bottom: .6rem;
+    padding: .3rem .65rem; background: var(--flag); color: #fff;
+    font-family: var(--micro); font-size: .55rem;
+    letter-spacing: .16em; text-transform: uppercase;
+}
+.pl-flag p { font-size: .89rem; line-height: 1.68; color: #8E1F18; }
+.pl-flag p + p { margin-top: .55rem; }
+.pl-flag b { font-weight: 600; }
+
+
+/* ── 06 PRINT · A11Y ─────────────────────────────────────────────────────── */
+.page-policy :focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+
+@media print {
+    .head, .menu, .fab, .totop, .pl-toc, .pl-crumb, .foot { display: none !important; }
+    .page-policy { background: #fff; color: #000; }
+    .pl-body { grid-template-columns: 1fr; padding-top: 0; }
+    .pl-prose { max-width: none; }
+    .pl-prose h2 { break-after: avoid; }
+    .pl-prose p, .pl-terms > div { break-inside: avoid; }
+    .pl-flag { border: 2px solid #000; }
+    a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .8em; word-break: break-all; }
+}
