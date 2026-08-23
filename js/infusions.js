@@ -157,61 +157,27 @@ const COMPOUNDS = [
 ============================================================================= */
 class Hero {
     constructor() {
-        this.el     = $('.ivx-hero');
-        this.lines  = $$('.ivx-mask__in');
-        this.anims  = $$('.ivx-anim');
-        this.counts = $$('[data-count]');
+        this.el = $('.ivx-hero');
     }
 
     init() {
         if (!this.el) return;
+        if (!LIVE()) { release(); return; }
 
-        if (!LIVE()) {
-            document.documentElement.classList.remove('has-js');
-            this.counts.forEach((el) => { el.textContent = el.dataset.count; });
-            return;
-        }
+        const first = $('.hr__line[data-split]', this.el);
+        const chars = first ? splitChars(first) : [];
 
         const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-        gsap.set(this.anims, { y: 18 });
-        tl.to(this.lines, { y: 0, duration: 1.2, stagger: .1 }, .1)
-          .to(this.anims, { opacity: 1, y: 0, duration: .9, stagger: .08 }, .4);
 
-        this.counts.forEach((el, i) => {
-            const end = +el.dataset.count;
-            const o = { v: 0 };
-            gsap.to(o, {
-                v: end, duration: 1.5, ease: 'expo.out', delay: .95 + i * .08,
-                onUpdate: () => { el.textContent = Math.round(o.v); },
-            });
-        });
-    }
-}
+        if (chars.length) {
+            gsap.set(first, { opacity: 1 });
+            tl.fromTo(chars,
+                { opacity: 0, yPercent: 60, rotateX: -55 },
+                { opacity: 1, yPercent: 0, rotateX: 0, duration: .9, stagger: .022 }, .15);
+        }
 
-
-/* =============================================================================
-   TICKER — the running index
-   Two identical sets sit side by side; the row travels exactly one set width,
-   so the loop has no seam. Slows to a crawl under the pointer.
-============================================================================= */
-class Ticker {
-    constructor() {
-        this.row = $('#ivxTicker');
-        this.roll = null;
-    }
-
-    init() {
-        if (!this.row || !LIVE()) return;
-
-        this.roll = gsap.to(this.row, { xPercent: -50, duration: 46, ease: 'none', repeat: -1 });
-
-        this.row.addEventListener('pointerenter', () => gsap.to(this.roll, { timeScale: .18, duration: .5 }));
-        this.row.addEventListener('pointerleave', () => gsap.to(this.roll, { timeScale: 1, duration: .5 }));
-
-        document.addEventListener('visibilitychange', () => {
-            if (!this.roll) return;
-            document.hidden ? this.roll.pause() : this.roll.resume();
-        });
+        tl.to($$('[data-rise]', this.el),
+            { opacity: 1, y: 0, duration: .9, stagger: .09 }, .5);
     }
 }
 
@@ -231,110 +197,267 @@ class Ticker {
 
    Below 900px the CSS makes the bar static and this all becomes inert.
 ============================================================================= */
-/* =============================================================================
-   THE CABINET  (#cabinet)
-   -----------------------------------------------------------------------------
-   Four controls, one state object, one code path. View, chair time and order
-   route through one measure-filter-slide pass, so the list can never animate
-   two different ways.
+/** Cut an element into per-character spans, keeping words unbreakable so the
+ *  line still wraps at word boundaries. Returns the spans to animate. */
+const splitChars = (el) => {
+    if (el.dataset.split === 'done') return $$('.ivx-ch', el);
+    const words = (el.textContent || '').split(/(\s+)/);
+    el.innerHTML = words.map((w) => {
+        if (/^\s+$/.test(w)) return ' ';
+        const inner = [...w].map((c) => `<span class="ivx-ch">${c}</span>`).join('');
+        return `<span class="ivx-word">${inner}</span>`;
+    }).join('');
+    el.dataset.split = 'done';
+    return $$('.ivx-ch', el);
+};
 
-   The ledger is not a second component — it is the same cards under a different
-   grid, which is why the switch can animate between the two at all.
+/** Scripting off, GSAP missing or motion reduced: show everything at once. */
+const release = () => {
+    document.documentElement.classList.remove('ivx-on', 'has-js');
+    $$('[data-rise], [data-split]').forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+    });
+    $$('.ivx-ch').forEach((el) => { el.style.opacity = '1'; });
+    document.body.classList.add('is-ready');
+};
+
+
+/* =============================================================================
+   THE TYPEWRITER — the headline finishes itself
+   -----------------------------------------------------------------------------
+   Types a phrase, holds it, erases it, moves to the next. Timed with setTimeout
+   rather than a GSAP tween so the caret rhythm stays irregular the way real
+   typing is. The full sentence is in the DOM for screen readers already, so
+   this element is aria-hidden and purely decorative.
 ============================================================================= */
-class Cabinet {
+class Typer {
     constructor() {
-        this.scene = $('.ivx-menu');
-        this.list  = $('#mnList');
-        this.rows  = this.list ? $$('.mn__row', this.list) : [];
-        this.count = $('#mnCount');
-        this.empty = $('#mnEmpty');
-        this.chips = $$('.mn__chip');
-        this.at    = 'all';
+        this.el = $('#hrTyped');
+        this.lines = [
+            'Chosen one at a time.',
+            'Given by one physician.',
+            'Mixed for one person.',
+        ];
+        this.i = 0;
+        this.stopped = false;
     }
 
     init() {
-        if (!this.list || !this.rows.length) return;
+        if (!this.el) return;
+        if (REDUCED || !LIVE()) { this.el.textContent = this.lines[0]; return; }
 
-        if (this.count) this.count.dataset.at = this.live().length;
+        // nothing types until the hero is actually being looked at
+        document.addEventListener('visibilitychange', () => {
+            this.stopped = document.hidden;
+            if (!this.stopped) this.type();
+        });
+        this.type();
+    }
 
-        this.chips.forEach((c) => c.addEventListener('click', () => this.band(c.dataset.band)));
-        if (this.empty) {
-            $$('button[data-band]', this.empty)
-                .forEach((b) => b.addEventListener('click', () => this.band(b.dataset.band)));
+    wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
+
+    async type() {
+        if (this.stopped) return;
+        const line = this.lines[this.i];
+
+        for (let n = 1; n <= line.length; n++) {
+            if (this.stopped) return;
+            this.el.textContent = line.slice(0, n);
+            await this.wait(38 + Math.random() * 55);       // an uneven hand
+        }
+        await this.wait(2100);
+
+        for (let n = line.length; n >= 0; n--) {
+            if (this.stopped) return;
+            this.el.textContent = line.slice(0, n);
+            await this.wait(20);
+        }
+        await this.wait(260);
+
+        this.i = (this.i + 1) % this.lines.length;
+        this.type();
+    }
+}
+
+
+/* =============================================================================
+   THE DROP — one bead falls down the hero's left margin, forever
+============================================================================= */
+class Drop {
+    constructor() { this.el = $('.hr__drop'); this.stem = $('.hr__drip'); }
+
+    init() {
+        if (!this.el || !LIVE()) return;
+        const fall = () => {
+            const h = this.stem.offsetHeight || 110;
+            gsap.fromTo(this.el,
+                { y: 0, opacity: 0, scaleY: .7 },
+                {
+                    keyframes: [
+                        { opacity: 1, scaleY: 1, duration: .18 },
+                        { y: h - 6, scaleY: 1.35, duration: 1.15, ease: 'power2.in' },
+                        { opacity: 0, scaleY: .5, duration: .16 },
+                    ],
+                    onComplete: () => gsap.delayedCall(1.1 + Math.random() * 1.4, fall),
+                });
+        };
+        fall();
+    }
+}
+
+
+/* =============================================================================
+   THE STAGE — the ten, handed over one at a time
+   -----------------------------------------------------------------------------
+   Above 900px the section pins and the scroll distance is divided into ten
+   equal stops; crossing a boundary swaps the live panel. Below 900px the pin
+   is skipped entirely (mobile viewport height changes mid-scroll and drags a
+   pin out of register) and each panel reveals on its own as it arrives.
+============================================================================= */
+class Stage {
+    constructor() {
+        this.scene  = $('.ivx-stage');
+        this.pin    = $('#stPin');
+        this.deck   = $('#stDeck');
+        this.panels = $$('.st__panel');
+        this.marks  = $$('.st__mark');
+        this.fill   = $('#stProgFill');
+        this.mq     = window.matchMedia('(min-width: 901px)');
+        this.at     = -1;
+        this.st     = null;
+    }
+
+    init() {
+        if (!this.deck || !this.panels.length) return;
+
+        this.marks.forEach((m) => m.addEventListener('click', () => this.jump(+m.dataset.go)));
+
+        if (!LIVE()) { this.panels.forEach((p) => p.classList.add('is-live')); return; }
+
+        this.mq.addEventListener('change', () => this.build());
+        this.build();
+    }
+
+    build() {
+        this.st?.kill();
+        this.st = null;
+
+        if (!this.mq.matches) {
+            // stacked: every panel is live, each announces itself on arrival
+            this.panels.forEach((p) => p.classList.add('is-live'));
+            gsap.set(this.panels, { clearProps: 'all' });
+            this.panels.forEach((p) => {
+                popIn($$('.st__text > *, .st__shot', p), { y: 26, stagger: .06 }, p, 'top 82%');
+                ScrollTrigger.create({
+                    trigger: p, start: 'top 70%', once: true,
+                    onEnter: () => {
+                        this.write(p);
+                        this.tally(p);
+                    },
+                });
+            });
+            return;
         }
 
-        if (!GSAP_ON() || REDUCED) return;
-        this.reveal();
-    }
+        // pinned: ten stops across ten viewport heights of scroll
+        this.panels.forEach((p, i) => p.classList.toggle('is-live', i === 0));
+        this.at = -1;
 
-    live() { return this.rows.filter((r) => !r.classList.contains('is-out')); }
-
-    /** Measure, filter, then slide the survivors from where they were to where
-     *  they now are. A hidden row has a zero rect, so anything arriving from
-     *  behind the filter fades up instead of travelling from nowhere. */
-    band(next) {
-        if (!next || next === this.at) return;
-        this.at = next;
-
-        this.chips.forEach((c) => c.classList.toggle('is-on', c.dataset.band === next));
-
-        const before = this.rows.map((r) => r.getBoundingClientRect());
-
-        this.rows.forEach((r) => {
-            r.classList.toggle('is-out', !(next === 'all' || r.dataset.band === next));
+        this.st = ScrollTrigger.create({
+            trigger: this.pin,
+            start: 'top top',
+            end: () => '+=' + (this.panels.length * window.innerHeight * .85),
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            scrub: false,
+            onUpdate: (self) => {
+                const n = Math.min(
+                    this.panels.length - 1,
+                    Math.floor(self.progress * this.panels.length),
+                );
+                if (this.fill) this.fill.style.width = (self.progress * 100).toFixed(2) + '%';
+                this.show(n);
+            },
         });
 
-        this.tally();
-        if (!LIVE()) return;
-
-        const after = this.rows.map((r) => r.getBoundingClientRect());
-
-        this.rows.forEach((r, i) => {
-            if (r.classList.contains('is-out')) return;
-            gsap.killTweensOf(r);
-
-            if (before[i].height === 0) {
-                gsap.fromTo(r, { opacity: 0, y: 18 },
-                    { opacity: 1, y: 0, duration: .6, ease: 'expo.out', clearProps: 'all' });
-                return;
-            }
-            const dy = before[i].top - after[i].top;
-            if (Math.abs(dy) < 1) return;
-            gsap.fromTo(r, { y: dy },
-                { y: 0, duration: .7, ease: 'expo.out', clearProps: 'transform' });
-        });
-
-        if (GSAP_ON()) ScrollTrigger.refresh();
+        this.show(0);
     }
 
-    tally() {
-        const n = this.live().length;
-        if (this.count) countTo(this.count, n, (v) => String(Math.round(v)));
-        this.empty?.classList.toggle('is-on', n === 0);
-    }
+    /** hand the screen from one panel to the next */
+    show(n) {
+        if (n === this.at) return;
+        const back = n < this.at;
+        const from = this.panels[this.at];
+        const to   = this.panels[n];
+        this.at = n;
 
-    /* ---------- the list writes itself in, line by line ---------- */
-    reveal() {
-        const lines = $$('.mn__title span > i', this.scene);
-        if (lines.length) {
-            gsap.set(lines, { yPercent: 108 });
-            gsap.to(lines, {
-                yPercent: 0, duration: 1.05, ease: 'expo.out', stagger: .1,
-                scrollTrigger: { trigger: '.mn__head', start: 'top 88%', once: true },
+        this.marks.forEach((m, i) => m.classList.toggle('is-on', i === n));
+
+        if (from && from !== to) {
+            gsap.killTweensOf(from);
+            gsap.to(from, {
+                opacity: 0, y: back ? 26 : -26, duration: .4, ease: 'power2.in',
+                onComplete: () => from.classList.remove('is-live'),
             });
         }
 
-        popIn($$('.ivx-eyebrow, .mn__lede', this.scene), { y: 20, stagger: .08 },
-            '.mn__head', 'top 86%');
+        to.classList.add('is-live');
+        gsap.killTweensOf(to);
+        gsap.fromTo(to, { opacity: 0, y: back ? -26 : 26 },
+            { opacity: 1, y: 0, duration: .6, ease: 'expo.out' });
 
-        gsap.set(this.rows, { opacity: 0, y: 26 });
-        ScrollTrigger.create({
-            trigger: this.list, start: 'top 86%', once: true,
-            onEnter: () => gsap.to(this.rows, {
-                opacity: 1, y: 0, duration: .8, ease: 'expo.out',
-                stagger: .06, clearProps: 'transform',
-            }),
+        gsap.fromTo($$('.st__text > *', to), { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: .55, ease: 'expo.out', stagger: .045, delay: .08 });
+
+        const shot = $('.st__shot img', to);
+        if (shot) {
+            gsap.fromTo(shot, { opacity: 0, scale: .9, rotate: back ? 4 : -4 },
+                { opacity: 1, scale: 1, rotate: 0, duration: .8, ease: 'expo.out' });
+        }
+
+        this.write(to);
+        this.tally(to);
+    }
+
+    /** the name types itself in as the panel takes the screen */
+    write(panel) {
+        const h = $('.st__name', panel);
+        const slot = h && $('span', h);
+        if (!slot) return;
+        const text = h.dataset.name || '';
+
+        if (REDUCED) { slot.textContent = text; return; }
+
+        gsap.killTweensOf(slot);
+        const o = { n: 0 };
+        slot.textContent = '';
+        gsap.to(o, {
+            n: text.length, duration: Math.min(.9, text.length * .028), ease: 'none',
+            onUpdate: () => { slot.textContent = text.slice(0, Math.round(o.n)); },
+            onComplete: () => { slot.textContent = text; },
         });
+    }
+
+    /** the rate counts up rather than appearing */
+    tally(panel) {
+        const b = $('.st__rate b', panel);
+        if (!b) return;
+        const to = parseFloat(b.dataset.cost);
+        if (!isFinite(to)) return;
+        b.dataset.at = 0;
+        countTo(b, to);
+    }
+
+    jump(n) {
+        if (!this.st || !this.mq.matches) {
+            this.panels[n]?.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
+            return;
+        }
+        const span = this.st.end - this.st.start;
+        const y = this.st.start + (span * ((n + .5) / this.panels.length));
+        window.scrollTo({ top: y, behavior: REDUCED ? 'auto' : 'smooth' });
     }
 }
 
@@ -486,53 +609,6 @@ class Compounds {
 
 
 /* =============================================================================
-   THE RACK — the ten hanging in the hero
-   -----------------------------------------------------------------------------
-   Each bag swings from its own hook on its own timing, so the row never reads
-   as one synchronised animation. The drop-in runs once on load; the sway runs
-   forever, and both are skipped outright under reduced motion.
-============================================================================= */
-class Rack {
-    constructor() {
-        this.el    = $('#ivxRack');
-        this.row   = $('#ivxRackRow');
-        this.lifts = $$('.rk__lift');
-    }
-
-    init() {
-        if (!this.el || !this.lifts.length || !LIVE()) return;
-
-        // the bags drop onto the wire, then never stop moving
-        gsap.set(this.lifts, { opacity: 0, y: -26, rotate: 0 });
-        gsap.to(this.lifts, {
-            opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .06,
-            scrollTrigger: { trigger: this.el, start: 'top 92%', once: true },
-            onComplete: () => this.sway(),
-        });
-
-        // the whole rail drifts a little against the scroll
-        gsap.to(this.row, {
-            yPercent: -6, ease: 'none',
-            scrollTrigger: { trigger: this.el, start: 'top bottom', end: 'bottom top', scrub: .8 },
-        });
-    }
-
-    sway() {
-        this.lifts.forEach((el, i) => {
-            const swing = 1.1 + (i % 3) * .35;          // never the same arc twice
-            gsap.to(el, {
-                rotate: swing, transformOrigin: '50% 0%',
-                duration: 2.6 + (i % 4) * .45,
-                ease: 'sine.inOut', yoyo: true, repeat: -1,
-                startAt: { rotate: -swing },
-                delay: i * .14,
-            });
-        });
-    }
-}
-
-
-/* =============================================================================
    THE PROGRAM  (#program)
    Six sessions of the same formulation at ten percent under the single rate.
    Every figure is derived from the two rates on the button, so the arithmetic
@@ -543,16 +619,10 @@ class Rack {
 ============================================================================= */
 const modules = {
     hero:      new Hero(),
-    ticker:    new Ticker(),
-    cabinet:   new Cabinet(),
-    rack:      new Rack(),
+    typer:     new Typer(),
+    drop:      new Drop(),
+    stage:     new Stage(),
     compounds: new Compounds(),
-};
-
-/** Nothing in this file is worth hiding the page for. */
-const release = () => {
-    document.documentElement.classList.remove('has-js');
-    document.body.classList.add('is-ready');
 };
 
 const boot = () => {
@@ -615,7 +685,7 @@ if (document.readyState === 'loading') {
 ============================================================================= */
 addEventListener('pagehide', () => {
     if (!GSAP_ON()) return;
-    const rows = $$('.mn__row');
+    const rows = $$('.st__panel');
     if (!rows.length) return;
     gsap.killTweensOf(rows);
     gsap.set(rows, { clearProps: 'transform' });
