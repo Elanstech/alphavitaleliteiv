@@ -825,24 +825,51 @@ addEventListener('pagehide', () => {
     if (grid) { gsap.killTweensOf(grid); gsap.set(grid, { clearProps: 'height' }); }
 });
 
+/** True when every live card still sits inside the grid box. A card hanging
+ *  below it means the height tween or a stranded transform survived the trip,
+ *  and no amount of clearing after the fact has put it back. */
+const gridIsSane = () => {
+    const grid = $('#ivxGrid');
+    if (!grid) return true;
+    const live = $$('.ivx-card', grid).filter((c) => !c.classList.contains('is-out'));
+    if (!live.length) return true;
+    const floor = grid.getBoundingClientRect().bottom;
+    return !live.some((c) => c.getBoundingClientRect().bottom > floor + 4);
+};
+
 addEventListener('pageshow', (e) => {
     const restored = e.persisted ||
         performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
-    if (!restored || !GSAP_ON()) return;
+    if (!restored) return;
 
-    const cards = $$('.ivx-card');
-    if (!cards.length) return;
-    const inners = cards.map((c) => $('.ivx-card__in', c)).filter(Boolean);
+    // a reload below lands here as a fresh load, so this can never loop —
+    // the flag is belt and braces for browsers that report the type oddly
+    const ONCE = 'ave:ix:healed';
 
-    gsap.killTweensOf([...cards, ...inners]);
-    gsap.set(cards,  { clearProps: 'transform' });
-    gsap.set(inners, { opacity: 1 });
-    gsap.set(cards.filter((c) => !c.classList.contains('is-out')), { opacity: 1, y: 0 });
+    if (GSAP_ON()) {
+        const cards  = $$('.ivx-card');
+        const inners = cards.map((c) => $('.ivx-card__in', c)).filter(Boolean);
+        const grid   = $('#ivxGrid');
 
-    const grid = $('#ivxGrid');
-    if (grid) { gsap.killTweensOf(grid); gsap.set(grid, { clearProps: 'height' }); }
+        if (cards.length) {
+            gsap.killTweensOf([...cards, ...inners]);
+            gsap.set(cards,  { clearProps: 'transform' });
+            gsap.set(inners, { opacity: 1 });
+            gsap.set(cards.filter((c) => !c.classList.contains('is-out')),
+                { opacity: 1, y: 0 });
+        }
+        if (grid) { gsap.killTweensOf(grid); gsap.set(grid, { clearProps: 'height' }); }
 
-    ScrollTrigger.refresh(true);
+        ScrollTrigger.refresh(true);
+    }
+
+    // let the clear paint, then check the result and rebuild if it did not take
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (gridIsSane()) { sessionStorage.removeItem(ONCE); return; }
+        if (sessionStorage.getItem(ONCE)) return;
+        sessionStorage.setItem(ONCE, '1');
+        location.reload();
+    }));
 });
 
 
