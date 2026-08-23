@@ -7,17 +7,13 @@
    static readable page without GSAP.
 
      Helpers
-     Flip        measure · mutate · animate — the one layout engine
+     Rack        the ten bags hanging in the hero, each on its own arc
      MENU        the ten, by id
      COMPOUNDS   the component index, and where each one appears
      Hero        masked lines, the counters
      Ticker      the running index under the hero
-     Bar         the console — pins under the header and rides up with it
-     Cabinet     view · chair time · order · pricing, all through Flip
-     Tilt        cards lean toward the pointer (fine pointers only)
-     DripLine    the gold line beside the menu, drawn by scroll
+     Cabinet     the menu list and its chair-time filter
      Compounds   the component index panel
-     Program     six sessions, and what the program rate does to them
      Boot
 
    REQUIRES .page-infusions on <body>. Bails instantly otherwise.
@@ -89,80 +85,11 @@ const popIn = (targets, opts = {}, trigger, start = 'top 86%') => {
 
 
 /* =============================================================================
-   FLIP — measure, mutate, animate
-   -----------------------------------------------------------------------------
-   Every control in the cabinet does the same three things: read where the cards
-   are, change the DOM, then move them from the old position to the new one. One
-   engine, so the view switch, the filter and the sort can never behave
-   differently from one another.
-
-   Cards hidden by the filter are skipped rather than tweened — a display:none
-   element has a zero rect, and animating from it throws every card across the
-   viewport. Anything arriving into view fades up instead.
-============================================================================= */
-const Flip = {
-    seen(el) { return el.offsetParent !== null; },
-
-    run(cards, mutate, opts = {}) {
-        const box = opts.box || null;
-
-        if (!cards.length || !LIVE()) { mutate(); opts.onDone?.(); return; }
-
-        gsap.killTweensOf(cards);
-        gsap.set(cards, { x: 0, y: 0 });
-        if (box) { gsap.killTweensOf(box); gsap.set(box, { clearProps: 'height' }); }
-
-        const h0 = box ? box.offsetHeight : 0;
-        const before = cards.map((el) => ({ on: this.seen(el), rect: el.getBoundingClientRect() }));
-
-        mutate();
-
-        const after = cards.map((el) => ({ on: this.seen(el), rect: el.getBoundingClientRect() }));
-        const h1 = box ? box.offsetHeight : 0;
-
-        if (box && h0 !== h1) {
-            gsap.fromTo(box, { height: h0 }, {
-                height: h1, duration: .7, ease: 'expo.out', clearProps: 'height',
-                onComplete: () => opts.onDone?.(),
-            });
-        } else {
-            opts.onDone?.();
-        }
-
-        cards.forEach((el, i) => {
-            const was = before[i];
-            const now = after[i];
-            if (!now.on) return;
-
-            // arriving from behind a filter — nowhere to travel from
-            if (!was.on) {
-                gsap.fromTo(el, { opacity: 0, y: 22 },
-                    { opacity: 1, y: 0, duration: .6, ease: 'expo.out', delay: .06 });
-                return;
-            }
-
-            const dx = was.rect.left - now.rect.left;
-            const dy = was.rect.top  - now.rect.top;
-            if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
-
-            gsap.fromTo(el, { x: dx, y: dy },
-                { x: 0, y: 0, duration: .8, ease: 'expo.out', clearProps: 'transform' });
-        });
-
-        // a soft dip while the contents change shape underneath the move
-        gsap.fromTo(cards.map((c) => $('.ivx-card__in', c)),
-            { opacity: .32 },
-            { opacity: 1, duration: .55, ease: 'power2.out', stagger: .015, overwrite: true });
-    },
-};
-
-
-/* =============================================================================
    THE MENU — the ten, by id
    Names, numerals and slugs match the cards and the header flyout exactly.
 ============================================================================= */
 const MENU = {
-    healthyaging: { no: 'I',    name: 'GLyNAC Longevity Restoration', slug: '/drips/glynac.html',          tone: '#5B7098' },
+    healthyaging: { no: 'I',    name: 'GLyNAC Healthy Aging', slug: '/drips/glynac.html',          tone: '#5B7098' },
     immune:       { no: 'II',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immun-o-boost.html',         tone: '#D9982A' },
     muscle:       { no: 'III',  name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo.html',        tone: '#B34E37' },
     antioxidant:  { no: 'IV',   name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant.html',    tone: '#4F7D5E' },
@@ -304,278 +231,109 @@ class Ticker {
 
    Below 900px the CSS makes the bar static and this all becomes inert.
 ============================================================================= */
-class Bar {
-    constructor() {
-        this.el   = $('#ivxBar');
-        this.head = $('#head');
-        this.mq   = window.matchMedia('(min-width: 901px)');
-        this.gap  = 8;
-        this.top  = 0;
-    }
-
-    init() {
-        if (!this.el) return;
-
-        this.sync();
-        this.watch();
-
-        if (this.head) {
-            new MutationObserver(() => this.sync())
-                .observe(this.head, { attributes: true, attributeFilter: ['class'] });
-        }
-
-        window.addEventListener('resize', debounce(() => this.sync(), 160));
-    }
-
-    /** where the console should park right now */
-    sync() {
-        if (!this.mq.matches) { this.top = 0; return; }
-
-        const hidden = this.head?.classList.contains('is-hidden');
-        const h = this.head ? this.head.offsetHeight : 0;
-
-        this.top = hidden ? 10 : h + this.gap;
-        this.el.style.setProperty('--ivx-top', this.top + 'px');
-    }
-
-    /** has it reached that park yet */
-    watch() {
-        const read = onFrame(() => {
-            if (!this.mq.matches) { this.el.classList.remove('is-stuck'); return; }
-            const top = this.el.getBoundingClientRect().top;
-            this.el.classList.toggle('is-stuck', top <= this.top + 1);
-        });
-
-        window.addEventListener('scroll', read, { passive: true });
-        read();
-    }
-}
-
-
 /* =============================================================================
    THE CABINET  (#cabinet)
    -----------------------------------------------------------------------------
    Four controls, one state object, one code path. View, chair time and order
-   all route through Flip.run(); pricing does not move anything, so it counts
-   the figures instead.
+   route through one measure-filter-slide pass, so the list can never animate
+   two different ways.
 
    The ledger is not a second component — it is the same cards under a different
    grid, which is why the switch can animate between the two at all.
 ============================================================================= */
 class Cabinet {
     constructor() {
-        this.scene = $('.ivx-cab');
-        this.grid  = $('#ivxGrid');
-        this.cards = this.grid ? $$('.ivx-card', this.grid) : [];
-        this.nums  = this.grid ? $$('.ivx-num', this.grid) : [];
-        this.count = $('#ivxCount');
-        this.empty = $('#ivxEmpty');
-        this.segView  = $('#ivxSegView');
-        this.segPrice = $('#ivxSegPrice');
-
-        this.at = { view: 'cabinet', band: 'all', order: 'order', price: 'single' };
+        this.scene = $('.ivx-menu');
+        this.list  = $('#mnList');
+        this.rows  = this.list ? $$('.mn__row', this.list) : [];
+        this.count = $('#mnCount');
+        this.empty = $('#mnEmpty');
+        this.chips = $$('.mn__chip');
+        this.at    = 'all';
     }
 
     init() {
-        if (!this.grid || !this.cards.length) return;
+        if (!this.list || !this.rows.length) return;
 
-        // countTo reads where a figure currently sits — seed it, or the first
-        // switch has nothing to count from and simply snaps
-        this.nums.forEach((n) => { n.dataset.at = n.dataset.single; });
         if (this.count) this.count.dataset.at = this.live().length;
 
-        this.views();
-        this.bands();
-        this.orders();
-        this.pricing();
-        this.arrive();
+        this.chips.forEach((c) => c.addEventListener('click', () => this.band(c.dataset.band)));
+        if (this.empty) {
+            $$('button[data-band]', this.empty)
+                .forEach((b) => b.addEventListener('click', () => this.band(b.dataset.band)));
+        }
 
-        popIn($$('.ivx-cab__head > *', this.scene), { y: 24, stagger: .08 }, '.ivx-cab__head', 'top 86%');
+        if (!GSAP_ON() || REDUCED) return;
+        this.reveal();
     }
 
-    live() { return this.cards.filter((c) => !c.classList.contains('is-out')); }
+    live() { return this.rows.filter((r) => !r.classList.contains('is-out')); }
 
-    /** everything that moves the cards goes through here */
-    relayout(mutate) {
-        Flip.run(this.cards, mutate, {
-            box: this.grid,
-            onDone: () => { if (GSAP_ON()) ScrollTrigger.refresh(); },
+    /** Measure, filter, then slide the survivors from where they were to where
+     *  they now are. A hidden row has a zero rect, so anything arriving from
+     *  behind the filter fades up instead of travelling from nowhere. */
+    band(next) {
+        if (!next || next === this.at) return;
+        this.at = next;
+
+        this.chips.forEach((c) => c.classList.toggle('is-on', c.dataset.band === next));
+
+        const before = this.rows.map((r) => r.getBoundingClientRect());
+
+        this.rows.forEach((r) => {
+            r.classList.toggle('is-out', !(next === 'all' || r.dataset.band === next));
         });
-    }
 
-    mark(list, on) {
-        list.forEach((b) => b.classList.toggle('is-on', b === on));
-    }
+        this.tally();
+        if (!LIVE()) return;
 
-    /* ---------- cabinet ⇄ ledger ---------- */
-    views() {
-        const btns = $$('[data-view]', this.segView);
-        btns.forEach((b) => {
-            b.addEventListener('click', () => {
-                const next = b.dataset.view;
-                if (next === this.at.view) return;
-                this.at.view = next;
+        const after = this.rows.map((r) => r.getBoundingClientRect());
 
-                this.mark(btns, b);
-                this.segView.classList.toggle('is-b', next === 'ledger');
-                this.relayout(() => this.grid.classList.toggle('is-ledger', next === 'ledger'));
-            });
+        this.rows.forEach((r, i) => {
+            if (r.classList.contains('is-out')) return;
+            gsap.killTweensOf(r);
+
+            if (before[i].height === 0) {
+                gsap.fromTo(r, { opacity: 0, y: 18 },
+                    { opacity: 1, y: 0, duration: .6, ease: 'expo.out', clearProps: 'all' });
+                return;
+            }
+            const dy = before[i].top - after[i].top;
+            if (Math.abs(dy) < 1) return;
+            gsap.fromTo(r, { y: dy },
+                { y: 0, duration: .7, ease: 'expo.out', clearProps: 'transform' });
         });
+
+        if (GSAP_ON()) ScrollTrigger.refresh();
     }
 
-    /* ---------- chair time ---------- */
-    bands() {
-        $$('[data-band]').forEach((b) => {
-            b.addEventListener('click', () => {
-                const next = b.dataset.band;
-                if (next === this.at.band) return;
-                this.at.band = next;
-
-                this.mark($$('.ivx-chip[data-band]'), $(`.ivx-chip[data-band="${next}"]`));
-                this.relayout(() => {
-                    this.cards.forEach((c) => {
-                        c.classList.toggle('is-out', !(next === 'all' || c.dataset.band === next));
-                    });
-                    this.tally();
-                });
-            });
-        });
-    }
-
-    /* ---------- order ---------- */
-    orders() {
-        const btns = $$('[data-order]');
-        btns.forEach((b) => {
-            b.addEventListener('click', () => {
-                const key = b.dataset.order;
-                if (key === this.at.order) return;
-                this.at.order = key;
-
-                this.mark(btns, b);
-                this.relayout(() => {
-                    [...this.cards]
-                        .sort((a, z) => (+a.dataset[key]) - (+z.dataset[key]))
-                        .forEach((c) => this.grid.appendChild(c));
-                });
-            });
-        });
-    }
-
-    /* ---------- single ⇄ program ---------- */
-    pricing() {
-        const btns = $$('[data-price]', this.segPrice);
-        btns.forEach((b) => {
-            b.addEventListener('click', () => {
-                const mode = b.dataset.price;
-                if (mode === this.at.price) return;
-                this.at.price = mode;
-
-                this.mark(btns, b);
-                this.segPrice.classList.toggle('is-b', mode === 'program');
-                this.grid.classList.toggle('is-program', mode === 'program');
-
-                this.nums.forEach((n) => {
-                    const to = parseFloat(n.dataset[mode]);
-                    if (isFinite(to)) countTo(n, to);
-                });
-            });
-        });
-    }
-
-    /** the count in the console, and the line that appears when a filter
-     *  leaves nothing behind */
     tally() {
         const n = this.live().length;
         if (this.count) countTo(this.count, n, (v) => String(Math.round(v)));
         this.empty?.classList.toggle('is-on', n === 0);
     }
 
-    /** the cards land as the menu comes into view */
-    arrive() {
-        if (!LIVE()) {
-            document.documentElement.classList.remove('has-js');
-            return;
+    /* ---------- the list writes itself in, line by line ---------- */
+    reveal() {
+        const lines = $$('.mn__title span > i', this.scene);
+        if (lines.length) {
+            gsap.set(lines, { yPercent: 108 });
+            gsap.to(lines, {
+                yPercent: 0, duration: 1.05, ease: 'expo.out', stagger: .1,
+                scrollTrigger: { trigger: '.mn__head', start: 'top 88%', once: true },
+            });
         }
-        gsap.set(this.cards, { opacity: 0, y: 38 });
+
+        popIn($$('.ivx-eyebrow, .mn__lede', this.scene), { y: 20, stagger: .08 },
+            '.mn__head', 'top 86%');
+
+        gsap.set(this.rows, { opacity: 0, y: 26 });
         ScrollTrigger.create({
-            trigger: this.grid,
-            start: 'top 84%',
-            once: true,
-            onEnter: () => gsap.to(this.cards, {
-                opacity: 1, y: 0, duration: .9, ease: 'expo.out',
-                stagger: .055, clearProps: 'transform',
+            trigger: this.list, start: 'top 86%', once: true,
+            onEnter: () => gsap.to(this.rows, {
+                opacity: 1, y: 0, duration: .8, ease: 'expo.out',
+                stagger: .06, clearProps: 'transform',
             }),
-        });
-    }
-}
-
-
-/* =============================================================================
-   TILT — the cards lean toward the pointer
-   The lean is written to the INNER element: the Flip engine owns x and y on the
-   card itself, and two writers on one transform would fight every time the
-   layout changes. Fine pointers only, never in the ledger, and never once the
-   grid is one column wide.
-============================================================================= */
-class Tilt {
-    constructor() {
-        this.grid  = $('#ivxGrid');
-        this.cards = this.grid ? $$('.ivx-card', this.grid) : [];
-        this.mq    = window.matchMedia('(min-width: 781px)');
-        this.LEAN  = 7;
-    }
-
-    init() {
-        if (!this.cards.length || !LIVE() || !FINE_POINTER) return;
-
-        this.cards.forEach((card) => {
-            const inner = $('.ivx-card__in', card);
-            const rx = gsap.quickTo(inner, 'rotationX', { duration: .5, ease: 'power3' });
-            const ry = gsap.quickTo(inner, 'rotationY', { duration: .5, ease: 'power3' });
-            const up = gsap.quickTo(inner, 'y', { duration: .5, ease: 'power3' });
-            let box = null;
-
-            const flat = () => !this.mq.matches || this.grid.classList.contains('is-ledger');
-
-            card.addEventListener('pointerenter', () => {
-                box = card.getBoundingClientRect();
-                up(flat() ? 0 : -8);
-            });
-
-            card.addEventListener('pointermove', (e) => {
-                if (flat()) return;
-                if (!box) box = card.getBoundingClientRect();
-                const px = clamp((e.clientX - box.left) / box.width, 0, 1) - .5;
-                const py = clamp((e.clientY - box.top) / box.height, 0, 1) - .5;
-                ry(px * this.LEAN);
-                rx(-py * this.LEAN);
-            });
-
-            card.addEventListener('pointerleave', () => {
-                box = null;
-                rx(0); ry(0); up(0);
-            });
-        });
-    }
-}
-
-
-/* =============================================================================
-   DRIP LINE — the gold rule beside the menu, filled by scroll
-============================================================================= */
-class DripLine {
-    constructor() {
-        this.scene = $('.ivx-cab');
-        this.fill  = $('.ivx-line__fill');
-    }
-
-    init() {
-        if (!this.scene || !this.fill || !LIVE()) return;
-
-        gsap.to(this.fill, {
-            height: '100%',
-            ease: 'none',
-            scrollTrigger: { trigger: this.scene, start: 'top 60%', end: 'bottom 85%', scrub: .6 },
         });
     }
 }
@@ -780,84 +538,15 @@ class Rack {
    Every figure is derived from the two rates on the button, so the arithmetic
    can never drift away from the menu.
 ============================================================================= */
-class Program {
-    constructor() {
-        this.scene  = $('.ivx-prog');
-        this.picks  = $$('.ivx-pick');
-        this.name   = $('#ivxProgName');
-        this.single = $('#ivxProgSingle');
-        this.total  = $('#ivxProgTotal');
-        this.save   = $('#ivxProgSave');
-        this.bars   = $$('.ivx-math__bar i');
-        this.SESSIONS = 6;
-        this.at = null;
-    }
-
-    init() {
-        if (!this.scene || !this.picks.length || !this.total) return;
-
-        this.picks.forEach((b) => b.addEventListener('click', () => this.show(b)));
-        this.show(this.picks[0], false);
-
-        if (!GSAP_ON() || REDUCED) return;
-        popIn($$('.ivx-prog__head > *', this.scene), { y: 24, stagger: .08 }, '.ivx-prog__head', 'top 86%');
-        popIn(this.picks, { y: 16, stagger: .05, duration: .5 }, '.ivx-prog__picker', 'top 88%');
-        popIn([$('.ivx-math')], { y: 30, duration: .9 }, '.ivx-prog__console', 'top 84%');
-    }
-
-    show(btn, animate = true) {
-        if (!btn || btn === this.at) return;
-        this.at = btn;
-
-        this.picks.forEach((b) => b.classList.toggle('is-on', b === btn));
-
-        const one  = parseFloat(btn.dataset.single);
-        const prog = parseFloat(btn.dataset.program);
-        const full = one * this.SESSIONS;
-        const cut  = prog * this.SESSIONS;
-
-        this.name.innerHTML = btn.dataset.name;
-
-        if (!animate) {
-            this.single.textContent = money(full);
-            this.total.textContent  = money(cut);
-            this.save.textContent   = money(full - cut);
-            this.single.dataset.at = full;
-            this.total.dataset.at  = cut;
-            this.save.dataset.at   = full - cut;
-        } else {
-            countTo(this.single, full);
-            countTo(this.total, cut);
-            countTo(this.save, full - cut);
-        }
-
-        // the two bars are the same arithmetic, read sideways
-        if (this.bars.length === 2) {
-            this.bars[0].style.width = '100%';
-            this.bars[1].style.width = ((cut / full) * 100).toFixed(1) + '%';
-        }
-
-        if (animate && LIVE()) {
-            gsap.fromTo(this.name, { opacity: 0, y: 12 },
-                { opacity: 1, y: 0, duration: .5, ease: 'expo.out' });
-        }
-    }
-}
-
-
 /* =============================================================================
    BOOT
 ============================================================================= */
 const modules = {
     hero:      new Hero(),
     ticker:    new Ticker(),
-    bar:       new Bar(),
     cabinet:   new Cabinet(),
-    tilt:      new Tilt(),
-    dripLine:  new DripLine(),
     rack:      new Rack(),
     compounds: new Compounds(),
-    program:   new Program(),
 };
 
 /** Nothing in this file is worth hiding the page for. */
@@ -914,10 +603,9 @@ if (document.readyState === 'loading') {
 /* =============================================================================
    BACK NAVIGATION — the bfcache
    -----------------------------------------------------------------------------
-   Flip.run() opens every move by writing the OLD position onto the card as an
-   inline transform, and only clears it when the tween finishes. Click through
-   to a drip page while that 0.8s is still running and the card travels into the
-   back/forward cache still holding translate(dx, dy).
+   A filter move writes an inline transform on the surviving rows and only
+   clears it when the tween finishes. Click through to a drip page while that
+   is still running and the row travels into the back/forward cache holding it.
 
    Coming back does not re-run boot() — DOMContentLoaded has already fired for
    this document — so nothing clears it. The grid has meanwhile settled at its
@@ -927,14 +615,10 @@ if (document.readyState === 'loading') {
 ============================================================================= */
 addEventListener('pagehide', () => {
     if (!GSAP_ON()) return;
-    const cards = $$('.ivx-card');
-    if (!cards.length) return;
-
-    gsap.killTweensOf(cards);
-    gsap.set(cards, { clearProps: 'transform' });
-
-    const grid = $('#ivxGrid');
-    if (grid) { gsap.killTweensOf(grid); gsap.set(grid, { clearProps: 'height' }); }
+    const rows = $$('.mn__row');
+    if (!rows.length) return;
+    gsap.killTweensOf(rows);
+    gsap.set(rows, { clearProps: 'transform' });
 });
 
 /* =============================================================================
@@ -955,4 +639,4 @@ addEventListener('pageshow', (e) => {
 
 
 // handy in the console while the ten protocol pages get built
-window.AVEIX = { modules, boot, MENU, COMPOUNDS, Flip, helpers: { $, $$, clamp, money, countTo, debounce, onFrame } };
+window.AVEIX = { modules, boot, MENU, COMPOUNDS, helpers: { $, $$, clamp, money, countTo, debounce, onFrame } };
