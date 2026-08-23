@@ -152,7 +152,7 @@ const Flip = {
         // a soft dip while the contents change shape underneath the move
         gsap.fromTo(cards.map((c) => $('.ivx-card__in', c)),
             { opacity: .32 },
-            { opacity: 1, duration: .55, ease: 'power2.out', stagger: .015 });
+            { opacity: 1, duration: .55, ease: 'power2.out', stagger: .015, overwrite: true });
     },
 };
 
@@ -798,6 +798,53 @@ if (document.readyState === 'loading') {
 } else {
     boot();
 }
+
+/* =============================================================================
+   BACK NAVIGATION — the bfcache
+   -----------------------------------------------------------------------------
+   Flip.run() opens every move by writing the OLD position onto the card as an
+   inline transform, and only clears it when the tween finishes. Click through
+   to a drip page while that 0.8s is still running and the card travels into the
+   back/forward cache still holding translate(dx, dy).
+
+   Coming back does not re-run boot() — DOMContentLoaded has already fired for
+   this document — so nothing clears it. The grid has meanwhile settled at its
+   filtered height, and the stranded cards sit on top of whatever follows.
+
+   So: leave clean on the way out, and re-measure on the way back in.
+============================================================================= */
+addEventListener('pagehide', () => {
+    if (!GSAP_ON()) return;
+    const cards = $$('.ivx-card');
+    if (!cards.length) return;
+
+    gsap.killTweensOf(cards);
+    gsap.set(cards, { clearProps: 'transform' });
+
+    const grid = $('#ivxGrid');
+    if (grid) { gsap.killTweensOf(grid); gsap.set(grid, { clearProps: 'height' }); }
+});
+
+addEventListener('pageshow', (e) => {
+    const restored = e.persisted ||
+        performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
+    if (!restored || !GSAP_ON()) return;
+
+    const cards = $$('.ivx-card');
+    if (!cards.length) return;
+    const inners = cards.map((c) => $('.ivx-card__in', c)).filter(Boolean);
+
+    gsap.killTweensOf([...cards, ...inners]);
+    gsap.set(cards,  { clearProps: 'transform' });
+    gsap.set(inners, { opacity: 1 });
+    gsap.set(cards.filter((c) => !c.classList.contains('is-out')), { opacity: 1, y: 0 });
+
+    const grid = $('#ivxGrid');
+    if (grid) { gsap.killTweensOf(grid); gsap.set(grid, { clearProps: 'height' }); }
+
+    ScrollTrigger.refresh(true);
+});
+
 
 // handy in the console while the ten protocol pages get built
 window.AVEIX = { modules, boot, MENU, COMPOUNDS, Flip, helpers: { $, $$, clamp, money, countTo, debounce, onFrame } };
