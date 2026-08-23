@@ -48,6 +48,20 @@
 .page-infusions :is(p, li, dd)  { text-wrap: pretty; }
 .page-infusions ::selection { background: var(--brass-lite); color: var(--ink); }
 
+/* ── the shared entrance, disarmed ────────────────────────────────────────
+   /styles.css runs its own [data-rise] entrance and re-enables it with a CSS
+   transition the moment script.js adds body.is-ready. This page drives those
+   same elements with GSAP, and two writers on one property is the flicker you
+   see at load. Take the inherited transition off and hold the start state;
+   GSAP owns these from here. Both selectors carry body.page-infusions so they
+   outrank the shared body.is-ready rule rather than relying on file order. */
+body.page-infusions [data-rise],
+body.page-infusions.is-ready [data-rise] { transition: none; }
+
+html.ivx-on body.page-infusions.is-ready [data-rise] {
+    opacity: 0; transform: translate3d(0, 30px, 0);
+}
+
 /* ── start states, set before first paint so nothing flashes ─────────────── */
 html.ivx-on [data-rise]  { opacity: 0; transform: translate3d(0, 30px, 0); }
 html.ivx-on [data-split] { opacity: 0; }
