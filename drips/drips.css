@@ -182,7 +182,7 @@ html.dx-on .dx-wk   { opacity: 0; }
 
 
 /* ── 06 VITALS ───────────────────────────────────────────────────────────── */
-.dx-vitals { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4,1fr); max-width: var(--maxw); margin: 0 auto; padding-bottom: clamp(1.5rem,4vh,2.5rem); border-top: 1px solid var(--forest); }
+.dx-vitals { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); max-width: var(--maxw); margin: 0 auto; padding-bottom: clamp(1.5rem,4vh,2.5rem); border-top: 1px solid var(--forest); }
 .dx-vital { padding: clamp(.95rem,2vh,1.35rem) clamp(.7rem,1.5vw,1.3rem) 0; border-left: 1px solid var(--rule); }
 .dx-vital:first-child { border-left: 0; padding-left: 0; }
 .dx-vital dt { font-family: var(--dx-mono); font-size: .55rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); margin-bottom: .5rem; }
@@ -330,6 +330,7 @@ html.dx-on .dx-wk   { opacity: 0; }
 .dx-card dt { font-family: var(--dx-mono); font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); }
 .dx-card dd { font-family: var(--dx-mono); font-weight: 500; font-size: .93rem; color: var(--forest); font-variant-numeric: tabular-nums; text-align: right; }
 .dx-card dd em { font-style: normal; color: var(--t-ink); }
+.dx-card__note { margin-top: .95rem; font-size: .78rem; line-height: 1.7; color: var(--mist); }
 .dx-legal { position: relative; z-index: 2; max-width: 84ch; margin: var(--stack) auto 0; padding-top: 1.3rem; border-top: 1px solid var(--rule); font-size: .76rem; line-height: 1.74; color: var(--mist); }
 .dx-legal b { display: block; margin-bottom: .45rem; font-family: var(--dx-mono); font-size: .56rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--forest); }
 
