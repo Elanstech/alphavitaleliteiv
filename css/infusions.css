@@ -67,8 +67,11 @@ html.ivx-on [data-rise]  { opacity: 0; transform: translate3d(0, 30px, 0); }
 html.ivx-on [data-split] { opacity: 0; }
 html.ivx-on .ivx-ch      { opacity: 0; }
 .ivx-word { display: inline-block; }
-.ivx-ch   { display: inline-block; will-change: transform, opacity; }
-.hr__title { perspective: 800px; }
+/* No standing will-change here. It used to promote all 48 letters to their own
+   compositor layers for the life of the page, not just for the ~1s they move.
+   GSAP sets and clears it around the tween instead. The perspective went with
+   the rotateX it existed for. */
+.ivx-ch   { display: inline-block; }
 
 .ivx-eyebrow {
     display: inline-flex; align-items: center; gap: .55rem;
