@@ -1204,32 +1204,40 @@ class Chronic {
 class Advantage {
     constructor() {
         this.el     = $('#advantage');
+        this.road   = $('#advRoad');
+        this.stage  = $('#advStage');
         this.switch = $('.adv__switch', this.el ?? document);
         this.opts   = $$('.adv__opt', this.el ?? document);
         this.lanes  = $$('.adv__lane', this.el ?? document);
         this.at     = 'oral';
-        this.drawn  = false;
-        this.locked = false;   // set once the visitor works the switch themselves
-        this.drewAt = 0;       // when the current lane started drawing
+        this.st     = null;
+        this.pinned = false;
+        this.locked = false;
+        this.BREAK  = 900;
+
+        /* Where the scrub does what, as a fraction of the pinned run:
+             0    → .40   the oral road draws, stop by stop
+             .40  → .50   it sits finished — the beat where the verdict reads
+             .50          the switch throws over to the line
+             .50  → .92   the IV road draws
+             .92  → 1     finished, held, then the pin releases        */
+        this.CUT = { oral: .40, swap: .50, iv: .92 };
     }
 
     init() {
         if (!this.el || !this.lanes.length) return;
 
-        this.opts.forEach((o) => o.addEventListener('click', () => {
-            this.take();
-            this.show(o.dataset.lane);
-        }));
+        this.opts.forEach((o) => o.addEventListener('click', () => this.pick(o.dataset.lane)));
 
         this.switch?.addEventListener('keydown', (e) => {
             if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
             e.preventDefault();
             const next = this.at === 'oral' ? 'iv' : 'oral';
-            this.take();
-            this.show(next);
+            this.pick(next);
             this.opts.find((o) => o.dataset.lane === next)?.focus();
         });
 
+        // no GSAP, or motion turned down: both roads drawn, nothing moves
         if (typeof window.gsap === 'undefined' || REDUCED) {
             this.lanes.forEach((l) => {
                 $$('.stp', l).forEach((s) => s.classList.add('is-passed'));
@@ -1240,111 +1248,162 @@ class Advantage {
         }
 
         gsap.registerPlugin(ScrollTrigger);
-        ScrollTrigger.create({
-            trigger: this.el, start: 'top 72%', once: true,
-            onEnter: () => { this.drawn = true; this.draw(this.live()); },
-        });
-        popIn($$('.adv__head > *, .adv__switch, .adv__note', this.el),
+        popIn($$('.adv__head > *, .adv__note', this.el),
               { y: 26, stagger: .07, duration: .55, ease: 'back.out(1.5)' }, this.el, 'top 84%');
 
-        this.autoLane();
-
-        /* Crossing 900px swaps the rule from horizontal to vertical, but the
-           fill keeps whatever inline width/height the last draw left on it —
-           so a rotate or a resize stranded a fully-drawn lane with a 0% bar on
-           the new axis. Redraw when the breakpoint actually flips. */
-        const mq = window.matchMedia('(max-width: 900px)');
-        const onFlip = () => { if (this.drawn) this.draw(this.live()); };
-        mq.addEventListener ? mq.addEventListener('change', onFlip) : mq.addListener(onFlip);
+        /* Same split the shelf uses. Desktop gets the pin; a phone gets the
+           road in normal flow, because pinning a mid-page block on a touch
+           device fights the address bar every time it collapses. */
+        const mm = gsap.matchMedia();
+        mm.add(`(min-width: ${this.BREAK + 1}px)`, () => this.pinnedRoad());
+        mm.add(`(max-width: ${this.BREAK}px)`,     () => this.flowRoad());
     }
 
-    /* The scroller stops driving the moment the visitor touches the switch.
-       Nothing is more irritating than picking a lane and watching the page
-       pick a different one two hundred pixels later. */
-    take() {
-        this.locked = true;
-        this.pending?.kill();
-        this.pending = null;
+    laneEl(lane) { return this.lanes.find((l) => l.dataset.lane === lane); }
+
+    /* =====================================================================
+       DESKTOP — the road pins and vertical scroll draws it
+       ===================================================================== */
+    pinnedRoad() {
+        if (!this.road) return;
+        this.pinned = true;
+        const C = this.CUT;
+
+        this.setLane('oral', false);
+        this.paint(this.laneEl('oral'), 0);
+
+        this.st = ScrollTrigger.create({
+            trigger: this.road,
+            start: 'center center',
+            /* a function + invalidateOnRefresh so the run re-measures against
+               the live viewport instead of freezing whatever height the page
+               happened to load at */
+            end: () => '+=' + Math.round(window.innerHeight * 1.9),
+            pin: true,
+            pinSpacing: true,
+            scrub: .6,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            fastScrollEnd: true,
+            onToggle: (self) => {
+                this.road.style.willChange = self.isActive ? 'transform' : 'auto';
+            },
+            onUpdate: (self) => {
+                const p = self.progress;
+                if (p < C.swap) {
+                    this.setLane('oral');
+                    this.paint(this.laneEl('oral'), p / C.oral);
+                } else {
+                    this.setLane('iv');
+                    this.paint(this.laneEl('iv'), (p - C.swap) / (C.iv - C.swap));
+                }
+            },
+        });
+
+        return () => {
+            this.st?.kill(true);
+            this.st = null;
+            this.pinned = false;
+            gsap.set(this.road, { clearProps: 'willChange' });
+        };
     }
 
-    /* SCROLL-DRIVEN LANE CHANGE
-       Read the oral road on the way in, and once the stage has been carried
-       past the middle of the screen the switch throws itself over to the line
-       and redraws — no pin, so the page never stops moving under the reader.
-       Scrolling back up puts it back on oral, otherwise returning to the
-       section shows a switch already flipped with nothing explaining why. */
-    autoLane() {
-        const stage = $('.adv__stage', this.el);
-        if (!stage) return;
+    /* =====================================================================
+       PHONE + TABLET — no pin. The road draws itself on arrival and the
+       switch throws over once the stage is carried past mid-screen.
+       ===================================================================== */
+    flowRoad() {
+        this.pinned = false;
 
-        // the oral road takes ~1.8s to draw; do not flip out from under it
-        const MIN_READ = 1.15;
+        const first = ScrollTrigger.create({
+            trigger: this.el, start: 'top 72%', once: true,
+            onEnter: () => this.sweep(this.at),
+        });
 
-        ScrollTrigger.create({
-            trigger: stage,
+        const over = ScrollTrigger.create({
+            trigger: this.stage ?? this.el,
             start: 'center 46%',
             onEnter: () => {
                 if (this.locked || this.at !== 'oral') return;
-                const held = (performance.now() - this.drewAt) / 1000;
-                const wait = Math.max(0, MIN_READ - held);
-                this.pending?.kill();
-                this.pending = gsap.delayedCall(wait, () => {
-                    if (!this.locked && this.at === 'oral') this.show('iv');
-                });
+                this.setLane('iv'); this.sweep('iv');
             },
             onLeaveBack: () => {
-                this.pending?.kill();
-                if (!this.locked && this.at === 'iv') this.show('oral');
+                if (this.locked || this.at !== 'iv') return;
+                this.setLane('oral'); this.sweep('oral');
             },
         });
+
+        return () => { first.kill(); over.kill(); };
     }
 
-    live() { return this.lanes.find((l) => l.dataset.lane === this.at); }
+    /* =====================================================================
+       SHARED
+       ===================================================================== */
 
-    show(lane) {
+    /** A click on the switch. While the road is pinned the switch is a
+     *  readout of scroll position, not a toggle — setting the class alone
+     *  would be overwritten by the very next scroll event. So move the page
+     *  to the scroll position that owns that lane and let the scrub do it. */
+    pick(lane) {
+        if (this.pinned && this.st) {
+            const { start, end } = this.st;
+            const at = lane === 'iv' ? this.CUT.iv : this.CUT.oral;
+            Nav.toY(Math.round(start + (end - start) * at));
+            return;
+        }
+        this.locked = true;              // phone: stop the auto-flip meddling
         if (lane === this.at) return;
+        this.setLane(lane);
+        this.sweep(lane);
+    }
+
+    /** lane visibility + the switch chrome. Never touches the fill. */
+    setLane(lane, fade = true) {
+        if (lane === this.at && this.lanes.some((l) => l.classList.contains('is-live'))) return;
         this.at = lane;
 
         this.opts.forEach((o) => o.classList.toggle('is-on', o.dataset.lane === lane));
         this.switch?.classList.toggle('is-iv', lane === 'iv');
+        this.lanes.forEach((l) => l.classList.toggle('is-live', l.dataset.lane === lane));
 
-        this.lanes.forEach((l) => {
-            const on = l.dataset.lane === lane;
-            l.classList.toggle('is-live', on);
-            if (on && this.drawn) this.draw(l);
-        });
-
-        if (typeof window.gsap !== 'undefined' && !REDUCED) {
-            gsap.fromTo(this.live(), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .45, ease: 'expo.out' });
+        if (fade && typeof window.gsap !== 'undefined' && !REDUCED) {
+            gsap.fromTo(this.laneEl(lane),
+                { opacity: 0, y: 14 },
+                { opacity: 1, y: 0, duration: .4, ease: 'expo.out', overwrite: true });
         }
     }
 
-    /** fill the rule, then light each pin as the fill reaches it */
-    draw(lane) {
+    /** Draw a road to an exact position, 0 → 1. Below 900px the rule is
+     *  vertical, so the fill has to animate whichever axis is in play. */
+    paint(lane, p) {
         if (!lane) return;
         const fill  = $('.adv__fill', lane);
         const stops = $$('.stp', lane);
         if (!fill || !stops.length) return;
 
-        // below 900px the rule is vertical — animate whichever axis is in play
-        const vertical = window.matchMedia('(max-width: 900px)').matches;
-        this.drewAt = performance.now();
-        stops.forEach((s) => s.classList.remove('is-passed'));
-        gsap.killTweensOf(fill);
-        gsap.set(fill, vertical ? { height: '0%', width: '100%' } : { width: '0%', height: '100%' });
+        const vertical = window.matchMedia(`(max-width: ${this.BREAK}px)`).matches;
+        const pct = clamp(p, 0, 1) * 100;
 
-        const span = { v: 0 };
+        fill.style[vertical ? 'height' : 'width'] = pct.toFixed(1) + '%';
+        fill.style[vertical ? 'width' : 'height'] = '100%';
+        stops.forEach((s, i) => {
+            s.classList.toggle('is-passed', pct >= ((i + 0.55) / stops.length) * 100);
+        });
+    }
+
+    /** Self-running draw, for the unpinned layout where no scrub exists. */
+    sweep(lane) {
+        const el = this.laneEl(lane);
+        if (!el) return;
+        const stops = $$('.stp', el);
+        const span  = { v: 0 };
+        gsap.killTweensOf(span);
+        this.paint(el, 0);
         gsap.to(span, {
-            v: 100,
+            v: 1,
             duration: 0.32 * stops.length + 0.5,
             ease: 'power2.inOut',
-            onUpdate: () => {
-                const p = span.v;
-                fill.style[vertical ? 'height' : 'width'] = p.toFixed(1) + '%';
-                stops.forEach((s, i) => {
-                    s.classList.toggle('is-passed', p >= ((i + 0.55) / stops.length) * 100);
-                });
-            },
+            onUpdate: () => this.paint(el, span.v),
         });
     }
 }
