@@ -1209,17 +1209,23 @@ class Advantage {
         this.lanes  = $$('.adv__lane', this.el ?? document);
         this.at     = 'oral';
         this.drawn  = false;
+        this.locked = false;   // set once the visitor works the switch themselves
+        this.drewAt = 0;       // when the current lane started drawing
     }
 
     init() {
         if (!this.el || !this.lanes.length) return;
 
-        this.opts.forEach((o) => o.addEventListener('click', () => this.show(o.dataset.lane)));
+        this.opts.forEach((o) => o.addEventListener('click', () => {
+            this.take();
+            this.show(o.dataset.lane);
+        }));
 
         this.switch?.addEventListener('keydown', (e) => {
             if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
             e.preventDefault();
             const next = this.at === 'oral' ? 'iv' : 'oral';
+            this.take();
             this.show(next);
             this.opts.find((o) => o.dataset.lane === next)?.focus();
         });
@@ -1241,6 +1247,8 @@ class Advantage {
         popIn($$('.adv__head > *, .adv__switch, .adv__note', this.el),
               { y: 26, stagger: .07, duration: .55, ease: 'back.out(1.5)' }, this.el, 'top 84%');
 
+        this.autoLane();
+
         /* Crossing 900px swaps the rule from horizontal to vertical, but the
            fill keeps whatever inline width/height the last draw left on it —
            so a rotate or a resize stranded a fully-drawn lane with a 0% bar on
@@ -1248,6 +1256,47 @@ class Advantage {
         const mq = window.matchMedia('(max-width: 900px)');
         const onFlip = () => { if (this.drawn) this.draw(this.live()); };
         mq.addEventListener ? mq.addEventListener('change', onFlip) : mq.addListener(onFlip);
+    }
+
+    /* The scroller stops driving the moment the visitor touches the switch.
+       Nothing is more irritating than picking a lane and watching the page
+       pick a different one two hundred pixels later. */
+    take() {
+        this.locked = true;
+        this.pending?.kill();
+        this.pending = null;
+    }
+
+    /* SCROLL-DRIVEN LANE CHANGE
+       Read the oral road on the way in, and once the stage has been carried
+       past the middle of the screen the switch throws itself over to the line
+       and redraws — no pin, so the page never stops moving under the reader.
+       Scrolling back up puts it back on oral, otherwise returning to the
+       section shows a switch already flipped with nothing explaining why. */
+    autoLane() {
+        const stage = $('.adv__stage', this.el);
+        if (!stage) return;
+
+        // the oral road takes ~1.8s to draw; do not flip out from under it
+        const MIN_READ = 1.15;
+
+        ScrollTrigger.create({
+            trigger: stage,
+            start: 'center 46%',
+            onEnter: () => {
+                if (this.locked || this.at !== 'oral') return;
+                const held = (performance.now() - this.drewAt) / 1000;
+                const wait = Math.max(0, MIN_READ - held);
+                this.pending?.kill();
+                this.pending = gsap.delayedCall(wait, () => {
+                    if (!this.locked && this.at === 'oral') this.show('iv');
+                });
+            },
+            onLeaveBack: () => {
+                this.pending?.kill();
+                if (!this.locked && this.at === 'iv') this.show('oral');
+            },
+        });
     }
 
     live() { return this.lanes.find((l) => l.dataset.lane === this.at); }
@@ -1279,6 +1328,7 @@ class Advantage {
 
         // below 900px the rule is vertical — animate whichever axis is in play
         const vertical = window.matchMedia('(max-width: 900px)').matches;
+        this.drewAt = performance.now();
         stops.forEach((s) => s.classList.remove('is-passed'));
         gsap.killTweensOf(fill);
         gsap.set(fill, vertical ? { height: '0%', width: '100%' } : { width: '0%', height: '100%' });
