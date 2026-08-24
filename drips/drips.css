@@ -213,6 +213,7 @@ html.dx-on .dx-wk   { opacity: 0; }
 .dx-bag__gloss { fill: url(#dxGloss); }
 .dx-bag__no    { font-family: var(--dx-mono); font-size: 14px; font-weight: 500; fill: var(--t-ink); letter-spacing: 1px; }
 .dx-bag__title { font-family: var(--dx-display); font-size: 17px; font-weight: 600; fill: var(--forest); letter-spacing: -.4px; }
+.dx-bag__title--sm { font-size: 13.5px; }   /* longer descriptor, same plate */
 .dx-bag__sub   { font-family: var(--dx-mono); font-size: 6.6px; fill: var(--mist); letter-spacing: 1.1px; }
 
 #dxMix stop:nth-child(1)  { stop-color: var(--f01); }
