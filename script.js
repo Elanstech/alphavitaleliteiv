@@ -993,7 +993,7 @@ class Shelf {
         this.skip.addEventListener('click', (e) => {
             e.preventDefault();
             if (this.st) { Nav.toY(this.st.end + 2); return; }
-            const after = $('#conditions') || this.scene.nextElementSibling;
+            const after = $('#advantage') || this.scene.nextElementSibling;
             if (after) { Nav.to(after); return; }
             Nav.toY(this.scene.offsetTop + this.scene.offsetHeight);
         });
