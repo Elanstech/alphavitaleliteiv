@@ -1992,6 +1992,94 @@ body.is-ready .hero__title .word > span {
 .adv__note p { font-size: .95rem; line-height: 1.75; }
 .adv__note b { color: var(--forest); font-weight: 600; }
 
+/* ---------- advantage · the two beats ---------- */
+.adv__beat {
+    display: flex; align-items: baseline; gap: clamp(.9rem, 2vw, 1.5rem);
+    margin: clamp(2.5rem, 5vw, 3.75rem) 0 clamp(1.35rem, 2.6vw, 2rem);
+    padding-top: clamp(1.5rem, 3vw, 2.25rem);
+    border-top: 1px solid var(--rule-gold);
+}
+.adv__beat:first-of-type { margin-top: clamp(1.5rem, 3vw, 2.25rem); padding-top: 0; border-top: 0; }
+.adv__beat-no {
+    flex: none; font-family: var(--micro); font-weight: 700;
+    font-size: .68rem; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--gold-deep);
+}
+.adv__beat-name {
+    font-family: var(--caps); font-weight: 400;
+    font-size: clamp(1.4rem, 2.5vw, 2rem); line-height: 1.14; color: var(--forest);
+}
+.adv__beat-say {
+    margin-top: .45rem;
+    font-family: var(--accent); font-style: italic; font-weight: 500;
+    font-size: clamp(1.08rem, 1.7vw, 1.35rem); line-height: 1.4; color: var(--gold-deep);
+}
+.adv__beat-body { margin-top: .7rem; max-width: 58ch; font-size: .95rem; line-height: 1.75; }
+
+/* ---------- advantage · the sequence ---------- */
+.seq { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(1rem, 2.4vw, 1.75rem); }
+.seq__card {
+    padding: clamp(1.3rem, 2.7vw, 2rem);
+    border: 1px solid var(--rule); background: rgba(255, 255, 255, .42);
+}
+.seq__card--ours { border-color: var(--rule-gold); background: rgba(193, 150, 63, .08); }
+.seq__tag {
+    display: block; margin-bottom: 1.15rem;
+    font-family: var(--micro); font-weight: 600;
+    font-size: .63rem; letter-spacing: .24em; text-transform: uppercase; color: var(--mist);
+}
+.seq__card--ours .seq__tag { color: var(--gold-deep); }
+
+.seq__viz { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.2rem; }
+.seq__bag {
+    display: inline-flex; flex-direction: column; gap: .22rem;
+    min-width: 6.6rem; padding: .62rem .8rem .7rem;
+    border: 1px solid var(--rule); border-top: 3px solid var(--mist);
+    background: var(--parchment);
+}
+.seq__card--ours .seq__bag { border-top-color: var(--gold); }
+.seq__bag i {
+    font-family: var(--data); font-style: normal; font-weight: 600;
+    font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
+}
+.seq__bag b { font-family: var(--ui); font-weight: 500; font-size: .84rem; color: var(--forest); }
+.seq__bag--mixed { min-width: 100%; border-top-color: #B34E37; }
+.seq__bag--mixed b { font-size: .95rem; }
+.seq__bag--shield { border-top-color: var(--forest); background: #E8E2D5; }
+.seq__bag em {
+    display: inline-flex; align-items: center; margin-top: .18rem;
+    font-family: var(--micro); font-style: normal; font-weight: 600;
+    font-size: .55rem; letter-spacing: .13em; text-transform: uppercase; color: var(--forest-mid);
+}
+.seq__bag em i { font-size: 1.5em; color: var(--forest-mid); letter-spacing: 0; }
+.seq__body { font-size: .93rem; line-height: 1.75; }
+.seq__body + .seq__body { margin-top: .85rem; }
+.seq__body b { color: var(--forest); font-weight: 600; }
+
+.seq__why {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: clamp(.9rem, 2vw, 1.6rem); margin-top: clamp(1.1rem, 2.4vw, 1.75rem);
+}
+.seq__why article { padding-top: 1rem; border-top: 2px solid var(--rule-gold); }
+.seq__why h4 {
+    display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem;
+    font-family: var(--caps); font-weight: 400; font-size: 1.05rem; color: var(--forest);
+}
+.seq__why h4 i { font-size: 1.2em; color: var(--gold-deep); }
+.seq__why p { font-size: .88rem; line-height: 1.72; }
+
+.seq__fine {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    font-size: .78rem; line-height: 1.7; color: var(--mist); max-width: 88ch;
+}
+
+/* ---------- advantage · sequence · 900 ---------- */
+@media (max-width: 900px) {
+    .seq, .seq__why { grid-template-columns: 1fr; }
+    .adv__beat { flex-direction: column; align-items: flex-start; gap: .5rem; }
+    .seq__bag { flex: 1 1 6.6rem; }
+}
+
 /* ---------- advantage · 1080 ---------- */
 @media (max-width: 1080px) {
     .adv__track--iv { max-width: 78%; }
