@@ -232,7 +232,7 @@
   <div class="hero__stage">
     <p class="hero__kicker" data-rise style="--i:2">
       <span class="hero__rule"></span>
-      Individual screening &middot; Individualized dosing &middot; Monitoring throughout treatment
+      Individual screening &middot; Individualized dosing &middot; Monitoring throughout the infusion
     </p>
 
     <h1 class="hero__title">
@@ -683,6 +683,201 @@
 
 
 <!-- ==============================================================
+     THE IV ADVANTAGE  (#advantage)
+     One stage with a switch: pick a road, watch it draw. Marcellus for the
+     stop names, Archivo for the counters, Cormorant for the caveat —
+     deliberately not the shelf's voice.
+     ============================================================== -->
+<section class="adv" id="advantage">
+  <span class="adv__field"></span>
+
+  <div class="adv__wrap">
+    <header class="adv__head">
+      <p class="adv__eyebrow" data-reveal><i class="ph-duotone ph-path"></i> What makes Alpha Vital different</p>
+      <h2 class="adv__title" data-reveal>It is not only what goes in.<br><em>It is the route, and the order.</em></h2>
+      <p class="adv__lede" data-reveal>
+        Two decisions shape every infusion here, and neither one appears on a menu. The first is how
+        a nutrient reaches your bloodstream at all. The second is what is sitting in the bag beside
+        it while it gets there.
+      </p>
+    </header>
+
+    <div class="adv__beat" data-reveal>
+      <span class="adv__beat-no">One</span>
+      <div>
+        <h3 class="adv__beat-name">The route</h3>
+        <p class="adv__beat-say">A vitamin only works once it reaches your bloodstream.</p>
+        <p class="adv__beat-body">
+          Swallow it and it has to survive the trip. Put it in a vein and it is simply already
+          there. Pick a road below and watch it run.
+        </p>
+      </div>
+    </div>
+
+    <div class="adv__switch" data-reveal>
+      <span class="adv__thumb"></span>
+      <button class="adv__opt is-on" type="button" data-lane="oral">
+        <i class="ph ph-pill"></i><span>By mouth</span><b>4 stops</b>
+      </button>
+      <button class="adv__opt" type="button" data-lane="iv">
+        <i class="ph ph-drop"></i><span>By line</span><b>0 stops</b>
+      </button>
+    </div>
+
+    <div class="adv__stage" id="advStage">
+
+      <div class="adv__lane is-live" id="lane-oral" data-lane="oral">
+        <ol class="adv__track">
+          <span class="adv__rule"><i class="adv__fill"></i></span>
+          <li class="stp" style="--n:0">
+            <span class="stp__pin">1</span>
+            <h4 class="stp__name">Your stomach</h4>
+            <p class="stp__what">Acid and enzymes start breaking the tablet apart. Some of what you swallowed does not survive this room.</p>
+          </li>
+          <li class="stp" style="--n:1">
+            <span class="stp__pin">2</span>
+            <h4 class="stp__name">Your gut wall</h4>
+            <p class="stp__what">Whatever is left has to cross into the blood. How much crosses depends on the nutrient, your gut, and what else you ate.</p>
+          </li>
+          <li class="stp" style="--n:2">
+            <span class="stp__pin">3</span>
+            <h4 class="stp__name">Your liver</h4>
+            <p class="stp__what">Everything absorbed from the gut is routed through the liver first. It takes its share before passing the rest on.</p>
+          </li>
+          <li class="stp" style="--n:3">
+            <span class="stp__pin">4</span>
+            <h4 class="stp__name">Your bloodstream</h4>
+            <p class="stp__what">What finally arrives is some fraction of the dose on the label &mdash; and it arrives over hours.</p>
+          </li>
+        </ol>
+        <p class="adv__verdict"><b>The catch &mdash;</b> you never quite know how much made it. The label dose is an estimate wearing a number.</p>
+      </div>
+
+      <div class="adv__lane" id="lane-iv" data-lane="iv">
+        <ol class="adv__track adv__track--iv">
+          <span class="adv__rule"><i class="adv__fill"></i></span>
+          <li class="stp" style="--n:0">
+            <span class="stp__pin"><i class="ph-fill ph-check"></i></span>
+            <h4 class="stp__name">Into the vein</h4>
+            <p class="stp__what">The infusion goes directly into circulation. No stomach to survive, no gut wall to cross.</p>
+          </li>
+          <li class="stp" style="--n:1">
+            <span class="stp__pin"><i class="ph-fill ph-check"></i></span>
+            <h4 class="stp__name">Your bloodstream</h4>
+            <p class="stp__what">The dose is in circulation within minutes, and Dr.&nbsp;Aronov controls the rate the entire time.</p>
+          </li>
+        </ol>
+        <p class="adv__verdict"><b>The point &mdash;</b> she knows exactly what went in, because she calculated it, prepared it and watched it go.</p>
+      </div>
+
+    </div>
+
+
+    <div class="adv__beat" data-reveal>
+      <span class="adv__beat-no">Two</span>
+      <div>
+        <h3 class="adv__beat-name">The sequence</h3>
+        <p class="adv__beat-say">One bag is not the same as one infusion.</p>
+        <p class="adv__beat-body">
+          Two providers can list the same ingredients and prepare them in completely different ways.
+          What separates them is whether those ingredients ever share a bag.
+        </p>
+      </div>
+    </div>
+
+    <div class="seq">
+
+      <article class="seq__card" data-reveal>
+        <span class="seq__tag">The common approach</span>
+        <div class="seq__viz">
+          <span class="seq__bag seq__bag--mixed">
+            <i>One bag</i><b>Everything, all at once</b>
+          </span>
+        </div>
+        <p class="seq__body">
+          On most IV wellness menus, every ingredient on the list goes into a single bag &mdash; hung
+          once, run once, done. It is quick, it schedules cleanly, and it is how a high-volume room
+          turns a chair over.
+        </p>
+        <p class="seq__body">
+          <b>A single bag is a throughput decision, not a clinical one.</b> Combining components does
+          not improve what any of them do. It shortens the appointment.
+        </p>
+      </article>
+
+      <article class="seq__card seq__card--ours" data-reveal>
+        <span class="seq__tag">How Dr. Aronov prepares an infusion</span>
+        <div class="seq__viz">
+          <span class="seq__bag"><i>01</i><b>Vitamin&nbsp;C</b></span>
+          <span class="seq__bag seq__bag--shield">
+            <i>02</i><b>B&nbsp;vitamins</b>
+            <em><i class="ph ph-moon"></i>&nbsp;Light-shielded</em>
+          </span>
+          <span class="seq__bag"><i>03</i><b>Minerals</b></span>
+          <span class="seq__bag"><i>04</i><b>Glutathione</b></span>
+        </div>
+        <p class="seq__body">
+          Here, components are prepared separately and given in sequence across one appointment.
+          Vitamin&nbsp;C runs in its own volume. The B vitamins run in theirs. Nothing spends the
+          hour in a shared bag next to something it reacts with.
+        </p>
+        <p class="seq__body">
+          The B vitamins are also <b>covered while they run</b> &mdash; an opaque sleeve over the
+          bag, for the same reason a pharmacy dispenses riboflavin in amber glass rather than clear.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="seq__why">
+      <article data-reveal>
+        <h4><i class="ph-duotone ph-flask"></i> Chemistry</h4>
+        <p>
+          Ascorbic acid is a strong reducing agent, and several B vitamins are unstable in its
+          presence. Every hospital pharmacy keeps compatibility charts for exactly this reason.
+          Giving components in sequence removes the question rather than managing it.
+        </p>
+      </article>
+      <article data-reveal>
+        <h4><i class="ph-duotone ph-moon-stars"></i> Light</h4>
+        <p>
+          Riboflavin is photosensitive, and photodegradation does not stay confined to riboflavin
+          &mdash; it can affect what shares the solution with it. Shielding the bag is routine in
+          hospital compounding. It is routine here.
+        </p>
+      </article>
+      <article data-reveal>
+        <h4><i class="ph-duotone ph-gauge"></i> Control</h4>
+        <p>
+          Separate volumes mean separate rates. Dr.&nbsp;Aronov can slow one component without
+          slowing the others, or stop one without ending the session &mdash; which is only possible
+          if they were never combined.
+        </p>
+      </article>
+    </div>
+
+    <p class="seq__fine" data-reveal>
+      Sequencing and light protection describe how infusions are prepared and administered at Alpha
+      Vital Elite. They are compounding and administration practices, not a claim of therapeutic
+      benefit or of superior outcomes. IV infusions here are individually screened supportive care,
+      designed to complement &mdash; not replace &mdash; appropriate primary or specialty medical
+      care, and are not intended to diagnose, treat, cure, mitigate or prevent any disease.
+    </p>
+
+    <aside class="adv__note" data-reveal>
+      <i class="ph-duotone ph-stethoscope"></i>
+      <p>
+        This is not an argument against swallowing your vitamins. For most people, most of the time,
+        by mouth is exactly right &mdash; cheaper, easier, and it works. The line matters when
+        absorption is unreliable, when the dose has to be certain, or when someone is too depleted
+        to wait. <b>Which of those applies to you is a question for the screening, not for a website.</b>
+      </p>
+    </aside>
+  </div>
+</section>
+
+
+<!-- ==============================================================
      LIVING WITH A CHRONIC CONDITION  (#conditions)
      A switcher, not a scroll. One condition on screen at a time so the
      section stays short; every panel stays in the DOM. Type here is its own
@@ -976,94 +1171,7 @@
 </section>
 
 
-<!-- ==============================================================
-     THE IV ADVANTAGE  (#advantage)
-     One stage with a switch: pick a road, watch it draw. Marcellus for the
-     stop names, Archivo for the counters, Cormorant for the caveat —
-     deliberately not the shelf's voice.
-     ============================================================== -->
-<section class="adv" id="advantage">
-  <span class="adv__field"></span>
 
-  <div class="adv__wrap">
-    <header class="adv__head">
-      <p class="adv__eyebrow" data-reveal><i class="ph-duotone ph-path"></i> The IV advantage</p>
-      <h2 class="adv__title" data-reveal>Same destination.<br><em>Very different roads.</em></h2>
-      <p class="adv__lede" data-reveal>
-        A vitamin only works once it reaches your bloodstream. Swallow it and it has to survive the
-        trip. Put it in a vein and it is simply already there. Pick a road and watch it run.
-      </p>
-    </header>
-
-    <div class="adv__switch" data-reveal>
-      <span class="adv__thumb"></span>
-      <button class="adv__opt is-on" type="button" data-lane="oral">
-        <i class="ph ph-pill"></i><span>By mouth</span><b>4 stops</b>
-      </button>
-      <button class="adv__opt" type="button" data-lane="iv">
-        <i class="ph ph-drop"></i><span>By line</span><b>0 stops</b>
-      </button>
-    </div>
-
-    <div class="adv__stage" id="advStage">
-
-      <div class="adv__lane is-live" id="lane-oral" data-lane="oral">
-        <ol class="adv__track">
-          <span class="adv__rule"><i class="adv__fill"></i></span>
-          <li class="stp" style="--n:0">
-            <span class="stp__pin">1</span>
-            <h4 class="stp__name">Your stomach</h4>
-            <p class="stp__what">Acid and enzymes start breaking the tablet apart. Some of what you swallowed does not survive this room.</p>
-          </li>
-          <li class="stp" style="--n:1">
-            <span class="stp__pin">2</span>
-            <h4 class="stp__name">Your gut wall</h4>
-            <p class="stp__what">Whatever is left has to cross into the blood. How much crosses depends on the nutrient, your gut, and what else you ate.</p>
-          </li>
-          <li class="stp" style="--n:2">
-            <span class="stp__pin">3</span>
-            <h4 class="stp__name">Your liver</h4>
-            <p class="stp__what">Everything absorbed from the gut is routed through the liver first. It takes its share before passing the rest on.</p>
-          </li>
-          <li class="stp" style="--n:3">
-            <span class="stp__pin">4</span>
-            <h4 class="stp__name">Your bloodstream</h4>
-            <p class="stp__what">What finally arrives is some fraction of the dose on the label &mdash; and it arrives over hours.</p>
-          </li>
-        </ol>
-        <p class="adv__verdict"><b>The catch &mdash;</b> you never quite know how much made it. The label dose is an estimate wearing a number.</p>
-      </div>
-
-      <div class="adv__lane" id="lane-iv" data-lane="iv">
-        <ol class="adv__track adv__track--iv">
-          <span class="adv__rule"><i class="adv__fill"></i></span>
-          <li class="stp" style="--n:0">
-            <span class="stp__pin"><i class="ph-fill ph-check"></i></span>
-            <h4 class="stp__name">Into the vein</h4>
-            <p class="stp__what">The infusion goes directly into circulation. No stomach to survive, no gut wall to cross.</p>
-          </li>
-          <li class="stp" style="--n:1">
-            <span class="stp__pin"><i class="ph-fill ph-check"></i></span>
-            <h4 class="stp__name">Your bloodstream</h4>
-            <p class="stp__what">The dose is in circulation within minutes, and Dr.&nbsp;Aronov controls the rate the entire time.</p>
-          </li>
-        </ol>
-        <p class="adv__verdict"><b>The point &mdash;</b> she knows exactly what went in, because she calculated it, mixed it and watched it go.</p>
-      </div>
-
-    </div>
-
-    <aside class="adv__note" data-reveal>
-      <i class="ph-duotone ph-stethoscope"></i>
-      <p>
-        This is not an argument against swallowing your vitamins. For most people, most of the time,
-        by mouth is exactly right &mdash; cheaper, easier, and it works. The line matters when
-        absorption is unreliable, when the dose has to be certain, or when someone is too depleted
-        to wait. <b>Which of those applies to you is a question for the screening, not for a website.</b>
-      </p>
-    </aside>
-  </div>
-</section>
 
 
 <!-- ==============================================================
