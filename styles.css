@@ -1992,6 +1992,11 @@ body.is-ready .hero__title .word > span {
 .adv__note p { font-size: .95rem; line-height: 1.75; }
 .adv__note b { color: var(--forest); font-weight: 600; }
 
+.adv__road { position: relative; }
+/* while the block is pinned the stage must not collapse as lanes swap —
+   both lanes already stack in the same grid cell, this just holds the box */
+.adv__stage { min-height: 1px; }
+
 /* ---------- advantage · the two beats ---------- */
 .adv__beat {
     display: flex; align-items: baseline; gap: clamp(.9rem, 2vw, 1.5rem);
