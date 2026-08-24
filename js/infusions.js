@@ -154,16 +154,28 @@ const COMPOUNDS = [
 
 /* =============================================================================
    HERO
+   -----------------------------------------------------------------------------
+   The headline has to land BEFORE the rotating line starts writing under it.
+   Without this the typer — which boots on DOMContentLoaded, while the headline
+   waits on webfonts — was already several characters into its first phrase
+   while the headline above it was still assembling letter by letter and the
+   second line had not appeared at all. Reading order inverted: it looked like
+   the page was struggling rather than arriving.
 ============================================================================= */
+let heroSettled;
+const HERO_IN = new Promise((resolve) => { heroSettled = resolve; });
+
 class Hero {
     constructor() {
         this.el = $('.ivx-hero');
     }
 
     init() {
-        if (!this.el) return;
-        if (!LIVE()) { release(); return; }
-        FONTS.then(() => this.play());
+        // every early exit still has to release the typer, or a page with no
+        // hero, no GSAP or reduced motion leaves it waiting forever
+        if (!this.el) { heroSettled(); return; }
+        if (!LIVE()) { release(); heroSettled(); return; }
+        FONTS_READY.then(() => this.play());
     }
 
     play() {
@@ -177,13 +189,20 @@ class Hero {
         const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
         if (chars.length) {
+            /* Two fixed lines is ~48 characters. At the old .9s/.016 stagger the
+               last letter landed 1.8s after the fonts resolved, which is most of
+               a second of half-built headline. Tightened so the whole thing is
+               down in about half that. */
             tl.fromTo(chars,
                 { opacity: 0, yPercent: 60, rotateX: -55 },
-                { opacity: 1, yPercent: 0, rotateX: 0, duration: .9, stagger: .016 }, .15);
+                { opacity: 1, yPercent: 0, rotateX: 0, duration: .62, stagger: .011,
+                  onComplete: heroSettled }, .05);
+        } else {
+            heroSettled();
         }
 
         tl.to($$('[data-rise]', this.el),
-            { opacity: 1, y: 0, duration: .9, stagger: .09 }, .5);
+            { opacity: 1, y: 0, duration: .8, stagger: .08 }, .35);
     }
 }
 
@@ -208,10 +227,25 @@ class Hero {
  *  Fraunces arrives, and a pin measured then is measured against the wrong
  *  height. Everything that measures waits on this. Capped so a font that
  *  never resolves cannot hold the page hostage. */
+const FACES = ['300 4rem "Fraunces"', 'italic 300 2rem "Fraunces"', '400 1rem "Figtree"'];
 const FONTS = Promise.race([
-    (document.fonts ? document.fonts.ready : Promise.resolve()).catch(() => {}),
-    new Promise((r) => setTimeout(r, 1400)),
+    /* document.fonts.ready waits for EVERY face the document touches — the six
+       shared site faces and both Phosphor icon fonts included — so the hero sat
+       blank behind webfonts it does not even measure against. Wait on just the
+       three this page actually measures. */
+    (document.fonts
+        ? Promise.all(FACES.map((f) => document.fonts.load(f))).catch(() => {})
+        : Promise.resolve()),
+    new Promise((r) => setTimeout(r, 900)),
 ]);
+
+/* On a repeat visit the faces are already in the font cache, so there is
+   nothing to wait for — check synchronously and let the hero start on the
+   first frame instead of paying the round trip again. */
+const CACHED = !!document.fonts && FACES.every((f) => {
+    try { return document.fonts.check(f); } catch { return false; }
+});
+const FONTS_READY = CACHED ? Promise.resolve() : FONTS;
 
 /** Cut an element into per-character spans, keeping words unbreakable so the
  *  line still wraps at word boundaries. Returns the spans to animate. */
@@ -257,6 +291,8 @@ class Typer {
         ];
         this.i = 0;
         this.stopped = false;
+        this.started = false;
+        this.box = this.el ? this.el.closest('.hr__line--type') : null;
     }
 
     init() {
@@ -266,9 +302,18 @@ class Typer {
         // nothing types until the hero is actually being looked at
         document.addEventListener('visibilitychange', () => {
             this.stopped = document.hidden;
-            if (!this.stopped) this.type();
+            // only resume something that was already running — otherwise a tab
+            // switch during load starts the typer ahead of the headline again
+            if (!this.stopped && this.started) this.type();
         });
-        this.type();
+
+        // the headline goes down first; the caret is hidden until then
+        HERO_IN.then(() => {
+            if (this.started) return;
+            this.started = true;
+            this.box?.classList.add('is-typing');
+            this.type();
+        });
     }
 
     wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
@@ -352,7 +397,7 @@ class Stage {
         if (!LIVE()) { this.panels.forEach((p) => p.classList.add('is-live')); return; }
 
         this.mq.addEventListener('change', () => this.build());
-        FONTS.then(() => {
+        FONTS_READY.then(() => {
             this.build();
             ScrollTrigger.refresh();
         });
