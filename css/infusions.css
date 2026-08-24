@@ -143,12 +143,20 @@ html.ivx-on .ivx-ch      { opacity: 0; }
 
 .hr__title {
     font-family: var(--fx-display); font-optical-sizing: auto; font-weight: 300;
-    font-size: clamp(2.7rem, 8vw, 6.5rem);
-    line-height: 1.02; letter-spacing: -.045em; color: var(--ink);
+    /* two fixed lines instead of one, so the display size steps down to keep
+       the headline, the rotating line, the dek and the buttons on one screen */
+    font-size: clamp(1.9rem, 5.5vw, 4.4rem);
+    line-height: 1.04; letter-spacing: -.04em; color: var(--ink);
     margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
 }
 .hr__line { display: block; }
-.hr__line--type { color: var(--brass); font-style: italic; min-height: 1.02em; }
+/* the rotating line runs much longer than the fixed ones — set it smaller so
+   the longest phrase still reads as one line of type, not a paragraph */
+.hr__line--type {
+    display: block; margin-top: .35em;
+    font-size: .5em; line-height: 1.24; letter-spacing: -.02em;
+    color: var(--brass); font-style: italic; min-height: 1.24em;
+}
 .hr__typed { font-style: italic; }
 .hr__caret {
     display: inline-block; width: .045em; height: .78em; margin-left: .06em;
