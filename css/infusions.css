@@ -158,11 +158,15 @@ html.ivx-on .ivx-ch      { opacity: 0; }
     color: var(--brass); font-style: italic; min-height: 1.24em;
 }
 .hr__typed { font-style: italic; }
+/* the caret only exists once there is something to type — before the headline
+   has landed it was blinking on its own over an empty line */
 .hr__caret {
     display: inline-block; width: .045em; height: .78em; margin-left: .06em;
     background: var(--brass); vertical-align: baseline;
-    animation: hrBlink 1.05s steps(1) infinite;
+    opacity: 0;
 }
+.hr__line--type.is-typing .hr__caret { animation: hrBlink 1.05s steps(1) infinite; }
+html:not(.ivx-on) .hr__caret { display: none; }
 @keyframes hrBlink { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
 .hr__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
