@@ -193,10 +193,18 @@ class Hero {
                last letter landed 1.8s after the fonts resolved, which is most of
                a second of half-built headline. Tightened so the whole thing is
                down in about half that. */
+            /* rotateX on 48 separately-composited letters was the stutter: a 3D
+               transform forces each one onto its own layer and re-rasterises it
+               every frame. Plain opacity + Y is the same read at display size
+               and costs a fraction. willChange is dropped the moment the letters
+               land so the layers are handed back. */
             tl.fromTo(chars,
-                { opacity: 0, yPercent: 60, rotateX: -55 },
-                { opacity: 1, yPercent: 0, rotateX: 0, duration: .62, stagger: .011,
-                  onComplete: heroSettled }, .05);
+                { opacity: 0, yPercent: 55 },
+                { opacity: 1, yPercent: 0, duration: .62, stagger: .011, force3D: true,
+                  onComplete: () => {
+                      gsap.set(chars, { clearProps: 'willChange,transform' });
+                      heroSettled();
+                  } }, .05);
         } else {
             heroSettled();
         }
@@ -713,9 +721,34 @@ const boot = () => {
 
     if (GSAP_ON()) gsap.registerPlugin(ScrollTrigger);
 
-    Object.values(modules).forEach((m) => {
+    const start = (m) => {
         try { m.init(); }
         catch (err) { console.error(`[AVE·IX] ${m.constructor?.name || 'module'} failed to start`, err); release(); }
+    };
+
+    /* Only the hero is on screen while the page is arriving. Stage and
+       Compounds each build ScrollTriggers, and every trigger created measures
+       the document synchronously — six of them were being built in the middle
+       of the headline entrance, which is what made it stutter. Nothing below
+       the fold can be seen yet, so it can wait the ~1s until the hero is down.
+       HERO_IN resolves even when there is no hero, no GSAP or reduced motion,
+       so this is never a dead end. */
+    /* ...but a visitor who scrolls straight away is not watching the headline
+       and DOES need what is under it, so any real input builds them at once.
+       Whichever comes first wins. */
+    const BUILD = Promise.race([
+        HERO_IN,
+        new Promise((resolve) => {
+            const go = () => resolve();
+            ['scroll', 'wheel', 'touchstart', 'keydown', 'pointerdown']
+                .forEach((e) => window.addEventListener(e, go, { once: true, passive: true }));
+        }),
+    ]);
+
+    const EAGER = new Set(['hero', 'typer', 'drop']);
+    Object.entries(modules).forEach(([key, m]) => {
+        if (EAGER.has(key)) start(m);
+        else BUILD.then(() => start(m));
     });
 
     /* The bag PNGs and three webfonts land after first paint and change the
@@ -723,10 +756,16 @@ const boot = () => {
        against a shorter page — refresh once the type settles, once every image
        is in, and again when a resize has actually changed the WIDTH. */
     if (GSAP_ON()) {
+        /* ScrollTrigger.refresh() measures every trigger on the page in one
+           synchronous pass — the single most expensive thing that happens
+           during load. Fired from fonts.ready and window.load it landed on top
+           of the hero entrance and dropped its frames. Hold every startup
+           refresh until the headline is down, then run ONE. */
         const refresh = debounce(() => ScrollTrigger.refresh(), 140);
+        const refreshAfterHero = () => BUILD.then(() => refresh());
 
-        if (document.fonts) document.fonts.ready.then(refresh);
-        window.addEventListener('load', refresh);
+        if (document.fonts) document.fonts.ready.then(refreshAfterHero);
+        window.addEventListener('load', refreshAfterHero);
 
         let lastW = window.innerWidth;
         window.addEventListener('resize', debounce(() => {
@@ -738,7 +777,7 @@ const boot = () => {
         const imgs = $$('img').filter((i) => !i.complete);
         if (imgs.length) {
             let left = imgs.length;
-            const done = () => { if (--left <= 0) refresh(); };
+            const done = () => { if (--left <= 0) refreshAfterHero(); };
             imgs.forEach((img) => {
                 img.addEventListener('load',  done, { once: true });
                 img.addEventListener('error', done, { once: true });
