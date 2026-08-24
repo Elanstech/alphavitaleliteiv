@@ -2073,6 +2073,23 @@ body.is-ready .hero__title .word > span {
     font-size: .78rem; line-height: 1.7; color: var(--mist); max-width: 88ch;
 }
 
+.seq__punch {
+    max-width: 20ch;
+    margin: clamp(.4rem, 1.5vw, 1rem) 0 clamp(.9rem, 2vw, 1.35rem);
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2rem, 5.2vw, 4.1rem); line-height: 1.04; letter-spacing: -.02em;
+    color: var(--forest);
+}
+.seq__punch em {
+    font-family: var(--accent); font-style: italic; font-weight: 600;
+    font-size: 1.06em; color: var(--gold-deep);
+}
+.seq__punch-say {
+    max-width: 46ch; margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+    font-family: var(--ui); font-weight: 500;
+    font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6; color: var(--ink-soft);
+}
+
 /* ---------- advantage · sequence · 900 ---------- */
 @media (max-width: 900px) {
     .seq, .seq__why { grid-template-columns: 1fr; }
