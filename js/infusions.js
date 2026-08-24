@@ -167,16 +167,19 @@ class Hero {
     }
 
     play() {
-        const first = $('.hr__line[data-split]', this.el);
-        const chars = first ? splitChars(first) : [];
+        /* The fixed headline is two sentences on two lines now, so every
+           [data-split] line has to be split and revealed — splitting only the
+           first left the second one sitting at the opacity:0 the stylesheet
+           gives it. */
+        const lines = $$('.hr__line[data-split]', this.el);
+        const chars = lines.flatMap((l) => { gsap.set(l, { opacity: 1 }); return splitChars(l); });
 
         const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
         if (chars.length) {
-            gsap.set(first, { opacity: 1 });
             tl.fromTo(chars,
                 { opacity: 0, yPercent: 60, rotateX: -55 },
-                { opacity: 1, yPercent: 0, rotateX: 0, duration: .9, stagger: .022 }, .15);
+                { opacity: 1, yPercent: 0, rotateX: 0, duration: .9, stagger: .016 }, .15);
         }
 
         tl.to($$('[data-rise]', this.el),
@@ -248,9 +251,9 @@ class Typer {
     constructor() {
         this.el = $('#hrTyped');
         this.lines = [
-            'Chosen one at a time.',
-            'Given by one physician.',
-            'Mixed for one person.',
+            'Selected for your individual needs.',
+            'Every decision begins with your history.',
+            'Under one physician\u2019s care \u2014 from review through administration.',
         ];
         this.i = 0;
         this.stopped = false;
