@@ -125,7 +125,7 @@ const TOTAL_ML = 1000;
 /* role → which bag it belongs in, in the order they are hung.
    Anything unrecognised falls to the end of the round. */
 const ROUND = [
-    { key: 'minerals',    match: /mineral|electrolyte|zinc|magnesium/i, what: 'Minerals and electrolytes' },
+    { key: 'minerals',    match: /mineral|electrolyte|zinc|magnesium/i, what: 'Minerals' },
     { key: 'vitamins',    match: /vitamin/i,                            what: 'Vitamins' },
     { key: 'amino',       match: /amino|precursor|peptide/i,            what: 'Amino acids' },
     { key: 'signal',      match: /signal|exosome/i,                     what: 'Signalling' },
@@ -140,6 +140,18 @@ const SOLO = /glutathione/i;
 const PHOTOSENSITIVE = /riboflavin|\bb-?\s?complex\b|\bb\s?vitamins?\b|b12|cobalamin|thiamine|\bb1\b|\bb6\b|pyridoxine|folate|folic|methylcobalamin/i;
 
 const txt = (el) => (el?.textContent || '').trim();
+
+/* Chair time is already stated on the page; read it rather than restate it,
+   and apportion it across the bags by volume so the parts add to the whole.
+   Per-bag minutes are therefore derived, not a published figure — if the real
+   timings differ they belong in ROUND alongside the volumes. */
+const chairMinutes = () => {
+    const cell = $$('.dx-facts dt').find((d) => /chair time/i.test(txt(d)));
+    const raw = cell ? txt(cell.nextElementSibling).toLowerCase() : '';
+    const h = raw.match(/(\d+)\s*h/); const m = raw.match(/h\s*(\d+)|(\d+)\s*min/);
+    const mins = (h ? +h[1] * 60 : 0) + (m ? +(m[1] || m[2]) : 0);
+    return mins || 0;
+};
 
 /** Sort the ledger rows into the bags they are carried in. */
 const planRound = (rows) => {
@@ -226,22 +238,31 @@ const ledger = () => {
     };
 
     /* ── build the bags, moving the real rows in rather than copying them ── */
+    const mins = chairMinutes();
+    let seen = 0;
+
     bags.forEach((bag, b) => {
+        const share = mins ? Math.max(5, Math.round((mins * bag.ml / TOTAL_ML) / 5) * 5) : 0;
         const li = document.createElement('li');
         li.className = 'dx-bagr';
         li.innerHTML =
             `<div class="dx-bagr__head">
                <span class="dx-bagr__no">${String(b + 1).padStart(2, '0')}</span>
                <span class="dx-bagr__vol">${bag.ml} mL</span>
+               ${share ? `<span class="dx-bagr__mins">~${share} min</span>` : ''}
                <span class="dx-bagr__what"></span>
                ${bag.shield ? '<span class="dx-bagr__shield">Light-shielded</span>' : ''}
              </div>
              <div class="dx-bagr__body"></div>`;
-        $('.dx-bagr__what', li).textContent = bag.what;
+        // say it as what it is: fluid, plus the thing that rides in it
+        $('.dx-bagr__what', li).textContent = 'Fluid + ' + bag.what.toLowerCase();
         const body = $('.dx-bagr__body', li);
         bag.items.forEach((c) => {
+            /* renumber in reading order. The original list index survived the
+               regrouping and produced jumbled numbers — 03, then 02, then 06 —
+               which read like a mistake. */
             const key = $('.dx-ing__key', c.row);
-            if (key) key.textContent = String(c.i + 1).padStart(2, '0');
+            if (key) key.textContent = String(++seen).padStart(2, '0');
             body.appendChild(c.row);
         });
         host.appendChild(li);
@@ -265,13 +286,26 @@ const ledger = () => {
     }
     const legend = $('#dxVolLegend');
     if (legend) {
-        legend.textContent = `${bags.length} ${bags.length === 1 ? 'bag' : 'bags'} · hung in order · one line`;
+        bags.forEach((bag, b) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<em></em><span></span><b>${bag.ml} mL</b>`;
+            $('em', li).style.setProperty('--sg', `color-mix(in oklab, var(--tone) ${28 + b * 12}%, var(--forest))`);
+            $('span', li).textContent = bag.what;
+            legend.appendChild(li);
+        });
     }
+
+    /* millilitres are meaningless to most readers on their own */
+    const cups = $('#dxVolCups');
+    if (cups) cups.textContent = `about ${Math.round(TOTAL_ML / 240)} cups`;
 
     const num  = $('#dxVolNum');
     const type = $('#dxType');
     const typeBox = type?.parentElement;
-    const LINE = `${bags.length} ${bags.length === 1 ? 'bag' : 'bags'}. ${TOTAL_ML.toLocaleString()} mL. One line.`;
+    const WORD = ['One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten'];
+    /* "One line" is what a clinician calls it; "one needle" is what the person
+       in the chair actually wants to know. */
+    const LINE = `${WORD[bags.length - 1] || bags.length} ${bags.length === 1 ? 'bag' : 'bags'}. One needle.`;
 
     /* ── no GSAP, or motion turned down: everything present, nothing moves ── */
     if (typeof window.gsap === 'undefined' || RM.matches) {
