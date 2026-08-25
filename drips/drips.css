@@ -528,6 +528,12 @@ html.dx-on .dx-wk   { opacity: 0; }
     font-family: var(--dx-serif); font-style: italic;
     font-size: clamp(.95rem, 1.6vw, 1.2rem); color: var(--mist);
 }
+/* millilitres mean nothing to most people — anchor it to something they hold */
+.dx-vol__cap b {
+    display: block; margin-top: .1rem;
+    font-family: var(--dx-mono); font-style: normal; font-weight: 400;
+    font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--t-ink);
+}
 
 /* the bar, one segment per bag */
 .dx-vol__bar {
@@ -550,9 +556,21 @@ html.dx-on .dx-wk   { opacity: 0; }
 }
 .dx-vol__seg.is-wide b { opacity: 1; }
 
-.dx-vol__legend {
-    margin-top: .8rem; font-family: var(--dx-mono); font-size: .55rem;
-    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+/* a real key under the bar: swatch, what it is, how much. Bare numbers on the
+   bar meant nothing on their own. */
+.dx-vol__key {
+    list-style: none; display: flex; flex-wrap: wrap; gap: .4rem 1.35rem;
+    margin-top: .85rem;
+}
+.dx-vol__key li { display: inline-flex; align-items: center; gap: .42rem; }
+.dx-vol__key em {
+    width: 10px; height: 10px; border-radius: 2px; background: var(--sg, var(--tone));
+    flex: none;
+}
+.dx-vol__key span { font-size: .82rem; color: var(--forest); }
+.dx-vol__key b {
+    font-family: var(--dx-mono); font-size: .62rem; letter-spacing: .06em;
+    color: var(--mist); font-variant-numeric: tabular-nums; font-weight: 400;
 }
 
 /* the carrier: not a step, but what every bag is made of */
@@ -587,9 +605,13 @@ html.dx-on .dx-wk   { opacity: 0; }
 .dx-bagr.is-in::after { transform: scaleX(1); }
 
 .dx-bagr__head {
-    display: grid; grid-template-columns: auto auto 1fr auto;
+    display: grid; grid-template-columns: auto auto auto 1fr auto;
     align-items: baseline; gap: .55rem clamp(.7rem, 1.8vw, 1.3rem);
     margin-bottom: .9rem;
+}
+.dx-bagr__mins {
+    font-family: var(--dx-mono); font-size: .6rem; letter-spacing: .08em;
+    color: var(--mist); font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .dx-bagr__no {
     font-family: var(--dx-display); font-weight: 300;
@@ -652,7 +674,7 @@ html.dx-on .dx-wk   { opacity: 0; }
 .dx-facts dd small { font-family: var(--dx-mono); font-size: .5rem; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
 
 @media (max-width: 760px) {
-    .dx-bagr__head { grid-template-columns: auto 1fr; }
+    .dx-bagr__head { grid-template-columns: auto auto 1fr; }
     .dx-bagr__what { grid-column: 1 / -1; }
     .dx-bagr__shield { grid-column: 1 / -1; justify-self: start; }
     .dx-bagr__body { padding-left: 0; }
