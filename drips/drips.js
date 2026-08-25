@@ -105,91 +105,109 @@ const intro = () => {
 };
 
 
-/* ── LEDGER ───────────────────────────────────────────────────────────────
-   Each compound gets its own micro-timeline: the row lifts, the number slides
-   in, the name wipes open, the chip pops and pings, the hairline draws.
-   As each row arrives, the matching layer lights up inside the bag.        */
+/* ── THE RUN ──────────────────────────────────────────────────────────────
+   What used to sit here was a single IV bag that filled as you read the
+   component list — an animation that said the opposite of what the practice
+   does. There is no vessel drawn any more. The components are numbered and
+   lit one at a time, which is the entire claim: given in order, never
+   combined. A page with one component and a page with ten both work.       */
+
+/* Components that degrade in light get a mark — the same reason a pharmacy
+   dispenses riboflavin in amber glass rather than clear. */
+const PHOTOSENSITIVE = /riboflavin|\bb-?\s?complex\b|\bb\s?vitamins?\b|b12|cobalamin|thiamine|\bb1\b|\bb6\b|pyridoxine|folate|folic|methylcobalamin/i;
+
 const ledger = () => {
     const list = $('#dxList');
-    const bag = $('#dxBag');
     if (!list) return;
-
     const rows = $$('.dx-ing', list);
-    const band = $('.dx-bag__hi');
-    const pct = $('#dxPct');
+    if (!rows.length) return;
 
-    /* interior of the bag is 366 user units tall, split by component count */
-    const H = 366, TOP = 54;
-    const bandH = H / (rows.length || 1);
-    if (band) band.setAttribute('height', bandH.toFixed(2));
+    const now   = $('#dxSeqNow');
+    const all   = $('#dxSeqAll');
+    const spine = $('#dxSeqSpine');
+    if (all) all.textContent = String(rows.length).padStart(2, '0');
 
-    const moveBand = (i) => {
-        if (!band) return;
-        gsap.to(band, {
-            y: TOP + (rows.length - 1 - i) * bandH,
-            autoAlpha: 1, duration: 0.55, ease: 'power3.out', overwrite: true,
-        });
-    };
-
+    /* number every row and mark the light-sensitive ones */
     rows.forEach((row, i) => {
-        const name = $('.dx-ing__name', row);
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: row,
-                start: 'top 86%',
-                end: 'bottom 40%',
-                toggleActions: 'play none none reverse',
-                onEnter: () => moveBand(i),
-                onEnterBack: () => moveBand(i),
-            },
-        });
+        const key = $('.dx-ing__key', row);
+        if (key) key.textContent = String(i + 1).padStart(2, '0');
 
-        tl.fromTo(row, { opacity: 0, y: 34 },
-                       { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out' }, 0)
-          .fromTo($('.dx-ing__key', row), { opacity: 0, x: -10 },
-                                          { opacity: 1, x: 0, duration: 0.45 }, 0.05)
-          .fromTo(name, { clipPath: 'inset(0 100% 0 0)', y: 6 },
-                        { clipPath: 'inset(0 0% 0 0)', y: 0, duration: 0.7, ease: 'power3.out' }, 0.08)
-          .fromTo([$('.dx-ing__what', row), $('.dx-ing__role', row)],
-                  { opacity: 0, y: 12 },
-                  { opacity: 1, y: 0, duration: 0.5, stagger: 0.07 }, 0.2)
-          .fromTo($('.dx-ing__chip', row), { scale: 0 },
-                  { scale: 1, duration: 0.55, ease: 'back.out(3)' }, 0.14)
-          .fromTo($('.dx-ing__chip i', row), { scale: 1, opacity: 0.9 },
-                  { scale: 2.6, opacity: 0, duration: 0.8, ease: 'power2.out' }, 0.26)
-          .fromTo($('.dx-ing__rule', row), { scaleX: 0 },
-                  { scaleX: 1, duration: 0.9, ease: 'power3.out' }, 0.12);
+        const name = ($('.dx-ing__name', row)?.textContent || '').trim();
+        const role = $('.dx-ing__role', row);
+        if (role && PHOTOSENSITIVE.test(name)) {
+            const tag = document.createElement('span');
+            tag.className = 'dx-ing__shield';
+            tag.textContent = 'Light-shielded';
+            role.insertAdjacentElement('afterend', tag);
+        }
     });
 
-    /* the ledger fills the bag: read half the list, the bag is half full */
-    if (bag) {
-        const setFill = gsap.quickSetter(bag, '--fill');
-        ScrollTrigger.create({
-            trigger: list,
-            start: 'top 78%',
-            end: 'bottom 62%',
-            scrub: 0.7,
-            onUpdate: (self) => {
-                setFill(self.progress.toFixed(4));
-                if (pct) pct.textContent = Math.round(self.progress * 100);
-            },
+    const mark = (i) => {
+        rows.forEach((r, n) => {
+            r.classList.toggle('is-live', n === i);
+            r.classList.toggle('is-done', n < i);
         });
+        if (now) now.textContent = String(i + 1).padStart(2, '0');
+        if (spine) spine.style.width = ((i + 1) / rows.length) * 100 + '%';
+    };
 
-        /* stuck state for the mobile gauge */
-        ScrollTrigger.create({
-            trigger: '.dx-mix__stage',
-            start: 'top top+=90',
-            end: 'bottom top+=240',
-            onToggle: (self) => bag.classList.toggle('is-stuck', self.isActive),
-        });
+    /* no GSAP or motion turned down: everything legible, nothing moving */
+    if (typeof window.gsap === 'undefined' || RM.matches) {
+        rows.forEach((r) => r.classList.add('is-done'));
+        if (spine) spine.style.width = '100%';
+        if (now) now.textContent = String(rows.length).padStart(2, '0');
+        return;
     }
 
-    /* scroll velocity leans the whole ledger — subtle, desktop only */
+    /* each row assembles as it arrives */
+    rows.forEach((row) => {
+        gsap.timeline({
+            scrollTrigger: { trigger: row, start: 'top 88%', end: 'bottom 40%',
+                             toggleActions: 'play none none reverse' },
+        })
+        .fromTo(row, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .7, ease: 'expo.out' }, 0)
+        .fromTo($('.dx-ing__key', row), { opacity: 0, y: 18 },
+                { opacity: 1, y: 0, duration: .75, ease: 'expo.out' }, .04)
+        .fromTo($('.dx-ing__name', row),
+                { clipPath: 'inset(0 100% 0 0)', y: 6 },
+                { clipPath: 'inset(0 0% 0 0)', y: 0, duration: .7, ease: 'power3.out' }, .1)
+        .fromTo([$('.dx-ing__what', row), $('.dx-ing__role', row), $('.dx-ing__shield', row)].filter(Boolean),
+                { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .5, stagger: .07 }, .2)
+        .fromTo($('.dx-ing__chip', row), { scale: 0 }, { scale: 1, duration: .55, ease: 'back.out(3)' }, .14)
+        .fromTo($('.dx-ing__chip i', row), { scale: 1, opacity: .9 },
+                { scale: 2.6, opacity: 0, duration: .8, ease: 'power2.out' }, .26)
+        .fromTo($('.dx-ing__rule', row), { scaleX: 0 }, { scaleX: 1, duration: .9, ease: 'power3.out' }, .12);
+    });
+
+    /* WHICH ONE IS BEING GIVEN
+       One focus line across the viewport rather than a trigger per row: with
+       a short list every row enters in the same frame and the last simply
+       wins, so the count never walks. Nearest row to the line is the live
+       one, at any list length. */
+    let live = -1;
+    const track = () => {
+        const focus = window.innerHeight * .42;
+        let best = 0, bestD = Infinity;
+        rows.forEach((r, i) => {
+            const b = r.getBoundingClientRect();
+            const d = Math.abs((b.top + b.height / 2) - focus);
+            if (d < bestD) { bestD = d; best = i; }
+        });
+        if (best !== live) { live = best; mark(best); }
+    };
+
+    ScrollTrigger.create({
+        trigger: list, start: 'top bottom', end: 'bottom top',
+        onUpdate: track, onRefresh: track,
+    });
+    track();
+
+    /* scroll velocity leans the stack — subtle, desktop only */
     if (FINE.matches && !LOW) {
-        const skew = gsap.quickTo(list, 'skewY', { duration: 0.6, ease: 'power3' });
+        const skew = gsap.quickTo(list, 'skewY', { duration: .6, ease: 'power3' });
         ScrollTrigger.create({
             trigger: list, start: 'top bottom', end: 'bottom top',
-            onUpdate: (self) => skew(clamp(self.getVelocity() / -420, -2.2, 2.2)),
+            onUpdate: (self) => skew(clamp(self.getVelocity() / -460, -1.8, 1.8)),
             onLeave: () => skew(0), onLeaveBack: () => skew(0),
         });
     }
@@ -471,6 +489,11 @@ const boot = () => {
 
     if (typeof window.gsap === 'undefined' || RM.matches) {
         release();
+        /* The sequence is built by JS now, so it has to be built here too —
+           otherwise reduced motion and no-GSAP get an empty column where the
+           bags should be. ledger() detects both cases itself and lays the
+           whole sequence out at rest, nothing moving. */
+        try { ledger(); } catch (err) { console.error('[dx] ledger', err); }
         questions();          // the accordion still needs to open
         carouselFallback();
         return;
