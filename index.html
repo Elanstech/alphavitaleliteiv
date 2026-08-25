@@ -796,127 +796,146 @@
       protection are the other half &mdash; and none of them appear on a menu.
     </p>
 
-    <!-- ---------- the split: one bag against six stages ---------- -->
+    <!-- ---------- the split: one bag against six bags ----------
+         VOLUMES ARE PLACEHOLDERS — confirm each one with Dr. Aronov and
+         edit the <i> inside .iv__vol. Nothing else needs touching. -->
     <div class="split">
 
-      <!-- LEFT · the shortcut -->
+      <!-- LEFT · one bag -->
       <article class="split__col split__col--one" data-reveal>
-        <p class="split__tag split__tag--warn"><i class="ph-fill ph-warning-circle"></i> The common shortcut</p>
-        <h4 class="split__name">Everything together</h4>
+        <p class="split__tag split__tag--warn"><i class="ph-fill ph-warning-circle"></i> Most IV clinics</p>
 
         <div class="split__viz">
-          <span class="bag bag--crowd" aria-hidden="true">
-            <span class="bag__port"></span>
-            <span class="bag__body">
-              <i>Vitamin&nbsp;C</i><i>B-complex</i><i>B12</i><i>Copper</i><i>Zinc</i>
-              <i>Selenium</i><i>Magnesium</i><i>Glutathione</i><i>ALA</i><i>Calcium</i>
+          <span class="iv iv--crowd" aria-hidden="true">
+            <span class="iv__hook"></span>
+            <span class="iv__bag">
+              <span class="iv__fluid"></span>
+              <span class="iv__crowd">
+                <i>Vitamin&nbsp;C</i><i>B-complex</i><i>Copper</i><i>Zinc</i><i>B12</i>
+                <i>Magnesium</i><i>Glutathione</i><i>ALA</i><i>Selenium</i><i>Calcium</i>
+              </span>
+              <span class="iv__vol"><i>1,000</i>mL</span>
             </span>
-            <span class="bag__tube"></span>
+            <span class="iv__tube"></span>
           </span>
-          <p class="bag__label">One bag &middot; hung once &middot; run once</p>
         </div>
 
-        <p class="split__say">
-          Every ingredient on the menu goes into a single shared bag.
-          <b>That shortens the appointment. It does not establish that each ingredient stays
-          physically and chemically compatible from preparation through administration.</b>
-        </p>
-        <p class="split__say">
-          A solution can stay perfectly clear while its chemistry changes. Clear is not the same as
-          stable.
-        </p>
+        <p class="split__big">1 bag.<br>Everything at once.</p>
+        <p class="split__say">Faster to hang. Nobody has checked what the ingredients do to each other inside it.</p>
       </article>
 
       <span class="split__vs" aria-hidden="true"><i></i><b>vs</b><i></i></span>
 
-      <!-- RIGHT · six stages -->
+      <!-- RIGHT · six bags -->
       <article class="split__col split__col--six" data-reveal>
-        <p class="split__tag"><i class="ph-fill ph-flask"></i> How Dr. Aronov prepares an infusion</p>
-        <h4 class="split__name">Six stages, one appointment</h4>
+        <p class="split__tag"><i class="ph-fill ph-flask"></i> Alpha Vital Elite</p>
 
-        <ol class="stages">
-          <li class="stage">
-            <span class="stage__no">01</span>
-            <span class="stage__bag" aria-hidden="true"></span>
-            <div class="stage__txt">
-              <h5>Hydration base</h5>
-              <p>The line is placed and the base solution runs on its own before any component is
-                introduced.</p>
-            </div>
+        <ol class="rack">
+          <li class="rack__item">
+            <span class="iv iv--sm" aria-hidden="true">
+              <span class="iv__hook"></span>
+              <span class="iv__bag" style="--fluid: rgba(190,205,196,.6)">
+                <span class="iv__fluid"></span>
+                <span class="iv__vol"><i>500</i>mL</span>
+              </span>
+              <span class="iv__tube"></span>
+            </span>
+            <b class="rack__no">01</b>
+            <b class="rack__name">Fluids</b>
           </li>
 
-          <li class="stage stage--shield">
-            <span class="stage__no">02</span>
-            <span class="stage__bag" aria-hidden="true"></span>
-            <div class="stage__txt">
-              <h5>Vitamin&nbsp;C <em class="stage__shield"><i class="ph-fill ph-moon"></i> Light-shielded</em></h5>
-              <p>Ascorbic acid injection is light-sensitive and is shielded through preparation and
-                administration. Its own volume, its own rate.</p>
-            </div>
+          <li class="rack__item rack__item--shield">
+            <span class="iv iv--sm" aria-hidden="true">
+              <span class="iv__hook"></span>
+              <span class="iv__bag" style="--fluid: rgba(231,203,134,.85)">
+                <span class="iv__fluid"></span>
+                <span class="iv__vol"><i>100</i>mL</span>
+                <span class="iv__sleeve"><i class="ph-fill ph-moon"></i></span>
+              </span>
+              <span class="iv__tube"></span>
+            </span>
+            <b class="rack__no">02</b>
+            <b class="rack__name">Vitamin&nbsp;C</b>
           </li>
 
-          <li class="stage stage--shield">
-            <span class="stage__no">03</span>
-            <span class="stage__bag" aria-hidden="true"></span>
-            <div class="stage__txt">
-              <h5>B-complex <em class="stage__shield"><i class="ph-fill ph-moon"></i> Light-shielded</em></h5>
-              <p>Riboflavin is particularly light-sensitive; injectable B-complex containing it is
-                labeled for protection from light. So it runs under a cover.</p>
-            </div>
+          <li class="rack__item rack__item--shield">
+            <span class="iv iv--sm" aria-hidden="true">
+              <span class="iv__hook"></span>
+              <span class="iv__bag" style="--fluid: rgba(214,160,60,.85)">
+                <span class="iv__fluid"></span>
+                <span class="iv__vol"><i>100</i>mL</span>
+                <span class="iv__sleeve"><i class="ph-fill ph-moon"></i></span>
+              </span>
+              <span class="iv__tube"></span>
+            </span>
+            <b class="rack__no">03</b>
+            <b class="rack__name">B-complex</b>
           </li>
 
-          <li class="stage">
-            <span class="stage__no">04</span>
-            <span class="stage__bag" aria-hidden="true"></span>
-            <div class="stage__txt">
-              <h5>Trace minerals</h5>
-              <p>This stage carries copper &mdash; which is precisely why it is never hung alongside
-                the ascorbic acid stage. See the example below.</p>
-            </div>
+          <li class="rack__item">
+            <span class="iv iv--sm" aria-hidden="true">
+              <span class="iv__hook"></span>
+              <span class="iv__bag" style="--fluid: rgba(160,180,190,.65)">
+                <span class="iv__fluid"></span>
+                <span class="iv__vol"><i>100</i>mL</span>
+              </span>
+              <span class="iv__tube"></span>
+            </span>
+            <b class="rack__no">04</b>
+            <b class="rack__name">Minerals</b>
           </li>
 
-          <li class="stage stage--shield">
-            <span class="stage__no">05</span>
-            <span class="stage__bag" aria-hidden="true"></span>
-            <div class="stage__txt">
-              <h5>Alpha-lipoic acid <em class="stage__shield"><i class="ph-fill ph-moon"></i> Light-shielded</em></h5>
-              <p>Prepared and administered protected from light, at its own rate, and watched on its
-                own.</p>
-            </div>
+          <li class="rack__item rack__item--shield">
+            <span class="iv iv--sm" aria-hidden="true">
+              <span class="iv__hook"></span>
+              <span class="iv__bag" style="--fluid: rgba(205,190,140,.8)">
+                <span class="iv__fluid"></span>
+                <span class="iv__vol"><i>100</i>mL</span>
+                <span class="iv__sleeve"><i class="ph-fill ph-moon"></i></span>
+              </span>
+              <span class="iv__tube"></span>
+            </span>
+            <b class="rack__no">05</b>
+            <b class="rack__name">Alpha-lipoic&nbsp;acid</b>
           </li>
 
-          <li class="stage stage--shield">
-            <span class="stage__no">06</span>
-            <span class="stage__bag" aria-hidden="true"></span>
-            <div class="stage__txt">
-              <h5>Glutathione <em class="stage__shield"><i class="ph-fill ph-moon"></i> Light-shielded</em></h5>
-              <p>Last, in its own volume, shielded &mdash; never dropped into a mixture already
-                holding nine other things.</p>
-            </div>
+          <li class="rack__item rack__item--shield">
+            <span class="iv iv--sm" aria-hidden="true">
+              <span class="iv__hook"></span>
+              <span class="iv__bag" style="--fluid: rgba(180,200,175,.75)">
+                <span class="iv__fluid"></span>
+                <span class="iv__vol"><i>100</i>mL</span>
+                <span class="iv__sleeve"><i class="ph-fill ph-moon"></i></span>
+              </span>
+              <span class="iv__tube"></span>
+            </span>
+            <b class="rack__no">06</b>
+            <b class="rack__name">Glutathione</b>
           </li>
         </ol>
 
-        <p class="stages__foot">
-          <i class="ph ph-arrows-down-up"></i>
-          The line is flushed between stages when indicated, and nothing is placed in an unverified
-          shared mixture to save time.
+        <p class="split__big">6 bags.<br>One at a time.</p>
+        <p class="split__say">Each one gets its own fluid, its own rate and its own place in line. The line is flushed in between.</p>
+
+        <p class="rack__key">
+          <span class="rack__keybit"><em class="rack__dot rack__dot--shield"><i class="ph-fill ph-moon"></i></em> Covered from light</span>
+          <span class="rack__keybit"><em class="rack__dot"></em> No cover needed</span>
         </p>
       </article>
     </div>
 
     <!-- ---------- the concrete example ---------- -->
     <aside class="seqx" data-reveal>
-      <p class="seqx__tag">A concrete example &middot; Vitamin&nbsp;C and trace minerals</p>
+      <p class="seqx__tag">Why it matters &mdash; one example</p>
       <div class="seqx__grid">
         <div class="seqx__body">
+          <p class="seqx__lead">Vitamin&nbsp;C and copper do not belong in the same bag.</p>
           <p>
-            The trace-mineral stage contains copper. Ascorbic acid is a reducing agent, and
-            prescribing information for ascorbic acid injection directs clinicians not to mix it with
-            elemental compounds that can be reduced &mdash; copper among them.
+            The mineral bag carries copper. Vitamin&nbsp;C is a reducing agent, and the prescribing
+            information for ascorbic acid injection says not to mix it with elemental compounds that
+            can be reduced &mdash; copper included.
           </p>
-          <p><b>That is why copper-containing trace minerals and Vitamin&nbsp;C never share a bag
-            here.</b> Two stages, two volumes, two rates, in order. That is what sequencing looks
-            like in practice.</p>
+          <p><b>So they run as bag 02 and bag 04. Never bag 01 and bag 01.</b></p>
         </div>
         <div class="seqx__viz" aria-hidden="true">
           <span class="seqx__pair">
@@ -926,9 +945,9 @@
           </span>
           <span class="seqx__rule"></span>
           <span class="seqx__pair seqx__pair--ok">
-            <span class="seqx__chip">Stage 02</span>
+            <span class="seqx__chip">Bag 02</span>
             <span class="seqx__then"><i class="ph ph-arrow-right"></i></span>
-            <span class="seqx__chip">Stage 04</span>
+            <span class="seqx__chip">Bag 04</span>
           </span>
         </div>
       </div>
