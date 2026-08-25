@@ -201,96 +201,27 @@
 
     <header class="dx-mix__head">
       <p class="dx-eyebrow" data-anim="rise"><i class="ph-duotone ph-flask"></i> The formulation <s></s></p>
-      <h2 class="dx-h" data-anim="rise">Everything in it,<br>and <em>nothing else</em>.</h2>
+      <h2 class="dx-h" data-anim="rise">Named in full,<br>and <em>given one at a time</em>.</h2>
       <p class="dx-lede" data-anim="rise" data-delay="90">
         No proprietary blend, no undisclosed filler. 6 components, each one named,
-        each one mixed by the physician who administers it.
+        each one hung separately by the physician who administers it.
       </p>
     </header>
 
-    <div class="dx-mix__stage">
 
-      <div class="dx-bag" id="dxBag">
-        <div class="dx-bag__inner">
+    <dl class="dx-facts" data-anim="rise">
+      <div><dt>Components</dt><dd>06<small>&nbsp;hung separately</small></dd></div>
+      <div><dt>Chair time</dt><dd>1 h 30</dd></div>
+      <div><dt>Per session</dt><dd>$500<small>&nbsp;single infusion</small></dd></div>
+      <div><dt>Consultation</dt><dd>$100<small>&nbsp;applied if approved</small></dd></div>
+    </dl>
 
-          <svg class="dx-bag__art" viewBox="0 0 240 476" role="img"
-               aria-label="The Stress   Brain Wellness IV bag and its components">
+    <div class="dx-mix__stage dx-mix__stage--stack">
 
-            <defs>
-              <linearGradient id="dxMix" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0%" style="stop-color:var(--f01)"/>
-              <stop offset="20%" style="stop-color:var(--f03)"/>
-              <stop offset="40%" style="stop-color:var(--f05)"/>
-              <stop offset="60%" style="stop-color:var(--f06)"/>
-              <stop offset="80%" style="stop-color:var(--f08)"/>
-              <stop offset="100%" style="stop-color:var(--f10)"/>
-              </linearGradient>
-              <linearGradient id="dxGloss" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#fff" stop-opacity=".85"/>
-                <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
-              </linearGradient>
-              <clipPath id="dxInside">
-                <path d="M40,90 C40,68 54,54 76,54 L164,54 C186,54 200,68 200,90
-                         L206,382 C207,404 193,420 171,420 L69,420
-                         C47,420 33,404 34,382 Z"/>
-              </clipPath>
-            </defs>
-
-            <path class="dx-bag__tab" d="M98,6 L142,6 C146,6 149,9 150,13 L154,44 L86,44 L90,13 C91,9 94,6 98,6 Z"/>
-            <ellipse class="dx-bag__hole" cx="120" cy="26" rx="13" ry="7"/>
-
-            <path class="dx-bag__shell"
-                  d="M32,86 C32,60 48,44 76,44 L164,44 C192,44 208,60 208,86
-                     L214,384 C215,410 199,428 171,428 L69,428
-                     C41,428 25,410 26,384 Z"/>
-
-            <g clip-path="url(#dxInside)">
-              <rect class="dx-bag__fluid" x="30" y="54" width="180" height="366" fill="url(#dxMix)"/>
-              <rect class="dx-bag__level" x="34" y="420" width="172" height="2"/>
-              <rect class="dx-bag__hi" x="34" y="0" width="172" height="36.6"/>
-            </g>
-
-            <path class="dx-bag__seam"
-                  d="M40,90 C40,68 54,54 76,54 L164,54 C186,54 200,68 200,90
-                     L206,382 C207,404 193,420 171,420 L69,420
-                     C47,420 33,404 34,382 Z"/>
-
-            <!-- graduations, unnumbered: printing millilitres would state a
-                 volume this practice has not published -->
-            <g class="dx-bag__tick">
-              <line x1="182" y1="120" x2="200" y2="120"/>
-              <line x1="189" y1="152" x2="200" y2="152"/>
-              <line x1="182" y1="184" x2="201" y2="184"/>
-              <line x1="189" y1="216" x2="201" y2="216"/>
-              <line x1="182" y1="248" x2="202" y2="248"/>
-              <line x1="190" y1="280" x2="202" y2="280"/>
-              <line x1="183" y1="312" x2="203" y2="312"/>
-              <line x1="190" y1="344" x2="203" y2="344"/>
-              <line x1="183" y1="376" x2="204" y2="376"/>
-            </g>
-
-            <g>
-              <rect class="dx-bag__plate" x="52" y="192" width="136" height="98" rx="4"/>
-              <text class="dx-bag__no"    x="66" y="218">No. IX</text>
-              <line class="dx-bag__rule"  x1="66" y1="228" x2="174" y2="228"/>
-              <text class="dx-bag__title" x="66" y="250">Stress &amp; Brain</text>
-              <text class="dx-bag__title" x="66" y="268">Wellness IV</text>
-              <text class="dx-bag__sub"   x="66" y="282">PHYSICIAN COMPOUNDED</text>
-            </g>
-
-            <g clip-path="url(#dxInside)">
-              <rect class="dx-bag__gloss" x="48" y="72" width="13" height="330" rx="6.5"/>
-            </g>
-
-            <path class="dx-bag__port" d="M100,428 L114,428 L112,452 L102,452 Z"/>
-            <path class="dx-bag__port" d="M126,428 L140,428 L138,452 L128,452 Z"/>
-            <line class="dx-bag__spike" x1="133" y1="452" x2="133" y2="470"/>
-          </svg>
-
-          <span class="dx-bag__gauge" aria-hidden="true"><i></i></span>
-          <p class="dx-bag__read"><span>Composition</span><span><b id="dxPct">0</b>%</span></p>
-
-        </div>
+      <div class="dx-run" id="dxSeq">
+        <span class="dx-run__lab">Given one at a time</span>
+        <span class="dx-run__count"><b id="dxSeqNow">01</b><s>/</s><i id="dxSeqAll">00</i></span>
+        <span class="dx-run__bar"><i id="dxSeqSpine"></i></span>
       </div>
 
       <ol class="dx-list" id="dxList">
