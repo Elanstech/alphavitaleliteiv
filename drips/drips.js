@@ -105,112 +105,247 @@ const intro = () => {
 };
 
 
-/* ── THE RUN ──────────────────────────────────────────────────────────────
-   What used to sit here was a single IV bag that filled as you read the
-   component list — an animation that said the opposite of what the practice
-   does. There is no vessel drawn any more. The components are numbered and
-   lit one at a time, which is the entire claim: given in order, never
-   combined. A page with one component and a page with ten both work.       */
+/* ── THE ROUND ────────────────────────────────────────────────────────────
+   A session is not one bag, and it is not one bare component at a time
+   either. It is a set of bags — each one hydration fluid plus what belongs
+   with it — hung in order, adding up to a known total volume. The volume is
+   what makes the whole thing legible, so it leads.
 
-/* Components that degrade in light get a mark — the same reason a pharmacy
-   dispenses riboflavin in amber glass rather than clear. */
+   ┌──────────────────────────────────────────────────────────────────────┐
+   │  VOLUMES AND GROUPING NEED DR. ARONOV'S SIGN-OFF BEFORE THIS GOES     │
+   │  LIVE. The grouping below is derived from each page's own component   │
+   │  roles — minerals together, B vitamins together and shielded, amino   │
+   │  acids together, antioxidants together, glutathione on its own, which │
+   │  is how these are ordinarily sequenced. TOTAL_ML is the figure quoted │
+   │  for a full session. Per-bag volumes are apportioned from it. If the  │
+   │  real protocol differs, edit ROUND — nothing else needs touching.     │
+   └──────────────────────────────────────────────────────────────────────┘ */
+const TOTAL_ML = 1000;
+
+/* role → which bag it belongs in, in the order they are hung.
+   Anything unrecognised falls to the end of the round. */
+const ROUND = [
+    { key: 'minerals',    match: /mineral|electrolyte|zinc|magnesium/i, what: 'Minerals and electrolytes' },
+    { key: 'vitamins',    match: /vitamin/i,                            what: 'Vitamins' },
+    { key: 'amino',       match: /amino|precursor|peptide/i,            what: 'Amino acids' },
+    { key: 'signal',      match: /signal|exosome/i,                     what: 'Signalling' },
+    { key: 'antioxidant', match: /antioxidant/i,                        what: 'Antioxidants' },
+];
+
+/* Glutathione is conventionally given on its own rather than sharing a bag,
+   so it is pulled out of the antioxidant group wherever it appears. */
+const SOLO = /glutathione/i;
+
+/* Photosensitive: the bag gets shielded, same reason a pharmacy uses amber. */
 const PHOTOSENSITIVE = /riboflavin|\bb-?\s?complex\b|\bb\s?vitamins?\b|b12|cobalamin|thiamine|\bb1\b|\bb6\b|pyridoxine|folate|folic|methylcobalamin/i;
+
+const txt = (el) => (el?.textContent || '').trim();
+
+/** Sort the ledger rows into the bags they are carried in. */
+const planRound = (rows) => {
+    const pool = rows
+        .map((row, i) => ({
+            row, i,
+            name: txt($('.dx-ing__name', row)),
+            role: txt($('.dx-ing__role', row)),
+        }))
+        .filter((c) => !/carrier|hydration/i.test(c.role + ' ' + c.name)); // the fluid is in every bag
+
+    const bags = [];
+    const take = (test) => {
+        const got = pool.filter(test);
+        got.forEach((c) => pool.splice(pool.indexOf(c), 1));
+        return got;
+    };
+
+    ROUND.forEach((g) => {
+        const solo = g.key === 'antioxidant' ? take((c) => SOLO.test(c.name)) : [];
+        const got  = take((c) => g.match.test(c.role) || g.match.test(c.name));
+        if (got.length) bags.push({ what: g.what, items: got });
+        solo.forEach((c) => bags.push({ what: c.name, items: [c] }));
+    });
+    if (pool.length) bags.push({ what: 'Remaining components', items: pool.slice() });
+
+    // nothing but a carrier, or a single-component infusion
+    if (!bags.length) bags.push({ what: 'Hydration', items: rows.map((row, i) => ({ row, i, name: txt($('.dx-ing__name', row)), role: txt($('.dx-ing__role', row)) })) });
+
+    /* Volume: the opening bag carries the largest share of the fluid, the rest
+       divide what is left. Rounded to 25 mL so the numbers read like a chart
+       and not like a spreadsheet. */
+    const n = bags.length;
+    const lead = n === 1 ? TOTAL_ML : Math.round((TOTAL_ML * 0.4) / 25) * 25;
+    let left = TOTAL_ML - lead;
+    bags.forEach((b, k) => {
+        if (k === 0) { b.ml = lead; return; }
+        const share = k === n - 1 ? left : Math.round((left / (n - k)) / 25) * 25;
+        b.ml = share; left -= share;
+    });
+    bags.forEach((b) => { b.shield = b.items.some((c) => PHOTOSENSITIVE.test(c.name)); });
+    return bags;
+};
 
 const ledger = () => {
     const list = $('#dxList');
-    if (!list) return;
+    const host = $('#dxRound');
+    if (!list || !host) return;
     const rows = $$('.dx-ing', list);
     if (!rows.length) return;
 
-    const now   = $('#dxSeqNow');
-    const all   = $('#dxSeqAll');
-    const spine = $('#dxSeqSpine');
-    if (all) all.textContent = String(rows.length).padStart(2, '0');
+    const bags = planRound(rows);
 
-    /* number every row and mark the light-sensitive ones */
-    rows.forEach((row, i) => {
-        const key = $('.dx-ing__key', row);
-        if (key) key.textContent = String(i + 1).padStart(2, '0');
+    /* The hydration fluid is not a step in the round — it is what every bag is
+       made of. Dropping it lost it from the page entirely, so it is stated
+       once, above the bags, where it belongs. */
+    const carrierRow = rows.find((r) => /carrier|hydration/i.test(
+        txt($('.dx-ing__role', r)) + ' ' + txt($('.dx-ing__name', r))));
+    const carrierBox = $('#dxCarrier');
+    if (carrierRow && carrierBox) {
+        const label = document.createElement('span');
+        label.className = 'dx-vol__carrier-lab';
+        label.textContent = 'In every bag';
+        carrierBox.appendChild(label);
+        $('.dx-ing__key', carrierRow)?.remove();
+        $('.dx-ing__role', carrierRow)?.remove();
+        carrierBox.appendChild(carrierRow);
+        carrierBox.hidden = false;
+    }
 
-        const name = ($('.dx-ing__name', row)?.textContent || '').trim();
-        const role = $('.dx-ing__role', row);
-        if (role && PHOTOSENSITIVE.test(name)) {
-            const tag = document.createElement('span');
-            tag.className = 'dx-ing__shield';
-            tag.textContent = 'Light-shielded';
-            role.insertAdjacentElement('afterend', tag);
+    /* the carrier sits outside the bag loop, so it needs its own reveal —
+       .dx-ing is held at opacity 0 before paint and nothing else would
+       release this one */
+    const revealCarrier = () => {
+        if (!carrierBox || carrierBox.hidden) return;
+        if (typeof window.gsap === 'undefined' || RM.matches) {
+            carrierBox.querySelectorAll('.dx-ing').forEach((el) => { el.style.opacity = 1; });
+            return;
         }
-    });
-
-    const mark = (i) => {
-        rows.forEach((r, n) => {
-            r.classList.toggle('is-live', n === i);
-            r.classList.toggle('is-done', n < i);
-        });
-        if (now) now.textContent = String(i + 1).padStart(2, '0');
-        if (spine) spine.style.width = ((i + 1) / rows.length) * 100 + '%';
+        gsap.fromTo(carrierBox.querySelectorAll('.dx-ing'),
+            { opacity: 0, x: -8 },
+            { opacity: 1, x: 0, duration: .6, ease: 'expo.out',
+              scrollTrigger: { trigger: carrierBox, start: 'top 90%', once: true } });
     };
 
-    /* no GSAP or motion turned down: everything legible, nothing moving */
+    /* ── build the bags, moving the real rows in rather than copying them ── */
+    bags.forEach((bag, b) => {
+        const li = document.createElement('li');
+        li.className = 'dx-bagr';
+        li.innerHTML =
+            `<div class="dx-bagr__head">
+               <span class="dx-bagr__no">${String(b + 1).padStart(2, '0')}</span>
+               <span class="dx-bagr__vol">${bag.ml} mL</span>
+               <span class="dx-bagr__what"></span>
+               ${bag.shield ? '<span class="dx-bagr__shield">Light-shielded</span>' : ''}
+             </div>
+             <div class="dx-bagr__body"></div>`;
+        $('.dx-bagr__what', li).textContent = bag.what;
+        const body = $('.dx-bagr__body', li);
+        bag.items.forEach((c) => {
+            const key = $('.dx-ing__key', c.row);
+            if (key) key.textContent = String(c.i + 1).padStart(2, '0');
+            body.appendChild(c.row);
+        });
+        host.appendChild(li);
+    });
+
+    /* ── the volume bar ─────────────────────────────────────────────────── */
+    const bar = $('#dxVolBar');
+    const segs = [];
+    if (bar) {
+        bags.forEach((bag, b) => {
+            const seg = document.createElement('span');
+            seg.className = 'dx-vol__seg';
+            const pct = (bag.ml / TOTAL_ML) * 100;
+            seg.style.flexBasis = pct + '%';
+            seg.style.setProperty('--sg', `color-mix(in oklab, var(--tone) ${28 + b * 12}%, var(--forest))`);
+            if (pct > 12) seg.classList.add('is-wide');
+            seg.innerHTML = `<i></i><b>${bag.ml}</b>`;
+            bar.appendChild(seg);
+            segs.push($('i', seg));
+        });
+    }
+    const legend = $('#dxVolLegend');
+    if (legend) {
+        legend.textContent = `${bags.length} ${bags.length === 1 ? 'bag' : 'bags'} · hung in order · one line`;
+    }
+
+    const num  = $('#dxVolNum');
+    const type = $('#dxType');
+    const typeBox = type?.parentElement;
+    const LINE = `${bags.length} ${bags.length === 1 ? 'bag' : 'bags'}. ${TOTAL_ML.toLocaleString()} mL. One line.`;
+
+    /* ── no GSAP, or motion turned down: everything present, nothing moves ── */
     if (typeof window.gsap === 'undefined' || RM.matches) {
-        rows.forEach((r) => r.classList.add('is-done'));
-        if (spine) spine.style.width = '100%';
-        if (now) now.textContent = String(rows.length).padStart(2, '0');
+        revealCarrier();
+        if (num) num.textContent = TOTAL_ML.toLocaleString();
+        if (type) type.textContent = LINE;
+        segs.forEach((i) => { i.style.transform = 'scaleX(1)'; });
         return;
     }
 
-    /* each row assembles as it arrives */
-    rows.forEach((row) => {
-        gsap.timeline({
-            scrollTrigger: { trigger: row, start: 'top 88%', end: 'bottom 40%',
-                             toggleActions: 'play none none reverse' },
-        })
-        .fromTo(row, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .7, ease: 'expo.out' }, 0)
-        .fromTo($('.dx-ing__key', row), { opacity: 0, y: 18 },
-                { opacity: 1, y: 0, duration: .75, ease: 'expo.out' }, .04)
-        .fromTo($('.dx-ing__name', row),
-                { clipPath: 'inset(0 100% 0 0)', y: 6 },
-                { clipPath: 'inset(0 0% 0 0)', y: 0, duration: .7, ease: 'power3.out' }, .1)
-        .fromTo([$('.dx-ing__what', row), $('.dx-ing__role', row), $('.dx-ing__shield', row)].filter(Boolean),
-                { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .5, stagger: .07 }, .2)
-        .fromTo($('.dx-ing__chip', row), { scale: 0 }, { scale: 1, duration: .55, ease: 'back.out(3)' }, .14)
-        .fromTo($('.dx-ing__chip i', row), { scale: 1, opacity: .9 },
-                { scale: 2.6, opacity: 0, duration: .8, ease: 'power2.out' }, .26)
-        .fromTo($('.dx-ing__rule', row), { scaleX: 0 }, { scaleX: 1, duration: .9, ease: 'power3.out' }, .12);
-    });
+    revealCarrier();
 
-    /* WHICH ONE IS BEING GIVEN
-       One focus line across the viewport rather than a trigger per row: with
-       a short list every row enters in the same frame and the last simply
-       wins, so the count never walks. Nearest row to the line is the live
-       one, at any list length. */
-    let live = -1;
-    const track = () => {
-        const focus = window.innerHeight * .42;
-        let best = 0, bestD = Infinity;
-        rows.forEach((r, i) => {
-            const b = r.getBoundingClientRect();
-            const d = Math.abs((b.top + b.height / 2) - focus);
-            if (d < bestD) { bestD = d; best = i; }
-        });
-        if (best !== live) { live = best; mark(best); }
-    };
-
-    ScrollTrigger.create({
-        trigger: list, start: 'top bottom', end: 'bottom top',
-        onUpdate: track, onRefresh: track,
-    });
-    track();
-
-    /* scroll velocity leans the stack — subtle, desktop only */
-    if (FINE.matches && !LOW) {
-        const skew = gsap.quickTo(list, 'skewY', { duration: .6, ease: 'power3' });
+    /* ── the headline types itself once, on arrival ─────────────────────── */
+    if (type) {
         ScrollTrigger.create({
-            trigger: list, start: 'top bottom', end: 'bottom top',
-            onUpdate: (self) => skew(clamp(self.getVelocity() / -460, -1.8, 1.8)),
-            onLeave: () => skew(0), onLeaveBack: () => skew(0),
+            trigger: type, start: 'top 88%', once: true,
+            onEnter: () => {
+                typeBox?.classList.add('is-typing');
+                let k = 0;
+                const tick = () => {
+                    type.textContent = LINE.slice(0, ++k);
+                    if (k < LINE.length) {
+                        // pause a beat on the full stops, like someone speaking
+                        const ch = LINE[k - 1];
+                        gsap.delayedCall((ch === '.' ? .26 : .028) + Math.random() * .022, tick);
+                    } else {
+                        gsap.delayedCall(1.1, () => typeBox?.classList.remove('is-typing'));
+                    }
+                };
+                tick();
+            },
         });
     }
+
+    /* ── the total counts up while the bar draws ────────────────────────── */
+    if (num) {
+        const box = { v: 0 };
+        gsap.to(box, {
+            v: TOTAL_ML, duration: 1.9, ease: 'power2.out',
+            scrollTrigger: { trigger: '#dxVol', start: 'top 82%', once: true },
+            onUpdate: () => { num.textContent = Math.round(box.v).toLocaleString(); },
+        });
+    }
+    if (segs.length) {
+        gsap.to(segs, {
+            scaleX: 1, duration: .9, ease: 'power3.out', stagger: .11,
+            scrollTrigger: { trigger: '#dxVolBar', start: 'top 86%', once: true },
+        });
+    }
+
+    /* ── each bag wipes open. No vertical drift — the section reads as a
+          document settling, not a list bouncing. ───────────────────────── */
+    $$('.dx-bagr', host).forEach((li) => {
+        gsap.timeline({ scrollTrigger: { trigger: li, start: 'top 88%', once: true } })
+            .fromTo(li, { opacity: 0 }, { opacity: 1, duration: .5, ease: 'power2.out' }, 0)
+            .fromTo($('.dx-bagr__no', li), { opacity: 0, x: -14 },
+                    { opacity: 1, x: 0, duration: .7, ease: 'expo.out' }, .04)
+            .fromTo([$('.dx-bagr__vol', li), $('.dx-bagr__what', li), $('.dx-bagr__shield', li)].filter(Boolean),
+                    { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: .6, stagger: .06, ease: 'expo.out' }, .1)
+            /* .dx-ing is held at opacity 0 before paint — release the rows
+               themselves, not just their contents */
+            .fromTo($$('.dx-ing', li), { opacity: 0 },
+                    { opacity: 1, duration: .5, stagger: .07 }, .16)
+            .fromTo($$('.dx-ing__name', li),
+                    { clipPath: 'inset(0 100% 0 0)' },
+                    { clipPath: 'inset(0 0% 0 0)', duration: .72, stagger: .07, ease: 'power3.out' }, .18)
+            .fromTo($$('.dx-ing__what, .dx-ing__role, .dx-ing__key', li),
+                    { opacity: 0 }, { opacity: 1, duration: .5, stagger: .035 }, .26);
+
+        /* the rule across the top of each bag draws in (pseudo-element, so a
+           class does it rather than a tween) */
+        ScrollTrigger.create({ trigger: li, start: 'top 88%', once: true,
+                               onEnter: () => li.classList.add('is-in') });
+    });
 
     /* the closing line inks in word by word as it crosses */
     const say = $('.dx-say');
