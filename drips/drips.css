@@ -481,113 +481,168 @@ html.dx-on .dx-wk   { opacity: 0; }
 
 
 /* ══════════════════════════════════════════════════════════════════════════
-   THE RUN — components as a numbered stack
+   THE ROUND — the session told in volume
    --------------------------------------------------------------------------
-   No bag, no vessel, no diagram. The claim is that these are given one after
-   another rather than combined, and the plainest way to show that is to
-   number them and let one be lit at a time. Reads at a glance and reads
-   closely, and it works whether a page has one component or ten.
+   A session is not one bag and it is not one component at a time either. It
+   is a set of bags, each carrying fluid plus what belongs with it, adding up
+   to a known total. So the volume leads: a counter, a bar broken into the
+   bags that make it up, then the bags themselves with their components inside.
+   Every number here comes from ROUND in drips.js.
    ══════════════════════════════════════════════════════════════════════════ */
 .dx-mix__stage--stack { display: block; }
+.dx-list[hidden] { display: none; }
 
-/* the sticky counter that rides along with the list */
-.dx-run {
-    position: sticky; z-index: 4;
-    top: calc(var(--head-h) - 1px);
-    display: grid; grid-template-columns: 1fr auto; align-items: baseline;
-    gap: .6rem 1rem; padding: .9rem 0 .75rem;
-    background: linear-gradient(var(--cream) 78%, transparent);
-    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+/* ── headline, with the second line typed ───────────────────────────────── */
+.dx-h--round { display: grid; gap: .06em; }
+.dx-h__fix { display: block; }
+.dx-h__type {
+    display: block; min-height: 1.05em;
+    font-family: var(--dx-serif); font-style: italic; font-weight: 400;
+    color: var(--t-ink); letter-spacing: -.015em;
 }
-.dx-run__lab {
-    font-family: var(--dx-mono); font-size: .58rem; letter-spacing: .22em;
-    text-transform: uppercase; color: var(--mist);
+.dx-h__type i { font-style: italic; }
+.dx-h__type s {
+    display: inline-block; width: .04em; height: .72em; margin-left: .04em;
+    background: var(--t-ink); text-decoration: none; vertical-align: baseline;
+    opacity: 0;
 }
-.dx-run__count {
-    display: inline-flex; align-items: baseline; gap: .18rem;
-    font-family: var(--dx-mono); font-size: .68rem; letter-spacing: .1em;
-    font-variant-numeric: tabular-nums; color: var(--mist);
-}
-.dx-run__count b { color: var(--t-ink); font-weight: 600; }
-.dx-run__count s { text-decoration: none; opacity: .4; }
-.dx-run__bar { grid-column: 1 / -1; height: 2px; background: var(--rule); }
-.dx-run__bar i {
-    display: block; height: 100%; width: 0%; background: var(--t-ink);
-    transition: width .5s cubic-bezier(.22,1,.36,1);
-}
+.dx-h__type.is-typing s { animation: dxCaret 1.05s steps(1) infinite; }
+@keyframes dxCaret { 0%,49% { opacity: 1 } 50%,100% { opacity: 0 } }
 
-/* ── the stack ──────────────────────────────────────────────────────────── */
-.dx-list { list-style: none; border-top: 0; }
+/* ── the volume ledger ──────────────────────────────────────────────────── */
+.dx-vol { margin: clamp(1.6rem, 4vw, 2.8rem) 0 clamp(1.4rem, 3vw, 2.2rem); }
 
-.dx-ing {
-    position: relative; display: grid;
-    grid-template-columns: minmax(3.6rem, auto) minmax(0, 1fr) auto;
-    gap: clamp(.9rem, 2.4vw, 2rem);
-    align-items: start;
-    padding: clamp(1.5rem, 3.4vh, 2.6rem) 0;
-    border-bottom: 1px solid var(--rule);
-    transition: padding-left .5s var(--ease), opacity .45s var(--ease);
-}
-.dx-ing:first-child { border-top: 1px solid var(--forest); }
-
-/* the number does the work */
-.dx-ing__key {
-    align-self: start; padding-top: 0;
+.dx-vol__read { display: flex; align-items: baseline; flex-wrap: wrap; gap: .1rem 1rem; }
+.dx-vol__num {
+    display: inline-flex; align-items: baseline; gap: .18em;
     font-family: var(--dx-display); font-weight: 300;
-    font-size: clamp(2.4rem, 6.4vw, 4.6rem); line-height: .82;
-    letter-spacing: -.06em; font-variant-numeric: tabular-nums;
-    color: color-mix(in oklab, var(--tone) 26%, transparent);
-    transition: color .45s var(--ease);
+    font-size: clamp(3.4rem, 11vw, 8rem); line-height: .84;
+    letter-spacing: -.055em; color: var(--forest);
+    font-variant-numeric: tabular-nums;
 }
-.dx-ing.is-live .dx-ing__key { color: var(--t-ink); }
-.dx-ing.is-done .dx-ing__key { color: color-mix(in oklab, var(--tone) 46%, transparent); }
+.dx-vol__num s {
+    text-decoration: none; font-family: var(--dx-mono); font-weight: 400;
+    font-size: .16em; letter-spacing: .14em; text-transform: uppercase; color: var(--mist);
+}
+.dx-vol__cap {
+    font-family: var(--dx-serif); font-style: italic;
+    font-size: clamp(.95rem, 1.6vw, 1.2rem); color: var(--mist);
+}
 
-.dx-ing__name {
-    font-family: var(--dx-display); font-weight: 500;
-    font-size: clamp(1.3rem, 2.6vw, 2rem); line-height: 1.04;
-    letter-spacing: -.036em; color: var(--forest); margin-bottom: .45rem;
+/* the bar, one segment per bag */
+.dx-vol__bar {
+    display: flex; gap: 3px; height: clamp(38px, 6vw, 54px);
+    margin-top: clamp(1rem, 2.4vw, 1.5rem);
 }
-.dx-ing__what { font-size: .92rem; line-height: 1.6; max-width: 54ch; }
-.dx-ing__role {
-    display: inline-block; margin-top: .6rem; padding: .18rem .5rem;
-    border: 1px solid var(--rule); border-radius: 999px;
-    font-family: var(--dx-mono); font-size: .52rem; letter-spacing: .14em;
+.dx-vol__seg {
+    position: relative; flex: 0 0 auto; overflow: hidden;
+    border-radius: 2px; background: color-mix(in oklab, var(--tone) 13%, transparent);
+}
+.dx-vol__seg i {
+    position: absolute; inset: 0; transform-origin: left; transform: scaleX(0);
+    background: var(--sg, var(--tone)); opacity: .9;
+}
+.dx-vol__seg b {
+    position: absolute; left: 0; right: 0; bottom: .34rem;
+    text-align: center; font-family: var(--dx-mono); font-size: .5rem;
+    letter-spacing: .06em; color: var(--forest); opacity: 0;
+    font-variant-numeric: tabular-nums;
+}
+.dx-vol__seg.is-wide b { opacity: 1; }
+
+.dx-vol__legend {
+    margin-top: .8rem; font-family: var(--dx-mono); font-size: .55rem;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+}
+
+/* the carrier: not a step, but what every bag is made of */
+.dx-vol__carrier {
+    display: flex; align-items: baseline; flex-wrap: wrap; gap: .5rem .9rem;
+    margin-top: .9rem; padding-top: .85rem; border-top: 1px solid var(--rule);
+}
+.dx-vol__carrier-lab {
+    flex: none; padding: .18rem .5rem; border: 1px solid var(--t-line); border-radius: 999px;
+    font-family: var(--dx-mono); font-size: .48rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--t-ink);
+}
+.dx-vol__carrier .dx-ing { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem .7rem; padding: 0; border: 0; }
+.dx-vol__carrier .dx-ing__name { font-family: var(--dx-display); font-weight: 500; font-size: clamp(1rem,1.7vw,1.22rem); letter-spacing: -.03em; color: var(--forest); margin: 0; }
+.dx-vol__carrier .dx-ing__what { font-size: .86rem; line-height: 1.5; color: var(--mist); }
+.dx-vol__carrier .dx-ing__chip, .dx-vol__carrier .dx-ing__rule { display: none; }
+
+/* ── the bags ───────────────────────────────────────────────────────────── */
+.dx-round { list-style: none; margin-top: clamp(1.4rem, 3vw, 2.2rem); }
+
+.dx-bagr {
+    position: relative;
+    border-top: 1px solid var(--rule);
+    padding: clamp(1.15rem, 2.6vw, 1.85rem) 0;
+}
+.dx-bagr:last-child { border-bottom: 1px solid var(--rule); }
+.dx-bagr::after {                      /* wipes across as the bag arrives */
+    content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 1px;
+    background: var(--t-ink); transform: scaleX(0); transform-origin: left;
+    transition: transform .9s cubic-bezier(.22,1,.36,1);
+}
+.dx-bagr.is-in::after { transform: scaleX(1); }
+
+.dx-bagr__head {
+    display: grid; grid-template-columns: auto auto 1fr auto;
+    align-items: baseline; gap: .55rem clamp(.7rem, 1.8vw, 1.3rem);
+    margin-bottom: .9rem;
+}
+.dx-bagr__no {
+    font-family: var(--dx-display); font-weight: 300;
+    font-size: clamp(1.9rem, 4.4vw, 3.1rem); line-height: .8;
+    letter-spacing: -.06em; color: color-mix(in oklab, var(--tone) 42%, transparent);
+    font-variant-numeric: tabular-nums;
+}
+.dx-bagr__vol {
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1rem, 1.9vw, 1.35rem); letter-spacing: -.03em;
+    color: var(--forest); font-variant-numeric: tabular-nums;
+}
+.dx-bagr__what {
+    font-family: var(--dx-serif); font-style: italic;
+    font-size: clamp(.95rem, 1.7vw, 1.2rem); color: var(--t-ink);
+}
+.dx-bagr__shield {
+    justify-self: end;
+    display: inline-flex; align-items: center; gap: .28rem;
+    padding: .2rem .5rem; border: 1px solid var(--forest); border-radius: 999px;
+    font-family: var(--dx-mono); font-size: .5rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--forest); white-space: nowrap;
+}
+
+/* the components that ride in this bag */
+.dx-bagr__body { display: grid; gap: .55rem; padding-left: clamp(0px, 4vw, 3.4rem); }
+.dx-bagr .dx-ing {
+    display: grid; grid-template-columns: auto minmax(0,1fr);
+    gap: .1rem clamp(.6rem, 1.6vw, 1.05rem);
+    padding: 0; border: 0;
+}
+.dx-bagr .dx-ing__key {
+    font-family: var(--dx-mono); font-size: .55rem; letter-spacing: .06em;
+    color: var(--mist); padding-top: .42rem; font-variant-numeric: tabular-nums;
+}
+.dx-bagr .dx-ing__name {
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1.02rem, 1.75vw, 1.28rem); line-height: 1.16;
+    letter-spacing: -.032em; color: var(--forest); margin-bottom: .12rem;
+}
+.dx-bagr .dx-ing__what { grid-column: 2; font-size: .86rem; line-height: 1.55; max-width: 56ch; }
+.dx-bagr .dx-ing__role {
+    grid-column: 2; justify-self: start; margin-top: .35rem;
+    padding: .14rem .45rem; border: 1px solid var(--rule); border-radius: 999px;
+    font-family: var(--dx-mono); font-size: .48rem; letter-spacing: .13em;
     text-transform: uppercase; color: var(--mist);
 }
-
-/* photosensitive components carry a mark, same reason a pharmacy uses amber */
-.dx-ing__shield {
-    display: inline-flex; align-items: center; gap: .3rem;
-    margin: .6rem 0 0 .4rem; padding: .18rem .5rem;
-    border: 1px solid var(--forest); border-radius: 999px;
-    font-family: var(--dx-mono); font-size: .52rem; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--forest);
-}
-
-/* the live marker: a bar down the left of whichever one is being given */
-.dx-ing::before {
-    content: ''; position: absolute; left: calc(-1 * clamp(.6rem, 1.6vw, 1.1rem));
-    top: clamp(1.5rem, 3.4vh, 2.6rem); bottom: clamp(1.5rem, 3.4vh, 2.6rem); width: 2px;
-    background: var(--t-ink); transform: scaleY(0); transform-origin: top;
-    transition: transform .5s cubic-bezier(.22,1,.36,1);
-}
-.dx-ing.is-live::before { transform: scaleY(1); }
-
-.dx-ing__chip { position: relative; width: 9px; height: 9px; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--forest) 14%, transparent); background: var(--bt, var(--tone)); margin-top: .9rem; }
-.dx-ing__chip i { position: absolute; inset: -1px; border-radius: 50%; border: 1.5px solid var(--bt, var(--tone)); opacity: 0; }
-.dx-ing__rule { position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%; background: var(--tone); transform: scaleX(0); transform-origin: left; }
-@media (hover: hover) and (pointer: fine) { .dx-ing:hover { padding-left: .6rem; } }
-
-.dx-run__note {
-    margin-top: clamp(1.1rem, 2.4vw, 1.6rem);
-    font-size: .82rem; line-height: 1.65; color: var(--mist);
-}
-.dx-run__note b { color: var(--t-ink); font-weight: 600; }
+.dx-bagr .dx-ing__chip, .dx-bagr .dx-ing__rule { display: none; }
 
 /* ── what a session is, stated plainly ──────────────────────────────────── */
 .dx-facts {
     display: flex; flex-wrap: wrap; gap: clamp(1rem, 3vw, 2.4rem);
-    margin: clamp(1.4rem, 3vw, 2.1rem) 0 clamp(1.6rem, 3.5vw, 2.4rem);
+    margin: clamp(1.4rem, 3vw, 2.1rem) 0 0;
     padding: clamp(.9rem, 2vw, 1.2rem) 0;
     border-top: 1px solid var(--t-line); border-bottom: 1px solid var(--t-line);
 }
@@ -596,11 +651,15 @@ html.dx-on .dx-wk   { opacity: 0; }
 .dx-facts dd { font-family: var(--dx-display); font-weight: 500; font-size: clamp(1.05rem, 1.8vw, 1.4rem); letter-spacing: -.03em; color: var(--forest); font-variant-numeric: tabular-nums; }
 .dx-facts dd small { font-family: var(--dx-mono); font-size: .5rem; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
 
-@media (max-width: 700px) {
-    .dx-ing { grid-template-columns: minmax(2.6rem, auto) minmax(0, 1fr); }
-    .dx-ing__chip { display: none; }
-    .dx-ing::before { left: -.5rem; }
+@media (max-width: 760px) {
+    .dx-bagr__head { grid-template-columns: auto 1fr; }
+    .dx-bagr__what { grid-column: 1 / -1; }
+    .dx-bagr__shield { grid-column: 1 / -1; justify-self: start; }
+    .dx-bagr__body { padding-left: 0; }
+    .dx-vol__bar { height: 34px; }
 }
 @media (prefers-reduced-motion: reduce) {
-    .dx-run__bar i, .dx-ing__key, .dx-ing::before { transition: none; }
+    .dx-vol__seg i { transform: scaleX(1); }
+    .dx-bagr::after { transform: scaleX(1); }
+    .dx-h__type s { display: none; }
 }
