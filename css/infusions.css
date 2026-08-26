@@ -111,26 +111,39 @@ html.ivx-on .ivx-ch      { opacity: 0; }
     background: var(--bone);
 }
 .hr__field { position: absolute; inset: -20%; z-index: -2; }
+/* A blurred element is rasterised at its layout size and the blur is applied to
+   that raster. A TRANSLATE of the result is handed to the compositor and costs
+   nothing per frame; a SCALE changes the size of the thing being blurred, so the
+   raster and the 46px blur are both redone every frame. Ten of those was the
+   stutter. The drift is translate-only now, and the gradient stop is pushed out
+   to 72% to give back the spread the scale used to add.
+
+   `will-change: transform` is gone with it: it was promoting ten 620px layers to
+   the GPU for the life of the page, and the grain layer above had to read them
+   all back anyway. */
 .hr__bloom {
     position: absolute; left: var(--bx); top: var(--by);
     width: clamp(320px, 42vw, 620px); aspect-ratio: 1; border-radius: 50%;
-    background: radial-gradient(circle at 50% 50%, var(--c), transparent 66%);
-    opacity: .3; filter: blur(46px);
+    background: radial-gradient(circle at 50% 50%, var(--c), transparent 72%);
+    opacity: .34; filter: blur(46px);
     transform: translate(-50%, -50%);
     animation: hrDrift var(--bd, 24s) var(--bi, 0s) ease-in-out infinite alternate;
-    will-change: transform;
 }
 @keyframes hrDrift {
-    from { transform: translate(-50%, -50%) scale(1)    translate(0, 0); }
-    to   { transform: translate(-50%, -50%) scale(1.28) translate(7%, -9%); }
+    from { transform: translate(-50%, -50%) translate(0, 0); }
+    to   { transform: translate(-50%, -50%) translate(7%, -9%); }
 }
 .hr__veil {
     position: absolute; inset: 0;
     background: linear-gradient(180deg, rgba(253,252,248,.62), rgba(253,252,248,.86) 58%, var(--bone));
 }
 /* a fine tooth, so the colour reads as printed rather than as a CSS gradient */
+/* mix-blend-mode was the other half of the stutter. A blend has to flatten and
+   read back everything painted beneath it in the stacking context — all the
+   blooms — on every frame that any of them moves, and they never stop moving.
+   On a bone background multiply at .5 and normal at .22 are the same tooth. */
 .hr__grain {
-    position: absolute; inset: 0; opacity: .5; mix-blend-mode: multiply;
+    position: absolute; inset: 0; opacity: .22;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E");
 }
 
@@ -155,11 +168,31 @@ html.ivx-on .ivx-ch      { opacity: 0; }
 .hr__line { display: block; }
 /* the rotating line runs much longer than the fixed ones — set it smaller so
    the longest phrase still reads as one line of type, not a paragraph */
+
+/* THE JUMP.
+   min-height:1.24em reserved ONE line, but the third phrase wraps to two on
+   nearly every width. So the box grew by a full line the moment the typewriter
+   crossed the wrap point and shrank again as it erased — and the dek, the two
+   buttons and the whole lower half of the hero rode up and down with it, twice
+   a cycle, forever. That was the struggling.
+
+   Fixed by stacking a hidden copy of the LONGEST phrase in the same grid cell
+   as the live text. The box is always exactly as tall as the tallest thing it
+   will ever hold, at whatever width the reader is at, so nothing below it ever
+   moves — and no space is wasted, because the spacer wraps by the same rules
+   the real text does. */
 .hr__line--type {
-    display: block; margin-top: .35em;
+    display: grid; margin-top: .35em;
     font-size: .5em; line-height: 1.24; letter-spacing: -.02em;
-    color: var(--brass); font-style: italic; min-height: 1.24em;
+    color: var(--brass); font-style: italic;
 }
+.hr__line--type::before {
+    content: "Under one physician\2019 s care \2014  from review through administration.";
+    visibility: hidden;
+}
+.hr__line--type::before,
+.hr__typebox { grid-area: 1 / 1; align-self: start; }
+.hr__typebox { display: block; }
 .hr__typed { font-style: italic; }
 /* the caret only exists once there is something to type — before the headline
    has landed it was blinking on its own over an empty line */
