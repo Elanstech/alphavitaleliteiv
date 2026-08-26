@@ -685,3 +685,253 @@ html.dx-on .dx-wk   { opacity: 0; }
     .dx-bagr::after { transform: scaleX(1); }
     .dx-h__type s { display: none; }
 }
+
+
+/* =============================================================================
+   14 THE COMPONENTS — editorial replacement for the volume ledger
+   Dr. Aronov's direction: the patient is told what is inside and why it is
+   there. No millilitres, no bag counts, no sequencing. That concept lives on
+   the home page under "What most IV clinics miss".
+   The old .dx-vol / .dx-round / .dx-bagr rules above are retained only for the
+   nine pages not yet converted, and come out with the last of them.
+============================================================================= */
+
+.dx-comp {
+    --comp-pad:  clamp(0rem, 3.4vw, 3.1rem);
+    --comp-rail: clamp(.35rem, 1.5vw, 1.35rem);
+    position: relative;
+    list-style: none;
+    margin: clamp(1.9rem, 4.5vw, 3.1rem) 0 0;
+    padding-left: var(--comp-pad);
+}
+
+/* the rail the reader travels down, filled by scroll */
+.dx-comp__rail {
+    position: absolute; left: var(--comp-rail); top: .8rem; bottom: 2.6rem;
+    width: 1px; background: var(--rule);
+}
+.dx-comp__rail i {
+    position: absolute; inset: 0;
+    background: linear-gradient(var(--tone), color-mix(in oklab, var(--tone) 40%, transparent));
+    transform: scaleY(0); transform-origin: 50% 0;
+}
+
+.dx-comp__item {
+    --bt: var(--tone);
+    position: relative;
+    display: grid;
+    grid-template-columns: clamp(2.6rem, 5vw, 4.2rem) minmax(0, 1fr);
+    gap: 0 clamp(1rem, 2.4vw, 2rem);
+    padding: clamp(1.5rem, 3.4vw, 2.4rem) 0;
+    border-bottom: 1px solid var(--rule);
+}
+.dx-comp__item:first-of-type { border-top: 1px solid var(--forest); }
+.dx-comp__item:last-of-type  { border-bottom: 1px solid var(--forest); }
+
+/* the marker on the rail, lit as its component arrives */
+.dx-comp__dot {
+    position: absolute;
+    left: calc(var(--comp-rail) - var(--comp-pad) - 4px);
+    top: clamp(1.85rem, 3.6vw, 2.75rem);
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--cream);
+    box-shadow: inset 0 0 0 1px var(--t-line);
+}
+.dx-comp__item.is-in .dx-comp__dot {
+    background: var(--bt);
+    box-shadow: inset 0 0 0 1px var(--bt), 0 0 0 5px color-mix(in oklab, var(--bt) 16%, transparent);
+}
+
+.dx-comp__no {
+    display: flex; align-items: baseline; gap: .55rem;
+    font-family: var(--dx-mono); font-size: .68rem; font-weight: 500;
+    letter-spacing: .06em; color: var(--mist);
+    font-variant-numeric: tabular-nums;
+}
+.dx-comp__no s {
+    flex: 1; height: 1px; background: var(--t-line);
+    text-decoration: none; transform: scaleX(0); transform-origin: 0 50%;
+}
+
+.dx-comp__role {
+    margin-bottom: .5rem;
+    font-family: var(--dx-mono); font-size: .55rem; font-weight: 500;
+    letter-spacing: .17em; text-transform: uppercase;
+    color: color-mix(in oklab, var(--bt) 74%, var(--forest));
+}
+
+.dx-comp__name {
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1.32rem, 2.9vw, 2.05rem);
+    letter-spacing: -.032em; line-height: 1.08; color: var(--forest);
+    margin-bottom: .6rem;
+}
+
+.dx-comp__why {
+    max-width: 62ch;
+    font-size: clamp(.93rem, 1.02vw, 1rem);
+    line-height: 1.76; color: var(--ink-soft);
+}
+
+/* the hairline under the row draws left to right on arrival */
+.dx-comp__item::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+    background: var(--bt); transform: scaleX(0); transform-origin: 0 50%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .dx-comp__item { transition: background .45s var(--ease); }
+    .dx-comp__item:hover { background: color-mix(in oklab, var(--bt) 5%, transparent); }
+}
+
+@media (max-width: 640px) {
+    .dx-comp { padding-left: 0; }
+    .dx-comp__rail { display: none; }
+    .dx-comp__dot  { display: none; }
+    .dx-comp__item { grid-template-columns: 1fr; gap: .55rem; }
+    .dx-comp__no   { max-width: 7rem; }
+}
+
+
+/* ── the evidence link ───────────────────────────────────────────────────── */
+.dx-cite {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(.9rem, 2.2vw, 1.7rem);
+    margin-top: clamp(1.5rem, 3.4vw, 2.4rem);
+    padding: clamp(1.1rem, 2.6vw, 1.7rem) clamp(1.1rem, 2.6vw, 1.8rem);
+    border: 1px solid var(--t-line); border-radius: 5px;
+    background: rgba(255, 255, 255, .68);
+    text-decoration: none;
+    transform-style: preserve-3d;
+    transition: border-color .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease);
+}
+.dx-cite:hover {
+    border-color: var(--tone);
+    background: rgba(255, 255, 255, .92);
+    box-shadow: 0 30px 60px -46px rgba(32, 52, 33, .58);
+}
+.dx-cite__icon { font-size: clamp(1.5rem, 3vw, 2rem); color: var(--t-ink); line-height: 1; }
+.dx-cite__main { display: grid; gap: .3rem; }
+.dx-cite__eyebrow {
+    font-family: var(--dx-mono); font-size: .54rem; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
+}
+.dx-cite__name {
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1rem, 1.6vw, 1.22rem); letter-spacing: -.025em; color: var(--forest);
+}
+.dx-cite__note { font-weight: 400; font-size: .8rem; line-height: 1.66; color: var(--mist); max-width: 56ch; }
+.dx-cite__go {
+    display: inline-flex; align-items: center; gap: .45rem;
+    font-family: var(--dx-mono); font-size: .58rem; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--t-ink);
+    white-space: nowrap;
+}
+.dx-cite__go i { transition: transform .35s var(--ease); }
+.dx-cite:hover .dx-cite__go i { transform: translate(3px, -3px); }
+
+@media (max-width: 720px) {
+    .dx-cite { grid-template-columns: auto minmax(0, 1fr); }
+    .dx-cite__go { grid-column: 1 / -1; }
+    .dx-cite__note { display: none; }
+}
+
+
+/* ── the review, as four steps ───────────────────────────────────────────── */
+.dx-steps {
+    position: relative; list-style: none;
+    margin: 0 0 1.5rem; padding-left: 1.6rem;
+    max-width: 46ch;
+}
+.dx-steps__rail { position: absolute; left: 5px; top: .7rem; bottom: 1.4rem; width: 1px; background: var(--rule); }
+.dx-steps__rail i {
+    position: absolute; inset: 0; background: var(--tone);
+    transform: scaleY(0); transform-origin: 50% 0;
+}
+.dx-step { position: relative; display: grid; gap: .18rem; padding: .55rem 0; }
+.dx-step::before {
+    content: ''; position: absolute; left: -1.6rem; top: .95rem;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--cream); box-shadow: inset 0 0 0 1px var(--t-line);
+    transform: translateX(0);
+}
+.dx-step.is-on::before { background: var(--tone); box-shadow: inset 0 0 0 1px var(--tone), 0 0 0 4px var(--t-wash); }
+.dx-step__no {
+    font-family: var(--dx-mono); font-size: .52rem; font-weight: 500;
+    letter-spacing: .18em; color: var(--mist);
+}
+.dx-step__body { display: grid; gap: .12rem; }
+.dx-step__name {
+    font-family: var(--dx-display); font-weight: 500; font-size: 1rem;
+    letter-spacing: -.02em; color: var(--forest);
+}
+.dx-step__what { font-size: .84rem; line-height: 1.66; color: var(--ink-soft); }
+
+.dx-begin__after { max-width: 46ch; margin-bottom: 1.6rem; font-size: .84rem; line-height: 1.72; color: var(--mist); }
+
+
+/* ── "what if I'm not eligible?" ─────────────────────────────────────────── */
+.dx-aside {
+    max-width: 52ch;
+    margin-top: clamp(1.5rem, 3.4vw, 2.3rem);
+    padding: clamp(1rem, 2.4vw, 1.5rem) clamp(1rem, 2.4vw, 1.5rem) clamp(1rem, 2.4vw, 1.5rem) clamp(1.1rem, 2.6vw, 1.7rem);
+    border-left: 2px solid var(--tone);
+    background: color-mix(in oklab, var(--tone) 5%, transparent);
+    border-radius: 0 4px 4px 0;
+}
+.dx-aside__ask {
+    display: block; margin-bottom: .5rem;
+    font-family: var(--dx-display); font-weight: 500; font-size: 1.02rem;
+    letter-spacing: -.02em; color: var(--forest);
+}
+.dx-aside p { font-size: .84rem; line-height: 1.72; color: var(--ink-soft); }
+.dx-aside p + p { margin-top: .6rem; }
+
+
+/* ── disclaimer, now several paragraphs ──────────────────────────────────── */
+.dx-legal p + p { margin-top: .7rem; }
+.dx-card dd small {
+    display: block; margin-top: .2rem;
+    font-family: var(--dx-mono); font-size: .55rem; font-weight: 400;
+    letter-spacing: .06em; text-transform: none; color: var(--mist);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dx-comp__rail i, .dx-steps__rail i { transform: scaleY(1); }
+    .dx-comp__item::after, .dx-comp__no s { transform: scaleX(1); }
+    .dx-comp__dot { transform: scale(1); opacity: 1; }
+}
+
+
+/* ── 14b start states for the component list ─────────────────────────────────
+   html.dx-on is set synchronously in <head>, so these land before first paint
+   and GSAP takes them from there. Scripting off, or motion reduced: the class
+   is never set (or is removed by release()) and everything is simply present. */
+html.dx-on .dx-comp__no b,
+html.dx-on .dx-comp__role,
+html.dx-on .dx-comp__why,
+html.dx-on .dx-step        { opacity: 0; }
+html.dx-on .dx-comp__name  { clip-path: inset(0 100% 0 0); }
+html.dx-on .dx-comp__dot   { transform: scale(.5); opacity: 0; }
+
+/* the hairline under a row is a pseudo-element, so the class carries it */
+.dx-comp__item.is-in::after { transform: scaleX(1); transition: transform 1s var(--ease) .18s; }
+
+
+/* ── 14c the eligibility layout ──────────────────────────────────────────────
+   The review-steps version of this section runs much taller on the left than
+   the spec card does on the right, so centring the two left a hole at the top.
+   Scoped with :has() so the nine unconverted pages keep the old centred pair. */
+.dx-begin:has(#dxSteps) .dx-begin__wrap { align-items: start; }
+.dx-begin:has(#dxSteps) .dx-card__col {
+    position: sticky;
+    top: calc(var(--head-h) + clamp(1.5rem, 5vh, 3rem));
+}
+@media (max-width: 900px) {
+    .dx-begin:has(#dxSteps) .dx-card__col { position: static; }
+}
+/* the review fee needs the room to say what it is */
+.dx-card div:has(small) { align-items: start; }
+.dx-card dt { line-height: 1.5; word-break: normal; overflow-wrap: normal; }
