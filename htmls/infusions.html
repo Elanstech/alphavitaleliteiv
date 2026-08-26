@@ -144,17 +144,16 @@
      ============================================================== -->
 <section class="ivx-hero" id="top">
 
+  <!-- Six blooms, not ten. Each one is a 620px circle carrying a 46px blur, and
+       at .34 opacity behind the veil they overlap so heavily that the last four
+       were paying full raster cost for a wash nobody can see. -->
   <div class="hr__field" aria-hidden="true">
-      <span class="hr__bloom" style="--c:#5B7098; --bx:11%; --by:9%; --bd:18s; --bi:-0.0s"></span>
-      <span class="hr__bloom" style="--c:#D9982A; --bx:34%; --by:46%; --bd:21s; --bi:-2.4s"></span>
-      <span class="hr__bloom" style="--c:#B34E37; --bx:57%; --by:7%; --bd:24s; --bi:-4.8s"></span>
-      <span class="hr__bloom" style="--c:#4F7D5E; --bx:80%; --by:44%; --bd:27s; --bi:-7.199999999999999s"></span>
-      <span class="hr__bloom" style="--c:#7FA08C; --bx:15%; --by:5%; --bd:30s; --bi:-9.6s"></span>
-      <span class="hr__bloom" style="--c:#8C6239; --bx:38%; --by:42%; --bd:33s; --bi:-12.0s"></span>
-      <span class="hr__bloom" style="--c:#5F7A55; --bx:61%; --by:3%; --bd:36s; --bi:-14.399999999999999s"></span>
-      <span class="hr__bloom" style="--c:#35707F; --bx:84%; --by:40%; --bd:39s; --bi:-16.8s"></span>
-      <span class="hr__bloom" style="--c:#7A5F98; --bx:19%; --by:1%; --bd:42s; --bi:-19.2s"></span>
-      <span class="hr__bloom" style="--c:#C1963F; --bx:42%; --by:38%; --bd:45s; --bi:-21.599999999999998s"></span>
+      <span class="hr__bloom" style="--c:#5B7098; --bx:11%; --by:9%;  --bd:26s; --bi:-0.0s"></span>
+      <span class="hr__bloom" style="--c:#D9982A; --bx:34%; --by:46%; --bd:31s; --bi:-5.0s"></span>
+      <span class="hr__bloom" style="--c:#B34E37; --bx:57%; --by:7%;  --bd:36s; --bi:-10.0s"></span>
+      <span class="hr__bloom" style="--c:#4F7D5E; --bx:80%; --by:44%; --bd:41s; --bi:-15.0s"></span>
+      <span class="hr__bloom" style="--c:#35707F; --bx:23%; --by:38%; --bd:46s; --bi:-20.0s"></span>
+      <span class="hr__bloom" style="--c:#7A5F98; --bx:68%; --by:34%; --bd:51s; --bi:-25.0s"></span>
     <span class="hr__veil"></span>
     <span class="hr__grain"></span>
   </div>
@@ -172,7 +171,7 @@
       <span class="hr__line" data-split>Nine signature infusions.</span>
       <span class="hr__line" data-split>One customized alternative.</span>
       <span class="hr__line hr__line--type">
-        <span class="hr__typed" id="hrTyped"></span><span class="hr__caret" aria-hidden="true"></span>
+        <span class="hr__typebox"><span class="hr__typed" id="hrTyped"></span><span class="hr__caret" aria-hidden="true"></span></span>
         <span class="hr__sr">Selected for your individual needs. Every decision begins with your history. Under one physician&rsquo;s care &mdash; from review through administration.</span>
       </span>
     </h1>
@@ -183,7 +182,7 @@
     </p>
 
     <div class="hr__acts" data-rise>
-      <a class="ivx-btn ivx-btn--solid" href="#menu"><span>Explore the infusions</span><i class="ph ph-arrow-down"></i></a>
+      <a class="ivx-btn ivx-btn--solid" href="#the-menu"><span>Explore the infusions</span><i class="ph ph-arrow-down"></i></a>
       <a class="ivx-btn" href="#compounds"><span>What is in the bag</span></a>
     </div>
   </div>
@@ -198,7 +197,7 @@
 <!-- ==============================================================
      02 · THE CABINET
      ============================================================== -->
-<section class="ivx-stage" id="menu">
+<section class="ivx-stage" id="the-menu">
   <div class="st__intro">
     <p class="ivx-eyebrow" data-rise><i class="ph-duotone ph-list-dashes"></i> The menu</p>
     <h2 class="st__head" data-split>One at a time.</h2>
@@ -239,7 +238,7 @@
 
           <figure class="st__shot">
             <span class="st__halo" aria-hidden="true"></span>
-            <img src="../assets/drips/glynac.png" alt="" width="524" height="1478" loading="eager" decoding="async">
+            <img src="../assets/drips/glynac.png" alt="" width="524" height="1478" loading="lazy" decoding="async" fetchpriority="low">
           </figure>
         </article>
         <article class="st__panel" id="stPanel-1" data-i="1" data-id="immune" style="--tone:#D9982A">
@@ -257,7 +256,7 @@
 
           <figure class="st__shot">
             <span class="st__halo" aria-hidden="true"></span>
-            <img src="../assets/drips/immuneoboost.png" alt="" width="524" height="1478" loading="eager" decoding="async">
+            <img src="../assets/drips/immuneoboost.png" alt="" width="524" height="1478" loading="lazy" decoding="async" fetchpriority="low">
           </figure>
         </article>
         <article class="st__panel" id="stPanel-2" data-i="2" data-id="muscle" style="--tone:#B34E37">
