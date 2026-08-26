@@ -26,7 +26,7 @@ const LOW = (navigator.hardwareConcurrency || 4) <= 4;
 /* release every start state — used when GSAP is missing or motion is reduced */
 const release = () => {
     root.classList.remove('dx-on');
-    $$('[data-anim], .dx-ing, .dx-wk, .dx-char').forEach((el) => {
+    $$('[data-anim], .dx-ing, .dx-wk, .dx-char, .dx-comp__why, .dx-comp__role').forEach((el) => {
         el.style.opacity = '1';
         el.style.transform = 'none';
     });
@@ -102,6 +102,163 @@ const intro = () => {
             scrollTrigger: { trigger: '.dx-hero', start: 'top top', end: 'bottom top', scrub: 0.6 },
         });
     }
+};
+
+
+/* ── THE COMPONENTS ───────────────────────────────────────────────────────
+   The editorial replacement for the volume ledger. Per Dr. Aronov: the reader
+   is told what is inside and why it is there. No millilitres, no bag counts,
+   no sequencing — that concept belongs on the home page, under "What most IV
+   clinics miss". Pages still carrying the old #dxList / #dxRound markup fall
+   through to ledger() until they are converted.
+
+   Five things move here, all on scroll:
+     1. the second headline line types itself in
+     2. a rail fills down the left as you travel the list
+     3. each row wipes open — number, rule, role, name, body
+     4. the marker on the rail lights and the hairline draws under the row
+     5. the closing line inks in word by word
+   ─────────────────────────────────────────────────────────────────────── */
+const components = () => {
+    const host = $('#dxComp');
+    if (!host) return false;
+
+    const items = $$('.dx-comp__item', host);
+    const still = typeof window.gsap === 'undefined' || RM.matches;
+
+    /* ── 1 · the headline types itself, once, on arrival ─────────────────── */
+    const type = $('#dxType');
+    const typeBox = type?.parentElement;
+    const LINE = type?.dataset.type || '';
+
+    if (type && LINE) {
+        if (still) {
+            type.textContent = LINE;
+        } else {
+            ScrollTrigger.create({
+                trigger: type, start: 'top 88%', once: true,
+                onEnter: () => {
+                    typeBox?.classList.add('is-typing');
+                    let k = 0;
+                    const tick = () => {
+                        type.textContent = LINE.slice(0, ++k);
+                        if (k < LINE.length) {
+                            /* a beat on the punctuation, like someone speaking */
+                            const ch = LINE[k - 1];
+                            const hold = ch === '.' ? 0.26 : ch === ',' ? 0.16 : 0.028;
+                            gsap.delayedCall(hold + Math.random() * 0.022, tick);
+                        } else {
+                            gsap.delayedCall(1.1, () => typeBox?.classList.remove('is-typing'));
+                        }
+                    };
+                    tick();
+                },
+            });
+        }
+    }
+
+    /* ── nothing else moves without GSAP: show it all and leave ──────────── */
+    if (still) {
+        items.forEach((li) => li.classList.add('is-in'));
+        return true;
+    }
+
+    /* ── 2 · the rail fills as the reader travels the list ───────────────── */
+    const railFill = $('.dx-comp__rail i', host);
+    if (railFill) {
+        gsap.to(railFill, {
+            scaleY: 1, ease: 'none',
+            scrollTrigger: { trigger: host, start: 'top 62%', end: 'bottom 78%', scrub: 0.5 },
+        });
+    }
+
+    /* ── 3 · each row opens like a paragraph settling, not a card bouncing ─ */
+    items.forEach((li) => {
+        const no   = $('.dx-comp__no b', li);
+        const rule = $('.dx-comp__no s', li);
+        const role = $('.dx-comp__role', li);
+        const name = $('.dx-comp__name', li);
+        const why  = $('.dx-comp__why', li);
+        const dot  = $('.dx-comp__dot', li);
+
+        const tl = gsap.timeline({
+            scrollTrigger: { trigger: li, start: 'top 84%', once: true },
+            /* 4 · the marker and the hairline are pseudo-element work, so a
+                  class carries them rather than a tween */
+            onStart: () => li.classList.add('is-in'),
+        });
+
+        if (no)   tl.fromTo(no,   { opacity: 0, y: 12 },  { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }, 0);
+        if (rule) tl.fromTo(rule, { scaleX: 0 },          { scaleX: 1, duration: 0.8, ease: 'power3.out' }, 0.06);
+        if (role) tl.fromTo(role, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.6, ease: 'expo.out' }, 0.1);
+
+        /* the name wipes in rather than fading — it reads as being written */
+        if (name) tl.fromTo(name,
+            { clipPath: 'inset(0 100% 0 0)' },
+            { clipPath: 'inset(0 0% 0 0)', duration: 0.82, ease: 'power3.out' }, 0.14);
+
+        if (dot)  tl.fromTo(dot,  { scale: 0.5, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(3)' }, 0.2);
+
+        if (why)  tl.fromTo(why,  { opacity: 0, y: 14 },  { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 0.3);
+    });
+
+    /* ── 5 · the closing line inks in word by word as it crosses ─────────── */
+    const say = $('.dx-say');
+    const words = splitWords(say);
+    if (words.length) {
+        gsap.fromTo(words, { opacity: 0.14 }, {
+            opacity: 1, ease: 'none', stagger: 0.4,
+            scrollTrigger: { trigger: say, start: 'top 82%', end: 'bottom 62%', scrub: 0.5 },
+        });
+    }
+
+    /* ── the evidence link lifts in ─────────────────────────────────────── */
+    const cite = $('.dx-cite');
+    if (cite) {
+        gsap.fromTo(cite, { opacity: 0, y: 26 }, {
+            opacity: 1, y: 0, duration: 0.8, ease: 'expo.out',
+            scrollTrigger: { trigger: cite, start: 'top 90%', once: true },
+        });
+    }
+
+    return true;
+};
+
+
+/* ── THE REVIEW STEPS ─────────────────────────────────────────────────────
+   The eligibility process, four beats, lit one at a time on the way past. */
+const steps = () => {
+    const list = $('#dxSteps');
+    if (!list) return;
+    const fill = $('.dx-steps__rail i', list);
+    const pins = $$('.dx-step', list);
+
+    if (typeof window.gsap === 'undefined' || RM.matches) {
+        pins.forEach((p) => p.classList.add('is-on'));
+        return;
+    }
+
+    gsap.fromTo(pins, { opacity: 0, x: -16 }, {
+        opacity: 1, x: 0, duration: 0.65, stagger: 0.1, ease: 'expo.out',
+        scrollTrigger: { trigger: list, start: 'top 84%', once: true },
+    });
+
+    if (fill) {
+        gsap.to(fill, {
+            scaleY: 1, ease: 'none',
+            scrollTrigger: { trigger: list, start: 'top 76%', end: 'bottom 74%', scrub: 0.5 },
+        });
+    }
+
+    pins.forEach((pin, i) => {
+        ScrollTrigger.create({
+            trigger: list,
+            start: `top ${76 - i * 4}%`,
+            end: 'bottom 74%',
+            onToggle: (self) => pin.classList.toggle('is-on', self.isActive),
+        });
+    });
 };
 
 
@@ -662,7 +819,10 @@ const boot = () => {
            otherwise reduced motion and no-GSAP get an empty column where the
            bags should be. ledger() detects both cases itself and lays the
            whole sequence out at rest, nothing moving. */
-        try { ledger(); } catch (err) { console.error('[dx] ledger', err); }
+        /* new editorial pages answer to components(); the nine not yet
+           converted still carry the old ledger markup */
+        try { if (!components()) ledger(); } catch (err) { console.error('[dx] components', err); }
+        try { steps(); } catch (err) { console.error('[dx] steps', err); }
         questions();          // the accordion still needs to open
         carouselFallback();
         return;
@@ -675,7 +835,8 @@ const boot = () => {
         const go = (name, fn) => { try { fn(); } catch (err) { console.error(`[dx] ${name}`, err); } };
         go('intro', intro);
         go('reveals', reveals);
-        go('ledger', ledger);
+        go('components', () => { if (!components()) ledger(); });
+        go('steps', steps);
         go('weeks', weeks);
         go('money', money);
         go('questions', questions);
