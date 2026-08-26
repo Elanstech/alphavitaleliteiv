@@ -184,25 +184,19 @@ class Hero {
            first left the second one sitting at the opacity:0 the stylesheet
            gives it. */
         const lines = $$('.hr__line[data-split]', this.el);
-        const chars = lines.flatMap((l) => { gsap.set(l, { opacity: 1 }); return splitChars(l); });
+        const words = lines.flatMap((l) => { gsap.set(l, { opacity: 1 }); return splitWords(l); });
 
         const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
-        if (chars.length) {
-            /* Two fixed lines is ~48 characters. At the old .9s/.016 stagger the
-               last letter landed 1.8s after the fonts resolved, which is most of
-               a second of half-built headline. Tightened so the whole thing is
-               down in about half that. */
-            /* rotateX on 48 separately-composited letters was the stutter: a 3D
-               transform forces each one onto its own layer and re-rasterises it
-               every frame. Plain opacity + Y is the same read at display size
-               and costs a fraction. willChange is dropped the moment the letters
-               land so the layers are handed back. */
-            tl.fromTo(chars,
-                { opacity: 0, yPercent: 55 },
-                { opacity: 1, yPercent: 0, duration: .62, stagger: .011, force3D: true,
+        if (words.length) {
+            /* Seven words at .05 puts the last one down ~.95s after the fonts
+               resolve — the same rhythm the letters had, at a seventh of the
+               layer count. willChange is handed back the moment they land. */
+            tl.fromTo(words,
+                { opacity: 0, yPercent: 60 },
+                { opacity: 1, yPercent: 0, duration: .6, stagger: .05, force3D: true,
                   onComplete: () => {
-                      gsap.set(chars, { clearProps: 'willChange,transform' });
+                      gsap.set(words, { clearProps: 'willChange,transform' });
                       heroSettled();
                   } }, .05);
         } else {
@@ -210,7 +204,7 @@ class Hero {
         }
 
         tl.to($$('[data-rise]', this.el),
-            { opacity: 1, y: 0, duration: .8, stagger: .08 }, .35);
+            { opacity: 1, y: 0, duration: .8, stagger: .08 }, .3);
     }
 }
 
@@ -244,7 +238,12 @@ const FONTS = Promise.race([
     (document.fonts
         ? Promise.all(FACES.map((f) => document.fonts.load(f))).catch(() => {})
         : Promise.resolve()),
-    new Promise((r) => setTimeout(r, 900)),
+    /* Was 900ms. The hero is held at opacity 0 for the whole of this wait, so
+       on a slow connection the page painted an empty headline and sat there for
+       nearly a second before anything moved — which reads as struggling even
+       when not one frame is dropped. Seven words re-wrap cleanly if Fraunces
+       lands late, so there is no longer any reason to wait this long. */
+    new Promise((r) => setTimeout(r, 550)),
 ]);
 
 /* On a repeat visit the faces are already in the font cache, so there is
@@ -255,16 +254,25 @@ const CACHED = !!document.fonts && FACES.every((f) => {
 });
 const FONTS_READY = CACHED ? Promise.resolve() : FONTS;
 
-/** Cut an element into per-character spans, keeping words unbreakable so the
- *  line still wraps at word boundaries. Returns the spans to animate. */
-const splitChars = (el) => {
+/** Cut an element into per-WORD spans. Returns the spans to animate.
+ *
+ *  This used to cut per character. Two lines is ~48 letters, and force3D put
+ *  every one of them on its own compositor layer for the whole entrance — 48
+ *  layers being composited over the blurred bloom field at the exact moment
+ *  the page is also parsing, decoding and laying out. Worse, 48 inline-blocks
+ *  re-measure individually the instant Fraunces swaps in over the fallback
+ *  face, so the headline re-wrapped in the middle of its own reveal.
+ *
+ *  Seven words is seven layers and one clean reflow. At 4.4rem the read is the
+ *  same. */
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const splitWords = (el) => {
     if (el.dataset.split === 'done') return $$('.ivx-ch', el);
-    const words = (el.textContent || '').split(/(\s+)/);
-    el.innerHTML = words.map((w) => {
-        if (/^\s+$/.test(w)) return ' ';
-        const inner = [...w].map((c) => `<span class="ivx-ch">${c}</span>`).join('');
-        return `<span class="ivx-word">${inner}</span>`;
-    }).join('');
+    const parts = (el.textContent || '').split(/(\s+)/);
+    el.innerHTML = parts
+        .map((w) => (/^\s+$/.test(w) || !w ? ' ' : `<span class="ivx-word ivx-ch">${esc(w)}</span>`))
+        .join('');
     el.dataset.split = 'done';
     return $$('.ivx-ch', el);
 };
@@ -300,6 +308,12 @@ class Typer {
         this.i = 0;
         this.stopped = false;
         this.started = false;
+        /* Every loop carries the token it was started with. Setting `stopped`
+           does NOT cancel a timer that is already pending, so the old loop woke
+           up after a tab switch, found `stopped` back to false, and carried on
+           typing into the same element as the new loop. Two hands on one line.
+           A loop whose token no longer matches now exits instead. */
+        this.run = 0;
         this.box = this.el ? this.el.closest('.hr__line--type') : null;
     }
 
@@ -310,9 +324,8 @@ class Typer {
         // nothing types until the hero is actually being looked at
         document.addEventListener('visibilitychange', () => {
             this.stopped = document.hidden;
-            // only resume something that was already running — otherwise a tab
-            // switch during load starts the typer ahead of the headline again
-            if (!this.stopped && this.started) this.type();
+            if (this.stopped) { this.run++; return; }     // retires the running loop
+            if (this.started) this.type(++this.run);
         });
 
         // the headline goes down first; the caret is hidden until then
@@ -320,32 +333,35 @@ class Typer {
             if (this.started) return;
             this.started = true;
             this.box?.classList.add('is-typing');
-            this.type();
+            this.type(++this.run);
         });
     }
 
     wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
-    async type() {
-        if (this.stopped) return;
+    async type(run) {
+        if (this.stopped || run !== this.run) return;
         const line = this.lines[this.i];
 
         for (let n = 1; n <= line.length; n++) {
-            if (this.stopped) return;
+            if (this.stopped || run !== this.run) return;
             this.el.textContent = line.slice(0, n);
             await this.wait(38 + Math.random() * 55);       // an uneven hand
         }
         await this.wait(2100);
 
-        for (let n = line.length; n >= 0; n--) {
-            if (this.stopped) return;
-            this.el.textContent = line.slice(0, n);
-            await this.wait(20);
+        /* The erase ran one character per 20ms — sixty-odd separate writes and
+           sixty-odd layouts of the headline to clear a line nobody is reading
+           any more. Three chunks looks identical and costs three. */
+        for (let n = 3; n >= 0; n--) {
+            if (this.stopped || run !== this.run) return;
+            this.el.textContent = line.slice(0, Math.round(line.length * n / 4));
+            await this.wait(55);
         }
         await this.wait(260);
 
         this.i = (this.i + 1) % this.lines.length;
-        this.type();
+        this.type(run);
     }
 }
 
@@ -358,8 +374,15 @@ class Drop {
 
     init() {
         if (!this.el || !LIVE()) return;
+
+        /* offsetHeight was read at the top of EVERY fall — a forced synchronous
+           layout of the document, on a loop, for the life of the page. It is a
+           CSS-fixed stem; measure it once, and re-measure only on resize. */
+        let h = 110;
+        const measure = () => { h = this.stem?.offsetHeight || 110; };
+        window.addEventListener('resize', debounce(measure, 260));
+
         const fall = () => {
-            const h = this.stem.offsetHeight || 110;
             gsap.fromTo(this.el,
                 { y: 0, opacity: 0, scaleY: .7 },
                 {
@@ -371,7 +394,11 @@ class Drop {
                     onComplete: () => gsap.delayedCall(1.1 + Math.random() * 1.4, fall),
                 });
         };
-        fall();
+
+        /* The drip used to start on the same tick as the headline reveal and
+           fight it for frames. It is decoration in the margin — it can wait the
+           one second until the words are down. */
+        HERO_IN.then(() => { measure(); fall(); });
     }
 }
 
@@ -407,7 +434,9 @@ class Stage {
         this.mq.addEventListener('change', () => this.build());
         FONTS_READY.then(() => {
             this.build();
-            ScrollTrigger.refresh();
+            // build() already inserts a pin-spacer and relayouts. Let that frame
+            // paint before refresh() measures every trigger on the page.
+            requestAnimationFrame(() => ScrollTrigger.refresh());
         });
     }
 
@@ -736,11 +765,18 @@ const boot = () => {
     /* ...but a visitor who scrolls straight away is not watching the headline
        and DOES need what is under it, so any real input builds them at once.
        Whichever comes first wins. */
+    /* `touchstart`, `keydown` and `pointerdown` were in this list. None of them
+       means the reader has left the hero — but any one of them fired the pin
+       build, which inserts a pin-spacer and re-measures the whole document
+       synchronously, right in the middle of the word stagger. One tap anywhere
+       on the page during load and the reveal hitched. Only a genuine scroll
+       counts now, and even that is held two frames so the build lands between
+       painted frames rather than on top of one. */
     const BUILD = Promise.race([
         HERO_IN,
         new Promise((resolve) => {
-            const go = () => resolve();
-            ['scroll', 'wheel', 'touchstart', 'keydown', 'pointerdown']
+            const go = () => requestAnimationFrame(() => requestAnimationFrame(resolve));
+            ['scroll', 'wheel', 'touchmove']
                 .forEach((e) => window.addEventListener(e, go, { once: true, passive: true }));
         }),
     ]);
@@ -774,7 +810,9 @@ const boot = () => {
             ScrollTrigger.refresh();
         }, 260));
 
-        const imgs = $$('img').filter((i) => !i.complete);
+        // lazy images do not load until they are scrolled near, so waiting on
+        // them meant this counter never reached zero and the refresh never ran
+        const imgs = $$('img').filter((i) => !i.complete && i.loading !== 'lazy');
         if (imgs.length) {
             let left = imgs.length;
             const done = () => { if (--left <= 0) refreshAfterHero(); };
