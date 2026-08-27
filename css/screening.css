@@ -1,0 +1,183 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   screening.css — begin-screening.html and review.html
+
+   Loaded after contact.css, which already carries the steps, the outcomes
+   grid, the embed slot and the red notice. Only what is new to these two
+   pages lives here.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── MASTHEAD ───────────────────────────────────────────────────────────── */
+.bs-top {
+    padding: calc(var(--head-h, 76px) + clamp(2.4rem, 7vh, 5rem)) 0 clamp(2rem, 5vw, 3.4rem);
+    background: var(--parchment, #F6F1E7);
+    border-bottom: 1px solid var(--rule);
+}
+.bs-top__title {
+    margin: .6rem 0 1.2rem; max-width: 20ch;
+    font-family: var(--display, 'Prata', serif); font-weight: 400;
+    font-size: clamp(2rem, 5.2vw, 3.5rem); line-height: 1.06;
+    letter-spacing: -.03em; color: var(--forest);
+}
+.bs-top__title em {
+    font-family: var(--accent, 'Cormorant', serif); font-style: italic;
+    color: var(--gold-deep);
+}
+
+.bs-back {
+    display: inline-flex; align-items: center; gap: .45rem;
+    margin-bottom: 1.4rem;
+    font-family: var(--data, ui-monospace, monospace); font-size: .68rem; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--mist); text-decoration: none;
+    transition: color .3s ease;
+}
+.bs-back:hover { color: var(--forest); }
+.bs-back i { transition: transform .3s ease; }
+.bs-back:hover i { transform: translateX(-3px); }
+
+
+/* ── THE FACTS STRIP on review.html ─────────────────────────────────────── */
+.bs-facts {
+    display: grid; gap: 1px;
+    grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+    margin: 0 0 1.6rem;
+    background: var(--rule); border: 1px solid var(--rule); border-radius: 5px;
+    overflow: hidden;
+}
+.bs-fact { padding: .95rem 1.1rem; background: var(--cream, #FDFBF6); }
+.bs-fact dt {
+    font-family: var(--data, ui-monospace, monospace); font-size: .58rem; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+    margin-bottom: .35rem;
+}
+.bs-fact dd {
+    font-family: var(--caps, 'Marcellus', serif); font-size: 1rem;
+    letter-spacing: .01em; color: var(--forest); line-height: 1.3;
+}
+.bs-fact dd small {
+    display: block; margin-top: .25rem;
+    font-family: var(--body, sans-serif); font-size: .68rem; letter-spacing: 0;
+    color: var(--mist);
+}
+.bs-fact--fee { background: color-mix(in oklab, var(--tone, #4F7D5E) 9%, var(--cream, #FDFBF6)); }
+
+.bs-swap {
+    margin-top: 1.1rem; max-width: 60ch;
+    font-size: .86rem; line-height: 1.65; color: var(--mist);
+}
+.bs-swap a { color: var(--forest); text-decoration: underline; text-underline-offset: 3px; }
+
+
+/* ── THE INFUSION CARDS on begin-screening.html ─────────────────────────── */
+.bs-pick { padding: clamp(2.6rem, 6vw, 4.4rem) 0; }
+.bs-cards {
+    list-style: none; display: grid; gap: .7rem;
+    grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+    margin-top: 1.6rem;
+}
+.bs-card {
+    --tone: #4F7D5E;
+    display: grid; align-items: center;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: .85rem;
+    padding: 1rem 1.1rem;
+    background: var(--cream, #FDFBF6);
+    border: 1px solid var(--rule); border-left: 3px solid var(--tone);
+    border-radius: 0 4px 4px 0;
+    text-decoration: none;
+    transition: border-color .32s ease, background .32s ease, transform .32s ease;
+}
+.bs-card:hover {
+    background: #fff;
+    border-color: var(--tone);
+    border-left-color: var(--tone);
+    transform: translateX(3px);
+}
+.bs-card__dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--tone);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--tone) 16%, transparent);
+}
+.bs-card__body { display: grid; gap: .2rem; }
+.bs-card__name {
+    font-family: var(--caps, 'Marcellus', serif); font-size: .98rem;
+    letter-spacing: .015em; color: var(--forest); line-height: 1.25;
+}
+.bs-card__meta {
+    font-family: var(--data, ui-monospace, monospace); font-size: .62rem;
+    letter-spacing: .1em; color: var(--mist);
+}
+.bs-card__price {
+    font-family: var(--data, ui-monospace, monospace); font-size: .76rem; font-weight: 600;
+    color: var(--gold-deep); white-space: nowrap;
+}
+.bs-card__go { font-size: .9rem; color: var(--mist); transition: transform .32s ease, color .32s ease; }
+.bs-card:hover .bs-card__go { transform: translateX(3px); color: var(--tone); }
+
+
+/* ── WHAT YOU'LL NEED ───────────────────────────────────────────────────── */
+.bs-need { padding: clamp(2.6rem, 6vw, 4.4rem) 0; border-top: 1px solid var(--rule); }
+.bs-need__grid {
+    list-style: none; display: grid; gap: 1px;
+    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+    margin-top: 1.8rem;
+    background: var(--rule); border: 1px solid var(--rule); border-radius: 5px;
+    overflow: hidden;
+}
+.bs-need__item {
+    display: grid; gap: .4rem; align-content: start;
+    padding: clamp(1.1rem, 2.4vw, 1.5rem);
+    background: var(--cream, #FDFBF6);
+}
+.bs-need__item i { font-size: 1.5rem; color: var(--gold-deep); line-height: 1; margin-bottom: .2rem; }
+.bs-need__item b {
+    font-family: var(--caps, 'Marcellus', serif); font-weight: 400; font-size: 1rem;
+    letter-spacing: .02em; color: var(--forest);
+}
+.bs-need__item span { font-size: .84rem; line-height: 1.62; color: var(--mist); }
+
+
+/* ── SECTIONS ───────────────────────────────────────────────────────────── */
+.bs-how { padding: clamp(2.6rem, 6vw, 4.4rem) 0; border-top: 1px solid var(--rule); }
+.bs-how--after { background: var(--parchment, #F6F1E7); }
+.bs-form { padding: clamp(2.2rem, 5vw, 3.4rem) 0; }
+.bs-999 { margin-top: clamp(1.8rem, 4vw, 2.8rem); }
+
+
+/* ── THE FALLBACK, while Form 1 does not exist yet ──────────────────────── */
+.bs-soon {
+    display: grid; justify-items: start; gap: .55rem;
+    max-width: 56ch;
+    padding: clamp(1.5rem, 3.4vw, 2.2rem);
+    background: var(--cream, #FDFBF6);
+    border: 1px dashed var(--rule); border-radius: 5px;
+}
+.bs-soon[hidden] { display: none; }
+.bs-soon i { font-size: 1.8rem; color: var(--gold-deep); line-height: 1; }
+.bs-soon b {
+    font-family: var(--caps, 'Marcellus', serif); font-weight: 400; font-size: 1.15rem;
+    letter-spacing: .02em; color: var(--forest);
+}
+.bs-soon p { font-size: .9rem; line-height: 1.7; color: var(--mist); }
+.bs-soon__acts { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .8rem; }
+
+
+/* ── DISCLAIMER ─────────────────────────────────────────────────────────── */
+.bs-legal {
+    max-width: 82ch; margin: 0 auto;
+    padding: clamp(2rem, 5vw, 3rem) var(--gut, 1.4rem) clamp(3rem, 7vw, 4.5rem);
+    border-top: 1px solid var(--rule);
+}
+.bs-legal b {
+    display: block; margin-bottom: .7rem;
+    font-family: var(--data, ui-monospace, monospace); font-size: .58rem; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
+}
+.bs-legal p { font-size: .78rem; line-height: 1.75; color: var(--mist); }
+.bs-legal p + p { margin-top: .7rem; }
+
+
+@media (max-width: 560px) {
+    .bs-card { grid-template-columns: auto minmax(0, 1fr) auto; }
+    .bs-card__go { display: none; }
+}
