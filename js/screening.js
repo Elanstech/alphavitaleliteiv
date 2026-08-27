@@ -139,8 +139,87 @@ const autosize = (frame) => {
 };
 
 
+
+/* ── THE TITLE SEQUENCE ──────────────────────────────────────────────────────
+   Plays itself on begin-screening.html. No button to press — the skip is a
+   courtesy, not the way through. Once a visit: the flag is set in <head>
+   before first paint, so the back button doesn't replay it.
+
+   If anything here throws, finish() still runs from the catch, so a broken
+   animation can never leave a dark panel covering the page. */
+const cine = () => {
+    const box = $('#bsCine');
+    if (!box) return;
+
+    const done = () => {
+        document.documentElement.classList.remove('has-cine');
+        box.remove();
+        try { sessionStorage.setItem('ave-intro', '1'); } catch { /* private mode */ }
+    };
+
+    /* No GSAP, or motion reduced — clear it and show the page. */
+    if (typeof window.gsap === 'undefined' || RM.matches) { done(); return; }
+
+    const skip = $('#bsSkip');
+    const q = (sel) => box.querySelector(sel);
+
+    const tl = gsap.timeline({ onComplete: done });
+
+    tl.fromTo(q('.bs-cine__mark'), { opacity: 0, y: 14, scale: .94 },
+              { opacity: 1, y: 0, scale: 1, duration: .9, ease: 'expo.out' })
+      .fromTo(q('.bs-cine__kicker'), { opacity: 0, y: 8 },
+              { opacity: 1, y: 0, duration: .7, ease: 'power2.out' }, '-=.5')
+      .fromTo(q('.bs-cine__line--1'), { opacity: 0, y: 22 },
+              { opacity: 1, y: 0, duration: .75, ease: 'expo.out' }, '-=.25')
+      .fromTo(q('.bs-cine__line--2'), { opacity: 0, y: 22 },
+              { opacity: 1, y: 0, duration: .75, ease: 'expo.out' }, '-=.5')
+      .fromTo(q('.bs-cine__line--3'), { opacity: 0, y: 22 },
+              { opacity: 1, y: 0, duration: .8, ease: 'expo.out' }, '-=.5')
+      .to(q('.bs-cine__rule'), { width: '11rem', duration: .8, ease: 'power3.inOut' }, '-=.35')
+      .fromTo(q('.bs-cine__sub'), { opacity: 0 },
+              { opacity: 1, duration: .7, ease: 'none' }, '-=.45')
+      .fromTo(skip, { opacity: 0 }, { opacity: 1, duration: .5 }, '-=.6')
+      /* hold, then clear */
+      .to(box, { opacity: 0, duration: .75, ease: 'power2.inOut' }, '+=1.15')
+      .to(box, { duration: .01 });
+
+    skip?.addEventListener('click', () => { tl.kill(); done(); });
+
+    /* Escape gets you out too — a fixed dark overlay with no keyboard exit is
+       a trap for anyone not using a mouse. */
+    const esc = (ev) => {
+        if (ev.key !== 'Escape') return;
+        tl.kill(); done();
+        window.removeEventListener('keydown', esc);
+    };
+    window.addEventListener('keydown', esc);
+};
+
+
+/* ── THE BAGS ────────────────────────────────────────────────────────────────
+   They arrive after the sequence clears, one after another, so the grid
+   assembles rather than appearing. */
+const bags = () => {
+    const grid = $('#bsBags');
+    if (!grid) return;
+
+    const cells = [...grid.querySelectorAll('.bs-bag__cell')];
+    if (typeof window.gsap === 'undefined' || RM.matches) return;
+
+    /* Wait out the sequence if it is running, so the two do not overlap. */
+    const delay = document.documentElement.classList.contains('has-cine') ? 6.2 : 0;
+
+    gsap.fromTo(cells, { opacity: 0, y: 26 }, {
+        opacity: 1, y: 0, duration: .8, ease: 'expo.out',
+        stagger: { each: .055, from: 'start' }, delay,
+    });
+};
+
+
 /* ── BOOT ───────────────────────────────────────────────────────────────── */
 const boot = () => {
+    cine();
+    bags();
     const drip = paint();
     embed(drip);
 };
