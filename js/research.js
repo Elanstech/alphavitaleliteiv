@@ -1,236 +1,348 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   screening.js — begin-screening.html and review.html
+/* =============================================================================
+   ALPHA VITAL ELITE IV — RESEARCH.JS
+   The reference library. Requires gsap + ScrollTrigger on window, and loads
+   AFTER ../script.js, which owns the header, menu, dock and nav trail.
 
-   begin-screening.html is a plain list of links; it needs nothing here beyond
-   the shared animations, which script.js already runs.
+   The filter is the real work here. Two independent axes — evidence tier and
+   treatment — combined with AND, animated with a FLIP so cards slide to their
+   new positions instead of teleporting. Everything degrades to plain visible
+   HTML if GSAP never arrives.
 
-   review.html is the one that does work. It is a single page serving all ten
-   infusions: it reads ?drip=<slug>, paints itself for that infusion, and hands
-   the slug to Form 1 as a prefill. Ten near-identical form pages would drift
-   apart the first time a price moved — this one cannot.
+     Release   Split   Reveal   Counters   Filter   Progress   Boot
+============================================================================= */
 
-   Each infusion has its own Jotform: that drip's screening and medical
-   questions in one form, with the $100 Stripe payment collected at submit.
-   review.html looks the form up by slug and embeds it.
-   ═══════════════════════════════════════════════════════════════════════════ */
+const $  = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+const root = document.documentElement;
 
-/* ▸ THE ONLY BLOCK TO EDIT — one Jotform per infusion.
-   Each form carries that drip's own screening and medical questions, and takes
-   the $100 Stripe payment at submit. Paste each form's URL beside its slug as
-   you build it; any drip left blank shows the phone fallback instead of a dead
-   iframe, so you can go live one drip at a time. */
-const FORMS = {
-    'glynac':              '',
-    'immun-o-boost':       '',
-    'liquixo':             '',
-    'antioxidant':         '',
-    'glutathione':         '',
-    'joint-skin':          '',
-    'fatty-liver-support': '',
-    'revive':              '',
-    'stress-brain':        '',
-    'customized':          '',
-};
-
-
-const MENU = {
-    'glynac':              { name: 'GLyNAC Healthy Aging',      price: '$450',   chair: '1 h 15', tone: '#5B7098' },
-    'immun-o-boost':       { name: 'Immun-O-Boost IV Support',  price: '$650',   chair: '2 h 30', tone: '#D9982A' },
-    'liquixo':             { name: 'LIQUIXO Muscle Recovery',   price: '$495',   chair: '45 min', tone: '#B34E37' },
-    'antioxidant':         { name: 'Antioxidant \u00d73 Reset', price: '$500',   chair: '1 h 15', tone: '#4F7D5E' },
-    'glutathione':         { name: 'Glutathione IV Injection',  price: '$125',   chair: '30 min', tone: '#7FA08C' },
-    'joint-skin':          { name: 'Joint & Skin Wellness',     price: '$750',   chair: '2 h 30', tone: '#8C6239' },
-    'fatty-liver-support': { name: 'Fatty Liver Support',       price: '$850',   chair: '3 h',    tone: '#5F7A55' },
-    'revive':              { name: 'Revive IV Support',         price: '$625',   chair: '2 h 15', tone: '#35707F' },
-    'stress-brain':        { name: 'Stress & Brain Wellness',   price: '$700',   chair: '1 h 30', tone: '#7A5F98' },
-    'customized':          { name: 'Customized IV Infusion',    price: 'By consultation', chair: 'Individual', tone: '#C1963F' },
-};
-
-const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const RM = matchMedia('(prefers-reduced-motion: reduce)');
+const HAS_GSAP = typeof window.gsap !== 'undefined'
+              && typeof window.ScrollTrigger !== 'undefined';
 
 
-/* ── PAINT ───────────────────────────────────────────────────────────────────
-   Fill the masthead from the slug. An unknown or absent slug is not an error:
-   the page falls back to the generic wording already in the markup, which is
-   also what a crawler sees. */
-const paint = () => {
-    const host = $('#bsFacts');
-    if (!host) return null;                       // not the form page
-
-    const slug = new URLSearchParams(location.search).get('drip');
-    const drip = slug && MENU[slug] ? MENU[slug] : null;
-
-    if (!drip) {
-        /* No infusion chosen. Say so plainly and offer the way back rather
-           than showing three em-dashes and hoping they work it out. */
-        const swap = $('#bsSwap');
-        if (swap) {
-            swap.hidden = false;
-            swap.innerHTML = 'No infusion chosen yet. '
-                + '<a href="begin-screening.html">Choose the one you are asking about</a> '
-                + '&mdash; or continue, and Dr. Aronov will advise you as part of her review.';
-        }
-        return null;
-    }
-
-    document.documentElement.style.setProperty('--tone', drip.tone);
-
-    const name = $('#bsName');
-    if (name) name.innerHTML = `Review request for<br><em>${drip.name}</em>`;
-
-    const set = (sel, val) => { const el = $(sel); if (el) el.innerHTML = val; };
-    set('#bsDrip', drip.name);
-    set('#bsChair', drip.chair);
-    set('#bsPrice', drip.price);
-
-    const swap = $('#bsSwap');
-    if (swap) swap.hidden = false;
-
-    document.title = `${drip.name} — Physician Review Request — Alpha Vital Elite IV`;
-
-    return { slug, ...drip };
-};
-
-
-/* ── EMBED ───────────────────────────────────────────────────────────────────
-   The frame is built only once FORMS.review is set. Until then the page shows
-   the phone fallback instead, so the CTA is never a dead end. */
-const embed = (drip) => {
-    const slot = $('#screeningForm');
-    const soon = $('#bsSoon');
-    const frame = $('#ctScreenFrame');
-    if (!slot || !frame) return;
-
-    /* No drip chosen, or that drip's form is not built yet: leave the phone
-       fallback showing. Never an empty iframe. */
-    const src = drip && FORMS[drip.slug];
-    if (!src) return;
-
-    const url = new URL(src);
-    url.searchParams.set('interest', drip.slug);
-    url.searchParams.set('interestName', drip.name);
-    frame.src = url.toString();
-
-    slot.hidden = false;
-    soon?.setAttribute('hidden', '');
-
-    autosize(frame);
-};
-
-
-/* Jotform is taller than any height we could guess, and a fixed height gives
-   the iframe its own scrollbar inside the page — two nested scroll areas,
-   which is horrible on a trackpad and worse on a phone. Jotform posts its real
-   height to the parent, so listen for that and let the frame grow. The CSS
-   min-height covers us until it arrives. */
-const autosize = (frame) => {
-    window.addEventListener('message', (ev) => {
-        let host;
-        try { host = new URL(ev.origin).hostname; } catch { return; }
-        if (!/(^|\.)jotform\.com$/.test(host)) return;
-
-        const data = typeof ev.data === 'string' ? ev.data : '';
-        const [action, height] = data.split(':');
-        if (action === 'setHeight' && Number(height) > 0) {
-            frame.style.height = `${Number(height)}px`;
-        }
+/* ── RELEASE ────────────────────────────────────────────────────────────────
+   No visitor should ever be left with a blank column because a CDN was slow. */
+const release = () => {
+    root.classList.remove('rs-on');
+    $$('[data-rs], [data-rs-split]').forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
     });
+    $$('.rs-line > span').forEach((el) => { el.style.transform = 'none'; });
+    $$('[data-rs-count]').forEach((el) => { el.textContent = el.dataset.rsCount; });
 };
 
 
+/* ── SPLIT ───────────────────────────────────────────────────────────────────
+   Masked lines, measured after the webfonts land so the mask matches the wrap
+   that is actually on screen. */
+const splitLines = (el) => {
+    if (!el || el.dataset.split) return [];
+    el.dataset.split = '1';
 
-/* ── THE TITLE SEQUENCE ──────────────────────────────────────────────────────
-   Plays itself on begin-screening.html. No button to press — the skip is a
-   courtesy, not the way through. Once a visit: the flag is set in <head>
-   before first paint, so the back button doesn't replay it.
+    const source = el.innerHTML;
+    el.innerHTML = source.replace(/(<[^>]+>)|([^<\s]+)/g,
+        (m, tag, word) => (tag ? tag : `<i class="rs-probe" style="font-style:inherit">${word}</i>`));
 
-   If anything here throws, finish() still runs from the catch, so a broken
-   animation can never leave a dark panel covering the page. */
-const cine = () => {
-    const box = $('#bsCine');
-    if (!box) return;
+    const probes = $$('.rs-probe', el);
+    if (!probes.length) { el.innerHTML = source; return []; }
 
-    const done = () => {
-        document.documentElement.classList.remove('has-cine');
-        box.remove();
-        try { sessionStorage.setItem('ave-intro', '1'); } catch { /* private mode */ }
-    };
-
-    /* No GSAP, or motion reduced — clear it and show the page. */
-    if (typeof window.gsap === 'undefined' || RM.matches) { done(); return; }
-
-    const skip = $('#bsSkip');
-    const q = (sel) => box.querySelector(sel);
-
-    const tl = gsap.timeline({ onComplete: done });
-
-    tl.fromTo(q('.bs-cine__mark'), { opacity: 0, y: 14, scale: .94 },
-              { opacity: 1, y: 0, scale: 1, duration: .9, ease: 'expo.out' })
-      .fromTo(q('.bs-cine__kicker'), { opacity: 0, y: 8 },
-              { opacity: 1, y: 0, duration: .7, ease: 'power2.out' }, '-=.5')
-      .fromTo(q('.bs-cine__line--1'), { opacity: 0, y: 22 },
-              { opacity: 1, y: 0, duration: .75, ease: 'expo.out' }, '-=.25')
-      .fromTo(q('.bs-cine__line--2'), { opacity: 0, y: 22 },
-              { opacity: 1, y: 0, duration: .75, ease: 'expo.out' }, '-=.5')
-      .fromTo(q('.bs-cine__line--3'), { opacity: 0, y: 22 },
-              { opacity: 1, y: 0, duration: .8, ease: 'expo.out' }, '-=.5')
-      .to(q('.bs-cine__rule'), { width: '11rem', duration: .8, ease: 'power3.inOut' }, '-=.35')
-      .fromTo(q('.bs-cine__sub'), { opacity: 0 },
-              { opacity: 1, duration: .7, ease: 'none' }, '-=.45')
-      .fromTo(skip, { opacity: 0 }, { opacity: 1, duration: .5 }, '-=.6')
-      /* hold, then clear */
-      .to(box, { opacity: 0, duration: .75, ease: 'power2.inOut' }, '+=1.15')
-      .to(box, { duration: .01 });
-
-    skip?.addEventListener('click', () => { tl.kill(); done(); });
-
-    /* Escape gets you out too — a fixed dark overlay with no keyboard exit is
-       a trap for anyone not using a mouse. */
-    const esc = (ev) => {
-        if (ev.key !== 'Escape') return;
-        tl.kill(); done();
-        window.removeEventListener('keydown', esc);
-    };
-    window.addEventListener('keydown', esc);
-};
-
-
-/* ── THE BAGS ────────────────────────────────────────────────────────────────
-   They arrive after the sequence clears, one after another, so the grid
-   assembles rather than appearing. */
-const bags = () => {
-    const grid = $('#bsBags');
-    if (!grid) return;
-
-    const cells = [...grid.querySelectorAll('.bs-bag__cell')];
-    if (typeof window.gsap === 'undefined' || RM.matches) return;
-
-    /* Wait out the sequence if it is running, so the two do not overlap. */
-    const delay = document.documentElement.classList.contains('has-cine') ? 6.2 : 0;
-
-    gsap.fromTo(cells, { opacity: 0, y: 26 }, {
-        opacity: 1, y: 0, duration: .8, ease: 'expo.out',
-        stagger: { each: .055, from: 'start' }, delay,
+    const rows = [];
+    let top = null;
+    probes.forEach((p) => {
+        const t = Math.round(p.offsetTop);
+        if (top === null || Math.abs(t - top) > 4) { top = t; rows.push([]); }
+        rows[rows.length - 1].push(p);
     });
+
+    el.innerHTML = rows.map((row) => {
+        const frag = document.createElement('div');
+        row.forEach((p, i) => {
+            const holder = p.parentElement !== el ? p.parentElement.cloneNode(false) : null;
+            const text = document.createTextNode((i ? ' ' : '') + p.textContent);
+            if (holder) { holder.appendChild(text); frag.appendChild(holder); }
+            else frag.appendChild(text);
+        });
+        return `<span class="rs-line"><span>${frag.innerHTML}</span></span>`;
+    }).join('');
+
+    return $$('.rs-line > span', el);
 };
 
 
-/* ── BOOT ───────────────────────────────────────────────────────────────── */
+/* ── REVEAL ─────────────────────────────────────────────────────────────────
+   Cards stagger within their own group, so a long list reads as one movement
+   rather than 27 separate ones. */
+const Reveal = {
+    init() {
+        // group the plain risers by their nearest section for a tidy stagger
+        $$('section, .rs-tiers, .rs-limits').forEach((sec) => {
+            const bits = $$('[data-rs]', sec).filter((el) => !el.dataset.done);
+            if (!bits.length) return;
+            bits.forEach((el) => { el.dataset.done = '1'; });
+            gsap.to(bits, {
+                opacity: 1, y: 0, scale: 1,
+                duration: .8, ease: 'power3.out', stagger: .05,
+                scrollTrigger: { trigger: sec, start: 'top 82%', once: true },
+            });
+        });
+
+        // anything the loop above missed
+        $$('[data-rs]:not([data-done])').forEach((el) => {
+            gsap.to(el, {
+                opacity: 1, y: 0, scale: 1, duration: .8, ease: 'power3.out',
+                scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+            });
+        });
+    },
+
+    lines() {
+        $$('[data-rs-split="lines"]').forEach((el) => {
+            const rows = splitLines(el);
+            gsap.set(el, { opacity: 1 });
+            if (!rows.length) return;
+            gsap.to(rows, {
+                y: '0%', duration: .95, ease: 'power4.out', stagger: .08,
+                scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+            });
+        });
+    },
+};
+
+
+/* ── COUNTERS ───────────────────────────────────────────────────────────── */
+const Counters = {
+    init() {
+        $$('[data-rs-count]').forEach((el) => {
+            const end = parseInt(el.dataset.rsCount, 10) || 0;
+            const obj = { v: 0 };
+            ScrollTrigger.create({
+                trigger: el, start: 'top 92%', once: true,
+                onEnter: () => gsap.to(obj, {
+                    v: end, duration: 1.3, ease: 'power2.out',
+                    onUpdate: () => { el.textContent = Math.round(obj.v); },
+                    onComplete: () => { el.textContent = String(end); },
+                }),
+            });
+        });
+    },
+};
+
+
+/* ── FILTER ─────────────────────────────────────────────────────────────────
+   Two axes, combined with AND: show a card when its tier is selected (or no
+   tier is) AND its treatment is selected (or no treatment is). A group hides
+   itself once it has no visible cards left, so you never get a stranded
+   heading over an empty grid. */
+const Filter = {
+    init() {
+        this.bar = $('#rsBar');
+        if (!this.bar) return;
+
+        this.chips  = $$('.rs-chip', this.bar);
+        this.all    = $('[data-all]', this.bar);
+        if (this.all) this.all.addEventListener('click', () => this.toggle(this.all));
+        this.groups = $$('.rs-group');
+        this.refs   = $$('.rs-ref');
+        this.count  = $('#rsCount');
+        this.empty  = $('#rsEmpty');
+
+        this.tiers = new Set();
+        this.txs   = new Set();
+
+        this.chips.forEach((chip) => {
+            chip.addEventListener('click', () => this.toggle(chip));
+        });
+
+        this.sync();
+    },
+
+    toggle(chip) {
+        if (chip === this.all) { this.tiers.clear(); this.txs.clear(); }
+        else {
+            const set = chip.dataset.tier ? this.tiers : this.txs;
+            const key = chip.dataset.tier || chip.dataset.tx;
+            set.has(key) ? set.delete(key) : set.add(key);
+        }
+        this.apply();
+    },
+
+    /** reflect state onto the chips */
+    sync() {
+        this.chips.forEach((c) => {
+            const on = c.dataset.tier ? this.tiers.has(c.dataset.tier) : this.txs.has(c.dataset.tx);
+            c.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        if (this.all) this.all.hidden = !this.tiers.size && !this.txs.size;
+    },
+
+    apply() {
+        const canFlip = HAS_GSAP && !RM.matches;
+
+        // FLIP: read every visible card's box BEFORE the DOM changes
+        const first = canFlip
+            ? new Map(this.refs.filter((r) => !r.hidden).map((r) => [r, r.getBoundingClientRect()]))
+            : null;
+
+        let shown = 0;
+        this.groups.forEach((g) => {
+            const txOk = !this.txs.size || this.txs.has(g.dataset.tx);
+            let visible = 0;
+
+            $$('.rs-ref', g).forEach((ref) => {
+                const tierOk = !this.tiers.size || this.tiers.has(ref.dataset.tier);
+                const on = txOk && tierOk;
+                ref.hidden = !on;
+                if (on) visible += 1;
+            });
+
+            g.hidden = visible === 0;
+            shown += visible;
+        });
+
+        if (this.count) {
+            const parts = [];
+            if (this.tiers.size) parts.push(`${this.tiers.size} evidence tier${this.tiers.size > 1 ? 's' : ''}`);
+            if (this.txs.size)   parts.push(`${this.txs.size} infusion${this.txs.size > 1 ? 's' : ''}`);
+            this.count.textContent = parts.length
+                ? `Showing ${shown} reference${shown === 1 ? '' : 's'} — filtered by ${parts.join(' and ')}`
+                : `Showing all ${shown} references`;
+        }
+        if (this.empty) this.empty.hidden = shown > 0;
+
+        this.sync();
+
+        if (!canFlip) return;
+
+        // FLIP: play the cards from where they were to where they now are
+        this.refs.filter((r) => !r.hidden).forEach((ref) => {
+            const box = ref.getBoundingClientRect();
+            const was = first.get(ref);
+            if (was) {
+                const dx = was.left - box.left;
+                const dy = was.top - box.top;
+                if (dx || dy) {
+                    gsap.fromTo(ref, { x: dx, y: dy },
+                        { x: 0, y: 0, duration: .55, ease: 'power3.out' });
+                }
+            } else {
+                gsap.fromTo(ref, { opacity: 0, y: 18, scale: .97 },
+                    { opacity: 1, y: 0, scale: 1, duration: .5, ease: 'power3.out' });
+            }
+        });
+
+        ScrollTrigger.refresh();
+    },
+};
+
+
+/* ── STICK ──────────────────────────────────────────────────────────────────
+   The filter bar pins under the header — but ../script.js condenses that
+   header at 40px and retreats it entirely on the way down. Pinning to a flat
+   78px therefore leaves the bar hanging with a gap above it. Rather than run a
+   second scroll listener, watch the class the shared Header already sets and
+   mirror it. One source of truth, and the two can never disagree. */
+const Stick = {
+    init() {
+        const bar  = $('#rsBar');
+        const head = $('#head');
+        if (!bar) return;
+
+        const HEIGHT  = 78;   // .head__rail
+        const STUCK_H = 64;   // .head.is-stuck .head__rail
+
+        const sync = () => {
+            const hidden = head?.classList.contains('is-hidden');
+            const stuck  = head?.classList.contains('is-stuck');
+            const top    = hidden ? 0 : (stuck ? STUCK_H : HEIGHT);
+            bar.style.setProperty('--rs-bar-top', `${top}px`);
+            bar.classList.toggle('is-pinned', bar.getBoundingClientRect().top <= top + 1);
+        };
+
+        sync();
+        if (head) new MutationObserver(sync)
+            .observe(head, { attributes: true, attributeFilter: ['class'] });
+        addEventListener('scroll', sync, { passive: true });
+        addEventListener('resize', sync);
+    },
+};
+
+
+/* ── PROGRESS ───────────────────────────────────────────────────────────── */
+const Plate = {
+    /* the featured document leans toward the pointer. Fine pointers only —
+       on a touch screen it is a card that twitches for no reason. */
+    init() {
+        const el = $('[data-rs-tilt]');
+        if (!el || RM.matches) return;
+        if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+        const rx = gsap.quickTo(el, 'rotationX', { duration: .55, ease: 'power2.out' });
+        const ry = gsap.quickTo(el, 'rotationY', { duration: .55, ease: 'power2.out' });
+        const host = el.closest('.rs-feat') || el;
+
+        host.addEventListener('pointermove', (ev) => {
+            const r = el.getBoundingClientRect();
+            rx(-((ev.clientY - r.top) / r.height - .5) * 7);
+            ry(((ev.clientX - r.left) / r.width - .5) * 9);
+        });
+        host.addEventListener('pointerleave', () => { rx(0); ry(0); });
+    },
+};
+
+
+const Progress = {
+    init() {
+        const bar = $('#rsProg');
+        if (!bar || RM.matches) return;
+        gsap.to(bar, { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: .25 } });
+    },
+};
+
+
+/* ── BOOT ────────────────────────────────────────────────────────────────────
+   Filter first and unconditionally — it is function, not decoration, and has
+   to work even when GSAP is blocked. Then the motion, with the split headlines
+   held until the webfonts settle (capped, so a slow CDN can never stall). */
 const boot = () => {
-    cine();
-    bags();
-    const drip = paint();
-    embed(drip);
+    const run = (label, fn) => {
+        try { fn(); }
+        catch (err) { console.error(`[AVE · research] ${label} failed`, err); release(); }
+    };
+
+    run('filter', () => Filter.init());
+    run('stick',  () => Stick.init());
+
+    if (!HAS_GSAP || RM.matches) { release(); return; }
+
+    run('reveal',   () => Reveal.init());
+    run('counters', () => Counters.init());
+    run('plate',    () => Plate.init());
+    run('progress', () => Progress.init());
+
+    const fonts = document.fonts
+        ? Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))])
+        : Promise.resolve();
+
+    fonts.then(() => {
+        run('lines', () => Reveal.lines());
+        ScrollTrigger.refresh();
+    });
+
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+
+    // absolute failsafe
+    setTimeout(() => {
+        $$('[data-rs], [data-rs-split]').forEach((el) => {
+            if (getComputedStyle(el).opacity === '0') {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            }
+        });
+    }, 3000);
 };
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot, { once: true });
-} else {
-    boot();
-}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
 
-/* release the animation start-states if something upstream failed */
-if (RM.matches) document.documentElement.classList.remove('ct-on');
-
-export { boot, FORMS, MENU };
+window.AVE_RESEARCH = { boot, release, Filter };
