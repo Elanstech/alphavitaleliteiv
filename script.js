@@ -1195,12 +1195,14 @@ class Chronic {
 
 /* =============================================================================
    WHAT MAKES ALPHA VITAL ELITE DIFFERENT (#advantage)
-   Rebuilt 8/27 alongside the markup. Four jobs, none of them pinned:
+   Rebuilt 8/27 alongside the markup. Three jobs, none of them pinned:
 
      1  the route switch — two roads, one shown, keyboard-driven like a tablist
      2  the stops draw in whenever a lane becomes live, so switching replays
      3  the six stages run left to right on arrival, arrows drawing between
-     4  the question boxes open one at a time, animated so nothing jumps
+
+   Dr. Aronov's question boxes moved to #faq on 8/27; that list is plain
+   <details> with no script behind it, so the accordion code went with them.
 
    The old version pinned the section and scrubbed the road with ScrollTrigger.
    That fought the mobile address bar every time it collapsed, and the section
@@ -1213,16 +1215,13 @@ class Advantage {
         this.sw    = $('.ap-switch', this.el ?? document);
         this.opts  = $$('.ap-opt',   this.el ?? document);
         this.lanes = $$('.ap-lane',  this.el ?? document);
-        this.qs    = $$('.ap-q',     this.el ?? document);
         this.at    = 'oral';
-        this.busy  = new WeakSet();
     }
 
     init() {
         if (!this.el) return;
 
         this.wireSwitch();
-        this.wireQuestions();
 
         /* No GSAP, or motion turned down. Nothing here starts hidden in CSS —
            only this class ever hides anything — so there is nothing to undo. */
@@ -1339,61 +1338,6 @@ class Advantage {
             popIn(reasons, { y: 26, stagger: .08, duration: .55, ease: 'back.out(1.4)' },
                   reasons[0].parentElement, 'top 84%');
         }
-    }
-
-    /* =====================================================================
-       4 · THE QUESTION BOXES
-       <details> snaps open by default, which throws the page around when a
-       long answer appears. Tween the wrapper's height instead, and close
-       whatever else is open so only one answer shows at a time.
-       ===================================================================== */
-    wireQuestions() {
-        if (!this.qs.length) return;
-
-        this.qs.forEach((q) => {
-            const ask  = $('.ap-q__ask', q);
-            const wrap = $('.ap-q__wrap', q);
-            if (!ask || !wrap) return;
-
-            ask.addEventListener('click', (e) => {
-                // let the browser handle it when there is nothing to animate with
-                if (typeof window.gsap === 'undefined' || REDUCED) { this.soloPlain(q); return; }
-
-                e.preventDefault();
-                if (this.busy.has(q)) return;
-
-                q.open ? this.shut(q) : this.open(q);
-            });
-        });
-    }
-
-    open(q) {
-        const wrap = $('.ap-q__wrap', q);
-        this.qs.forEach((other) => { if (other !== q && other.open) this.shut(other); });
-
-        q.open = true;
-        this.busy.add(q);
-        gsap.fromTo(wrap,
-            { height: 0 },
-            { height: wrap.scrollHeight, duration: .45, ease: 'expo.out',
-              onComplete: () => { gsap.set(wrap, { height: 'auto' }); this.busy.delete(q); } });
-    }
-
-    shut(q) {
-        const wrap = $('.ap-q__wrap', q);
-        this.busy.add(q);
-        gsap.to(wrap, {
-            height: 0, duration: .32, ease: 'power2.inOut',
-            onComplete: () => { q.open = false; gsap.set(wrap, { height: 'auto' }); this.busy.delete(q); },
-        });
-    }
-
-    /* no-GSAP path: still only one answer open at a time */
-    soloPlain(q) {
-        requestAnimationFrame(() => {
-            if (!q.open) return;
-            this.qs.forEach((other) => { if (other !== q) other.open = false; });
-        });
     }
 }
 
