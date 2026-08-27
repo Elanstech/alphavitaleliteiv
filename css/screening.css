@@ -185,7 +185,7 @@
 
 /* ═══════════════════════════════════════════════════════════════════════════
    THE TITLE SEQUENCE
-   Plays itself once a visit, then removes itself. html.bs-cine is set before
+   Plays on every load of the page, then removes itself. html.has-cine is set before
    first paint so the page underneath never flashes; if scripting dies, the
    no-JS rule at the bottom of this block clears it anyway.
    ═══════════════════════════════════════════════════════════════════════════ */
