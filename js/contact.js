@@ -4,14 +4,15 @@
    the header, menu, dock, nav trail and magnetic buttons.
 
    Two jobs:
-     1. The infusion picker. It records INTEREST and passes it to the screening
-        form as a prefill. It never decides anything — the copy says so and the
-        code keeps it true: no branching, no eligibility, no scoring.
+     1. The question form embed, with iframe autosize.
      2. Reveals, matching the about and research pages.
 
-   Note on the embeds: both iframes ship with an empty src and the screening
-   block ships hidden, so nothing renders a broken frame before the Jotform
-   forms exist. Fill in FORMS below and both wake up.
+   Also loaded by begin-screening.html and review.html purely as the reveal
+   engine — its modules each check for their own markup and no-op when it is
+   absent, so it is safe on any ct- page.
+
+   The screening flow is NOT here. It lives on begin-screening.html and
+   review.html, and its forms are configured in js/screening.js.
 ============================================================================= */
 
 const $  = (s, c = document) => c.querySelector(s);
@@ -32,8 +33,9 @@ const HAS_GSAP = typeof window.gsap !== 'undefined'
                  (no health fields on this one, ever)
    ───────────────────────────────────────────────────────────────────────── */
 const FORMS = {
-    screening: '',                                            // still to build
-    ask:       'https://form.jotform.com/262338508765062',    // Contact Alpha Vital Elite IV
+    /* The question form only. The screening forms live on review.html and are
+       configured in js/screening.js — one per infusion. */
+    ask: 'https://form.jotform.com/262338508765062',          // Contact Alpha Vital Elite IV
 };
 
 
@@ -80,77 +82,6 @@ const splitLines = (el) => {
     }).join('');
 
     return $$('.ct-line > span', el);
-};
-
-
-/* ── PICKER ─────────────────────────────────────────────────────────────────
-   Single-select, and clicking the active one clears it — nobody should be
-   trapped into an answer they did not mean to give. The value is INTEREST
-   only: it prefills the screening form so Dr. Aronov knows what the patient
-   was hoping for. It grants nothing and unlocks nothing. */
-const Picker = {
-    init() {
-        this.grid = $('#ctPick');
-        if (!this.grid) return;
-
-        this.opts  = $$('.ct-opt', this.grid);
-        this.read  = $('#ctRead');
-        this.start = $('#ctStart');
-        this.slug  = null;
-        this.label = null;
-
-        this.opts.forEach((opt) => {
-            opt.addEventListener('click', () => this.choose(opt));
-        });
-
-        this.start?.addEventListener('click', (ev) => this.go(ev));
-        this.paint();
-    },
-
-    choose(opt) {
-        const same = opt.dataset.iv === this.slug;
-        this.slug  = same ? null : opt.dataset.iv;
-        this.label = same ? null : opt.dataset.label;
-
-        this.opts.forEach((o) => {
-            o.setAttribute('aria-pressed', o.dataset.iv === this.slug ? 'true' : 'false');
-        });
-        this.paint();
-
-        if (!RM.matches && HAS_GSAP && !same) {
-            gsap.fromTo(opt, { scale: .97 }, { scale: 1, duration: .35, ease: 'power2.out' });
-        }
-    },
-
-    paint() {
-        if (!this.read) return;
-        this.read.innerHTML = this.slug
-            ? (this.slug === 'undecided'
-                ? 'Noted &mdash; <b>you are not sure yet</b>. Dr. Aronov will work it out with you at the consultation.'
-                : `Noted &mdash; you are interested in <b>${this.label}</b>. Dr. Aronov makes the final decision.`)
-            : 'Choose one to continue, or start without choosing.';
-    },
-
-    /** open the screening form, carrying the interest along as a prefill */
-    go(ev) {
-        const slot  = $('#screeningForm');
-        const frame = $('#ctScreenFrame');
-        if (!FORMS.screening || !slot || !frame) return;   // no form yet: let the anchor do nothing
-
-        ev.preventDefault();
-
-        if (!frame.src) {
-            const url = new URL(FORMS.screening);
-            if (this.slug) {
-                url.searchParams.set('interest', this.slug);
-                if (this.label) url.searchParams.set('interestName', this.label);
-            }
-            frame.src = url.toString();
-        }
-
-        slot.hidden = false;
-        slot.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' });
-    },
 };
 
 
@@ -228,15 +159,13 @@ const Progress = {
 
 
 /* ── BOOT ───────────────────────────────────────────────────────────────────
-   Picker and Embeds are function, not decoration — they run whether or not
-   GSAP ever arrives. */
+   Embeds is function, not decoration — it runs whether or not GSAP ever
+   arrives. */
 const boot = () => {
     const run = (label, fn) => {
         try { fn(); }
         catch (err) { console.error(`[AVE · contact] ${label} failed`, err); release(); }
     };
-
-    run('picker', () => Picker.init());
     run('embeds', () => Embeds.init());
 
     if (!HAS_GSAP || RM.matches) { release(); return; }
@@ -264,4 +193,4 @@ const boot = () => {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
 
-window.AVE_CONTACT = { boot, release, Picker, FORMS };
+window.AVE_CONTACT = { boot, release, FORMS };
