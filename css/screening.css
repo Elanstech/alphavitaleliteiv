@@ -247,6 +247,16 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 .bs-choose__title em {
     font-family: var(--accent, 'Cormorant', serif); font-style: italic; color: var(--gold-deep);
 }
+/* Each headline line rides up out of its own clip. The mask is what makes the
+   reveal read as typeset rather than faded-in. */
+.bs-mask { display: block; overflow: hidden; padding-bottom: .06em; }
+.bs-mask__i { display: block; will-change: transform; }
+/* Drawn left-to-right once the lines have landed. */
+.bs-choose__rule {
+    display: block; width: clamp(4.5rem, 12vw, 7.5rem); height: 1px; margin: 1.15rem 0 1.1rem;
+    background: linear-gradient(to right, var(--gold-deep), color-mix(in oklab, var(--gold-deep) 12%, transparent));
+    transform-origin: 0 50%;
+}
 .bs-choose__note { max-width: 54ch; font-size: .92rem; line-height: 1.7; color: var(--mist); }
 
 
@@ -255,8 +265,9 @@ html.has-cine body { overflow: hidden; height: 100vh; }
     list-style: none; display: grid; gap: clamp(.7rem, 1.8vw, 1.1rem);
     grid-template-columns: repeat(auto-fill, minmax(178px, 1fr));
     align-items: stretch;
+    perspective: 1400px;
 }
-.bs-bag__cell { display: grid; }
+.bs-bag__cell { display: grid; transform-style: preserve-3d; }
 .bs-bag {
     --tone: #4F7D5E;
     position: relative; display: grid; justify-items: center; align-content: start; gap: .1rem;
@@ -283,6 +294,19 @@ html.has-cine body { overflow: hidden; height: 100vh; }
     display: grid; place-items: center;
     width: 100%; height: clamp(120px, 20vw, 168px);
     margin-bottom: .8rem; overflow: hidden;
+}
+/* A single pass of light across the card as it lands — the thing that makes it
+   feel lit rather than just moved. Driven once by GSAP, then it sits off-stage. */
+.bs-bag__sheen {
+    content: ''; position: absolute; inset: -20% -60%;
+    background: linear-gradient(105deg,
+        transparent 38%,
+        color-mix(in oklab, var(--tone) 26%, transparent) 48%,
+        rgba(255,255,255,.72) 52%,
+        color-mix(in oklab, var(--tone) 22%, transparent) 56%,
+        transparent 66%);
+    opacity: 0; pointer-events: none; z-index: 2;
+    transform: translateX(-130%);
 }
 .bs-bag__art img {
     max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain;
