@@ -2384,79 +2384,9 @@ body.is-ready .hero__title .word > span {
 
 
 /* -----------------------------------------------------------------------------
-   THREE · THE QUESTIONS
-   Each question is a box; opening one closes the rest. The heights are
-   animated in script.js, which is why the panel is a wrapper with its own
-   inner element — the wrapper is what gets tweened.
------------------------------------------------------------------------------ */
-.ap-qa { display: grid; gap: .75rem; margin-top: clamp(2rem, 4.5vw, 3rem); }
-
-.ap-q {
-    border: 1px solid var(--rule);
-    border-radius: 5px;
-    background: var(--parchment);
-    transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
-}
-
-.ap-q[open] { border-color: var(--rule-gold); box-shadow: var(--shade-sm); }
-
-.ap-q__ask {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: clamp(1.15rem, 2.4vw, 1.5rem) clamp(1.2rem, 2.6vw, 1.75rem);
-    font-family: var(--caps);
-    font-size: clamp(1rem, 1.9vw, 1.18rem);
-    line-height: 1.4;
-    color: var(--forest);
-    cursor: pointer;
-    list-style: none;
-}
-
-.ap-q__ask::-webkit-details-marker { display: none; }
-.ap-q__ask:hover { color: var(--gold-deep); }
-
-.ap-q__sign {
-    display: grid;
-    place-items: center;
-    flex: 0 0 auto;
-    width: 1.9rem;
-    height: 1.9rem;
-    margin-left: auto;
-    border: 1px solid var(--rule-gold);
-    border-radius: 50%;
-    color: var(--gold-deep);
-    transition: rotate .35s var(--ease), background .35s var(--ease);
-}
-
-.ap-q[open] .ap-q__sign { rotate: 45deg; background: rgba(193, 150, 63, .14); }
-
-/* the wrapper script.js tweens — it must clip, and must not carry padding */
-.ap-q__wrap { overflow: hidden; }
-
-.ap-q__say {
-    padding: 0 clamp(1.2rem, 2.6vw, 1.75rem) clamp(1.35rem, 2.8vw, 1.75rem);
-    font-family: var(--ui);
-    font-size: clamp(.92rem, 1.35vw, 1rem);
-    line-height: 1.74;
-    color: var(--ink-soft);
-}
-
-.ap-q__say p + p { margin-top: .85rem; }
-
-.ap-q__say ul {
-    display: grid;
-    gap: .4rem;
-    margin-top: .85rem;
-    padding-left: 1.1rem;
-}
-
-.ap-q__say li::marker { color: var(--gold); }
-.ap-q__say strong { color: var(--forest); font-weight: 600; }
-
-
-/* -----------------------------------------------------------------------------
-   THE CLOSE + THE NOTICE
+   THE CLOSE
+   Two lines and two buttons. The five-point list and the medical notice that
+   used to sit here were removed on 8/27 at Dr. Aronov's instruction.
 ----------------------------------------------------------------------------- */
 .ap-diff {
     margin-top: clamp(3rem, 6vw, 4.5rem);
@@ -2466,32 +2396,7 @@ body.is-ready .hero__title .word > span {
     background: linear-gradient(155deg, rgba(193, 150, 63, .09), var(--parchment) 58%);
 }
 
-.ap-diff__head {
-    font-family: var(--display);
-    font-weight: 400;
-    font-size: clamp(1.35rem, 3vw, 2rem);
-    line-height: 1.16;
-    color: var(--forest);
-}
-
-.ap-diff__list { display: grid; gap: .85rem; margin-top: 1.5rem; list-style: none; }
-
-.ap-diff__list li {
-    display: flex;
-    align-items: baseline;
-    gap: .75rem;
-    font-family: var(--ui);
-    font-size: clamp(.98rem, 1.45vw, 1.08rem);
-    line-height: 1.6;
-    color: var(--forest);
-}
-
-.ap-diff__list i { flex: 0 0 auto; font-size: .95em; color: var(--gold); }
-
 .ap-diff__punch {
-    margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
-    padding-top: clamp(1.5rem, 3vw, 2rem);
-    border-top: 1px solid var(--rule-gold);
     font-family: var(--display);
     font-weight: 400;
     font-size: clamp(1.3rem, 3.2vw, 2rem);
@@ -2500,33 +2405,6 @@ body.is-ready .hero__title .word > span {
 }
 
 .ap-diff__acts { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: clamp(1.5rem, 3vw, 2rem); }
-
-/* Edit P is explicit: one clearly visible box, readable type, strong contrast.
-   Never behind a link, an expandable section, or very small print. */
-.ap-notice {
-    margin-top: clamp(2.5rem, 5vw, 3.5rem);
-    padding: clamp(1.6rem, 3.4vw, 2.6rem);
-    border: 2px solid var(--forest);
-    border-radius: 6px;
-    background: var(--parchment);
-}
-
-.ap-notice__head {
-    font-family: var(--caps);
-    font-size: clamp(.95rem, 1.8vw, 1.12rem);
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--forest);
-}
-
-.ap-notice p {
-    margin-top: 1.1rem;
-    font-family: var(--ui);
-    font-size: clamp(.92rem, 1.3vw, 1rem);
-    line-height: 1.76;
-    color: var(--ink);
-}
-
 
 /* ---------- advantage · 1080 ---------- */
 @media (max-width: 1080px) {
@@ -2559,8 +2437,7 @@ body.is-ready .hero__title .word > span {
 }
 
 /* ---------- advantage · focus ---------- */
-.ap-opt:focus-visible,
-.ap-q__ask:focus-visible {
+.ap-opt:focus-visible {
     outline: 2px solid var(--gold-deep);
     outline-offset: 3px;
 }
@@ -2572,9 +2449,7 @@ body.is-ready .hero__title .word > span {
     .ap-step,
     .ap-flow__stage,
     .ap-flow__arrow,
-    .ap-reason,
-    .ap-q { opacity: 1 !important; transform: none !important; }
-    .ap-q__wrap { height: auto !important; }
+    .ap-reason { opacity: 1 !important; transform: none !important; }
 }
 
 
@@ -3308,6 +3183,24 @@ body.is-ready .hero__title .word > span {
 
 .fq__a { padding: 0 3.5rem 1.35rem .25rem; }
 .fq__a p { font-size: .94rem; line-height: 1.78; max-width: 68ch; }
+
+/* Dr. Aronov's answers run to several paragraphs, and two of them list — the
+   original eight were all single paragraphs, so none of this existed. */
+.fq__a > * + * { margin-top: .85rem; }
+
+.fq__a ul {
+    display: grid;
+    gap: .4rem;
+    max-width: 68ch;
+    padding-left: 1.15rem;
+    /* the base reset strips list markers site-wide; these answers want them */
+    list-style: disc;
+    font-size: .94rem;
+    line-height: 1.7;
+}
+
+.fq__a li::marker { color: var(--gold); }
+.fq__a strong { color: var(--forest); font-weight: 600; }
 
 .faq__foot {
     display: flex; align-items: center; justify-content: space-between;
