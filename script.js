@@ -1194,216 +1194,205 @@ class Chronic {
 
 
 /* =============================================================================
-   THE IV ADVANTAGE — one stage, one switch (#advantage)
-   Picking a road draws it: the rule fills, the pins light in sequence. The
-   first draw is fired by ScrollTrigger so it plays on arrival; every switch
-   after that replays it. Vertical below 900px, which is why the fill animates
-   whichever axis the media query is using — and why it redraws when the
-   layout flips, or a rotate left the fill running along the wrong axis.
+   WHAT MAKES ALPHA VITAL ELITE DIFFERENT (#advantage)
+   Rebuilt 8/27 alongside the markup. Four jobs, none of them pinned:
+
+     1  the route switch — two roads, one shown, keyboard-driven like a tablist
+     2  the stops draw in whenever a lane becomes live, so switching replays
+     3  the six stages run left to right on arrival, arrows drawing between
+     4  the question boxes open one at a time, animated so nothing jumps
+
+   The old version pinned the section and scrubbed the road with ScrollTrigger.
+   That fought the mobile address bar every time it collapsed, and the section
+   is short enough now that it does not need the pin. Everything below degrades
+   to plain visible markup with GSAP absent or motion reduced.
 ============================================================================= */
 class Advantage {
     constructor() {
-        this.el     = $('#advantage');
-        this.road   = $('#advRoad');
-        this.stage  = $('#advStage');
-        this.switch = $('.adv__switch', this.el ?? document);
-        this.opts   = $$('.adv__opt', this.el ?? document);
-        this.lanes  = $$('.adv__lane', this.el ?? document);
-        this.at     = 'oral';
-        this.st     = null;
-        this.pinned = false;
-        this.locked = false;
-        this.BREAK  = 900;
-
-        /* Where the scrub does what, as a fraction of the pinned run:
-             0    → .40   the oral road draws, stop by stop
-             .40  → .50   it sits finished — the beat where the verdict reads
-             .50          the switch throws over to the line
-             .50  → .92   the IV road draws
-             .92  → 1     finished, held, then the pin releases        */
-        this.CUT = { oral: .40, swap: .50, iv: .92 };
+        this.el    = $('#advantage');
+        this.sw    = $('.ap-switch', this.el ?? document);
+        this.opts  = $$('.ap-opt',   this.el ?? document);
+        this.lanes = $$('.ap-lane',  this.el ?? document);
+        this.qs    = $$('.ap-q',     this.el ?? document);
+        this.at    = 'oral';
+        this.busy  = new WeakSet();
     }
 
     init() {
-        if (!this.el || !this.lanes.length) return;
+        if (!this.el) return;
+
+        this.wireSwitch();
+        this.wireQuestions();
+
+        /* No GSAP, or motion turned down. Nothing here starts hidden in CSS —
+           only this class ever hides anything — so there is nothing to undo. */
+        if (typeof window.gsap === 'undefined' || REDUCED) return;
+
+        gsap.registerPlugin(ScrollTrigger);
+        this.drawSteps(this.laneEl('oral'));
+        this.wireFlow();
+        this.wireReasons();
+    }
+
+    laneEl(lane) { return this.lanes.find((l) => l.dataset.lane === lane); }
+
+    /* =====================================================================
+       1 · THE SWITCH
+       ===================================================================== */
+    wireSwitch() {
+        if (!this.opts.length || !this.lanes.length) return;
 
         this.opts.forEach((o) => o.addEventListener('click', () => this.pick(o.dataset.lane)));
 
-        this.switch?.addEventListener('keydown', (e) => {
+        // left/right (and up/down) move between the two roads, as a tablist does
+        this.sw?.addEventListener('keydown', (e) => {
             if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
             e.preventDefault();
             const next = this.at === 'oral' ? 'iv' : 'oral';
             this.pick(next);
             this.opts.find((o) => o.dataset.lane === next)?.focus();
         });
-
-        // no GSAP, or motion turned down: both roads drawn, nothing moves
-        if (typeof window.gsap === 'undefined' || REDUCED) {
-            this.lanes.forEach((l) => {
-                $$('.stp', l).forEach((s) => s.classList.add('is-passed'));
-                const f = $('.adv__fill', l);
-                if (f) { f.style.width = '100%'; f.style.height = '100%'; }
-            });
-            return;
-        }
-
-        gsap.registerPlugin(ScrollTrigger);
-        popIn($$('.adv__head > *, .adv__note', this.el),
-              { y: 26, stagger: .07, duration: .55, ease: 'back.out(1.5)' }, this.el, 'top 84%');
-
-        /* Same split the shelf uses. Desktop gets the pin; a phone gets the
-           road in normal flow, because pinning a mid-page block on a touch
-           device fights the address bar every time it collapses. */
-        const mm = gsap.matchMedia();
-        mm.add(`(min-width: ${this.BREAK + 1}px)`, () => this.pinnedRoad());
-        mm.add(`(max-width: ${this.BREAK}px)`,     () => this.flowRoad());
     }
 
-    laneEl(lane) { return this.lanes.find((l) => l.dataset.lane === lane); }
-
-    /* =====================================================================
-       DESKTOP — the road pins and vertical scroll draws it
-       ===================================================================== */
-    pinnedRoad() {
-        if (!this.road) return;
-        this.pinned = true;
-        const C = this.CUT;
-
-        this.setLane('oral', false);
-        this.paint(this.laneEl('oral'), 0);
-
-        this.st = ScrollTrigger.create({
-            trigger: this.road,
-            start: 'center center',
-            /* a function + invalidateOnRefresh so the run re-measures against
-               the live viewport instead of freezing whatever height the page
-               happened to load at */
-            end: () => '+=' + Math.round(window.innerHeight * 1.9),
-            pin: true,
-            pinSpacing: true,
-            scrub: .6,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            fastScrollEnd: true,
-            onToggle: (self) => {
-                this.road.style.willChange = self.isActive ? 'transform' : 'auto';
-            },
-            onUpdate: (self) => {
-                const p = self.progress;
-                if (p < C.swap) {
-                    this.setLane('oral');
-                    this.paint(this.laneEl('oral'), p / C.oral);
-                } else {
-                    this.setLane('iv');
-                    this.paint(this.laneEl('iv'), (p - C.swap) / (C.iv - C.swap));
-                }
-            },
-        });
-
-        return () => {
-            this.st?.kill(true);
-            this.st = null;
-            this.pinned = false;
-            gsap.set(this.road, { clearProps: 'willChange' });
-        };
-    }
-
-    /* =====================================================================
-       PHONE + TABLET — no pin. The road draws itself on arrival and the
-       switch throws over once the stage is carried past mid-screen.
-       ===================================================================== */
-    flowRoad() {
-        this.pinned = false;
-
-        const first = ScrollTrigger.create({
-            trigger: this.el, start: 'top 72%', once: true,
-            onEnter: () => this.sweep(this.at),
-        });
-
-        const over = ScrollTrigger.create({
-            trigger: this.stage ?? this.el,
-            start: 'center 46%',
-            onEnter: () => {
-                if (this.locked || this.at !== 'oral') return;
-                this.setLane('iv'); this.sweep('iv');
-            },
-            onLeaveBack: () => {
-                if (this.locked || this.at !== 'iv') return;
-                this.setLane('oral'); this.sweep('oral');
-            },
-        });
-
-        return () => { first.kill(); over.kill(); };
-    }
-
-    /* =====================================================================
-       SHARED
-       ===================================================================== */
-
-    /** A click on the switch. While the road is pinned the switch is a
-     *  readout of scroll position, not a toggle — setting the class alone
-     *  would be overwritten by the very next scroll event. So move the page
-     *  to the scroll position that owns that lane and let the scrub do it. */
     pick(lane) {
-        if (this.pinned && this.st) {
-            const { start, end } = this.st;
-            const at = lane === 'iv' ? this.CUT.iv : this.CUT.oral;
-            Nav.toY(Math.round(start + (end - start) * at));
-            return;
-        }
-        this.locked = true;              // phone: stop the auto-flip meddling
-        if (lane === this.at) return;
-        this.setLane(lane);
-        this.sweep(lane);
-    }
-
-    /** lane visibility + the switch chrome. Never touches the fill. */
-    setLane(lane, fade = true) {
-        if (lane === this.at && this.lanes.some((l) => l.classList.contains('is-live'))) return;
+        if (!lane || lane === this.at) return;
         this.at = lane;
 
-        this.opts.forEach((o) => o.classList.toggle('is-on', o.dataset.lane === lane));
-        this.switch?.classList.toggle('is-iv', lane === 'iv');
+        this.opts.forEach((o) => {
+            const on = o.dataset.lane === lane;
+            o.classList.toggle('is-on', on);
+            o.setAttribute('aria-selected', on ? 'true' : 'false');
+            o.tabIndex = on ? 0 : -1;
+        });
+
         this.lanes.forEach((l) => l.classList.toggle('is-live', l.dataset.lane === lane));
 
-        if (fade && typeof window.gsap !== 'undefined' && !REDUCED) {
-            gsap.fromTo(this.laneEl(lane),
-                { opacity: 0, y: 14 },
-                { opacity: 1, y: 0, duration: .4, ease: 'expo.out', overwrite: true });
-        }
+        // 2 · the stops of the road you just picked draw themselves in
+        this.drawSteps(this.laneEl(lane));
     }
 
-    /** Draw a road to an exact position, 0 → 1. Below 900px the rule is
-     *  vertical, so the fill has to animate whichever axis is in play. */
-    paint(lane, p) {
-        if (!lane) return;
-        const fill  = $('.adv__fill', lane);
-        const stops = $$('.stp', lane);
-        if (!fill || !stops.length) return;
+    /* =====================================================================
+       2 · THE STOPS
+       On the first road this is fired by ScrollTrigger so it plays on
+       arrival. Every switch after that replays it immediately.
+       ===================================================================== */
+    drawSteps(lane) {
+        /* The switch is wired before the GSAP check, because picking a road has
+           to work with or without it. So this has to guard itself: without
+           GSAP the stops are simply already visible. */
+        if (!lane || typeof window.gsap === 'undefined' || REDUCED) return;
 
-        const vertical = window.matchMedia(`(max-width: ${this.BREAK}px)`).matches;
-        const pct = clamp(p, 0, 1) * 100;
+        const steps   = $$('.ap-step', lane);
+        const verdict = $('.ap-verdict', lane);
+        if (!steps.length) return;
 
-        fill.style[vertical ? 'height' : 'width'] = pct.toFixed(1) + '%';
-        fill.style[vertical ? 'width' : 'height'] = '100%';
-        stops.forEach((s, i) => {
-            s.classList.toggle('is-passed', pct >= ((i + 0.55) / stops.length) * 100);
+        const run = () => {
+            gsap.fromTo(steps,
+                { opacity: 0, y: 24 },
+                { opacity: 1, y: 0, duration: .55, ease: 'back.out(1.4)', stagger: .09, overwrite: true });
+            if (verdict) {
+                gsap.fromTo(verdict,
+                    { opacity: 0, y: 16 },
+                    { opacity: 1, y: 0, duration: .5, ease: 'expo.out',
+                      delay: steps.length * .09, overwrite: true });
+            }
+        };
+
+        // already on screen? play now. Otherwise wait until it is.
+        if (lane.getBoundingClientRect().top < window.innerHeight * .9) { run(); return; }
+
+        gsap.set([...steps, verdict].filter(Boolean), { opacity: 0, y: 24 });
+        ScrollTrigger.create({ trigger: lane, start: 'top 86%', once: true, onEnter: run });
+    }
+
+    /* =====================================================================
+       3 · THE SIX STAGES
+       They are given in an order, so they arrive in that order — stage, then
+       the arrow that leads to the next one, left to right.
+       ===================================================================== */
+    wireFlow() {
+        const flow = $('.ap-flow', this.el);
+        if (!flow) return;
+
+        const kids = $$('.ap-flow__stage, .ap-flow__arrow', flow);
+        if (!kids.length) return;
+
+        gsap.set(kids, { opacity: 0 });
+        gsap.set($$('.ap-flow__stage', flow), { y: 18 });
+        gsap.set($$('.ap-flow__arrow', flow), { x: -8 });
+
+        gsap.to(kids, {
+            opacity: 1, y: 0, x: 0,
+            duration: .45,
+            ease: 'expo.out',
+            stagger: .07,
+            scrollTrigger: { trigger: flow, start: 'top 82%', once: true },
         });
     }
 
-    /** Self-running draw, for the unpinned layout where no scrub exists. */
-    sweep(lane) {
-        const el = this.laneEl(lane);
-        if (!el) return;
-        const stops = $$('.stp', el);
-        const span  = { v: 0 };
-        gsap.killTweensOf(span);
-        this.paint(el, 0);
-        gsap.to(span, {
-            v: 1,
-            duration: 0.32 * stops.length + 0.5,
-            ease: 'power2.inOut',
-            onUpdate: () => this.paint(el, span.v),
+    /* =====================================================================
+       3b · THE FOUR REASONS
+       ===================================================================== */
+    wireReasons() {
+        const reasons = $$('.ap-reason', this.el);
+        if (reasons.length) {
+            popIn(reasons, { y: 26, stagger: .08, duration: .55, ease: 'back.out(1.4)' },
+                  reasons[0].parentElement, 'top 84%');
+        }
+    }
+
+    /* =====================================================================
+       4 · THE QUESTION BOXES
+       <details> snaps open by default, which throws the page around when a
+       long answer appears. Tween the wrapper's height instead, and close
+       whatever else is open so only one answer shows at a time.
+       ===================================================================== */
+    wireQuestions() {
+        if (!this.qs.length) return;
+
+        this.qs.forEach((q) => {
+            const ask  = $('.ap-q__ask', q);
+            const wrap = $('.ap-q__wrap', q);
+            if (!ask || !wrap) return;
+
+            ask.addEventListener('click', (e) => {
+                // let the browser handle it when there is nothing to animate with
+                if (typeof window.gsap === 'undefined' || REDUCED) { this.soloPlain(q); return; }
+
+                e.preventDefault();
+                if (this.busy.has(q)) return;
+
+                q.open ? this.shut(q) : this.open(q);
+            });
+        });
+    }
+
+    open(q) {
+        const wrap = $('.ap-q__wrap', q);
+        this.qs.forEach((other) => { if (other !== q && other.open) this.shut(other); });
+
+        q.open = true;
+        this.busy.add(q);
+        gsap.fromTo(wrap,
+            { height: 0 },
+            { height: wrap.scrollHeight, duration: .45, ease: 'expo.out',
+              onComplete: () => { gsap.set(wrap, { height: 'auto' }); this.busy.delete(q); } });
+    }
+
+    shut(q) {
+        const wrap = $('.ap-q__wrap', q);
+        this.busy.add(q);
+        gsap.to(wrap, {
+            height: 0, duration: .32, ease: 'power2.inOut',
+            onComplete: () => { q.open = false; gsap.set(wrap, { height: 'auto' }); this.busy.delete(q); },
+        });
+    }
+
+    /* no-GSAP path: still only one answer open at a time */
+    soloPlain(q) {
+        requestAnimationFrame(() => {
+            if (!q.open) return;
+            this.qs.forEach((other) => { if (other !== q) other.open = false; });
         });
     }
 }
