@@ -39,9 +39,9 @@
 <script>
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('ct-on');
-    /* The title sequence plays once a visit, not on every back-button. Set the
-       flag before first paint so a returning visitor never sees a flash of it. */
-    if (!sessionStorage.getItem('ave-intro')) document.documentElement.classList.add('has-cine');
+    /* The title sequence plays on every load of this page. Set before first
+       paint so the page underneath never flashes through. */
+    document.documentElement.classList.add('has-cine');
   }
 </script>
 </head>
