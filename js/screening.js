@@ -151,9 +151,19 @@ const cine = () => {
     const box = $('#bsCine');
     if (!box) return;
 
+    /* The cue the picker waits on. Fired once, at the moment the curtain
+       starts to lift rather than after it has gone, so the two shots overlap. */
+    let fired = false;
+    const cue = () => {
+        if (fired) return;
+        fired = true;
+        document.dispatchEvent(new CustomEvent('ave:curtain'));
+    };
+
     const done = () => {
         document.documentElement.classList.remove('has-cine');
         box.remove();
+        cue();
     };
 
     /* No GSAP, or motion reduced — clear it and show the page. */
@@ -178,8 +188,8 @@ const cine = () => {
       .fromTo(q('.bs-cine__sub'), { opacity: 0 },
               { opacity: 1, duration: .7, ease: 'none' }, '-=.45')
       .fromTo(skip, { opacity: 0 }, { opacity: 1, duration: .5 }, '-=.6')
-      /* hold, then clear */
-      .to(box, { opacity: 0, duration: .75, ease: 'power2.inOut' }, '+=1.15')
+      /* hold, then clear — the cue goes out as the fade begins, not after it */
+      .to(box, { opacity: 0, duration: .85, ease: 'power2.inOut', onStart: cue }, '+=1.1')
       .to(box, { duration: .01 });
 
     skip?.addEventListener('click', () => { tl.kill(); done(); });
@@ -195,30 +205,98 @@ const cine = () => {
 };
 
 
-/* ── THE BAGS ────────────────────────────────────────────────────────────────
-   They arrive after the sequence clears, one after another, so the grid
-   assembles rather than appearing. */
-const bags = () => {
+/* ── THE CHOICE ──────────────────────────────────────────────────────────────
+   The picker is the second shot of a two-shot opening, so it is built as one
+   timeline and held paused until the welcome screen starts lifting. The two
+   overlap deliberately: cards are already rising while the curtain fades, which
+   reads as one continuous move rather than "animation ends, page appears".
+
+   Returns a play() function, or null if there is nothing to play. */
+const choose = () => {
+    const sec = $('#choose');
     const grid = $('#bsBags');
-    if (!grid) return;
+    if (!sec || !grid) return null;
 
     const cells = [...grid.querySelectorAll('.bs-bag__cell')];
-    if (typeof window.gsap === 'undefined' || RM.matches) return;
+    if (!cells.length || typeof window.gsap === 'undefined' || RM.matches) return null;
 
-    /* Wait out the sequence if it is running, so the two do not overlap. */
-    const delay = document.documentElement.classList.contains('has-cine') ? 6.2 : 0;
+    const q = (sel) => sec.querySelector(sel);
+    const all = (sel) => cells.map((c) => c.querySelector(sel)).filter(Boolean);
 
-    gsap.fromTo(cells, { opacity: 0, y: 26 }, {
-        opacity: 1, y: 0, duration: .8, ease: 'expo.out',
-        stagger: { each: .055, from: 'start' }, delay,
-    });
+    const EASE = 'expo.out';
+
+    /* fromTo sets its start state on creation, so the section is already
+       staged before the first frame — nothing flashes behind the curtain. */
+    const tl = gsap.timeline({ paused: true, defaults: { ease: EASE } });
+
+    tl
+      /* 1 — the eyebrow, quietly */
+      .fromTo(q('.ct-eyebrow'),
+              { opacity: 0, y: 10 },
+              { opacity: 1, y: 0, duration: .6 })
+
+      /* 2 — headline lines ride up out of their clips, one after the other */
+      .fromTo(sec.querySelectorAll('.bs-mask__i'),
+              { yPercent: 120 },
+              { yPercent: 0, duration: 1.1, stagger: .1 }, '-=.34')
+
+      /* 3 — the gold rule draws under them */
+      .fromTo(q('.bs-choose__rule'),
+              { scaleX: 0 },
+              { scaleX: 1, duration: .85, ease: 'power3.inOut' }, '-=.72')
+
+      /* 4 — the instruction */
+      .fromTo(q('.bs-choose__note'),
+              { opacity: 0, y: 10 },
+              { opacity: 1, y: 0, duration: .7 }, '-=.58')
+
+      /* 5 — the cards assemble from the middle out, tilting up to flat. Ten
+             cards landing left-to-right looks like a list loading; from the
+             centre it looks arranged. */
+      .fromTo(cells,
+              { opacity: 0, y: 52, scale: .93, rotateX: -9, transformOrigin: '50% 100%' },
+              { opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 1.15,
+                stagger: { each: .055, from: 'center' } }, '-=.42')
+
+      /* 6 — each bottle settles a beat after its own card, so the card feels
+             like a frame the product drops into */
+      .fromTo(all('.bs-bag__art img'),
+              { yPercent: 22, opacity: 0 },
+              { yPercent: 0, opacity: 1, duration: .95,
+                stagger: { each: .055, from: 'center' } }, '<0.13')
+
+      /* 7 — one pass of light over each card, riding the same stagger */
+      .fromTo(all('.bs-bag__sheen'),
+              { xPercent: -130, opacity: 0 },
+              { xPercent: 130, opacity: 1, duration: .9, ease: 'power2.inOut',
+                stagger: { each: .055, from: 'center' },
+                onComplete() { gsap.set(this.targets(), { opacity: 0 }); } }, '<0.06')
+
+      /* 8 — the way out, last */
+      .fromTo(q('.bs-unsure'),
+              { opacity: 0, y: 8 },
+              { opacity: 1, y: 0, duration: .7 }, '-=.75');
+
+    return () => tl.play();
 };
 
 
 /* ── BOOT ───────────────────────────────────────────────────────────────── */
 const boot = () => {
+    /* Read this before cine() runs — it clears the class on its way out. */
+    const curtain = document.documentElement.classList.contains('has-cine');
+
+    /* Stage the picker first so its start state is set before anything paints,
+       then let the welcome screen decide when to release it. */
+    const play = choose();
+
     cine();
-    bags();
+
+    if (play) {
+        if (curtain) document.addEventListener('ave:curtain', play, { once: true });
+        else play();
+    }
+
     const drip = paint();
     embed(drip);
 };
@@ -232,4 +310,4 @@ if (document.readyState === 'loading') {
 /* release the animation start-states if something upstream failed */
 if (RM.matches) document.documentElement.classList.remove('ct-on');
 
-export { boot, FORMS, MENU };
+export { boot, choose, FORMS, MENU };
