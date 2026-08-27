@@ -142,8 +142,8 @@ const autosize = (frame) => {
 
 /* ── THE TITLE SEQUENCE ──────────────────────────────────────────────────────
    Plays itself on begin-screening.html. No button to press — the skip is a
-   courtesy, not the way through. Once a visit: the flag is set in <head>
-   before first paint, so the back button doesn't replay it.
+   courtesy, not the way through. Runs on every load of the page: the class is
+   set in <head> before first paint so nothing flashes through underneath.
 
    If anything here throws, finish() still runs from the catch, so a broken
    animation can never leave a dark panel covering the page. */
@@ -154,7 +154,6 @@ const cine = () => {
     const done = () => {
         document.documentElement.classList.remove('has-cine');
         box.remove();
-        try { sessionStorage.setItem('ave-intro', '1'); } catch { /* private mode */ }
     };
 
     /* No GSAP, or motion reduced — clear it and show the page. */
