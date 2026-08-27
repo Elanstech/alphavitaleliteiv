@@ -20,7 +20,7 @@
      05 · HERO                     #hero
      06 · THE SHELF                #infusions      Chapter I
      07 · CHRONIC CONDITIONS       #conditions
-     08 · THE IV ADVANTAGE         #advantage
+     08 · WHAT MAKES US DIFFERENT   #advantage
      09 · HOW A VISIT WORKS        #visit          Chapter II
      10 · THE PHYSICIAN            #physician      Chapter III
      11 · THE EVIDENCE             #research       Chapter IV
@@ -1834,555 +1834,747 @@ body.is-ready .hero__title .word > span {
 
 
 /* =============================================================================
-   08 · THE IV ADVANTAGE  (#advantage)
-   One stage, one switch. Typography is deliberately its own: Marcellus for
-   the stop names, Archivo for the counters, Cormorant for the verdict — so
-   this section does not read in the shelf's voice.
+   08 · WHAT MAKES ALPHA VITAL ELITE DIFFERENT  (#advantage)
+   Rebuilt 8/27 from Dr. Aronov's Edits K, L, M, N, O and P (8/26). Three beats
+   in one section — the route, the six stages, the questions — kept short on
+   purpose: the stages run across rather than stacking, the reasons run four-up,
+   and the questions stay collapsed until they are asked for.
+
+   Typography stays this section's own: Marcellus for the stop and stage names,
+   Archivo for the counters, Cormorant for the verdicts, so it never reads in
+   the shelf's voice.
+
+   Everything is prefixed `ap-`. The old .adv / .seq / .split / .rack / .seqx
+   rules this replaced are gone; nothing else in the sheet referenced them.
 ============================================================================= */
-.adv {
-    --lane:  var(--gold-deep);
+.ap-sec {
     position: relative;
     padding: clamp(4rem, 9vw, 7rem) var(--gut);
     background: var(--cream);
     color: var(--ink-soft);
     overflow: clip;
 }
-.adv__field {
-    position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background:
-        radial-gradient(70% 50% at 82% 2%, rgba(231,203,134,.30), transparent 62%),
-        radial-gradient(60% 45% at 4% 98%, rgba(143,190,155,.13), transparent 60%);
-}
-.adv__wrap { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; }
 
-.adv__head { margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem); }
-.adv__eyebrow {
-    display: inline-flex; align-items: center; gap: .7rem;
-    font-family: var(--caps); font-size: .74rem; letter-spacing: .3em;
-    text-transform: uppercase; color: var(--gold-deep); margin-bottom: 1.1rem;
+.ap-wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
 }
-.adv__eyebrow i { font-size: 1.3em; }
-.adv__title {
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(2.1rem, 5.6vw, 4.4rem);
-    line-height: 1.03; letter-spacing: -.022em; color: var(--forest); margin-bottom: 1.15rem;
-}
-.adv__title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.06em; color: var(--gold-deep); }
-.adv__lede { font-size: clamp(.98rem, 1.2vw, 1.12rem); line-height: 1.76; max-width: 56ch; }
 
-/* ---------- the switch ---------- */
-.adv__switch {
+/* ---------- the opener ---------- */
+.ap-open { max-width: 70ch; }
+
+.ap-open__title {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -.015em;
+    color: var(--forest);
+    text-wrap: balance;
+}
+
+.ap-open__title em {
+    font-family: var(--accent);
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold-deep);
+}
+
+.ap-open__say {
+    margin-top: 1.3rem;
+    font-family: var(--accent);
+    font-style: italic;
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    line-height: 1.44;
+    color: var(--forest-mid);
+}
+
+.ap-open__stand {
+    margin-top: 1.1rem;
+    font-family: var(--caps);
+    font-size: clamp(.88rem, 1.5vw, 1rem);
+    line-height: 1.6;
+    letter-spacing: .04em;
+    color: var(--ink-soft);
+}
+
+/* ---------- a beat marker between the three movements ---------- */
+.ap-beat {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+    padding-top: clamp(1.75rem, 4vw, 2.5rem);
+    border-top: 1px solid var(--rule);
+}
+
+.ap-beat__no {
+    flex: 0 0 auto;
+    font-family: var(--micro);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+}
+
+.ap-beat__name {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.4vw, 2.3rem);
+    line-height: 1.14;
+    color: var(--forest);
+}
+
+.ap-beat__say {
+    margin-top: .6rem;
+    font-family: var(--accent);
+    font-style: italic;
+    font-size: clamp(1.02rem, 1.9vw, 1.25rem);
+    color: var(--forest-mid);
+}
+
+
+/* -----------------------------------------------------------------------------
+   ONE · THE ROUTE
+----------------------------------------------------------------------------- */
+.ap-switch {
     position: relative;
-    display: inline-grid; grid-auto-flow: column; gap: 0;
-    padding: 5px; margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
-    border: 1px solid var(--rule); border-radius: 999px;
-    background: rgba(255,255,255,.6);
-    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-}
-.adv__thumb {
-    position: absolute; top: 5px; bottom: 5px; left: 5px;
-    width: calc(50% - 5px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .4rem;
+    width: min(100%, 640px);
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding: .4rem;
+    border: 1px solid var(--rule);
     border-radius: 999px;
-    background: var(--forest);
-    box-shadow: 0 14px 28px -16px rgba(32,52,33,.6);
-    transition: transform .55s var(--ease), background .55s var(--ease);
+    background: var(--parchment);
+    box-shadow: var(--shade-sm);
 }
-.adv__switch.is-iv .adv__thumb { transform: translateX(100%); background: var(--gold); }
-.adv__opt {
-    position: relative; z-index: 2;
-    display: inline-flex; align-items: center; gap: .6rem;
-    padding: .85rem clamp(1rem, 2.4vw, 1.9rem);
+
+.ap-opt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .5rem .7rem;
+    padding: .9rem 1rem;
+    border: 0;
     border-radius: 999px;
-    font-family: var(--micro); font-size: .66rem; font-weight: 700;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft);
-    white-space: nowrap;
-    transition: color .45s var(--ease);
+    background: transparent;
+    font-family: var(--caps);
+    font-size: clamp(.82rem, 1.5vw, .96rem);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: color .35s var(--ease), background .35s var(--ease);
 }
-.adv__opt i { font-size: 1.25em; }
-.adv__opt b {
-    font-family: var(--data); font-weight: 600; font-size: .72em;
-    letter-spacing: .1em; color: var(--mist);
-    transition: color .45s var(--ease);
-}
-.adv__opt.is-on { color: var(--cream); }
-.adv__opt.is-on b { color: rgba(246,241,231,.7); }
-.adv__switch.is-iv .adv__opt.is-on { color: var(--forest-deep); }
-.adv__switch.is-iv .adv__opt.is-on b { color: rgba(16,27,19,.6); }
 
-/* ---------- the stage ---------- */
-.adv__stage { position: relative; display: grid; }
-.adv__lane {
-    grid-area: 1 / 1;
-    visibility: hidden; opacity: 0; pointer-events: none;
-}
-.adv__lane.is-live { visibility: visible; opacity: 1; pointer-events: auto; }
-.adv__lane[data-lane="iv"] { --lane: var(--gold-deep); }
-.adv__lane[data-lane="oral"] { --lane: #8B8877; }
+.ap-opt i { font-size: 1.15em; }
 
-.adv__track {
+.ap-opt b {
+    font-family: var(--data);
+    font-size: .74em;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--mist);
+    transition: color .35s var(--ease);
+}
+
+.ap-opt.is-on { background: var(--forest); color: var(--cream); }
+.ap-opt.is-on b { color: var(--gold-lite); }
+.ap-opt:hover:not(.is-on) { background: rgba(32, 52, 33, .06); color: var(--forest); }
+
+/* ---------- the lanes ---------- */
+.ap-stage { margin-top: clamp(2.25rem, 5vw, 3.25rem); }
+
+.ap-lane { display: none; }
+.ap-lane.is-live { display: block; }
+
+.ap-lane__head { max-width: 66ch; margin-bottom: clamp(1.75rem, 4vw, 2.5rem); }
+
+.ap-lane__title {
+    font-family: var(--caps);
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--forest);
+}
+
+.ap-lane__title::after {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 2px;
+    margin-top: .85rem;
+    background: var(--gold);
+}
+
+.ap-lane__intro {
+    margin-top: 1.25rem;
+    font-family: var(--ui);
+    font-size: clamp(.98rem, 1.4vw, 1.06rem);
+    line-height: 1.72;
+    color: var(--ink-soft);
+}
+
+/* ---------- the stops ---------- */
+.ap-track {
     position: relative;
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: clamp(1rem, 2.5vw, 2rem);
-    padding-top: 3.25rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1rem, 2.2vw, 1.5rem);
     list-style: none;
 }
-.adv__track--iv { grid-template-columns: repeat(2, 1fr); max-width: 62%; }
 
-.adv__rule {
-    position: absolute; left: 0; right: 0; top: 1.05rem; height: 2px;
-    background: repeating-linear-gradient(90deg,
-        color-mix(in oklab, var(--lane) 38%, transparent) 0 7px, transparent 7px 15px);
-}
-.adv__track--iv .adv__rule { background: color-mix(in oklab, var(--lane) 22%, transparent); }
-.adv__fill {
-    position: absolute; left: 0; top: 0; height: 100%; width: 0%;
-    background: var(--lane);
-    box-shadow: 0 0 14px color-mix(in oklab, var(--lane) 55%, transparent);
-}
+.ap-track--iv { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; }
 
-.stp { position: relative; }
-.stp__pin {
-    position: absolute; left: 0; top: -3.25rem;
-    display: grid; place-items: center;
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--cream);
-    border: 1px solid color-mix(in oklab, var(--lane) 40%, transparent);
-    font-family: var(--data); font-weight: 600; font-size: .8rem; color: var(--mist);
-    transition: color .5s var(--ease), background .5s var(--ease),
-                border-color .5s var(--ease), transform .5s var(--ease);
-}
-.stp.is-passed .stp__pin {
-    color: var(--cream); background: var(--lane);
-    border-color: var(--lane); transform: scale(1.12);
-}
-.adv__track--iv .stp.is-passed .stp__pin { color: var(--forest-deep); }
-.stp__name {
-    /* Marcellus — engraved caps, not the display serif used elsewhere */
-    font-family: var(--caps); font-weight: 400;
-    font-size: clamp(.92rem, 1.35vw, 1.1rem);
-    letter-spacing: .06em; text-transform: uppercase;
-    color: var(--forest); margin-bottom: .5rem;
-    transition: color .5s var(--ease);
-}
-.stp.is-passed .stp__name { color: var(--lane); }
-.stp__what { font-size: .89rem; line-height: 1.68; color: var(--ink-soft); }
-
-.adv__verdict {
-    margin-top: clamp(1.5rem, 3vw, 2.25rem);
-    padding-top: 1.2rem; border-top: 1px solid var(--rule);
-    font-family: var(--accent); font-style: italic;
-    font-size: clamp(1.05rem, 1.6vw, 1.35rem); line-height: 1.55;
-    color: var(--forest); max-width: 62ch;
-}
-.adv__verdict b {
-    font-family: var(--micro); font-style: normal; font-size: .58rem; font-weight: 700;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep);
-    margin-right: .5rem;
-}
-
-.adv__note {
-    display: grid; grid-template-columns: auto 1fr; gap: clamp(1rem, 2.5vw, 1.75rem);
-    align-items: start;
-    margin-top: clamp(2rem, 4vw, 3rem);
-    padding: clamp(1.35rem, 3vw, 2rem);
-    border: 1px solid var(--rule-gold); border-left: 3px solid var(--gold);
-    background: rgba(193, 150, 63, .07);
-}
-.adv__note > i { font-size: 1.9rem; color: var(--gold-deep); line-height: 1; }
-.adv__note p { font-size: .95rem; line-height: 1.75; }
-.adv__note b { color: var(--forest); font-weight: 600; }
-
-.adv__road { position: relative; }
-/* while the block is pinned the stage must not collapse as lanes swap —
-   both lanes already stack in the same grid cell, this just holds the box */
-.adv__stage { min-height: 1px; }
-
-/* ---------- advantage · the two beats ---------- */
-.adv__beat {
-    display: flex; align-items: baseline; gap: clamp(.9rem, 2vw, 1.5rem);
-    margin: clamp(2.5rem, 5vw, 3.75rem) 0 clamp(1.35rem, 2.6vw, 2rem);
-    padding-top: clamp(1.5rem, 3vw, 2.25rem);
-    border-top: 1px solid var(--rule-gold);
-}
-.adv__beat:first-of-type { margin-top: clamp(1.5rem, 3vw, 2.25rem); padding-top: 0; border-top: 0; }
-.adv__beat-no {
-    flex: none; font-family: var(--micro); font-weight: 700;
-    font-size: .68rem; letter-spacing: .26em; text-transform: uppercase;
-    color: var(--gold-deep);
-}
-.adv__beat-name {
-    font-family: var(--caps); font-weight: 400;
-    font-size: clamp(1.4rem, 2.5vw, 2rem); line-height: 1.14; color: var(--forest);
-}
-.adv__beat-say {
-    margin-top: .45rem;
-    font-family: var(--accent); font-style: italic; font-weight: 500;
-    font-size: clamp(1.08rem, 1.7vw, 1.35rem); line-height: 1.4; color: var(--gold-deep);
-}
-.adv__beat-body { margin-top: .7rem; max-width: 58ch; font-size: .95rem; line-height: 1.75; }
-
-/* ---------- advantage · the sequence · the split ----------
-   One crowded bag against six. Read the shapes first, the words second:
-   the point should land before a single line of copy is read. */
-.split {
-    display: grid;
-    grid-template-columns: minmax(0, .82fr) auto minmax(0, 1.18fr);
-    gap: clamp(.9rem, 2.2vw, 1.9rem);
-    align-items: stretch;
-}
-.split__col {
-    display: flex; flex-direction: column;
-    padding: clamp(1.3rem, 2.7vw, 2rem);
+.ap-step {
+    padding: clamp(1.4rem, 2.6vw, 1.9rem);
     border: 1px solid var(--rule);
-    background: rgba(255, 255, 255, .42);
+    border-radius: 4px;
+    background: var(--parchment);
 }
-.split__col--one {
-    border-color: rgba(179, 78, 55, .3);
-    background: rgba(179, 78, 55, .05);
-}
-.split__col--six {
-    border-color: var(--rule-gold);
-    background: rgba(193, 150, 63, .08);
-}
-.split__tag {
-    display: flex; align-items: center; gap: .5rem;
-    margin-bottom: clamp(1rem, 2.2vw, 1.6rem);
-    font-family: var(--micro); font-weight: 600;
-    font-size: .63rem; letter-spacing: .24em; text-transform: uppercase;
-    color: var(--gold-deep);
-}
-.split__tag i { font-size: 1.35em; letter-spacing: 0; }
-.split__tag--warn { color: #B34E37; }
 
-/* the headline under each picture — this is the whole argument */
-.split__big {
-    margin-bottom: .7rem;
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(1.55rem, 3vw, 2.35rem); line-height: 1.08; letter-spacing: -.02em;
+.ap-step__pin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: var(--forest);
+    font-family: var(--data);
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--gold-lite);
+}
+
+.ap-track--iv .ap-step__pin { background: var(--gold); color: var(--forest-deep); }
+
+.ap-step__name {
+    margin-top: 1rem;
+    font-family: var(--caps);
+    font-size: clamp(.95rem, 1.7vw, 1.08rem);
+    letter-spacing: .06em;
     color: var(--forest);
 }
-.split__col--one .split__big { color: #A2452F; }
-.split__say { font-size: .92rem; line-height: 1.7; color: var(--ink-soft); }
-.split__say b { color: var(--forest); font-weight: 600; }
 
-.split__viz { flex: 1; display: flex; align-items: center; justify-content: center; padding: .5rem 0 1.4rem; }
-
-/* the vs divider */
-.split__vs { display: grid; grid-template-rows: 1fr auto 1fr; justify-items: center; gap: .8rem; }
-.split__vs i { width: 1px; height: 100%; background: var(--rule); }
-.split__vs b {
-    font-family: var(--micro); font-weight: 700; font-size: .58rem;
-    letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
+.ap-step__what {
+    margin-top: .7rem;
+    font-family: var(--ui);
+    font-size: clamp(.88rem, 1.25vw, .95rem);
+    line-height: 1.66;
+    color: var(--ink-soft);
 }
 
-/* =========================================================================
-   THE BAG — one component, two sizes. Hook, body, fluid line, tubing.
-   --fluid sets the contents colour, set inline per bag in the markup.
-   ========================================================================= */
-.iv { position: relative; display: block; }
-.iv__hook {
-    display: block; width: 18px; height: 11px; margin: 0 auto -1px;
-    border: 2px solid color-mix(in oklab, var(--forest) 26%, transparent);
-    border-bottom: 0; border-radius: 9px 9px 0 0;
-}
-.iv__bag {
-    position: relative; overflow: hidden;
-    display: block; width: 100%; aspect-ratio: 3 / 4;
-    border: 1.5px solid color-mix(in oklab, var(--forest) 26%, transparent);
-    border-radius: 12px 12px 22px 22px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, .7), rgba(255, 255, 255, .3));
-    box-shadow:
-        inset -10px 0 20px -16px rgba(32, 52, 33, .75),
-        inset 10px 0 18px -16px rgba(255, 255, 255, .95);
-}
-.iv__fluid {
-    position: absolute; left: 0; right: 0; bottom: 0; height: 74%; z-index: 1;
-    background: linear-gradient(180deg,
-        var(--fluid, rgba(231, 203, 134, .85)),
-        color-mix(in oklab, var(--fluid, #E7CB86) 72%, #ffffff));
-}
-.iv__fluid::before {
-    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
-    background: rgba(255, 255, 255, .75);
-}
-.iv__vol {
-    position: absolute; z-index: 3; left: 0; right: 0; bottom: .5rem;
-    text-align: center;
-    font-family: var(--micro); font-weight: 700; font-size: .52rem;
-    letter-spacing: .16em; text-transform: uppercase; color: var(--forest);
-}
-.iv__vol i {
-    display: block; font-family: var(--data); font-style: normal; font-weight: 600;
-    font-size: 1.55rem; letter-spacing: -.01em; line-height: 1.05;
-}
-/* the light cover */
-.iv__sleeve {
-    /* the cover stops short of the bottom, the way a real light sleeve does —
-       so a shielded bag still reads as a bag with something in it */
-    position: absolute; inset: 0 0 46% 0; z-index: 2;
-    border-radius: 10px 10px 0 0;
-    display: grid; place-items: center; align-content: center;
-    background: repeating-linear-gradient(135deg,
-        rgba(32, 52, 33, .94) 0 6px, rgba(44, 69, 48, .94) 6px 12px);
-    color: var(--gold-lite); font-size: 1.35rem; line-height: 1;
-    box-shadow: 0 3px 8px -4px rgba(16, 27, 19, .6);
-}
-.iv__tube {
-    display: block; width: 2px; height: 22px; margin: 0 auto;
-    background: linear-gradient(180deg, color-mix(in oklab, var(--forest) 28%, transparent), transparent);
+/* ---------- the verdict ---------- */
+.ap-verdict {
+    max-width: 70ch;
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding: clamp(1.25rem, 2.6vw, 1.75rem) clamp(1.4rem, 3vw, 2rem);
+    border-left: 3px solid var(--gold);
+    background: rgba(193, 150, 63, .07);
+    font-family: var(--ui);
+    font-size: clamp(.98rem, 1.4vw, 1.06rem);
+    line-height: 1.7;
+    color: var(--ink-soft);
 }
 
-/* ---------- the crowded one ---------- */
-.iv--crowd { width: min(100%, 14.5rem); }
-.iv--crowd .iv__hook,
-.iv--crowd .iv__bag { border-color: rgba(179, 78, 55, .45); }
-.iv--crowd .iv__bag { aspect-ratio: 4 / 5; }
-.iv--crowd .iv__fluid {
-    height: 100%;
-    background: linear-gradient(158deg, rgba(150, 88, 55, .5), rgba(120, 96, 40, .55) 48%, rgba(150, 78, 55, .45));
-}
-.iv--crowd .iv__fluid::before { display: none; }
-.iv__crowd {
-    position: absolute; inset: 0; z-index: 2;
-    display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
-    gap: .26rem; padding: .9rem .6rem 2.4rem;
-}
-.iv__crowd i {
-    font-family: var(--ui); font-style: normal; font-weight: 500; font-size: .64rem;
-    padding: .16rem .38rem; border-radius: 2px;
-    background: rgba(251, 248, 241, .9); color: var(--ink);
-    box-shadow: 0 1px 0 rgba(60, 25, 15, .18);
-}
-.iv__crowd i:nth-child(2n) { transform: rotate(-3deg); }
-.iv__crowd i:nth-child(3n) { transform: rotate(2.5deg); }
-.iv__crowd i:nth-child(5n) { transform: rotate(-1.5deg) translateY(1px); }
-.iv--crowd .iv__vol { color: var(--cream); bottom: .6rem; }
-.iv--crowd .iv__tube { background: linear-gradient(180deg, rgba(179, 78, 55, .55), transparent); height: 26px; }
-
-/* ---------- the rack of six ---------- */
-.rack {
-    list-style: none; margin: 0 0 1.4rem; padding: 0;
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: clamp(.7rem, 1.8vw, 1.3rem);
-}
-.rack__item { text-align: center; }
-.rack__item .iv { width: min(100%, 5.4rem); margin: 0 auto; }
-.rack__no {
-    display: block; margin-top: .5rem;
-    font-family: var(--data); font-weight: 600; font-size: .68rem;
-    letter-spacing: .1em; color: var(--gold-deep);
-}
-.rack__name {
-    display: block; margin-top: .12rem;
-    font-family: var(--caps); font-weight: 400; font-size: .88rem;
-    line-height: 1.25; color: var(--forest);
-}
-.rack__item--shield .iv__vol { color: var(--forest); }
-.rack__key {
-    display: flex; flex-wrap: wrap; gap: .35rem 1.1rem;
-    margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--rule-gold);
-}
-.rack__keybit {
-    display: inline-flex; align-items: center; gap: .45rem;
-    font-family: var(--micro); font-weight: 600; font-size: .58rem;
-    letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft);
-}
-.rack__dot {
-    display: grid; place-items: center; width: 17px; height: 17px; border-radius: 3px;
-    border: 1px solid var(--rule-gold);
-    background: linear-gradient(180deg, rgba(255, 255, 255, .6), rgba(231, 203, 134, .55));
-    font-size: .72rem; color: var(--gold-lite);
-}
-.rack__dot--shield {
-    border-color: var(--forest-mid);
-    background: repeating-linear-gradient(135deg,
-        rgba(32, 52, 33, .94) 0 4px, rgba(44, 69, 48, .94) 4px 8px);
+.ap-verdict b {
+    font-family: var(--caps);
+    font-weight: 400;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--forest);
 }
 
-/* ---------- the concrete example ---------- */
-.seqx {
-    margin-top: clamp(1.2rem, 2.6vw, 2rem);
-    padding: clamp(1.35rem, 3vw, 2rem);
-    border: 1px solid var(--rule); border-left: 3px solid var(--forest);
-    background: rgba(255, 255, 255, .5);
+
+/* -----------------------------------------------------------------------------
+   TWO · WHY WE DON'T PUT EVERYTHING IN ONE BAG
+----------------------------------------------------------------------------- */
+.ap-boxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1.25rem, 3vw, 2rem);
+    align-items: stretch;
+    margin-top: clamp(2.25rem, 5vw, 3.25rem);
 }
-.seqx__tag {
-    margin-bottom: 1rem;
-    font-family: var(--micro); font-weight: 600; font-size: .63rem;
-    letter-spacing: .24em; text-transform: uppercase; color: var(--forest-mid);
-}
-.seqx__grid {
-    display: grid; grid-template-columns: 1.35fr .65fr;
-    gap: clamp(1.2rem, 3vw, 2.4rem); align-items: center;
-}
-.seqx__lead {
-    margin-bottom: .7rem;
-    font-family: var(--accent); font-style: italic; font-weight: 600;
-    font-size: clamp(1.2rem, 2.1vw, 1.6rem); line-height: 1.3; color: var(--forest);
-}
-.seqx__body p { font-size: .92rem; line-height: 1.72; }
-.seqx__body p + p { margin-top: .7rem; }
-.seqx__body b { color: var(--forest); font-weight: 600; }
-.seqx__viz { display: grid; gap: .9rem; justify-items: center; }
-.seqx__pair { display: flex; align-items: center; gap: .55rem; }
-.seqx__chip {
-    padding: .42rem .7rem; border: 1px solid var(--rule);
+
+.ap-box {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.6rem, 3.2vw, 2.4rem);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
     background: var(--parchment);
-    font-family: var(--ui); font-weight: 500; font-size: .78rem; color: var(--forest);
 }
-.seqx__no, .seqx__then {
-    display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
-    font-size: 1rem;
+
+.ap-box--ours { border-color: var(--rule-gold); box-shadow: var(--shade-sm); }
+
+.ap-box__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .5em;
+    align-self: flex-start;
+    padding: .4rem .8rem;
+    border-radius: 999px;
+    background: rgba(32, 52, 33, .08);
+    font-family: var(--micro);
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
 }
-.seqx__no { background: rgba(179, 78, 55, .16); color: #B34E37; }
-.seqx__then { background: rgba(193, 150, 63, .22); color: var(--gold-deep); }
-.seqx__rule { width: 100%; max-width: 12rem; height: 1px; background: var(--rule); }
-.seqx__pair--ok .seqx__chip { border-color: var(--rule-gold); background: rgba(193, 150, 63, .1); }
+
+.ap-box--ours .ap-box__tag { background: rgba(193, 150, 63, .16); color: var(--gold-deep); }
+
+.ap-box__name {
+    margin-top: 1.25rem;
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+    line-height: 1.2;
+    color: var(--forest);
+}
+
+.ap-box__say {
+    margin-top: .9rem;
+    font-family: var(--accent);
+    font-style: italic;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    line-height: 1.44;
+    color: var(--gold-deep);
+}
+
+.ap-box__body {
+    margin-top: 1.1rem;
+    font-family: var(--ui);
+    font-size: clamp(.92rem, 1.3vw, 1rem);
+    line-height: 1.7;
+    color: var(--ink-soft);
+}
+
+/* ---------- the six stages, running across ----------
+   A fixed grid — six stage columns and five arrow columns — so the row can
+   never wrap and leave an arrow pointing at nothing. */
+.ap-flow {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr) auto) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(.35rem, 1.2vw, .9rem);
+    margin-top: clamp(2rem, 4.5vw, 3rem);
+    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(.75rem, 2vw, 1.5rem);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--parchment);
+    list-style: none;
+}
+
+.ap-flow__stage { display: grid; justify-items: center; gap: .5rem; text-align: center; }
+
+.ap-flow__art { position: relative; display: grid; place-items: center; min-height: 58px; }
+
+/* the stage bag */
+.ap-vial {
+    position: relative;
+    width: clamp(38px, 6vw, 50px);
+    aspect-ratio: 5 / 7;
+    border: 1px solid rgba(32, 52, 33, .22);
+    border-radius: 8px 8px 12px 12px / 6px 6px 16px 16px;
+    background: linear-gradient(170deg, var(--fluid, rgba(180, 200, 186, .55)), var(--fluid2, rgba(150, 178, 160, .85)));
+}
+
+.ap-vial::before {
+    content: '';
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    width: 1.5px;
+    height: 9px;
+    translate: -50% 0;
+    background: rgba(32, 52, 33, .3);
+}
+
+/* the syringe, for the final push */
+.ap-syr {
+    position: relative;
+    width: clamp(44px, 7vw, 58px);
+    height: clamp(18px, 3vw, 22px);
+    border: 1px solid rgba(32, 52, 33, .24);
+    border-radius: 3px;
+    background: linear-gradient(180deg, rgba(231, 203, 134, .5), rgba(193, 150, 63, .38));
+}
+
+.ap-syr::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -16px;
+    width: 16px;
+    height: 1.5px;
+    translate: 0 -50%;
+    background: rgba(32, 52, 33, .42);
+}
+
+.ap-syr::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -9px;
+    width: 9px;
+    height: 9px;
+    translate: 0 -50%;
+    border-radius: 2px;
+    background: rgba(32, 52, 33, .3);
+}
+
+/* the light-protection mark */
+.ap-moon {
+    position: absolute;
+    right: -6px;
+    bottom: -4px;
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--forest);
+    font-size: .62rem;
+    color: var(--gold-lite);
+}
+
+.ap-flow__no {
+    font-family: var(--data);
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    color: var(--gold-deep);
+}
+
+.ap-flow__name {
+    font-family: var(--caps);
+    font-size: clamp(.7rem, 1.1vw, .82rem);
+    line-height: 1.35;
+    letter-spacing: .03em;
+    color: var(--forest);
+}
+
+.ap-flow__arrow { align-self: start; padding-top: 1.4rem; color: var(--gold); }
+.ap-flow__arrow i { font-size: clamp(.8rem, 1.5vw, 1rem); }
+
+/* ---------- the key under the stages ---------- */
+.ap-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem 1.5rem;
+    margin-top: 1.5rem;
+    font-family: var(--ui);
+    font-size: .82rem;
+    color: var(--ink-soft);
+}
+
+.ap-key span { display: inline-flex; align-items: center; gap: .5em; }
+
+.ap-key em {
+    display: inline-grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    background: var(--parchment);
+    font-size: .7rem;
+    color: var(--gold-deep);
+}
+
+.ap-key em.ap-key--plain { background: rgba(32, 52, 33, .06); }
+
+.ap-stages-say {
+    margin-top: clamp(2rem, 4vw, 2.75rem);
+    font-family: var(--caps);
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--forest);
+}
 
 /* ---------- why the sequence matters ---------- */
-.seq__whyhead {
-    margin: clamp(1.8rem, 3.6vw, 2.75rem) 0 clamp(.9rem, 1.8vw, 1.3rem);
-    font-family: var(--caps); font-weight: 400;
-    font-size: clamp(1.35rem, 2.3vw, 1.85rem); color: var(--forest);
+.ap-why {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    font-family: var(--caps);
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--forest);
 }
 
-/* ---------- the close ---------- */
-.seq__close {
-    margin-top: clamp(1.8rem, 3.6vw, 2.75rem);
-    padding-top: clamp(1.4rem, 2.8vw, 2rem);
+.ap-reasons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1rem, 2.4vw, 1.6rem);
+    margin-top: clamp(2rem, 4.5vw, 3rem);
+}
+
+.ap-reason {
+    padding: clamp(1.5rem, 3vw, 2.1rem);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--parchment);
+}
+
+.ap-reason__no {
+    font-family: var(--data);
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    color: var(--gold-deep);
+}
+
+.ap-reason__name {
+    display: flex;
+    align-items: center;
+    gap: .55em;
+    margin-top: .6rem;
+    font-family: var(--caps);
+    font-size: clamp(1rem, 1.9vw, 1.2rem);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--forest);
+}
+
+.ap-reason__name i { font-size: 1.2em; color: var(--gold); }
+
+.ap-reason__ask {
+    margin-top: .5rem;
+    font-family: var(--accent);
+    font-style: italic;
+    font-size: clamp(1rem, 1.7vw, 1.14rem);
+    color: var(--forest-mid);
+}
+
+.ap-reason__body {
+    margin-top: .9rem;
+    font-family: var(--ui);
+    font-size: clamp(.9rem, 1.3vw, .98rem);
+    line-height: 1.7;
+    color: var(--ink-soft);
+}
+
+.ap-body {
+    max-width: 72ch;
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+    font-family: var(--ui);
+    font-size: clamp(.98rem, 1.4vw, 1.06rem);
+    line-height: 1.72;
+    color: var(--ink-soft);
+}
+
+.ap-punch {
+    margin-top: 1rem;
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.15rem, 2.6vw, 1.65rem);
+    line-height: 1.3;
+    color: var(--forest);
+}
+
+
+/* -----------------------------------------------------------------------------
+   THREE · THE QUESTIONS
+   Each question is a box; opening one closes the rest. The heights are
+   animated in script.js, which is why the panel is a wrapper with its own
+   inner element — the wrapper is what gets tweened.
+----------------------------------------------------------------------------- */
+.ap-qa { display: grid; gap: .75rem; margin-top: clamp(2rem, 4.5vw, 3rem); }
+
+.ap-q {
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--parchment);
+    transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+
+.ap-q[open] { border-color: var(--rule-gold); box-shadow: var(--shade-sm); }
+
+.ap-q__ask {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: clamp(1.15rem, 2.4vw, 1.5rem) clamp(1.2rem, 2.6vw, 1.75rem);
+    font-family: var(--caps);
+    font-size: clamp(1rem, 1.9vw, 1.18rem);
+    line-height: 1.4;
+    color: var(--forest);
+    cursor: pointer;
+    list-style: none;
+}
+
+.ap-q__ask::-webkit-details-marker { display: none; }
+.ap-q__ask:hover { color: var(--gold-deep); }
+
+.ap-q__sign {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 1.9rem;
+    height: 1.9rem;
+    margin-left: auto;
+    border: 1px solid var(--rule-gold);
+    border-radius: 50%;
+    color: var(--gold-deep);
+    transition: rotate .35s var(--ease), background .35s var(--ease);
+}
+
+.ap-q[open] .ap-q__sign { rotate: 45deg; background: rgba(193, 150, 63, .14); }
+
+/* the wrapper script.js tweens — it must clip, and must not carry padding */
+.ap-q__wrap { overflow: hidden; }
+
+.ap-q__say {
+    padding: 0 clamp(1.2rem, 2.6vw, 1.75rem) clamp(1.35rem, 2.8vw, 1.75rem);
+    font-family: var(--ui);
+    font-size: clamp(.92rem, 1.35vw, 1rem);
+    line-height: 1.74;
+    color: var(--ink-soft);
+}
+
+.ap-q__say p + p { margin-top: .85rem; }
+
+.ap-q__say ul {
+    display: grid;
+    gap: .4rem;
+    margin-top: .85rem;
+    padding-left: 1.1rem;
+}
+
+.ap-q__say li::marker { color: var(--gold); }
+.ap-q__say strong { color: var(--forest); font-weight: 600; }
+
+
+/* -----------------------------------------------------------------------------
+   THE CLOSE + THE NOTICE
+----------------------------------------------------------------------------- */
+.ap-diff {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border: 1px solid var(--rule-gold);
+    border-radius: 6px;
+    background: linear-gradient(155deg, rgba(193, 150, 63, .09), var(--parchment) 58%);
+}
+
+.ap-diff__head {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.16;
+    color: var(--forest);
+}
+
+.ap-diff__list { display: grid; gap: .85rem; margin-top: 1.5rem; list-style: none; }
+
+.ap-diff__list li {
+    display: flex;
+    align-items: baseline;
+    gap: .75rem;
+    font-family: var(--ui);
+    font-size: clamp(.98rem, 1.45vw, 1.08rem);
+    line-height: 1.6;
+    color: var(--forest);
+}
+
+.ap-diff__list i { flex: 0 0 auto; font-size: .95em; color: var(--gold); }
+
+.ap-diff__punch {
+    margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+    padding-top: clamp(1.5rem, 3vw, 2rem);
     border-top: 1px solid var(--rule-gold);
-}
-.seq__close-say {
-    max-width: 24ch;
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(1.6rem, 3.4vw, 2.7rem); line-height: 1.1; letter-spacing: -.018em;
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(1.3rem, 3.2vw, 2rem);
+    line-height: 1.24;
     color: var(--forest);
 }
-.seq__close-say em {
-    font-family: var(--accent); font-style: italic; font-weight: 600;
-    font-size: 1.06em; color: var(--gold-deep);
-}
-.seq__close-body {
-    max-width: 58ch; margin: .9rem 0 1.4rem;
-    font-size: .95rem; line-height: 1.75;
+
+.ap-diff__acts { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: clamp(1.5rem, 3vw, 2rem); }
+
+/* Edit P is explicit: one clearly visible box, readable type, strong contrast.
+   Never behind a link, an expandable section, or very small print. */
+.ap-notice {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding: clamp(1.6rem, 3.4vw, 2.6rem);
+    border: 2px solid var(--forest);
+    border-radius: 6px;
+    background: var(--parchment);
 }
 
-.seq__why {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: clamp(.9rem, 2vw, 1.6rem); margin-top: clamp(1.1rem, 2.4vw, 1.75rem);
-}
-.seq__why article { padding-top: 1rem; border-top: 2px solid var(--rule-gold); }
-.seq__why h4 {
-    display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem;
-    font-family: var(--caps); font-weight: 400; font-size: 1.05rem; color: var(--forest);
-}
-.seq__why h4 i { font-size: 1.2em; color: var(--gold-deep); }
-.seq__why p { font-size: .88rem; line-height: 1.72; }
-
-.seq__fine {
-    margin-top: clamp(1.5rem, 3vw, 2.25rem);
-    font-size: .78rem; line-height: 1.7; color: var(--mist); max-width: 88ch;
-}
-
-.seq__punch {
-    max-width: 20ch;
-    margin: clamp(.4rem, 1.5vw, 1rem) 0 clamp(.9rem, 2vw, 1.35rem);
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(2rem, 5.2vw, 4.1rem); line-height: 1.04; letter-spacing: -.02em;
+.ap-notice__head {
+    font-family: var(--caps);
+    font-size: clamp(.95rem, 1.8vw, 1.12rem);
+    letter-spacing: .14em;
+    text-transform: uppercase;
     color: var(--forest);
 }
-.seq__punch em {
-    font-family: var(--accent); font-style: italic; font-weight: 600;
-    font-size: 1.06em; color: var(--gold-deep);
-}
-.seq__punch-say {
-    max-width: 46ch; margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
-    font-family: var(--ui); font-weight: 500;
-    font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6; color: var(--ink-soft);
-}
 
-/* ---------- advantage · sequence · 900 ---------- */
-@media (max-width: 1080px) {
-    .seq__why { grid-template-columns: repeat(2, 1fr); }
-    .split { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.1fr); }
+.ap-notice p {
+    margin-top: 1.1rem;
+    font-family: var(--ui);
+    font-size: clamp(.92rem, 1.3vw, 1rem);
+    line-height: 1.76;
+    color: var(--ink);
 }
 
-@media (max-width: 900px) {
-    .adv__beat { flex-direction: column; align-items: flex-start; gap: .5rem; }
-
-    /* the split unstacks: one bag first, then the rack of six */
-    .split { grid-template-columns: 1fr; }
-    .split__vs { grid-template-rows: auto; grid-auto-flow: column; align-items: center; gap: .8rem; }
-    .split__vs i { width: 100%; height: 1px; }
-    .iv--crowd { width: min(100%, 12.5rem); }
-    .split__viz { padding-bottom: 1rem; }
-
-    .seqx__grid { grid-template-columns: 1fr; }
-    .seqx__viz { justify-items: start; }
-}
-
-@media (max-width: 640px) {
-    .seq__why { grid-template-columns: 1fr; }
-    .rack { gap: .6rem .7rem; }
-    .rack__item .iv { width: min(100%, 4.6rem); }
-    .rack__name { font-size: .8rem; }
-    .iv__vol i { font-size: 1.25rem; }
-}
 
 /* ---------- advantage · 1080 ---------- */
 @media (max-width: 1080px) {
-    .adv__track--iv { max-width: 78%; }
-    .adv__lede { max-width: none; }
+    .ap-reasons { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* ---------- advantage · 900, the hinge: the track goes vertical ---------- */
+/* ---------- advantage · 900 · the layout hinge ----------
+   Three stages across, two rows. The arrows stop earning their place once the
+   row breaks, so the numerals carry the order on their own. */
 @media (max-width: 900px) {
-    .adv__track, .adv__track--iv {
-        grid-template-columns: 1fr; max-width: none;
-        gap: 1.6rem; padding-top: 0; padding-left: 3rem;
-    }
-    .adv__rule {
-        left: 1rem; right: auto; top: .4rem; bottom: 1rem; width: 2px; height: auto;
-        background: repeating-linear-gradient(180deg,
-            color-mix(in oklab, var(--lane) 38%, transparent) 0 7px, transparent 7px 15px);
-    }
-    .adv__track--iv .adv__rule { background: color-mix(in oklab, var(--lane) 22%, transparent); }
-    .adv__fill { width: 100%; height: 0%; }
-    .stp__pin { left: -3rem; top: -.2rem; width: 30px; height: 30px; }
-
-    /* the switch becomes two full-width rows — a 50/50 pill row was too tight
-       for the longer labels on a phone */
-    .adv__switch { display: grid; grid-auto-flow: row; width: 100%; border-radius: 6px; }
-    .adv__thumb { left: 5px; right: 5px; width: auto; height: calc(50% - 5px); bottom: auto; border-radius: 4px; }
-    .adv__switch.is-iv .adv__thumb { transform: translateY(100%); }
-    .adv__opt { justify-content: center; border-radius: 4px; min-height: 48px; }
-    .adv__note { grid-template-columns: 1fr; }
+    .ap-beat { flex-direction: column; gap: .5rem; }
+    .ap-track { grid-template-columns: repeat(2, 1fr); }
+    .ap-boxes { grid-template-columns: 1fr; }
+    .ap-flow { grid-template-columns: repeat(3, 1fr); row-gap: 1.5rem; }
+    .ap-flow__arrow { display: none; }
 }
 
 /* ---------- advantage · 640 ---------- */
 @media (max-width: 640px) {
-    .adv { padding-block: clamp(3rem, 7vw, 4.5rem); }
-    .adv__title { font-size: clamp(1.9rem, 8.5vw, 2.7rem); }
-    .adv__lede { font-size: .95rem; }
-    .adv__track, .adv__track--iv { padding-left: 2.5rem; gap: 1.35rem; }
-    .adv__rule { left: .8rem; }
-    .stp__pin { left: -2.5rem; width: 26px; height: 26px; font-size: .72rem; }
-    .stp__name { font-size: .92rem; }
-    .stp__what { font-size: .87rem; }
-    .adv__verdict { font-size: 1.02rem; }
-    .adv__note p { font-size: .9rem; }
-    .adv__opt { font-size: .6rem; letter-spacing: .14em; padding-inline: .9rem; }
+    .ap-track,
+    .ap-track--iv { grid-template-columns: 1fr; }
+    .ap-switch { grid-template-columns: 1fr; border-radius: 12px; }
+    .ap-opt { border-radius: 8px; }
+    .ap-reasons { grid-template-columns: 1fr; }
 }
 
-/* ---------- advantage · 420 ---------- */
-@media (max-width: 420px) {
-    .adv__opt b { display: none; }        /* "4 stops" already sits in the head */
+/* ---------- advantage · 480 ---------- */
+@media (max-width: 480px) {
+    .ap-flow { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* ---------- advantage · reduced motion ---------- */
+/* ---------- advantage · focus ---------- */
+.ap-opt:focus-visible,
+.ap-q__ask:focus-visible {
+    outline: 2px solid var(--gold-deep);
+    outline-offset: 3px;
+}
+
+/* ---------- advantage · reduced motion ----------
+   The stops and stages are tweened from opacity 0 by script.js. With motion
+   reduced that script never runs, so nothing here may start hidden. */
 @media (prefers-reduced-motion: reduce) {
-    .adv__fill { width: 100% !important; height: 100% !important; }
-    .stp .stp__pin { color: var(--cream); background: var(--lane); border-color: var(--lane); }
+    .ap-step,
+    .ap-flow__stage,
+    .ap-flow__arrow,
+    .ap-reason,
+    .ap-q { opacity: 1 !important; transform: none !important; }
+    .ap-q__wrap { height: auto !important; }
 }
 
 
