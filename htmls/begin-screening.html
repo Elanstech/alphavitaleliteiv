@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Begin Eligibility Review — Alpha Vital Elite IV</title>
-<meta name="description" content="Every infusion at Alpha Vital Elite begins with a physician eligibility review by Dr. Violeta Aronov, DO. Four steps, $100 review fee, Middle Village, Queens.">
+<meta name="description" content="Choose the infusion you are asking about and begin your physician eligibility review with Dr. Violeta Aronov, DO. Middle Village, Queens.">
 <meta name="theme-color" content="#F6F1E7">
 <meta name="format-detection" content="telephone=yes">
 <link rel="canonical" href="https://www.precisionmedicaliv.com/htmls/begin-screening.html">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Begin Eligibility Review — Alpha Vital Elite IV">
-<meta property="og:description" content="Every infusion at Alpha Vital Elite begins with a physician eligibility review by Dr. Violeta Aronov, DO. Four steps, $100 review fee, Middle Village, Queens.">
+<meta property="og:description" content="Choose your infusion and begin the physician eligibility review.">
 <meta property="og:url" content="https://www.precisionmedicaliv.com/htmls/begin-screening.html">
 <meta property="og:image" content="https://www.precisionmedicaliv.com/assets/gen-images/dr.aronov.png">
 
@@ -37,12 +37,32 @@
 <link rel="stylesheet" href="../css/screening.css">
 
 <script>
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('ct-on');
+    /* The title sequence plays once a visit, not on every back-button. Set the
+       flag before first paint so a returning visitor never sees a flash of it. */
+    if (!sessionStorage.getItem('ave-intro')) document.documentElement.classList.add('has-cine');
+  }
 </script>
 </head>
 
 <body class="page-begin-screening">
+
+<!-- ============ TITLE SEQUENCE ============
+     Plays itself. No button to press. Removed from the DOM when it finishes,
+     and never inserted at all for reduced motion or a repeat visit. -->
+<div class="bs-cine" id="bsCine" aria-hidden="true">
+  <div class="bs-cine__stage">
+    <img class="bs-cine__mark" src="../logo.png" alt="" width="120" height="60">
+    <p class="bs-cine__kicker">Alpha Vital Elite IV</p>
+    <p class="bs-cine__line bs-cine__line--1">Welcome.</p>
+    <p class="bs-cine__line bs-cine__line--2">Let&rsquo;s begin your</p>
+    <p class="bs-cine__line bs-cine__line--3"><em>eligibility review.</em></p>
+    <span class="bs-cine__rule"></span>
+    <p class="bs-cine__sub">Every infusion is reviewed personally by Dr.&nbsp;Violeta Aronov, DO</p>
+  </div>
+  <button class="bs-cine__skip" id="bsSkip" type="button">Skip</button>
+</div>
 
 <a class="ct-skip" href="#main">Skip to content</a>
 <span class="ct-prog" id="ctProg" aria-hidden="true"></span>
@@ -113,7 +133,7 @@
 
     <div class="head__actions">
       <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
-      <a class="btn btn--forest head__cta" href="begin-screening.html" data-magnetic><span>Begin screening</span></a>
+      <a class="btn btn--forest head__cta" href="contact.html" data-magnetic><span>Begin screening</span></a>
       <button class="head__burger" id="burger" type="button" aria-label="Menu">
         <span></span><span></span>
       </button>
@@ -157,7 +177,7 @@
       <a class="is-here" href="contact.html" aria-current="page"><i>v.</i><em>Contact</em></a>
     </nav>
     <div class="menu__foot">
-      <a class="btn btn--gold" href="begin-screening.html"><span>Begin screening</span></a>
+      <a class="btn btn--gold" href="contact.html"><span>Begin screening</span></a>
       <a class="menu__tel" href="tel:+19292010740">929 · 201 · 0740</a>
       <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
@@ -168,303 +188,166 @@
 <main id="main">
 
 
-<!-- ============================= MASTHEAD ============================= -->
-<section class="bs-top" id="top">
+<!-- ============================= CHOOSE ============================= -->
+<section class="bs-choose" id="choose">
   <div class="ct-wrap">
-    <div class="ct-folio" data-ct="rise">
-      <span class="ct-folio__mid">Appointments by physician review only</span>
-    </div>
 
-    <p class="ct-eyebrow" data-ct="rise">Begin eligibility review</p>
-    <h1 class="bs-top__title" data-ct-split="lines">
-      A physician reads your file <em>before anything is scheduled.</em>
-    </h1>
-    <p class="ct-lede" data-ct="rise">
-      Not every patient can safely receive every infusion. Before you can book, Dr.&nbsp;Aronov
-      reviews your medical history, current medications and supplements, allergies, available
-      laboratory results and infusion goals herself, and decides whether IV support is appropriate
-      for you.
+    <header class="bs-choose__head">
+      <p class="ct-eyebrow">Begin eligibility review</p>
+      <h1 class="bs-choose__title">Which infusion <em>are you asking about?</em></h1>
+      <p class="bs-choose__note">
+        Pick one to start. Dr.&nbsp;Aronov decides what is clinically appropriate &mdash; it may
+        not be the one you chose.
+      </p>
+    </header>
+
+    <ul class="bs-bags" id="bsBags">
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=antioxidant" style="--tone:#4F7D5E">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/antioxidant.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">Antioxidant &times;3 Reset</span>
+          <span class="bs-bag__meta">1 h 15<i>&middot;</i>$500</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=stress-brain" style="--tone:#7A5F98">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/brainwellness.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">Stress &amp; Brain Wellness</span>
+          <span class="bs-bag__meta">1 h 30<i>&middot;</i>$700</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=glynac" style="--tone:#5B7098">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/glynac.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">GLyNAC Healthy Aging</span>
+          <span class="bs-bag__meta">1 h 15<i>&middot;</i>$450</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=glutathione" style="--tone:#7FA08C">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/glutathione.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">Glutathione Injection</span>
+          <span class="bs-bag__meta">30 min<i>&middot;</i>$125</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=liquixo" style="--tone:#B34E37">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/liquixo.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">LIQUIXO Muscle Recovery</span>
+          <span class="bs-bag__meta">45 min<i>&middot;</i>$495</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=immun-o-boost" style="--tone:#D9982A">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/immuneoboost.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">Immun-O-Boost</span>
+          <span class="bs-bag__meta">2 h 30<i>&middot;</i>$650</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=joint-skin" style="--tone:#8C6239">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/jointsupport.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">Joint &amp; Skin Wellness</span>
+          <span class="bs-bag__meta">2 h 30<i>&middot;</i>$750</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=revive" style="--tone:#35707F">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/revive.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">Revive IV Support</span>
+          <span class="bs-bag__meta">2 h 15<i>&middot;</i>$625</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=fatty-liver-support" style="--tone:#5F7A55">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/liversupport.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">Fatty Liver Support</span>
+          <span class="bs-bag__meta">3 h<i>&middot;</i>$850</span>
+        </a>
+      </li>
+      <li class="bs-bag__cell">
+        <a class="bs-bag" href="review.html?drip=customized" style="--tone:#C1963F">
+          <span class="bs-bag__art">
+            <img src="../assets/drips/customized.png" alt="" width="180" height="300" loading="lazy" decoding="async">
+          </span>
+          <span class="bs-bag__name">Customized Infusion</span>
+          <span class="bs-bag__meta">Individual<i>&middot;</i>Consult</span>
+        </a>
+      </li>
+    </ul>
+
+    <p class="bs-unsure">
+      Not sure which one? <a href="review.html">Start without choosing</a> and Dr.&nbsp;Aronov will
+      advise you, or <a href="infusions.html">read about each infusion first</a>.
     </p>
+
   </div>
 </section>
 
 
 <!-- ============================= HOW IT WORKS ============================= -->
-<section class="bs-how" id="how">
+<section class="bs-brief" id="how">
   <div class="ct-wrap">
+    <div class="bs-brief__grid">
 
-    <div class="ct-screen__head">
-      <p class="ct-eyebrow" data-ct="rise">How it works</p>
-      <h2 class="ct-h2" data-ct-split="lines">
-        Four steps, then <em>a decision from Dr.&nbsp;Aronov.</em>
-      </h2>
+      <div class="bs-brief__col">
+        <p class="ct-eyebrow">How it works</p>
+        <ol class="bs-brief__steps">
+          <li><b>01</b><span>Fill in the screening and medical form for your infusion.</span></li>
+          <li><b>02</b><span>Pay the $100 physician review fee when you submit.</span></li>
+          <li><b>03</b><span>Dr.&nbsp;Aronov reads your file herself.</span></li>
+          <li><b>04</b><span>You get an email &mdash; with a booking link if approved.</span></li>
+        </ol>
+      </div>
+
+      <div class="bs-brief__col">
+        <p class="ct-eyebrow">Worth knowing</p>
+        <ul class="bs-brief__notes">
+          <li>The $100 is <b>non-refundable</b>. It pays for the review whatever the outcome, and is credited to your infusion if you are approved.</li>
+          <li>She may approve, suggest a different formulation, ask for more information, or decline. She will say why either way.</li>
+          <li>Have your medications, supplements and any recent bloodwork to hand &mdash; the form takes about fifteen minutes.</li>
+          <li><b>Not for emergencies.</b> If this is urgent, call&nbsp;911 or go to your nearest emergency department.</li>
+        </ul>
+      </div>
+
     </div>
-
-    <ol class="ct-steps ct-steps--four">
-      <li class="ct-step" data-ct="pop">
-        <span class="ct-step__no">STEP 01</span>
-        <h3 class="ct-step__name">Review deposit</h3>
-        <p class="ct-step__what">
-          $100, taken before the review begins. Applied toward your infusion if you are approved. Non-refundable &mdash; see the <a href="../policies/refund-policy.html">refund policy</a>.
-        </p>
-      </li>
-      <li class="ct-step" data-ct="pop">
-        <span class="ct-step__no">STEP 02</span>
-        <h3 class="ct-step__name">Screening &amp; intake</h3>
-        <p class="ct-step__what">
-          Your history, medications and supplements, allergies, infusion goals, and any laboratory results you choose to share. Read only by Dr.&nbsp;Aronov.
-        </p>
-      </li>
-      <li class="ct-step" data-ct="pop">
-        <span class="ct-step__no">STEP 03</span>
-        <h3 class="ct-step__name">Physician review</h3>
-        <p class="ct-step__what">
-          Dr.&nbsp;Aronov reviews your file herself and determines whether the infusion you asked about is medically appropriate for you.
-        </p>
-      </li>
-      <li class="ct-step" data-ct="pop">
-        <span class="ct-step__no">STEP 04</span>
-        <h3 class="ct-step__name">Your result by email</h3>
-        <p class="ct-step__what">
-          An email explaining your eligibility and the next step. If approved, it carries a link to book, and your $100 is credited to the infusion.
-        </p>
-      </li>
-    </ol>
-
-    <div class="ct-out" data-ct="rise">
-      <p class="ct-out__lab">Four things her review can conclude</p>
-      <ul class="ct-out__grid">
-        <li class="ct-out__item ct-out__item--yes">
-          <b>Approved</b>
-          <span>The infusion you asked about is appropriate. You receive a link to book.</span>
-        </li>
-        <li class="ct-out__item">
-          <b>A different formulation</b>
-          <span>Another infusion suits you better. Your deposit still applies.</span>
-        </li>
-        <li class="ct-out__item">
-          <b>More information needed</b>
-          <span>Additional records, laboratory results, or clearance from your own physician.</span>
-        </li>
-        <li class="ct-out__item">
-          <b>Not appropriate</b>
-          <span>IV support is not the right step for you at this time, and she will say why.</span>
-        </li>
-      </ul>
-      <p class="ct-out__fine">
-        Being told no does not mean your concerns are being dismissed. Depending on the reason, the
-        safest next step may be additional testing, evaluation by your primary-care physician or a
-        specialist, a different supportive option, or no infusion at all. The purpose of the review
-        is to make the safest medical decision for you.
-      </p>
-    </div>
-
   </div>
 </section>
 
-
-<!-- ============================= WHAT YOU'LL NEED ============================= -->
-<section class="bs-need" id="prepare">
-  <div class="ct-wrap">
-    <p class="ct-eyebrow" data-ct="rise">Before you start</p>
-    <h2 class="ct-h2" data-ct-split="lines">Have these <em>to hand.</em></h2>
-    <p class="ct-lede" data-ct="rise">
-      The deposit takes a minute. The medical form that follows takes ten to fifteen, and goes
-      faster if you have these ready.
-    </p>
-
-    <ul class="bs-need__grid">
-      <li class="bs-need__item" data-ct="pop">
-        <i class="ph-duotone ph-pill"></i>
-        <b>Your medications</b>
-        <span>Every prescription you take, with doses if you know them.</span>
-      </li>
-      <li class="bs-need__item" data-ct="pop">
-        <i class="ph-duotone ph-leaf"></i>
-        <b>Your supplements</b>
-        <span>Vitamins, minerals, herbal products &mdash; everything, not just the ones you think matter.</span>
-      </li>
-      <li class="bs-need__item" data-ct="pop">
-        <i class="ph-duotone ph-file-text"></i>
-        <b>Recent bloodwork</b>
-        <span>If you have it. A photo or PDF is fine. Not having it does not stop you.</span>
-      </li>
-      <li class="bs-need__item" data-ct="pop">
-        <i class="ph-duotone ph-stethoscope"></i>
-        <b>Your doctors</b>
-        <span>Your primary-care physician, and any specialist you see.</span>
-      </li>
-    </ul>
-  </div>
-</section>
-
-
-<!-- ============================= PICK ============================= -->
-<section class="bs-pick" id="choose">
-  <div class="ct-wrap">
-    <p class="ct-eyebrow" data-ct="rise">Step one</p>
-    <h2 class="ct-h2" data-ct-split="lines">Which infusion <em>are you asking about?</em></h2>
-    <p class="ct-pick__note" data-ct="rise">
-      This tells Dr.&nbsp;Aronov what you are hoping for, and decides which safety questions you
-      are asked. It is not a selection &mdash; she determines what is clinically appropriate, and
-      it may not be the one you picked.
-    </p>
-
-    <ul class="bs-cards">
-          <li>
-            <a class="bs-card" href="review.html?drip=glynac" style="--tone:#5B7098" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">GLyNAC Healthy Aging</span>
-                <span class="bs-card__meta">1 h 15</span>
-              </span>
-              <span class="bs-card__price">$450</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=immun-o-boost" style="--tone:#D9982A" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Immun-O-Boost IV Support</span>
-                <span class="bs-card__meta">2 h 30</span>
-              </span>
-              <span class="bs-card__price">$650</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=liquixo" style="--tone:#B34E37" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">LIQUIXO Muscle Recovery</span>
-                <span class="bs-card__meta">45 min</span>
-              </span>
-              <span class="bs-card__price">$495</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=antioxidant" style="--tone:#4F7D5E" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Antioxidant ×3 Reset</span>
-                <span class="bs-card__meta">1 h 15</span>
-              </span>
-              <span class="bs-card__price">$500</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=glutathione" style="--tone:#7FA08C" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Glutathione IV Injection</span>
-                <span class="bs-card__meta">30 min</span>
-              </span>
-              <span class="bs-card__price">$125</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=joint-skin" style="--tone:#8C6239" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Joint &amp; Skin Wellness</span>
-                <span class="bs-card__meta">2 h 30</span>
-              </span>
-              <span class="bs-card__price">$750</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=fatty-liver-support" style="--tone:#5F7A55" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Fatty Liver Support</span>
-                <span class="bs-card__meta">3 h</span>
-              </span>
-              <span class="bs-card__price">$850</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=revive" style="--tone:#35707F" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Revive IV Support</span>
-                <span class="bs-card__meta">2 h 15</span>
-              </span>
-              <span class="bs-card__price">$625</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=stress-brain" style="--tone:#7A5F98" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Stress &amp; Brain Wellness</span>
-                <span class="bs-card__meta">1 h 30</span>
-              </span>
-              <span class="bs-card__price">$700</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html?drip=customized" style="--tone:#C1963F" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Customized IV Infusion</span>
-                <span class="bs-card__meta">By consultation</span>
-              </span>
-              <span class="bs-card__price">Consult</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-          <li>
-            <a class="bs-card" href="review.html" style="--tone:#8A9A8E" data-ct="pop">
-              <span class="bs-card__dot" aria-hidden="true"></span>
-              <span class="bs-card__body">
-                <span class="bs-card__name">Not sure yet</span>
-                
-              </span>
-              <span class="bs-card__price">&mdash;</span>
-              <i class="ph ph-arrow-right bs-card__go" aria-hidden="true"></i>
-            </a>
-          </li>
-    </ul>
-
-    <div class="ct-notice bs-999" data-ct="rise">
-      <span class="ct-notice__tag"><i class="ph-fill ph-warning"></i> Not for emergencies</span>
-      <p>
-        <b>This is not a medical channel and nobody is monitoring it in real time.</b> If this is a
-        medical emergency, call&nbsp;911 or go to your nearest emergency department.
-      </p>
-      <p>
-        If you are unwell right now, the appropriate step is evaluation by a physician &mdash; not
-        an elective infusion. Dr.&nbsp;Aronov will tell you that plainly rather than schedule you.
-      </p>
-    </div>
-
-  </div>
-</section>
-
-  <div class="bs-legal">
-    <b>Important disclaimer</b>
-    <p>
-      Every infusion offered by Alpha Vital Elite IV is an elective, physician-directed wellness
-      service. None is intended to diagnose, treat, cure, mitigate, prevent or reverse any disease
-      or medical condition. Research involving individual ingredients does not establish the safety
-      or effectiveness of a combined IV protocol. No benefit or outcome is promised or guaranteed.
-    </p>
-    <p>
-      IV administration carries risks, including infection, vein irritation, fluid or electrolyte
-      imbalance, changes in blood pressure or heart rhythm, medication interactions, kidney
-      complications, and allergic reactions, including rare anaphylaxis. Screening and monitoring
-      reduce but do not eliminate these risks. This service does not replace primary or specialist
-      care, prescribed treatment, diagnostic evaluation or emergency care.
-    </p>
-  </div>
+<div class="bs-legal">
+  <b>Important disclaimer</b>
+  <p>
+    Every infusion offered by Alpha Vital Elite IV is an elective, physician-directed wellness
+    service. None is intended to diagnose, treat, cure, mitigate, prevent or reverse any disease or
+    medical condition. Research involving individual ingredients does not establish the safety or
+    effectiveness of a combined IV protocol. No benefit or outcome is promised or guaranteed.
+  </p>
+  <p>
+    IV administration carries risks, including infection, vein irritation, fluid or electrolyte
+    imbalance, changes in blood pressure or heart rhythm, medication interactions, kidney
+    complications, and allergic reactions, including rare anaphylaxis. Screening and monitoring
+    reduce but do not eliminate these risks. This service does not replace primary or specialist
+    care, prescribed treatment, diagnostic evaluation or emergency care.
+  </p>
+</div>
 
 </main>
 
