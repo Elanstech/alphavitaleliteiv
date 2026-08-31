@@ -67,9 +67,9 @@ const paint = () => {
         const swap = $('#bsSwap');
         if (swap) {
             swap.hidden = false;
-            swap.innerHTML = 'No infusion chosen yet. '
-                + '<a href="begin-screening.html">Choose the one you are asking about</a> '
-                + '&mdash; or continue, and Dr. Aronov will advise you as part of her review.';
+            swap.innerHTML = 'No infusion selected yet. You may continue without selecting one '
+                + 'and let physician screening guide the next step, or '
+                + '<a href="begin-screening.html">return to read about each infusion first</a>.';
         }
         return null;
     }
@@ -83,6 +83,9 @@ const paint = () => {
     set('#bsDrip', drip.name);
     set('#bsChair', drip.chair);
     set('#bsPrice', drip.price);
+    /* These two only mean anything once an infusion is chosen; review.html ships
+       them hidden so the empty em-dash boxes never show on the no-selection path. */
+    ['#bsChairBox', '#bsPriceBox'].forEach(sel => { const b = $(sel); if (b) b.hidden = false; });
 
     const swap = $('#bsSwap');
     if (swap) swap.hidden = false;
