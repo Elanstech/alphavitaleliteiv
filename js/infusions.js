@@ -301,9 +301,9 @@ class Typer {
     constructor() {
         this.el = $('#hrTyped');
         this.lines = [
-            'Selected for your individual needs.',
+            'Screened for safety and appropriateness.',
             'Every decision begins with your history.',
-            'Under one physician\u2019s care \u2014 from review through administration.',
+            'Physician oversight from review through administration.',
         ];
         this.i = 0;
         this.stopped = false;
