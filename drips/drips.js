@@ -833,6 +833,20 @@ const boot = () => {
 
     const run = () => {
         const go = (name, fn) => { try { fn(); } catch (err) { console.error(`[dx] ${name}`, err); } };
+
+        /* Landing on /page.html#questions, the browser jumps to the anchor while
+           the document is still parsing — long before this module runs. Building
+           pinned ScrollTriggers from a scrolled position makes ScrollTrigger
+           refresh re-entrantly as each one is created, and the cascade throws
+           part-way through. Every module after the throw never runs, so the
+           start states in 02 are never released and the page reads as blank.
+
+           So: build from the top, where the measurements are stable, then put
+           the reader back where the hash asked for. */
+        const hash = location.hash;
+        const anchor = hash && hash.length > 1 ? document.querySelector(hash) : null;
+        if (anchor) window.scrollTo(0, 0);
+
         go('intro', intro);
         go('reveals', reveals);
         go('components', () => { if (!components()) ledger(); });
@@ -844,6 +858,13 @@ const boot = () => {
         go('rail', rail);
         go('pointer', pointer);
         ScrollTrigger.refresh();
+
+        if (anchor) {
+            /* after refresh, so pinned sections above the anchor are measured
+               and the target has settled at its final offset */
+            anchor.scrollIntoView();
+            ScrollTrigger.refresh();
+        }
     };
 
     /* wait for the display face, or the character split measures the fallback
