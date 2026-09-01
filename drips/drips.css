@@ -773,6 +773,34 @@ html.dx-on .dx-wk   { opacity: 0; }
     line-height: 1.76; color: var(--ink-soft);
 }
 
+/* multi-part component copy: an intro line, a list of named ingredients,
+   then a closing line. Used where one card covers several compounds. */
+.dx-comp__why > p + p,
+.dx-comp__why > ul + p { margin-top: .85rem; }
+
+.dx-comp__list {
+    list-style: none;
+    margin: .85rem 0 0;
+    padding: 0 0 0 1.05rem;
+    display: grid;
+    gap: .6rem;
+}
+.dx-comp__list li { position: relative; }
+.dx-comp__list li::before {
+    content: ''; position: absolute;
+    left: -1.05rem; top: .78em;
+    width: .38rem; height: 1px;
+    background: color-mix(in oklab, var(--bt) 60%, var(--rule));
+}
+.dx-comp__list b {
+    font-weight: 500;
+    color: var(--forest);
+}
+
+/* the carrier fluid sits alongside the numbered compounds, not inside the
+   count — its marker is a dash rather than an index */
+.dx-comp__item--carrier .dx-comp__no b { color: var(--t-line); }
+
 /* the hairline under the row draws left to right on arrival */
 .dx-comp__item::after {
     content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
