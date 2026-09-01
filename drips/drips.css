@@ -293,6 +293,78 @@ html.dx-on .dx-wk   { opacity: 0; }
 @container (max-width: 560px) { .dx-sum__keep { flex-direction: column; align-items: flex-start; gap: .2rem; } }
 
 
+/* ── 08b ONGOING SUPPORT ─────────────────────────────────────────────────────
+   ImmunoBoost has no fixed course, so this section stands in for 08 COURSE:
+   the cadence stated plainly, the single rate, and the re-review rule.
+────────────────────────────────────────────────────────────────────────────── */
+.dx-ongoing { position: relative; padding: var(--pad) var(--gut); background: var(--cream); }
+.dx-ongoing__wrap { max-width: var(--maxw); margin: 0 auto; }
+
+.dx-ongoing__lead { margin-bottom: var(--stack); }
+.dx-ongoing__lead .dx-h { margin-bottom: clamp(1rem, 2.2vw, 1.5rem); }
+.dx-ongoing__lead p { max-width: 64ch; font-size: clamp(.95rem, 1.05vw, 1.03rem); line-height: 1.76; }
+
+.dx-ongoing__grid {
+    display: grid;
+    grid-template-columns: minmax(0, .82fr) minmax(0, 1fr);
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: start;
+}
+
+/* the rate, carried as a card so it reads as the one fixed fact here */
+.dx-ongoing__price {
+    padding: clamp(1.4rem, 3vw, 2.2rem);
+    border: 1px solid var(--t-line); border-radius: 5px;
+    background: rgba(255, 255, 255, .74);
+    box-shadow: 0 32px 66px -50px rgba(32, 52, 33, .5);
+}
+.dx-ongoing__price dt {
+    font-family: var(--dx-mono); font-size: .56rem; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--mist);
+    margin-bottom: .55rem;
+}
+.dx-ongoing__price dd {
+    margin: 0;
+    font-family: var(--dx-display); font-weight: 600;
+    font-size: clamp(1.5rem, 3vw, 2.15rem); line-height: 1.04;
+    letter-spacing: -.045em; color: var(--t-ink);
+    font-variant-numeric: tabular-nums;
+}
+.dx-ongoing__price dd + dd {
+    margin-top: .95rem; padding-top: .8rem;
+    border-top: 1px solid var(--rule);
+}
+.dx-ongoing__price small {
+    display: block;
+    font-family: var(--dx-body); font-weight: 400;
+    font-size: .79rem; line-height: 1.6; letter-spacing: 0;
+    color: var(--mist);
+}
+
+/* the re-review rule — the part patients most often assume does not apply */
+.dx-ongoing__note {
+    padding-left: clamp(1rem, 2.2vw, 1.6rem);
+    border-left: 2px solid var(--t-line);
+}
+.dx-ongoing__note b {
+    display: block;
+    font-family: var(--dx-display); font-weight: 500;
+    font-size: clamp(1.2rem, 2.1vw, 1.6rem); line-height: 1.08;
+    letter-spacing: -.034em; color: var(--forest);
+    margin-bottom: .85rem;
+}
+.dx-ongoing__note p { font-size: .94rem; line-height: 1.74; }
+.dx-ongoing__note p + p {
+    margin-top: 1rem; padding-top: .9rem;
+    border-top: 1px solid var(--rule);
+    font-size: .87rem; color: var(--mist);
+}
+
+@media (max-width: 860px) {
+    .dx-ongoing__grid { grid-template-columns: 1fr; gap: clamp(1.5rem, 4vw, 2rem); }
+}
+
+
 /* ── 09 QUESTIONS ────────────────────────────────────────────────────────── */
 .dx-qs { position: relative; padding: var(--pad) var(--gut); background: var(--parchment); }
 .dx-qs__wrap { max-width: min(var(--maxw),62rem); margin: 0 auto; }
