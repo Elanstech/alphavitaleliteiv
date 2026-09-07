@@ -176,6 +176,46 @@
 .bs-legal p { font-size: .78rem; line-height: 1.75; color: var(--mist); }
 .bs-legal p + p { margin-top: .7rem; }
 
+/* ── STEP RAIL ───────────────────────────────────────────────────────────────
+   Three steps across the top of each review page. The point is answering "how
+   much more of this is there", so the steps that are done stay visible and
+   ticked rather than disappearing. Static markup — no JS — because a patient
+   mid-intake must never be told the wrong step because a script failed. */
+.bs-rail {
+    display: flex; flex-wrap: wrap; gap: .5rem 1.6rem;
+    margin: 0 0 clamp(1.6rem, 4vw, 2.4rem); padding: 0; list-style: none;
+}
+.bs-rail__i {
+    display: flex; align-items: baseline; gap: .55rem;
+    font-family: var(--data, ui-monospace, monospace);
+    font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--mist); opacity: .5;
+}
+.bs-rail__i b { font-weight: 600; letter-spacing: .1em; }
+.bs-rail__i span { letter-spacing: .13em; }
+
+/* Done: ticked, still legible, clearly behind you. */
+.bs-rail__i.is-done { opacity: .8; }
+.bs-rail__i.is-done b { position: relative; color: var(--forest, #26402C); }
+.bs-rail__i.is-done b::after {
+    content: '\2713'; margin-left: .3rem; font-size: .8em;
+}
+
+/* Now: the only one carrying colour. */
+.bs-rail__i.is-now { opacity: 1; color: var(--ink, #1B1B18); }
+.bs-rail__i.is-now b {
+    color: var(--gold, #C1963F);
+    border-bottom: 1px solid currentColor; padding-bottom: 2px;
+}
+
+@media (max-width: 620px) {
+    /* Three across is unreadable on a phone; the numbers alone still place you. */
+    .bs-rail { gap: .4rem 1.1rem; }
+    .bs-rail__i span { display: none; }
+    .bs-rail__i.is-now span { display: inline; }
+}
+
+
 /* ── FOLDED DISCLAIMER (review.html) ─────────────────────────────────────────
    The disclosure still has to be on the page, but it does not have to be a wall
    of small print between the patient and the form. Closed by default, one line
@@ -417,3 +457,181 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 
 /* Scripting off, or motion reduced: no sequence at all. */
 @media (prefers-reduced-motion: reduce) { .bs-cine { display: none !important; } }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE REVIEW PAGES — CINEMATIC
+   ───────────────────────────────────────────────────────────────────────────
+   The title sequence used to lift away and hand over to a cream page, which
+   made the opening feel like a trailer for a different film. These three pages
+   now stay in the world the sequence establishes: deep forest ground, cream
+   type, gold as the only accent. The curtain does not lift so much as dissolve
+   into the page behind it.
+
+   Scoped to .page-review so nothing here touches the rest of the site.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.page-review {
+    background: var(--forest-deep);
+    color: var(--cream);
+}
+
+/* Depth, not decoration: two very soft pools of light so the ground is not a
+   flat rectangle. Fixed, so they sit still while the page scrolls past. */
+.page-review::before {
+    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+        radial-gradient(70% 55% at 18% 0%,   rgba(44, 69, 48, .85), transparent 70%),
+        radial-gradient(60% 50% at 92% 22%,  rgba(193, 150, 63, .10), transparent 68%),
+        radial-gradient(90% 60% at 50% 108%, rgba(32, 52, 33, .75),  transparent 72%);
+}
+.page-review > * { position: relative; z-index: 1; }
+
+.page-review main,
+.page-review .bs-top,
+.page-review .bs-form,
+.page-review .bs-how { background: transparent; }
+
+/* ── HEADER ON DARK ────────────────────────────────────────────────────────── */
+.page-review .head { background: transparent; border-bottom-color: var(--rule-light); }
+.page-review .head.is-stuck { background: rgba(16, 27, 19, .92); backdrop-filter: blur(14px); }
+.page-review .head__link,
+.page-review .head__tel   { color: var(--cream-dim); }
+.page-review .head__link:hover,
+.page-review .head__tel:hover { color: var(--cream); }
+.page-review .head__link.is-here { color: var(--gold-lite); }
+.page-review .head__mark img { filter: brightness(0) invert(1); }
+.page-review .head__burger span { background: var(--cream); }
+.page-review .head__cta {
+    background: var(--gold); border-color: var(--gold); color: var(--forest-deep);
+}
+
+/* ── MASTHEAD ──────────────────────────────────────────────────────────────── */
+.page-review .bs-top { padding-top: clamp(5rem, 12vw, 8.5rem); }
+.page-review .ct-eyebrow { color: var(--gold); }
+.page-review .ct-eyebrow::before { background: var(--rule-gold); }
+
+.page-review .bs-top__title {
+    color: var(--cream);
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    line-height: 1.02;
+    letter-spacing: -.015em;
+    text-wrap: balance;
+}
+.page-review .bs-top__title em { color: var(--gold-lite); }
+
+.page-review .ct-lede { color: var(--cream-dim); max-width: 46ch; }
+.page-review .ct-lede b { color: var(--cream); }
+
+.page-review .bs-back,
+.page-review .bs-swap { color: var(--cream-dim); }
+.page-review .bs-back:hover,
+.page-review .bs-swap a { color: var(--gold-lite); }
+
+/* ── FACTS ─────────────────────────────────────────────────────────────────── */
+/* .bs-fact carries `background: var(--cream)` in the light theme above. Left as
+   is, the cells stay cream and the cream dd text on them is invisible — the
+   value simply does not appear. Override the cell, not just the grid. */
+.page-review .bs-facts { border-color: var(--rule-light); background: var(--rule-light); }
+.page-review .bs-fact  { border-color: var(--rule-light); background: rgba(246, 241, 231, .05); }
+.page-review .bs-fact dt { color: var(--mist); }
+.page-review .bs-fact dd { color: var(--cream); }
+.page-review .bs-fact small { color: var(--cream-dim); }
+.page-review .bs-fact--fee { background: rgba(193, 150, 63, .12); }
+.page-review .bs-fact--fee dd { color: var(--gold-lite); }
+
+/* ── STEP RAIL ON DARK ─────────────────────────────────────────────────────── */
+.page-review .bs-rail__i { color: var(--cream-dim); opacity: .38; }
+.page-review .bs-rail__i.is-done { opacity: .72; }
+.page-review .bs-rail__i.is-done b { color: var(--gold); }
+.page-review .bs-rail__i.is-now { opacity: 1; color: var(--cream); }
+.page-review .bs-rail__i.is-now b { color: var(--gold-lite); }
+
+/* ── THE FORM, LIT ─────────────────────────────────────────────────────────────
+   Jotform renders light and cannot be themed from out here, so rather than
+   fight it, the form is staged as the one lit surface in a dark room. The glow
+   underneath is what makes it read as deliberate instead of as a white box
+   someone forgot to style. */
+.page-review .ct-embed {
+    position: relative;
+    background: var(--cream);
+    border: 1px solid var(--rule-gold);
+    border-radius: 3px;
+    padding: clamp(1rem, 2.5vw, 1.6rem);
+    box-shadow:
+        0 0 0 1px rgba(193, 150, 63, .10),
+        0 2rem 5rem rgba(0, 0, 0, .45),
+        0 .4rem 1.4rem rgba(0, 0, 0, .3);
+}
+.page-review .ct-embed::before {
+    content: ''; position: absolute; inset: -14% -4% auto; height: 60%;
+    background: radial-gradient(60% 100% at 50% 0%, rgba(231, 203, 134, .16), transparent 70%);
+    pointer-events: none; z-index: -1;
+}
+.page-review .ct-embed__lab { color: var(--gold-deep); }
+.page-review .ct-embed iframe { border-radius: 2px; background: var(--cream); }
+
+.page-review .bs-soon {
+    background: rgba(246, 241, 231, .05);
+    border-color: var(--rule-light);
+    color: var(--cream);
+}
+.page-review .bs-soon b { color: var(--cream); }
+.page-review .bs-soon p, .page-review .bs-soon i { color: var(--cream-dim); }
+
+/* ── STEPS / OUTCOMES / NOTICES ────────────────────────────────────────────── */
+.page-review .ct-h2 { color: var(--cream); }
+.page-review .ct-h2 em { color: var(--gold-lite); }
+.page-review .ct-step,
+.page-review .ct-out__item {
+    background: rgba(246, 241, 231, .045);
+    border-color: var(--rule-light);
+}
+.page-review .ct-step__no   { color: var(--gold); }
+.page-review .ct-step__name { color: var(--cream); }
+.page-review .ct-step__what,
+.page-review .ct-out__item span { color: var(--cream-dim); }
+.page-review .ct-step__what a { color: var(--gold-lite); }
+.page-review .ct-out__lab { color: var(--mist); }
+.page-review .ct-out__item b { color: var(--cream); }
+.page-review .ct-out__item--yes {
+    background: rgba(193, 150, 63, .14); border-color: var(--rule-gold);
+}
+.page-review .ct-out__item--yes b { color: var(--gold-lite); }
+
+.page-review .ct-notice {
+    background: rgba(179, 38, 30, .14);
+    border-color: rgba(240, 134, 125, .42);
+    color: var(--cream);
+}
+.page-review .ct-notice p { color: var(--cream); }
+
+/* ── LEGAL ─────────────────────────────────────────────────────────────────── */
+.page-review .bs-legal { border-top-color: var(--rule-light); }
+.page-review .bs-legal b,
+.page-review .bs-legal p { color: var(--cream-dim); }
+.page-review .bs-legal--fold summary span { color: var(--gold-lite); }
+
+/* ── THE DISSOLVE ──────────────────────────────────────────────────────────────
+   The sequence sits on the same ground the page uses, so when it fades there is
+   nothing behind it to flash — it uncovers the page rather than replacing it. */
+.page-review .bs-cine { background: transparent; }
+.page-review .bs-cine::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: var(--forest-deep);
+}
+
+/* One slow breath of light across the masthead once it lands. Ornament, so it
+   is the first thing to go when motion is reduced. */
+@media (prefers-reduced-motion: no-preference) {
+    .page-review .bs-top__title { position: relative; overflow: hidden; }
+    .page-review .bs-top__title::after {
+        content: ''; position: absolute; inset: 0;
+        background: linear-gradient(100deg, transparent 38%,
+                    rgba(231, 203, 134, .22) 50%, transparent 62%);
+        transform: translateX(-120%);
+        animation: bsSheen 2.6s cubic-bezier(.22,.61,.36,1) 1.1s both;
+        pointer-events: none;
+    }
+    @keyframes bsSheen { to { transform: translateX(120%); } }
+}
