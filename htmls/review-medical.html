@@ -3,15 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- The intake chain carries the patient's name, email, phone and chosen
+     infusion in the query string. Without this, every request this page makes
+     to Google Fonts and jsDelivr sends that whole URL in the Referer header —
+     which hands identified health information to third parties who have no BAA.
+     no-referrer stops the header being sent at all. -->
+<meta name="referrer" content="no-referrer">
 <title>Medical History — Alpha Vital Elite IV</title>
-<meta name="description" content="Your medical history and the $100 physician review fee.">
+<meta name="description" content="Step three of three: your medical history and the $100 physician review fee.">
 <meta name="theme-color" content="#F6F1E7">
 <meta name="format-detection" content="telephone=yes">
 <link rel="canonical" href="https://www.precisionmedicaliv.com/htmls/review-medical.html">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Physician Review Request — Alpha Vital Elite IV">
-<meta property="og:description" content="Your medical history and the $100 physician review fee.">
+<meta property="og:title" content="Medical History — Alpha Vital Elite IV">
+<meta property="og:description" content="Step three of three: your medical history and the $100 physician review fee.">
 <meta property="og:url" content="https://www.precisionmedicaliv.com/htmls/review-medical.html">
 <meta property="og:image" content="https://www.precisionmedicaliv.com/assets/gen-images/dr.aronov.png">
 
@@ -46,7 +52,7 @@
 </script>
 </head>
 
-<body class="page-review page-review--medical">
+<body class="page-review">
 
 <!-- ============ TITLE SEQUENCE ============
      Plays itself, names the infusion they chose, then clears. screening.js
@@ -187,43 +193,66 @@
 
 <main id="main">
 
-<section class="bs-top bs-top--form" id="top">
+<!-- ============================= THE ROOM =============================
+     Left: the green panel — the infusion and where you are, kept beside you
+     for all three steps. Right: the one task in front of you.
+     screening.js paints the panel from ?drip= (a slug on step I, the infusion
+     name relayed by Jotform on steps II and III) and drives the entrance. -->
+<section class="bs-room" id="top">
   <div class="ct-wrap">
-    
-<!-- Where they are in the three steps. Same rail on all three pages; only
-     is-now moves. Static markup, no JS — it must be right even if a script
-     fails, because it is the only thing telling them how much is left. -->
-<ol class="bs-rail" aria-label="Progress">
-  <li class="bs-rail__i is-done"><b>01</b><span>Your details</span></li>
-  <li class="bs-rail__i is-done"><b>02</b><span>Safety questions</span></li>
-  <li class="bs-rail__i is-now"><b>03</b><span>Medical history &amp; payment</span></li>
-</ol>
+    <div class="bs-room__grid">
 
-    <p class="ct-eyebrow" data-ct="rise">Step three of three</p>
-    <h1 class="bs-top__title" data-ct="rise">Your <em>medical history.</em></h1>
-    <p class="ct-lede" data-ct="rise">Conditions, medications, allergies, and the $100 review fee at the end. About 15 minutes. Read only by Dr.&nbsp;Aronov.</p>
-  </div>
-</section>
+      <aside class="bs-side" id="bsSide" data-numeral="III" data-fill="1">
+        <a class="bs-side__back" href="begin-screening.html"><i class="ph ph-arrow-left"></i> All infusions</a>
 
-<section class="bs-form" id="form">
-  <div class="ct-wrap">
-    <div class="ct-embed" id="screeningForm" hidden>
-      <span class="ct-embed__lab">Step 03 &middot; medical history &amp; payment</span>
-      <iframe id="ctScreenFrame" data-form="medical"
-              title="Alpha Vital Elite IV — Step 03 &middot; medical history &amp; payment" src="" loading="lazy"></iframe>
-    </div>
+        <div class="bs-bottle" id="bsBottle">
+          <img id="bsBottleImg" src="../assets/drips/customized.png" alt="" width="1024" height="1536" decoding="async" fetchpriority="high">
+        </div>
 
-    <div class="bs-soon" id="bsSoon">
-      <i class="ph-duotone ph-hourglass-medium"></i>
-      <b>This step is not live yet</b>
-      <p>Call the practice and we will take you through it by phone.</p>
-      <div class="bs-soon__acts">
-        <a class="btn btn--forest btn--lg" href="tel:+19292010740" data-magnetic>
-          <span>929 &middot; 201 &middot; 0740</span><i class="ph ph-phone"></i>
-        </a>
+        <div class="bs-side__id">
+          <span class="bs-side__kicker">Physician eligibility review</span>
+          <h2 class="bs-side__name" id="bsName">Your infusion</h2>
+          <p class="bs-side__meta"><span id="bsChair"></span><b id="bsPrice"></b></p>
+          <p class="bs-side__swap" id="bsSwap" hidden>Not the one you wanted? <a href="begin-screening.html">Choose a different infusion</a>.</p>
+        </div>
+
+        <ol class="bs-path" id="bsPath" style="--fill:0" aria-label="Progress">
+          <li class="bs-path__i is-done"><b>Step I</b><span>Your details</span></li>
+          <li class="bs-path__i is-done"><b>Step II</b><span>Safety questions</span></li>
+          <li class="bs-path__i is-now"><b>Step III</b><span>Medical history &amp; payment</span></li>
+        </ol>
+
+        <div class="bs-side__dr">
+          <b>Dr.&nbsp;Violeta Aronov, DO</b>
+          <span>Reviews every request herself and emails you the outcome.</span>
+        </div>
+      </aside>
+
+      <div class="bs-stage" id="bsStage">
+        <div class="bs-stage__head">
+          <p class="bs-eyebrow" id="bsEyebrow">Step three of three</p>
+          <h1 class="bs-h1" id="bsTitle"><span class="l"><span>Your</span></span><span class="l"><span><em>medical history.</em></span></span></h1>
+          <p class="bs-lede" id="bsLede">Conditions, medications and allergies, then the $100 review fee. About 15 minutes. <b>Read only by Dr.&nbsp;Aronov.</b></p>
+        </div>
+
+        <div class="bs-frame" id="screeningForm" hidden>
+          <div class="bs-frame__bar"><span><b>III</b>Medical history &amp; payment</span><i>Secure &middot; HIPAA</i></div>
+          <iframe id="ctScreenFrame" data-form="medical" title="Alpha Vital Elite IV — Medical history &amp; payment" src="" loading="eager"></iframe>
+        </div>
+
+        <div class="bs-soon" id="bsSoon">
+          <i class="ph-duotone ph-hourglass-medium"></i>
+          <b>This step is not live yet</b>
+          <p>Call the practice and we will take you through it by phone.</p>
+          <div class="bs-soon__acts">
+            <a class="btn btn--forest btn--lg" href="tel:+19292010740" data-magnetic><span>929 &middot; 201 &middot; 0740</span><i class="ph ph-phone"></i></a>
+          </div>
+        </div>
+
+        <p class="bs-911" id="bs911"><i class="ph-fill ph-warning"></i><span><b>Not for emergencies.</b> Nobody monitors this in real time. If this is a medical emergency, call&nbsp;911 or go to the nearest emergency department.</span></p>
       </div>
+
     </div>
-    
   </div>
 </section>
 
