@@ -2,9 +2,9 @@
    screening.css — the eligibility review
 
        begin-screening.html   choose an infusion
-       review.html            step I   · your details
-       review-safety.html     step II  · safety questions
-       review-medical.html    step III · medical history & payment
+       review.html            step I  · your details
+       review-safety.html     step II · safety questions (last step online)
+       review-done.html       received · what happens next
 
    Two materials, used together on every screen: cream paper and forest
    green, with gold as the hairline that joins them. The title card is all
@@ -13,7 +13,7 @@
    so the opening never feels like it belonged to a different site.
 
    The infusion bottle is the through-line. Chosen on the first page, it rides
-   in the green panel through all three steps.
+   in the green panel through both steps.
 
    Motion carries you from one thing to the next: rules draw, numerals light,
    panels settle, and a step you have finished stays visibly finished.
@@ -298,7 +298,7 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   2 · THE REVIEW — three steps, one room
+   2 · THE REVIEW — two steps, one room
    ───────────────────────────────────────────────────────────────────────────
    Left: a tall forest panel — your infusion, and where you are. It is the
    title card, folded into the page and kept beside you. Right: cream, and the
@@ -405,6 +405,47 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 .bs-soon p { margin: 0; font-size: .9rem; line-height: 1.7; color: var(--mist); }
 .bs-soon__acts { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .6rem; }
 
+/* ── THE END OF THE LINE ─────────────────────────────────────────────────────
+   review-done.html. Same white stage as the form frame, so arriving here reads
+   as the form having turned into its own receipt rather than as a new page.
+   The seal is the only thing on these pages drawn at that size — it is allowed
+   to be, because it is the one moment the patient is being told they are
+   finished. */
+.bs-done {
+    position: relative; background: #fff; border: 1px solid var(--rule); border-radius: 20px;
+    box-shadow: 0 34px 64px -34px rgba(32,52,33,.4), 0 4px 16px rgba(32,52,33,.05);
+    overflow: clip; padding: clamp(1.8rem, 4vw, 2.9rem);
+}
+.bs-done::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-lite), var(--gold)); transform: scaleX(var(--draw, 0)); transform-origin: left; transition: transform 1.2s var(--ease) .3s; }
+
+.bs-done__seal {
+    display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 50%;
+    background: var(--gold-lite); color: var(--forest-deep); font-size: 1.5rem; line-height: 1;
+    box-shadow: 0 0 0 8px rgba(193,150,63,.13);
+}
+.bs-done__seal i { line-height: 1; }
+.bs-done__title { margin: 1.15rem 0 0; font-family: var(--caps); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 1.85rem); color: var(--forest); }
+.bs-done__title em { font-style: italic; font-family: var(--display); color: var(--gold-deep); }
+.bs-done__sub { margin: .55rem 0 0; max-width: 54ch; font-size: .95rem; line-height: 1.72; color: var(--mist); }
+
+/* What happens next — the same numbered spine as the green band, in cream. */
+.bs-done__next { list-style: none; margin: clamp(1.6rem, 3.4vw, 2.3rem) 0 0; padding: 0; display: grid; gap: 1.15rem; }
+.bs-done__next li { position: relative; display: grid; gap: .18rem; padding-left: 3.1rem; }
+.bs-done__next li::before {
+    content: attr(data-n); position: absolute; left: 0; top: -.1rem;
+    display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 50%;
+    background: var(--parchment); border: 1px solid var(--rule-gold, rgba(193,150,63,.32));
+    font-family: var(--display); font-size: .8rem; color: var(--gold-deep);
+}
+.bs-done__next b { font-family: var(--caps); font-weight: 400; font-size: 1.02rem; color: var(--forest); }
+.bs-done__next p { margin: 0; font-size: .88rem; line-height: 1.65; color: var(--mist); }
+
+.bs-done__rule { height: 1px; margin: clamp(1.6rem, 3.4vw, 2.2rem) 0; background: var(--rule); }
+.bs-done__free { display: flex; gap: .7rem; align-items: flex-start; font-size: .88rem; line-height: 1.65; color: var(--mist); }
+.bs-done__free i { color: var(--gold-deep); font-size: 1.05rem; margin-top: .05rem; }
+.bs-done__free b { color: var(--forest); font-weight: 600; }
+.bs-done__acts { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.4rem; }
+
 .bs-911 { display: flex; gap: .85rem; align-items: flex-start; padding: 1rem 1.2rem; border-radius: 14px; background: #FBEFEC; border: 1px solid rgba(179,38,30,.16); font-size: .86rem; line-height: 1.6; color: #7A2A22; }
 .bs-911 i { font-size: 1.05rem; color: #B3261E; margin-top: .1rem; }
 .bs-911 b { color: #9E2A20; font-weight: 600; }
@@ -418,7 +459,7 @@ html.has-cine body { overflow: hidden; height: 100vh; }
     .bs-bottle img { width: 82%; height: 88%; }
     .bs-side__id { grid-area: id; }
     .bs-side__name { font-size: 1.2rem; }
-    .bs-path { grid-area: path; padding: 1.2rem 0 0; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+    .bs-path { grid-area: path; padding: 1.2rem 0 0; grid-template-columns: repeat(2, 1fr); gap: .5rem; }
     .bs-path::before { left: .6rem; right: .6rem; top: 1.8rem; bottom: auto; width: auto; height: 1px; }
     .bs-path::after  { left: .6rem; top: 1.8rem; height: 1px; width: calc((100% - 1.2rem) * var(--fill, 0)); transition: width 1.2s var(--ease) .35s; }
     .bs-path__i { padding-top: 1.1rem; }
