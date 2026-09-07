@@ -207,20 +207,23 @@
 <section class="bs-form" id="form">
   <div class="ct-wrap">
 
-    <!-- ▸ JOTFORM FORM 1 GOES HERE — the review fee, not the medical form.
-         Set FORMS.review in js/screening.js and this wakes up on its own.
-         screening.js appends ?interest=<slug>&interestName=<label> so the form
-         arrives knowing what they came for. Form 1 collects name, contact,
-         date of birth and the $100; it asks nothing medical. Its autoresponder
-         emails the link to Form 2 — the screening and intake form — which is
-         never embedded on this site. -->
+    <!-- ▸ THE INTAKE CHAIN STARTS HERE.
+         This embeds step 1 only — the short intake form that collects name,
+         contact and which infusion. It asks nothing medical and takes no
+         payment. On submit Jotform redirects, inside this same frame, to the
+         urgent-symptom screening and then to the full medical history, where
+         the $100 is collected. Each step carries the patient's details forward,
+         so they are never asked for their name twice.
+
+         screening.js sets the src and pre-selects the infusion from ?drip=.
+         Set FORMS.intake in js/screening.js; blank shows the fallback below. -->
     <div class="ct-embed" id="screeningForm" hidden>
-      <span class="ct-embed__lab">Step 01 &middot; physician review fee</span>
-      <iframe id="ctScreenFrame" title="Alpha Vital Elite IV physician review fee"
+      <span class="ct-embed__lab">Step 01 &middot; your details</span>
+      <iframe id="ctScreenFrame" title="Alpha Vital Elite IV physician review request"
               src="" loading="lazy"></iframe>
     </div>
 
-    <!-- Shown instead of the frame until FORMS.review is filled in. -->
+    <!-- Shown instead of the frame until FORMS.intake is filled in. -->
     <div class="bs-soon" id="bsSoon">
       <i class="ph-duotone ph-hourglass-medium"></i>
       <b>Online review requests open shortly</b>
