@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   screening.js — begin-screening.html and review.html
+   screening.js — begin-screening, review, review-safety, review-done
 
    begin-screening.html is a plain list of links; it needs nothing here beyond
    the shared animations, which script.js already runs.
@@ -10,29 +10,41 @@
    apart the first time a price moved — this one cannot.
 
    All ten infusions share ONE intake chain rather than ten near-identical
-   forms. Ten copies of the same medical questionnaire would drift apart the
-   first time a question changed — and there are 189 of them. The chain is:
+   forms, which would drift apart the first time a price or a question moved.
+   The patient-facing chain is TWO steps, both online, both free:
 
-     1. INTAKE  — name, email, phone, which infusion.        (this is the embed)
+     1. INTAKE  — name, email, phone, which infusion.   (review.html embeds it)
      2. URGENT  — twelve yes/no urgent-symptom questions.
                   Any "yes" hides the submit button entirely, so a patient
                   reporting an emergency symptom cannot submit and no record
-                  is created. All "no" carries them on.
-     3. MEDICAL — the full 189-question history, then the $100 payment.
+                  is created. All "no" submits, and the thank-you page tells
+                  them the practice will call within 24–48 hours.
 
-   Each step redirects to the next and passes the patient's details along in
-   the query string, so nobody is asked their name twice. review.html only
-   ever embeds step 1; Jotform handles the rest inside the same iframe.
+   There is no third step and no payment. The full medical history is a
+   separate Jotform the practice fills out WITH the patient on an iPad in the
+   office; it is never linked from this site and MEDICAL below is recorded
+   only so the id is findable.
+
+   Step 1 redirects to step 2, and step 2 redirects to review-done.html — the
+   confirmation. Each redirect passes the patient's details in the query
+   string, so nobody is asked their name twice; both receiving pages scrub
+   that query string out of the address bar once they have read it.
+
+   The two redirect URLs are set inside Jotform, not here:
+     intake  →  …/htmls/review-safety.html?first={fullLegal:first}&last={fullLegal:last}
+                &email={emailAddress}&phone={phoneNumber}&drip={whichIv}
+     urgent  →  …/htmls/review-done.html?drip={whichIv}&first={fullLegal:first}
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ▸ THE ONLY BLOCK TO EDIT.
-   INTAKE is the form the page embeds. URGENT and MEDICAL are listed for
-   reference only — the redirects between them are configured inside Jotform,
-   not here. Blank INTAKE shows the phone fallback instead of a dead iframe. */
+   Each page embeds one of these; the redirect between them is configured
+   inside Jotform, not here. MEDICAL is the in-office iPad form — reference
+   only, never embedded. Blank url shows the phone fallback, not a dead
+   iframe. */
 const FORMS = {
     intake:  'https://hipaa.jotform.com/262494642474061',
     urgent:  'https://hipaa.jotform.com/262484460970059',
-    medical: 'https://hipaa.jotform.com/262387848695075',
+    medical: 'https://hipaa.jotform.com/262387848695075',  // in-office only
 };
 
 /* Jotform's field name for the infusion dropdown on the intake form. The
@@ -54,8 +66,8 @@ const MENU = {
     'customized':          { name: 'Customized IV Infusion',    price: 'By consultation', chair: 'Individual', tone: '#C1963F', img: 'customized' },
 };
 
-/* ?drip= is a slug on step I (from the picker) and the infusion NAME on steps
-   II and III (relayed by Jotform from its dropdown). Resolve either. */
+/* ?drip= is a slug on step I (from the picker) and the infusion NAME on step
+   II (relayed by Jotform from its dropdown). Resolve either. */
 const findDrip = (raw) => {
     if (!raw) return null;
     if (MENU[raw]) return { slug: raw, ...MENU[raw] };
@@ -79,10 +91,15 @@ const paint = () => {
     const swap = $('#bsSwap');
 
     if (!drip) {
-        if (swap) {
+        /* Nothing chosen. On a step that still has a form there is something to
+           offer — carry on, or go back and pick one. On the confirmation page
+           there is nothing left to continue TO, so its own wording stands. */
+        if (swap && !$('#bsDone')) {
             swap.hidden = false;
             swap.innerHTML = 'No infusion chosen yet. You can continue and let physician screening '
                 + 'guide the next step, or <a href="begin-screening.html">choose one first</a>.';
+        } else if (swap) {
+            swap.hidden = false;
         }
         return null;
     }
@@ -110,21 +127,22 @@ const paint = () => {
 
        review.html          → intake form  → redirects to…
        review-safety.html   → urgent form  → redirects to…
-       review-medical.html  → medical form → the $100, then done.
+       review-done.html     → no form. Confirms, and says the practice calls
+                              within 24–48 hours.
 
    Two separate vocabularies meet here, so keep them straight:
 
      • The SITE's own short params, below. These travel page → page and are
        ours to name.
-     • JOTFORM's field names, in FIELDS. Those are fixed by the forms and are
-       identical on the urgent and medical forms, which is why one map covers
-       both.
+     • JOTFORM's field names, in FIELDS. Those are fixed by the form and are
+       the unique names WITHOUT the qID prefix — {fullLegal:first}, never
+       {q16_fullLegal:first}, which silently prefills nothing.
 
    The Jotform redirect URLs are configured inside Jotform, not here. They must
    emit the site params below — see README-intake-chain.md. */
 const CARRY = ['first', 'last', 'email', 'phone', 'drip'];
 
-/* Site param  →  Jotform field name on the urgent and medical forms. */
+/* Site param  →  Jotform field name on the urgent form. */
 const FIELDS = {
     first: 'fullLegal[first]',
     last:  'fullLegal[last]',
@@ -134,9 +152,31 @@ const FIELDS = {
 };
 
 
+/* ── SCRUB THE ADDRESS BAR ───────────────────────────────────────────────────
+   Once the patient's details have been handed to the form — or, on the last
+   page, once the panel has been painted — they have no further business
+   sitting in the address bar.
+
+   This is not cosmetic. Left there they persist in browser history and in the
+   back/forward cache on whatever machine this is — a shared laptop, a family
+   iPad, a phone someone hands to a friend — and they are readable over
+   anyone's shoulder for as long as the page is open. replaceState rewrites the
+   entry rather than adding one, so Back still goes where the patient expects.
+
+   What this does NOT undo: the request that carried these params has already
+   reached the host, so they may sit in access logs. That is inherent to
+   Jotform redirecting by GET, and is a question for whoever holds the hosting
+   BAA. */
+const scrub = () => {
+    if (!location.search) return;
+    if (!window.history?.replaceState) return;
+    history.replaceState(null, '', location.pathname + location.hash);
+};
+
+
 /* ── EMBED ───────────────────────────────────────────────────────────────────
-   One embed for all three pages. The iframe declares which form it wants with
-   data-form="intake|urgent|medical"; everything else follows from that.
+   One embed for both pages. The iframe declares which form it wants with
+   data-form="intake|urgent"; everything else follows from that.
 
    Arriving with no infusion is a valid path — the intake form asks anyway, and
    the physician may recommend a different one. So the frame loads regardless;
@@ -166,7 +206,7 @@ const embed = (drip) => {
             url.searchParams.set('interest', drip.slug);
         }
     } else {
-        /* Steps two and three. Relay whatever the previous step sent us.
+        /* Step two. Relay whatever step one sent us.
            A missing value is not an error — the patient can still type it — so
            blanks are skipped rather than passed through as empty strings, which
            would overwrite a value Jotform had already remembered. */
@@ -178,23 +218,7 @@ const embed = (drip) => {
 
     frame.src = url.toString();
 
-    /* The patient's name, email and phone have now been handed to the form, so
-       they have no further business sitting in the address bar. Scrub them.
-
-       This is not cosmetic. Left there they persist in browser history and in
-       the back/forward cache on whatever machine this is — a shared laptop, a
-       family iPad, a phone someone hands to a friend — and they are readable
-       over anyone's shoulder for the fifteen minutes it takes to fill the form
-       in. replaceState rewrites the entry rather than adding one, so Back still
-       goes where the patient expects.
-
-       What this does NOT undo: the request that carried these params has already
-       reached the host, so they may sit in access logs. That is inherent to
-       Jotform redirecting by GET, and is a question for whoever holds the
-       hosting BAA — see README-intake-chain.md. */
-    if (which !== 'intake' && here.toString() && window.history?.replaceState) {
-        history.replaceState(null, '', location.pathname + location.hash);
-    }
+    if (which !== 'intake') scrub();
 
     slot.hidden = false;
     soon?.setAttribute('hidden', '');
@@ -353,7 +377,7 @@ const rise = () => {
     const lines = [...stage.querySelectorAll('.bs-h1 .l > span')];
     const eye   = $('#bsEyebrow');
     const lede  = $('#bsLede');
-    const frame = $('#screeningForm:not([hidden]), #bsSoon:not([hidden])');
+    const frame = $('#screeningForm:not([hidden]), #bsSoon:not([hidden]), #bsDone:not([hidden])');
     const note  = $('#bs911');
     const path  = $('#bsPath');
     const bottle = $('#bsBottleImg');
@@ -392,6 +416,21 @@ const rise = () => {
     if (note) tl.fromTo(note, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .6 }, '-=.7');
 
     return () => tl.play();
+};
+
+
+/* ── GREET BY NAME ───────────────────────────────────────────────────────────
+   review-done.html reads ?first= so the headline can say "Thank you, Jane."
+   Optional in both directions: no name and it just says "Thank you." The value
+   is written with textContent, never innerHTML — it arrives from a query string
+   and is treated as text, not markup. Trimmed to a sane length so a pasted
+   paragraph cannot blow the headline apart. */
+const greet = () => {
+    const slot = $('#bsWho');
+    if (!slot) return;
+    const first = (new URLSearchParams(location.search).get('first') || '').trim();
+    if (!first) return;
+    slot.textContent = `, ${first.slice(0, 24)}`;
 };
 
 
@@ -439,7 +478,13 @@ const boot = () => {
        the phone fallback is visible, and it is embed() that decides which —
        stage after it and the real frame just pops in un-animated. */
     const drip = paint();
+    greet();
     embed(drip);
+
+    /* A page with no form has nothing to hand the params to, so the moment the
+       panel and the headline have read them they come straight back out of the
+       address bar. embed() does this itself on the pages that have a form. */
+    if (!$('#ctScreenFrame')) scrub();
 
     /* Stage before anything paints, then let the title card decide when to
        release. choose() is begin-screening's grid, rise() is the review pages'
