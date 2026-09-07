@@ -9,28 +9,36 @@
    the slug to Form 1 as a prefill. Ten near-identical form pages would drift
    apart the first time a price moved — this one cannot.
 
-   Each infusion has its own Jotform: that drip's screening and medical
-   questions in one form, with the $100 Stripe payment collected at submit.
-   review.html looks the form up by slug and embeds it.
+   All ten infusions share ONE intake chain rather than ten near-identical
+   forms. Ten copies of the same medical questionnaire would drift apart the
+   first time a question changed — and there are 189 of them. The chain is:
+
+     1. INTAKE  — name, email, phone, which infusion.        (this is the embed)
+     2. URGENT  — twelve yes/no urgent-symptom questions.
+                  Any "yes" hides the submit button entirely, so a patient
+                  reporting an emergency symptom cannot submit and no record
+                  is created. All "no" carries them on.
+     3. MEDICAL — the full 189-question history, then the $100 payment.
+
+   Each step redirects to the next and passes the patient's details along in
+   the query string, so nobody is asked their name twice. review.html only
+   ever embeds step 1; Jotform handles the rest inside the same iframe.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ▸ THE ONLY BLOCK TO EDIT — one Jotform per infusion.
-   Each form carries that drip's own screening and medical questions, and takes
-   the $100 Stripe payment at submit. Paste each form's URL beside its slug as
-   you build it; any drip left blank shows the phone fallback instead of a dead
-   iframe, so you can go live one drip at a time. */
+/* ▸ THE ONLY BLOCK TO EDIT.
+   INTAKE is the form the page embeds. URGENT and MEDICAL are listed for
+   reference only — the redirects between them are configured inside Jotform,
+   not here. Blank INTAKE shows the phone fallback instead of a dead iframe. */
 const FORMS = {
-    'glynac':              '',
-    'immun-o-boost':       '',
-    'liquixo':             '',
-    'antioxidant':         '',
-    'glutathione':         '',
-    'joint-skin':          '',
-    'fatty-liver-support': '',
-    'revive':              '',
-    'stress-brain':        '',
-    'customized':          '',
+    intake:  'https://hipaa.jotform.com/262494642474061',
+    urgent:  'https://hipaa.jotform.com/262484460970059',
+    medical: 'https://hipaa.jotform.com/262387848695075',
 };
+
+/* Jotform's field name for the infusion dropdown on the intake form. The
+   options there are the MENU names below, verbatim — if you rename an infusion,
+   rename it in both places or the dropdown arrives blank. */
+const INTAKE_DRIP_FIELD = 'dropdown3';
 
 
 const MENU = {
@@ -97,22 +105,32 @@ const paint = () => {
 
 
 /* ── EMBED ───────────────────────────────────────────────────────────────────
-   The frame is built only once FORMS.review is set. Until then the page shows
-   the phone fallback instead, so the CTA is never a dead end. */
+   Builds the intake frame and pre-selects the infusion they came for, so the
+   dropdown is already answered when the form loads.
+
+   Unlike the old per-drip setup, arriving with no infusion is a valid path —
+   the intake form asks which one anyway, and physician screening may recommend
+   a different one. So the frame loads either way; only a missing FORMS.intake
+   leaves the phone fallback showing. */
 const embed = (drip) => {
     const slot = $('#screeningForm');
     const soon = $('#bsSoon');
     const frame = $('#ctScreenFrame');
     if (!slot || !frame) return;
 
-    /* No drip chosen, or that drip's form is not built yet: leave the phone
-       fallback showing. Never an empty iframe. */
-    const src = drip && FORMS[drip.slug];
-    if (!src) return;
+    if (!FORMS.intake) return;          // not configured — keep the fallback
 
-    const url = new URL(src);
-    url.searchParams.set('interest', drip.slug);
-    url.searchParams.set('interestName', drip.name);
+    const url = new URL(FORMS.intake);
+
+    if (drip) {
+        /* Pre-select the dropdown. The value must match the option text on the
+           Jotform exactly, which is why it comes from MENU rather than the slug. */
+        url.searchParams.set(INTAKE_DRIP_FIELD, drip.name);
+        /* Carried for the record so a submission can be traced back to the page
+           it started on, even if the patient changes the dropdown. */
+        url.searchParams.set('interest', drip.slug);
+    }
+
     frame.src = url.toString();
 
     slot.hidden = false;
