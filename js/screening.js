@@ -104,31 +104,78 @@ const paint = () => {
 };
 
 
-/* ── EMBED ───────────────────────────────────────────────────────────────────
-   Builds the intake frame and pre-selects the infusion they came for, so the
-   dropdown is already answered when the form loads.
+/* ── CARRYING THE PATIENT BETWEEN STEPS ──────────────────────────────────────
+   Each step is its own page on this site, and each embeds one Jotform. When a
+   form is submitted, Jotform redirects to the NEXT page here and puts the
+   patient's details in the query string. That page reads them and passes them
+   into its own iframe, so the patient is asked for their name exactly once.
 
-   Unlike the old per-drip setup, arriving with no infusion is a valid path —
-   the intake form asks which one anyway, and physician screening may recommend
-   a different one. So the frame loads either way; only a missing FORMS.intake
-   leaves the phone fallback showing. */
+       review.html          → intake form  → redirects to…
+       review-safety.html   → urgent form  → redirects to…
+       review-medical.html  → medical form → the $100, then done.
+
+   Two separate vocabularies meet here, so keep them straight:
+
+     • The SITE's own short params, below. These travel page → page and are
+       ours to name.
+     • JOTFORM's field names, in FIELDS. Those are fixed by the forms and are
+       identical on the urgent and medical forms, which is why one map covers
+       both.
+
+   The Jotform redirect URLs are configured inside Jotform, not here. They must
+   emit the site params below — see README-intake-chain.md. */
+const CARRY = ['first', 'last', 'email', 'phone', 'drip'];
+
+/* Site param  →  Jotform field name on the urgent and medical forms. */
+const FIELDS = {
+    first: 'fullLegal[first]',
+    last:  'fullLegal[last]',
+    email: 'emailAddress',
+    phone: 'phoneNumber',
+    drip:  'whichIv',
+};
+
+
+/* ── EMBED ───────────────────────────────────────────────────────────────────
+   One embed for all three pages. The iframe declares which form it wants with
+   data-form="intake|urgent|medical"; everything else follows from that.
+
+   Arriving with no infusion is a valid path — the intake form asks anyway, and
+   the physician may recommend a different one. So the frame loads regardless;
+   only an unconfigured form leaves the phone fallback showing, which is why
+   this can go live one step at a time. */
 const embed = (drip) => {
-    const slot = $('#screeningForm');
-    const soon = $('#bsSoon');
+    const slot  = $('#screeningForm');
+    const soon  = $('#bsSoon');
     const frame = $('#ctScreenFrame');
     if (!slot || !frame) return;
 
-    if (!FORMS.intake) return;          // not configured — keep the fallback
+    const which = frame.dataset.form || 'intake';
+    const src = FORMS[which];
+    if (!src) return;                   // not configured — keep the fallback
 
-    const url = new URL(FORMS.intake);
+    const url = new URL(src);
+    const here = new URLSearchParams(location.search);
 
-    if (drip) {
-        /* Pre-select the dropdown. The value must match the option text on the
-           Jotform exactly, which is why it comes from MENU rather than the slug. */
-        url.searchParams.set(INTAKE_DRIP_FIELD, drip.name);
-        /* Carried for the record so a submission can be traced back to the page
-           it started on, even if the patient changes the dropdown. */
-        url.searchParams.set('interest', drip.slug);
+    if (which === 'intake') {
+        /* Step one. Nothing to carry in yet — the only thing we know is which
+           infusion they clicked, and the dropdown value must match the option
+           text on the Jotform exactly, so it comes from MENU not the slug. */
+        if (drip) {
+            url.searchParams.set(INTAKE_DRIP_FIELD, drip.name);
+            /* Kept for the record so a submission traces back to the page it
+               started on, even if they change the dropdown. */
+            url.searchParams.set('interest', drip.slug);
+        }
+    } else {
+        /* Steps two and three. Relay whatever the previous step sent us.
+           A missing value is not an error — the patient can still type it — so
+           blanks are skipped rather than passed through as empty strings, which
+           would overwrite a value Jotform had already remembered. */
+        CARRY.forEach((key) => {
+            const val = here.get(key);
+            if (val) url.searchParams.set(FIELDS[key], val);
+        });
     }
 
     frame.src = url.toString();
@@ -322,6 +369,92 @@ const nameCine = () => {
 };
 
 
+/* ── THE MASTHEAD LANDS ──────────────────────────────────────────────────────
+   The review pages keep the world the title sequence builds, so the handover
+   has to be a continuation rather than a cut: the rail, headline and form rise
+   while the curtain is still fading, on the same easing. Built paused and
+   released by the curtain cue, exactly as the picker is on begin-screening.
+
+   Returns a play() function, or null when there is nothing to animate — no
+   GSAP, reduced motion, or simply not one of these pages. */
+const rise = () => {
+    const top = $('.bs-top');
+    if (!top || typeof window.gsap === 'undefined' || RM.matches) return null;
+
+    /* contact.js reveals [data-ct] and [data-ct-split] elements when they scroll
+       into view. On these pages the masthead is already in view at load, behind
+       the title sequence — so by the time the curtain lifts the moment has
+       passed and the headline stays parked at its start state: translated 105%
+       down inside a line box with overflow:hidden, which paints as a completely
+       blank masthead. That is why this timeline exists rather than leaning on
+       the shared scroll reveal.
+
+       Claiming them with data-done is what stops the two from fighting: it is
+       the same flag contact.js sets, so it skips anything already handled here. */
+    const claim = (sel) => {
+        const els = [...document.querySelectorAll(sel)];
+        els.forEach((el) => { el.dataset.done = '1'; });
+        return els.length ? els : null;
+    };
+
+
+    const rail  = claim('.bs-rail__i');
+    /* Both attributes, deliberately. The headline carries data-ct-split, not
+       data-ct, and `html.ct-on [data-ct-split] { opacity: 0 }` hides the whole
+       element — so leaving it out of the fade left the masthead blank even once
+       the lines underneath were animating correctly. */
+    const fades = claim('.bs-top [data-ct], .bs-top [data-ct-split]');
+    const facts = document.querySelector('.bs-facts');
+    const panel = document.querySelector('.ct-embed, .bs-soon');
+
+    /* Whatever the reveal does not reach must not be left invisible. The CSS
+       start states only apply under .ct-on, so dropping the class is the one
+       move that guarantees nothing stays hidden if this bails out early. */
+    if (!rail && !lines && !fades) {
+        document.documentElement.classList.remove('ct-on');
+        return null;
+    }
+
+    const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+    /* 1 — the rail: "where am I" before "what am I reading". Each item returns
+           to the resting opacity its own state calls for, not a flat 1. */
+    if (rail) {
+        tl.fromTo(rail, { opacity: 0, y: 8 }, {
+            opacity: (i, el) => (el.classList.contains('is-now')  ? 1
+                               : el.classList.contains('is-done') ? .72 : .38),
+            y: 0, duration: .55, stagger: .07,
+        });
+    }
+
+    /* The headline used to be a data-ct-split line reveal. It is a plain rise
+       on these three pages now: contact.js only builds the .ct-line wrappers
+       after the webfonts settle, and its scroll reveal fires while the title
+       sequence is still covering the page — so it decided the masthead was
+       already shown and left the lines parked at 105%, which paints as a blank
+       masthead. Racing it with a poll swapped one timing bug for another. A
+       reveal a patient depends on should not hinge on when a font arrives. */
+
+    /* 3 — the eyebrow, lede and anything else marked for a plain fade */
+    if (fades) {
+        tl.fromTo(fades, { opacity: 0, y: 14 },
+                  { opacity: 1, y: 0, duration: .7, stagger: .07 }, '-=.85');
+    }
+
+    if (facts) {
+        tl.fromTo(facts, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: .8 }, '-=.55');
+    }
+
+    /* 4 — the form last and from further down, so it reads as the thing the
+           page was walking you toward, not something already sitting there. */
+    if (panel) {
+        tl.fromTo(panel, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, '-=.5');
+    }
+
+    return () => tl.play();
+};
+
+
 /* ── BOOT ───────────────────────────────────────────────────────────────── */
 const boot = () => {
     /* Read this before cine() runs — it clears the class on its way out. */
@@ -329,9 +462,10 @@ const boot = () => {
 
     nameCine();
 
-    /* Stage the picker first so its start state is set before anything paints,
-       then let the welcome screen decide when to release it. */
-    const play = choose();
+    /* Stage before anything paints, then let the welcome screen decide when to
+       release. choose() is begin-screening's card grid, rise() is the review
+       pages' masthead — a page has one or the other, never both. */
+    const play = choose() || rise();
 
     cine();
 
