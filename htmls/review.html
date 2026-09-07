@@ -194,10 +194,20 @@
 <section class="bs-top bs-top--form" id="top">
   <div class="ct-wrap">
 
+
+    <!-- Where they are in the three steps. Same rail on all three pages; only
+         is-now moves. Static markup, no JS — it must be right even if a script
+         fails, because it is the only thing telling them how much is left. -->
+    <ol class="bs-rail" aria-label="Progress">
+      <li class="bs-rail__i is-now"><b>01</b><span>Your details</span></li>
+      <li class="bs-rail__i"><b>02</b><span>Safety questions</span></li>
+      <li class="bs-rail__i"><b>03</b><span>Medical history &amp; payment</span></li>
+    </ol>
+
     <a class="bs-back" href="begin-screening.html"><i class="ph ph-arrow-left"></i> All infusions</a>
 
-    <p class="ct-eyebrow" data-ct="rise">Step one of four &middot; safety screening &amp; medical intake</p>
-    <h1 class="bs-top__title" id="bsName" data-ct-split="lines">
+    <p class="ct-eyebrow" data-ct="rise">Step one of three &middot; your details</p>
+    <h1 class="bs-top__title" id="bsName" data-ct="rise">
       Physician <em>eligibility review</em>
     </h1>
 
@@ -235,7 +245,7 @@
          Set FORMS.intake in js/screening.js; blank shows the fallback below. -->
     <div class="ct-embed" id="screeningForm" hidden>
       <span class="ct-embed__lab">Step 01 &middot; your details</span>
-      <iframe id="ctScreenFrame" title="Alpha Vital Elite IV physician review request"
+      <iframe id="ctScreenFrame" data-form="intake" title="Alpha Vital Elite IV physician review request"
               src="" loading="lazy"></iframe>
     </div>
 
