@@ -3,15 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Physician Review Request — Alpha Vital Elite IV</title>
-<meta name="description" content="Begin your $100 physician eligibility review with Dr. Violeta Aronov, DO. Middle Village, Queens.">
+<!-- The intake chain carries the patient's name, email, phone and chosen
+     infusion in the query string. Without this, every request this page makes
+     to Google Fonts and jsDelivr sends that whole URL in the Referer header —
+     which hands identified health information to third parties who have no BAA.
+     no-referrer stops the header being sent at all. -->
+<meta name="referrer" content="no-referrer">
+<title>Your Details — Alpha Vital Elite IV</title>
+<meta name="description" content="Step one of three: your details, then a short safety screen and your medical history.">
 <meta name="theme-color" content="#F6F1E7">
 <meta name="format-detection" content="telephone=yes">
 <link rel="canonical" href="https://www.precisionmedicaliv.com/htmls/review.html">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Physician Review Request — Alpha Vital Elite IV">
-<meta property="og:description" content="Begin your $100 physician eligibility review with Dr. Violeta Aronov, DO. Middle Village, Queens.">
+<meta property="og:title" content="Your Details — Alpha Vital Elite IV">
+<meta property="og:description" content="Step one of three: your details, then a short safety screen and your medical history.">
 <meta property="og:url" content="https://www.precisionmedicaliv.com/htmls/review.html">
 <meta property="og:image" content="https://www.precisionmedicaliv.com/assets/gen-images/dr.aronov.png">
 
@@ -187,178 +193,68 @@
 
 <main id="main">
 
-
-<!-- ============================= MASTHEAD =============================
-     Painted by js/screening.js from ?drip=<slug>. The markup below is the
-     no-parameter fallback, and is also what a crawler sees. -->
-<section class="bs-top bs-top--form" id="top">
+<!-- ============================= THE ROOM =============================
+     Left: the green panel — the infusion and where you are, kept beside you
+     for all three steps. Right: the one task in front of you.
+     screening.js paints the panel from ?drip= (a slug on step I, the infusion
+     name relayed by Jotform on steps II and III) and drives the entrance. -->
+<section class="bs-room" id="top">
   <div class="ct-wrap">
+    <div class="bs-room__grid">
 
+      <aside class="bs-side" id="bsSide" data-numeral="I" data-fill="0">
+        <a class="bs-side__back" href="begin-screening.html"><i class="ph ph-arrow-left"></i> All infusions</a>
 
-    <!-- Where they are in the three steps. Same rail on all three pages; only
-         is-now moves. Static markup, no JS — it must be right even if a script
-         fails, because it is the only thing telling them how much is left. -->
-    <ol class="bs-rail" aria-label="Progress">
-      <li class="bs-rail__i is-now"><b>01</b><span>Your details</span></li>
-      <li class="bs-rail__i"><b>02</b><span>Safety questions</span></li>
-      <li class="bs-rail__i"><b>03</b><span>Medical history &amp; payment</span></li>
-    </ol>
+        <div class="bs-bottle" id="bsBottle">
+          <img id="bsBottleImg" src="../assets/drips/customized.png" alt="" width="1024" height="1536" decoding="async" fetchpriority="high">
+        </div>
 
-    <a class="bs-back" href="begin-screening.html"><i class="ph ph-arrow-left"></i> All infusions</a>
+        <div class="bs-side__id">
+          <span class="bs-side__kicker">Physician eligibility review</span>
+          <h2 class="bs-side__name" id="bsName">Your infusion</h2>
+          <p class="bs-side__meta"><span id="bsChair"></span><b id="bsPrice"></b></p>
+          <p class="bs-side__swap" id="bsSwap" hidden>Not the one you wanted? <a href="begin-screening.html">Choose a different infusion</a>.</p>
+        </div>
 
-    <p class="ct-eyebrow" data-ct="rise">Step one of three &middot; your details</p>
-    <h1 class="bs-top__title" id="bsName" data-ct="rise">
-      Physician <em>eligibility review</em>
-    </h1>
+        <ol class="bs-path" id="bsPath" style="--fill:0" aria-label="Progress">
+          <li class="bs-path__i is-now"><b>Step I</b><span>Your details</span></li>
+          <li class="bs-path__i"><b>Step II</b><span>Safety questions</span></li>
+          <li class="bs-path__i"><b>Step III</b><span>Medical history &amp; payment</span></li>
+        </ol>
 
-    <dl class="bs-facts" id="bsFacts">
-      <div class="bs-fact"><dt>Infusion</dt><dd id="bsDrip">Not yet selected</dd></div>
-      <div class="bs-fact" id="bsChairBox" hidden><dt>Chair time</dt><dd id="bsChair">&mdash;</dd></div>
-      <div class="bs-fact" id="bsPriceBox" hidden><dt>Single infusion</dt><dd id="bsPrice">&mdash;</dd></div>
-      <div class="bs-fact bs-fact--fee"><dt>Physician review fee</dt><dd>$100<small>Non-refundable. Applied toward your infusion if approved.</small></dd></div>
-    </dl>
+        <div class="bs-side__dr">
+          <b>Dr.&nbsp;Violeta Aronov, DO</b>
+          <span>Reviews every request herself and emails you the outcome.</span>
+        </div>
+      </aside>
 
-    <p class="ct-lede" data-ct="rise" id="bsLede">
-      About 15 minutes. Dr.&nbsp;Aronov reviews it herself and emails you the outcome.
-    </p>
+      <div class="bs-stage" id="bsStage">
+        <div class="bs-stage__head">
+          <p class="bs-eyebrow" id="bsEyebrow">Step one of three</p>
+          <h1 class="bs-h1" id="bsTitle"><span class="l"><span>Your</span></span><span class="l"><span><em>details.</em></span></span></h1>
+          <p class="bs-lede" id="bsLede">Name, contact, and the infusion you would like reviewed. <b>About a minute.</b></p>
+        </div>
 
-    <p class="bs-swap" id="bsSwap" hidden>
-      Not the one you wanted? <a href="begin-screening.html">Choose a different infusion</a>.
-    </p>
-  </div>
-</section>
+        <div class="bs-frame" id="screeningForm" hidden>
+          <div class="bs-frame__bar"><span><b>I</b>Your details</span><i>Secure &middot; HIPAA</i></div>
+          <iframe id="ctScreenFrame" data-form="intake" title="Alpha Vital Elite IV — Your details" src="" loading="eager"></iframe>
+        </div>
 
+        <div class="bs-soon" id="bsSoon">
+          <i class="ph-duotone ph-hourglass-medium"></i>
+          <b>This step is not live yet</b>
+          <p>Call the practice and we will take you through it by phone.</p>
+          <div class="bs-soon__acts">
+            <a class="btn btn--forest btn--lg" href="tel:+19292010740" data-magnetic><span>929 &middot; 201 &middot; 0740</span><i class="ph ph-phone"></i></a>
+          </div>
+        </div>
 
-<!-- ============================= THE FORM ============================= -->
-<section class="bs-form" id="form">
-  <div class="ct-wrap">
-
-    <!-- ▸ THE INTAKE CHAIN STARTS HERE.
-         This embeds step 1 only — the short intake form that collects name,
-         contact and which infusion. It asks nothing medical and takes no
-         payment. On submit Jotform redirects, inside this same frame, to the
-         urgent-symptom screening and then to the full medical history, where
-         the $100 is collected. Each step carries the patient's details forward,
-         so they are never asked for their name twice.
-
-         screening.js sets the src and pre-selects the infusion from ?drip=.
-         Set FORMS.intake in js/screening.js; blank shows the fallback below. -->
-    <div class="ct-embed" id="screeningForm" hidden>
-      <span class="ct-embed__lab">Step 01 &middot; your details</span>
-      <iframe id="ctScreenFrame" data-form="intake" title="Alpha Vital Elite IV physician review request"
-              src="" loading="lazy"></iframe>
-    </div>
-
-    <!-- Shown instead of the frame until FORMS.intake is filled in. -->
-    <div class="bs-soon" id="bsSoon">
-      <i class="ph-duotone ph-hourglass-medium"></i>
-      <b>Online review requests open shortly</b>
-      <p>
-        The secure form is being finalised. Until it is live, call the practice and we will take
-        you through the same review by phone.
-      </p>
-      <div class="bs-soon__acts">
-        <a class="btn btn--forest btn--lg" href="tel:+19292010740" data-magnetic>
-          <span>929 &middot; 201 &middot; 0740</span><i class="ph ph-phone"></i>
-        </a>
-        <a class="btn btn--line btn--lg" href="contact.html#questions">
-          <span>Send a question</span><i class="ph ph-arrow-right"></i>
-        </a>
+        <p class="bs-911" id="bs911"><i class="ph-fill ph-warning"></i><span><b>Not for emergencies.</b> Nobody monitors this in real time. If this is a medical emergency, call&nbsp;911 or go to the nearest emergency department.</span></p>
       </div>
-    </div>
 
+    </div>
   </div>
 </section>
-
-
-<!-- ============================= WHAT HAPPENS NEXT ============================= -->
-<section class="bs-how bs-how--after" id="next">
-  <div class="ct-wrap">
-    <div class="ct-screen__head">
-      <p class="ct-eyebrow" data-ct="rise">After you pay</p>
-      <h2 class="ct-h2" data-ct-split="lines">What happens <em>next.</em></h2>
-    </div>
-
-    <ol class="ct-steps ct-steps--four">
-      <li class="ct-step" data-ct="pop">
-        <span class="ct-step__no">STEP 01</span>
-        <h3 class="ct-step__name">Your details</h3>
-        <p class="ct-step__what">Name, contact, and the infusion you want.</p>
-      </li>
-      <li class="ct-step" data-ct="pop">
-        <span class="ct-step__no">STEP 02</span>
-        <h3 class="ct-step__name">Safety &amp; medical history</h3>
-        <p class="ct-step__what">Conditions, medications, allergies. Read only by Dr.&nbsp;Aronov.</p>
-      </li>
-      <li class="ct-step" data-ct="pop">
-        <span class="ct-step__no">STEP 03</span>
-        <h3 class="ct-step__name">$100 review fee</h3>
-        <p class="ct-step__what">
-          Credited to your infusion if approved.
-          <a href="../policies/refund-policy.html">Non&#8209;refundable</a>.
-        </p>
-      </li>
-      <li class="ct-step" data-ct="pop">
-        <span class="ct-step__no">STEP 04</span>
-        <h3 class="ct-step__name">Outcome by email</h3>
-        <p class="ct-step__what">With a booking link if you&rsquo;re approved.</p>
-      </li>
-    </ol>
-
-    <div class="ct-out" data-ct="rise">
-      <p class="ct-out__lab">What the review can conclude</p>
-      <ul class="ct-out__grid">
-        <li class="ct-out__item ct-out__item--yes">
-          <b>Approved</b>
-          <span>You get a link to book.</span>
-        </li>
-        <li class="ct-out__item">
-          <b>A different infusion</b>
-          <span>Another suits you better. Your $100 still applies.</span>
-        </li>
-        <li class="ct-out__item">
-          <b>More information</b>
-          <span>Records, labs, or clearance from your own doctor.</span>
-        </li>
-        <li class="ct-out__item">
-          <b>Not appropriate</b>
-          <span>She&rsquo;ll explain why, and what to do instead.</span>
-        </li>
-      </ul>
-    </div>
-
-    <div class="ct-notice bs-999" data-ct="rise">
-      <span class="ct-notice__tag"><i class="ph-fill ph-warning"></i> Not for emergencies</span>
-      <p>
-        <b>Nobody monitors this in real time.</b> If this is a medical emergency, call&nbsp;911 or go
-        to your nearest emergency department.
-      </p>
-    </div>
-
-  </div>
-</section>
-
-  <!-- Required disclosure. Collapsed so it is not a wall of text on the way to
-       the form, but present on the page and open to anyone who wants it. Do not
-       delete it — it is the risk and non-FDA-approval disclosure. -->
-  <details class="bs-legal bs-legal--fold">
-    <summary><b>Important disclaimer</b><span>Read</span></summary>
-    <div class="bs-legal__body">
-      <p>
-        Every infusion offered by Alpha Vital Elite IV is an elective, physician-directed wellness
-        service. None is intended to diagnose, treat, cure, mitigate, prevent or reverse any disease
-        or medical condition. Research involving individual ingredients does not establish the safety
-        or effectiveness of a combined IV protocol. No benefit or outcome is promised or guaranteed.
-      </p>
-      <p>
-        IV administration carries risks, including infection, vein irritation, fluid or electrolyte
-        imbalance, changes in blood pressure or heart rhythm, medication interactions, kidney
-        complications, and allergic reactions, including rare anaphylaxis. Screening and monitoring
-        reduce but do not eliminate these risks. This service does not replace primary or specialist
-        care, prescribed treatment, diagnostic evaluation or emergency care.
-      </p>
-    </div>
-  </details>
 
 </main>
 
