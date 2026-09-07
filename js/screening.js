@@ -42,16 +42,25 @@ const INTAKE_DRIP_FIELD = 'dropdown3';
 
 
 const MENU = {
-    'glynac':              { name: 'GLyNAC Healthy Aging',      price: '$350',   chair: '1 h 15', tone: '#5B7098' },
-    'immun-o-boost':       { name: 'Immun-O-Boost IV Support',  price: '$550',   chair: '2 h 30', tone: '#D9982A' },
-    'liquixo':             { name: 'LIQUIXO Muscle Recovery',   price: '$395',   chair: '45 min', tone: '#B34E37' },
-    'antioxidant':         { name: 'Antioxidant \u00d73 Reset', price: '$400',   chair: '1 h 15', tone: '#4F7D5E' },
-    'glutathione':         { name: 'Glutathione IV Injection',  price: '$100',   chair: '30 min', tone: '#7FA08C' },
-    'joint-skin':          { name: 'Joint & Skin Wellness',     price: '$650',   chair: '2 h 30', tone: '#8C6239' },
-    'fatty-liver-support': { name: 'Fatty Liver Support',       price: '$650',   chair: '3 h',    tone: '#5F7A55' },
-    'revive':              { name: 'Revive IV Support',         price: '$525',   chair: '2 h 15', tone: '#35707F' },
-    'stress-brain':        { name: 'Stress & Brain Wellness',   price: '$500',   chair: '1 h 30', tone: '#7A5F98' },
-    'customized':          { name: 'Customized IV Infusion',    price: 'By consultation', chair: 'Individual', tone: '#C1963F' },
+    'glynac':              { name: 'GLyNAC Healthy Aging',      price: '$350', chair: '1 h 15', tone: '#5B7098', img: 'glynac' },
+    'immun-o-boost':       { name: 'Immun-O-Boost IV Support',  price: '$550', chair: '2 h 30', tone: '#D9982A', img: 'immuneoboost' },
+    'liquixo':             { name: 'LIQUIXO Muscle Recovery',   price: '$395', chair: '45 min', tone: '#B34E37', img: 'liquixo' },
+    'antioxidant':         { name: 'Antioxidant \u00d73 Reset', price: '$400', chair: '1 h 15', tone: '#4F7D5E', img: 'antioxidant' },
+    'glutathione':         { name: 'Glutathione IV Injection',  price: '$100', chair: '30 min', tone: '#7FA08C', img: 'glutathione' },
+    'joint-skin':          { name: 'Joint & Skin Wellness',     price: '$650', chair: '2 h 30', tone: '#8C6239', img: 'jointsupport' },
+    'fatty-liver-support': { name: 'Fatty Liver Support',       price: '$650', chair: '3 h',    tone: '#5F7A55', img: 'liversupport' },
+    'revive':              { name: 'Revive IV Support',         price: '$525', chair: '2 h 15', tone: '#35707F', img: 'revive' },
+    'stress-brain':        { name: 'Stress & Brain Wellness',   price: '$500', chair: '1 h 30', tone: '#7A5F98', img: 'brainwellness' },
+    'customized':          { name: 'Customized IV Infusion',    price: 'By consultation', chair: 'Individual', tone: '#C1963F', img: 'customized' },
+};
+
+/* ?drip= is a slug on step I (from the picker) and the infusion NAME on steps
+   II and III (relayed by Jotform from its dropdown). Resolve either. */
+const findDrip = (raw) => {
+    if (!raw) return null;
+    if (MENU[raw]) return { slug: raw, ...MENU[raw] };
+    const hit = Object.entries(MENU).find(([, d]) => d.name === raw);
+    return hit ? { slug: hit[0], ...hit[1] } : null;
 };
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -59,48 +68,37 @@ const RM = matchMedia('(prefers-reduced-motion: reduce)');
 
 
 /* ── PAINT ───────────────────────────────────────────────────────────────────
-   Fill the masthead from the slug. An unknown or absent slug is not an error:
-   the page falls back to the generic wording already in the markup, which is
-   also what a crawler sees. */
+   Fill the green panel from the infusion: bottle, tone, name, chair, price.
+   An unknown or absent infusion is not an error — the panel keeps its generic
+   wording and the customised bottle, and the swap line explains. */
 const paint = () => {
-    const host = $('#bsFacts');
-    if (!host) return null;                       // not the form page
+    const side = $('#bsSide');
+    if (!side) return null;                       // not a review page
 
-    const slug = new URLSearchParams(location.search).get('drip');
-    const drip = slug && MENU[slug] ? MENU[slug] : null;
+    const drip = findDrip(new URLSearchParams(location.search).get('drip'));
+    const swap = $('#bsSwap');
 
     if (!drip) {
-        /* No infusion chosen. Say so plainly and offer the way back rather
-           than showing three em-dashes and hoping they work it out. */
-        const swap = $('#bsSwap');
         if (swap) {
             swap.hidden = false;
-            swap.innerHTML = 'No infusion selected yet. You may continue without selecting one '
-                + 'and let physician screening guide the next step, or '
-                + '<a href="begin-screening.html">return to read about each infusion first</a>.';
+            swap.innerHTML = 'No infusion chosen yet. You can continue and let physician screening '
+                + 'guide the next step, or <a href="begin-screening.html">choose one first</a>.';
         }
         return null;
     }
 
-    document.documentElement.style.setProperty('--tone', drip.tone);
+    side.style.setProperty('--tone', drip.tone);
+    const img = $('#bsBottleImg');
+    if (img) { img.src = `../assets/drips/${drip.img}.png`; img.alt = drip.name; }
 
-    const name = $('#bsName');
-    if (name) name.innerHTML = `Review request for<br><em>${drip.name}</em>`;
-
-    const set = (sel, val) => { const el = $(sel); if (el) el.innerHTML = val; };
-    set('#bsDrip', drip.name);
+    const set = (sel, val) => { const el = $(sel); if (el) el.textContent = val; };
+    set('#bsName',  drip.name);
     set('#bsChair', drip.chair);
     set('#bsPrice', drip.price);
-    /* These two only mean anything once an infusion is chosen; review.html ships
-       them hidden so the empty em-dash boxes never show on the no-selection path. */
-    ['#bsChairBox', '#bsPriceBox'].forEach(sel => { const b = $(sel); if (b) b.hidden = false; });
-
-    const swap = $('#bsSwap');
     if (swap) swap.hidden = false;
 
-    document.title = `${drip.name} — Physician Review Request — Alpha Vital Elite IV`;
-
-    return { slug, ...drip };
+    document.title = `${drip.name} — ${document.title}`;
+    return drip;
 };
 
 
@@ -179,6 +177,24 @@ const embed = (drip) => {
     }
 
     frame.src = url.toString();
+
+    /* The patient's name, email and phone have now been handed to the form, so
+       they have no further business sitting in the address bar. Scrub them.
+
+       This is not cosmetic. Left there they persist in browser history and in
+       the back/forward cache on whatever machine this is — a shared laptop, a
+       family iPad, a phone someone hands to a friend — and they are readable
+       over anyone's shoulder for the fifteen minutes it takes to fill the form
+       in. replaceState rewrites the entry rather than adding one, so Back still
+       goes where the patient expects.
+
+       What this does NOT undo: the request that carried these params has already
+       reached the host, so they may sit in access logs. That is inherent to
+       Jotform redirecting by GET, and is a question for whoever holds the
+       hosting BAA — see README-intake-chain.md. */
+    if (which !== 'intake' && here.toString() && window.history?.replaceState) {
+        history.replaceState(null, '', location.pathname + location.hash);
+    }
 
     slot.hidden = false;
     soon?.setAttribute('hidden', '');
@@ -274,78 +290,126 @@ const cine = () => {
 
 
 /* ── THE CHOICE ──────────────────────────────────────────────────────────────
-   The picker is the second shot of a two-shot opening, so it is built as one
-   timeline and held paused until the welcome screen starts lifting. The two
-   overlap deliberately: cards are already rising while the curtain fades, which
-   reads as one continuous move rather than "animation ends, page appears".
+   The picker's entrance, held paused until the title card starts to lift so
+   the two overlap. The cards rise in reading order — left to right, row by
+   row — which reads as an arrangement rather than a list loading. The bottle
+   is not animated separately from its card any more: it arrives with it.
 
    Returns a play() function, or null if there is nothing to play. */
 const choose = () => {
-    const sec = $('#choose');
+    const sec  = $('#choose');
     const grid = $('#bsBags');
     if (!sec || !grid) return null;
 
     const cells = [...grid.querySelectorAll('.bs-bag__cell')];
-    if (!cells.length || typeof window.gsap === 'undefined' || RM.matches) return null;
+    const lines = [...sec.querySelectorAll('.bs-h1 .l > span')];
+    const eye   = $('#bsEyebrow');
+    const lede  = $('#bsLede');
+    const count = $('#bsCount');
+    const unsure = sec.querySelector('.bs-unsure');
 
-    const q = (sel) => sec.querySelector(sel);
-    const all = (sel) => cells.map((c) => c.querySelector(sel)).filter(Boolean);
+    [eye, lede, count, unsure, ...lines].forEach((el) => { if (el) el.dataset.done = '1'; });
 
-    const EASE = 'expo.out';
+    if (!cells.length || typeof window.gsap === 'undefined' || RM.matches) {
+        [eye, lede, count, unsure].forEach((el) => { if (el) { el.style.opacity = 1; el.style.transform = 'none'; } });
+        lines.forEach((el) => { el.style.transform = 'none'; });
+        return null;
+    }
 
-    /* fromTo sets its start state on creation, so the section is already
-       staged before the first frame — nothing flashes behind the curtain. */
-    const tl = gsap.timeline({ paused: true, defaults: { ease: EASE } });
+    const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
 
-    tl
-      /* 1 — the eyebrow, quietly */
-      .fromTo(q('.ct-eyebrow'),
-              { opacity: 0, y: 10 },
-              { opacity: 1, y: 0, duration: .6 })
+    if (eye) tl.fromTo(eye, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: .6 });
+    if (lines.length) tl.fromTo(lines, { yPercent: 110 }, { yPercent: 0, duration: 1.1, stagger: .1 }, '-=.35');
+    if (count) tl.fromTo(count, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .7 }, '-=.8');
+    if (lede)  tl.fromTo(lede,  { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .75 }, '-=.7');
 
-      /* 2 — headline lines ride up out of their clips, one after the other */
-      .fromTo(sec.querySelectorAll('.bs-mask__i'),
-              { yPercent: 120 },
-              { yPercent: 0, duration: 1.1, stagger: .1 }, '-=.34')
+    tl.fromTo(cells,
+        { opacity: 0, y: 46, scale: .96 },
+        { opacity: 1, y: 0, scale: 1, duration: 1.15, stagger: { each: .05, from: 'start' } }, '-=.5');
 
-      /* 3 — the gold rule draws under them */
-      .fromTo(q('.bs-choose__rule'),
-              { scaleX: 0 },
-              { scaleX: 1, duration: .85, ease: 'power3.inOut' }, '-=.72')
-
-      /* 4 — the instruction */
-      .fromTo(q('.bs-choose__note'),
-              { opacity: 0, y: 10 },
-              { opacity: 1, y: 0, duration: .7 }, '-=.58')
-
-      /* 5 — the cards assemble from the middle out, tilting up to flat. Ten
-             cards landing left-to-right looks like a list loading; from the
-             centre it looks arranged. */
-      .fromTo(cells,
-              { opacity: 0, y: 52, scale: .93, rotateX: -9, transformOrigin: '50% 100%' },
-              { opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 1.15,
-                stagger: { each: .055, from: 'center' } }, '-=.42')
-
-      /* 6 — each bottle settles a beat after its own card, so the card feels
-             like a frame the product drops into */
-      .fromTo(all('.bs-bag__art img'),
-              { yPercent: 22, opacity: 0 },
-              { yPercent: 0, opacity: 1, duration: .95,
-                stagger: { each: .055, from: 'center' } }, '<0.13')
-
-      /* 7 — one pass of light over each card, riding the same stagger */
-      .fromTo(all('.bs-bag__sheen'),
-              { xPercent: -130, opacity: 0 },
-              { xPercent: 130, opacity: 1, duration: .9, ease: 'power2.inOut',
-                stagger: { each: .055, from: 'center' },
-                onComplete() { gsap.set(this.targets(), { opacity: 0 }); } }, '<0.06')
-
-      /* 8 — the way out, last */
-      .fromTo(q('.bs-unsure'),
-              { opacity: 0, y: 8 },
-              { opacity: 1, y: 0, duration: .7 }, '-=.75');
+    if (unsure) tl.fromTo(unsure, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .7 }, '-=.8');
 
     return () => tl.play();
+};
+
+
+/* ── THE ROOM SETTLES ────────────────────────────────────────────────────────
+   The review pages' entrance. Built paused and released by the curtain cue so
+   it overlaps the title card fading, the same way the picker does on
+   begin-screening — one continuous move, not "animation ends, page appears".
+
+   Order is the order you would read the page in: the green panel slides in
+   from the left and settles; the bottle lands on it; the progress line draws
+   to your step; then the headline rides up line by line, the lede follows,
+   and the form frame rises last with its gold rule drawing across the top.
+
+   Everything here is claimed with data-done so contact.js's scroll reveal
+   leaves it alone — the two fighting is how a masthead ends up blank. */
+const rise = () => {
+    const side  = $('#bsSide');
+    const stage = $('#bsStage');
+    if (!side || !stage) return null;
+
+    const lines = [...stage.querySelectorAll('.bs-h1 .l > span')];
+    const eye   = $('#bsEyebrow');
+    const lede  = $('#bsLede');
+    const frame = $('#screeningForm:not([hidden]), #bsSoon:not([hidden])');
+    const note  = $('#bs911');
+    const path  = $('#bsPath');
+    const bottle = $('#bsBottleImg');
+    const sideBits = [...side.querySelectorAll('.bs-side__back, .bs-side__id, .bs-side__dr')];
+
+    [eye, lede, ...lines, frame, note, side, stage].forEach((el) => { if (el) el.dataset.done = '1'; });
+
+    const fill = () => { if (path) path.style.setProperty('--fill', side.dataset.fill || '0'); };
+    const drawFrame = () => { if (frame) frame.style.setProperty('--draw', '1'); };
+
+    if (typeof window.gsap === 'undefined' || RM.matches) {
+        [eye, lede, frame, note, side].forEach((el) => { if (el) { el.style.opacity = 1; el.style.transform = 'none'; } });
+        lines.forEach((el) => { el.style.transform = 'none'; });
+        fill(); drawFrame();
+        return null;
+    }
+
+    const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+    tl.fromTo(side, { opacity: 0, x: -34, rotateY: 6, transformOrigin: 'left center' },
+                    { opacity: 1, x: 0,  rotateY: 0, duration: 1.15 })
+      .fromTo(sideBits, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .7, stagger: .08 }, '-=.75');
+
+    if (bottle) {
+        tl.fromTo(bottle, { opacity: 0, y: 26, scale: .92 }, { opacity: 1, y: 0, scale: 1, duration: 1.1 }, '-=.9');
+    }
+    tl.add(fill, '-=.6');
+
+    if (eye) tl.fromTo(eye, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: .6 }, '-=.9');
+    if (lines.length) tl.fromTo(lines, { yPercent: 110 }, { yPercent: 0, duration: 1.05, stagger: .1 }, '-=.45');
+    if (lede) tl.fromTo(lede, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .75 }, '-=.7');
+    if (frame) {
+        tl.fromTo(frame, { opacity: 0, y: 44 }, { opacity: 1, y: 0, duration: 1.15 }, '-=.55')
+          .add(drawFrame, '-=.9');
+    }
+    if (note) tl.fromTo(note, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .6 }, '-=.7');
+
+    return () => tl.play();
+};
+
+
+/* ── HOW IT WORKS DRAWS ITSELF ───────────────────────────────────────────────
+   The gold line across the four steps, and the line under the picker headline,
+   draw when they scroll into view. CSS does the drawing; this just says when. */
+const draw = () => {
+    const line = $('#bsLine');
+    if (!line || !('IntersectionObserver' in window)) { line?.style.setProperty('--draw', '1'); line?.classList.add('is-drawn'); return; }
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            line.style.setProperty('--draw', '1');
+            line.classList.add('is-drawn');
+            io.disconnect();
+        });
+    }, { threshold: .35 });
+    io.observe(line);
 };
 
 
@@ -353,105 +417,14 @@ const choose = () => {
    review.html opens on the same title card as begin-screening, but it can say
    what the patient actually came for. Runs before cine() so the name is in
    place for the first frame — a card that says "IV support." and then swaps to
-   the infusion mid-animation reads as a bug.
-
-   Falls back to the generic wording already in the markup when no infusion was
-   chosen, which is a real path: you may start the review without picking one. */
+   the infusion mid-animation reads as a bug. Falls back to the generic wording
+   already in the markup when no infusion was chosen. */
 const nameCine = () => {
     const slot = $('#bsCineDrip');
     if (!slot) return;
-
-    const slug = new URLSearchParams(location.search).get('drip');
-    const drip = slug && MENU[slug];
+    const drip = findDrip(new URLSearchParams(location.search).get('drip'));
     if (!drip) return;
-
     slot.innerHTML = `<em>${drip.name}</em>`;
-};
-
-
-/* ── THE MASTHEAD LANDS ──────────────────────────────────────────────────────
-   The review pages keep the world the title sequence builds, so the handover
-   has to be a continuation rather than a cut: the rail, headline and form rise
-   while the curtain is still fading, on the same easing. Built paused and
-   released by the curtain cue, exactly as the picker is on begin-screening.
-
-   Returns a play() function, or null when there is nothing to animate — no
-   GSAP, reduced motion, or simply not one of these pages. */
-const rise = () => {
-    const top = $('.bs-top');
-    if (!top || typeof window.gsap === 'undefined' || RM.matches) return null;
-
-    /* contact.js reveals [data-ct] and [data-ct-split] elements when they scroll
-       into view. On these pages the masthead is already in view at load, behind
-       the title sequence — so by the time the curtain lifts the moment has
-       passed and the headline stays parked at its start state: translated 105%
-       down inside a line box with overflow:hidden, which paints as a completely
-       blank masthead. That is why this timeline exists rather than leaning on
-       the shared scroll reveal.
-
-       Claiming them with data-done is what stops the two from fighting: it is
-       the same flag contact.js sets, so it skips anything already handled here. */
-    const claim = (sel) => {
-        const els = [...document.querySelectorAll(sel)];
-        els.forEach((el) => { el.dataset.done = '1'; });
-        return els.length ? els : null;
-    };
-
-
-    const rail  = claim('.bs-rail__i');
-    /* Both attributes, deliberately. The headline carries data-ct-split, not
-       data-ct, and `html.ct-on [data-ct-split] { opacity: 0 }` hides the whole
-       element — so leaving it out of the fade left the masthead blank even once
-       the lines underneath were animating correctly. */
-    const fades = claim('.bs-top [data-ct], .bs-top [data-ct-split]');
-    const facts = document.querySelector('.bs-facts');
-    const panel = document.querySelector('.ct-embed, .bs-soon');
-
-    /* Whatever the reveal does not reach must not be left invisible. The CSS
-       start states only apply under .ct-on, so dropping the class is the one
-       move that guarantees nothing stays hidden if this bails out early. */
-    if (!rail && !lines && !fades) {
-        document.documentElement.classList.remove('ct-on');
-        return null;
-    }
-
-    const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
-
-    /* 1 — the rail: "where am I" before "what am I reading". Each item returns
-           to the resting opacity its own state calls for, not a flat 1. */
-    if (rail) {
-        tl.fromTo(rail, { opacity: 0, y: 8 }, {
-            opacity: (i, el) => (el.classList.contains('is-now')  ? 1
-                               : el.classList.contains('is-done') ? .72 : .38),
-            y: 0, duration: .55, stagger: .07,
-        });
-    }
-
-    /* The headline used to be a data-ct-split line reveal. It is a plain rise
-       on these three pages now: contact.js only builds the .ct-line wrappers
-       after the webfonts settle, and its scroll reveal fires while the title
-       sequence is still covering the page — so it decided the masthead was
-       already shown and left the lines parked at 105%, which paints as a blank
-       masthead. Racing it with a poll swapped one timing bug for another. A
-       reveal a patient depends on should not hinge on when a font arrives. */
-
-    /* 3 — the eyebrow, lede and anything else marked for a plain fade */
-    if (fades) {
-        tl.fromTo(fades, { opacity: 0, y: 14 },
-                  { opacity: 1, y: 0, duration: .7, stagger: .07 }, '-=.85');
-    }
-
-    if (facts) {
-        tl.fromTo(facts, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: .8 }, '-=.55');
-    }
-
-    /* 4 — the form last and from further down, so it reads as the thing the
-           page was walking you toward, not something already sitting there. */
-    if (panel) {
-        tl.fromTo(panel, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, '-=.5');
-    }
-
-    return () => tl.play();
 };
 
 
@@ -462,9 +435,15 @@ const boot = () => {
 
     nameCine();
 
-    /* Stage before anything paints, then let the welcome screen decide when to
-       release. choose() is begin-screening's card grid, rise() is the review
-       pages' masthead — a page has one or the other, never both. */
+    /* Paint and embed FIRST. rise() animates whichever of the form frame or
+       the phone fallback is visible, and it is embed() that decides which —
+       stage after it and the real frame just pops in un-animated. */
+    const drip = paint();
+    embed(drip);
+
+    /* Stage before anything paints, then let the title card decide when to
+       release. choose() is begin-screening's grid, rise() is the review pages'
+       room — a page has one or the other, never both. */
     const play = choose() || rise();
 
     cine();
@@ -474,8 +453,7 @@ const boot = () => {
         else play();
     }
 
-    const drip = paint();
-    embed(drip);
+    draw();
 };
 
 if (document.readyState === 'loading') {
