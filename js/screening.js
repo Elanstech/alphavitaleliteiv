@@ -42,15 +42,15 @@ const INTAKE_DRIP_FIELD = 'dropdown3';
 
 
 const MENU = {
-    'glynac':              { name: 'GLyNAC Healthy Aging',      price: '$450',   chair: '1 h 15', tone: '#5B7098' },
-    'immun-o-boost':       { name: 'Immun-O-Boost IV Support',  price: '$650',   chair: '2 h 30', tone: '#D9982A' },
-    'liquixo':             { name: 'LIQUIXO Muscle Recovery',   price: '$495',   chair: '45 min', tone: '#B34E37' },
-    'antioxidant':         { name: 'Antioxidant \u00d73 Reset', price: '$500',   chair: '1 h 15', tone: '#4F7D5E' },
-    'glutathione':         { name: 'Glutathione IV Injection',  price: '$125',   chair: '30 min', tone: '#7FA08C' },
-    'joint-skin':          { name: 'Joint & Skin Wellness',     price: '$750',   chair: '2 h 30', tone: '#8C6239' },
-    'fatty-liver-support': { name: 'Fatty Liver Support',       price: '$850',   chair: '3 h',    tone: '#5F7A55' },
-    'revive':              { name: 'Revive IV Support',         price: '$625',   chair: '2 h 15', tone: '#35707F' },
-    'stress-brain':        { name: 'Stress & Brain Wellness',   price: '$700',   chair: '1 h 30', tone: '#7A5F98' },
+    'glynac':              { name: 'GLyNAC Healthy Aging',      price: '$350',   chair: '1 h 15', tone: '#5B7098' },
+    'immun-o-boost':       { name: 'Immun-O-Boost IV Support',  price: '$550',   chair: '2 h 30', tone: '#D9982A' },
+    'liquixo':             { name: 'LIQUIXO Muscle Recovery',   price: '$395',   chair: '45 min', tone: '#B34E37' },
+    'antioxidant':         { name: 'Antioxidant \u00d73 Reset', price: '$400',   chair: '1 h 15', tone: '#4F7D5E' },
+    'glutathione':         { name: 'Glutathione IV Injection',  price: '$100',   chair: '30 min', tone: '#7FA08C' },
+    'joint-skin':          { name: 'Joint & Skin Wellness',     price: '$650',   chair: '2 h 30', tone: '#8C6239' },
+    'fatty-liver-support': { name: 'Fatty Liver Support',       price: '$650',   chair: '3 h',    tone: '#5F7A55' },
+    'revive':              { name: 'Revive IV Support',         price: '$525',   chair: '2 h 15', tone: '#35707F' },
+    'stress-brain':        { name: 'Stress & Brain Wellness',   price: '$500',   chair: '1 h 30', tone: '#7A5F98' },
     'customized':          { name: 'Customized IV Infusion',    price: 'By consultation', chair: 'Individual', tone: '#C1963F' },
 };
 
@@ -302,10 +302,32 @@ const choose = () => {
 };
 
 
+/* ── NAME THE TITLE SEQUENCE ─────────────────────────────────────────────────
+   review.html opens on the same title card as begin-screening, but it can say
+   what the patient actually came for. Runs before cine() so the name is in
+   place for the first frame — a card that says "IV support." and then swaps to
+   the infusion mid-animation reads as a bug.
+
+   Falls back to the generic wording already in the markup when no infusion was
+   chosen, which is a real path: you may start the review without picking one. */
+const nameCine = () => {
+    const slot = $('#bsCineDrip');
+    if (!slot) return;
+
+    const slug = new URLSearchParams(location.search).get('drip');
+    const drip = slug && MENU[slug];
+    if (!drip) return;
+
+    slot.innerHTML = `<em>${drip.name}</em>`;
+};
+
+
 /* ── BOOT ───────────────────────────────────────────────────────────────── */
 const boot = () => {
     /* Read this before cine() runs — it clears the class on its way out. */
     const curtain = document.documentElement.classList.contains('has-cine');
+
+    nameCine();
 
     /* Stage the picker first so its start state is set before anything paints,
        then let the welcome screen decide when to release it. */
