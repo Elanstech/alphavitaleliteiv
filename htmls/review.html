@@ -37,12 +37,32 @@
 <link rel="stylesheet" href="../css/screening.css">
 
 <script>
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('ct-on');
+    /* Same title sequence as begin-screening. Set before first paint so the
+       page underneath never flashes through. */
+    document.documentElement.classList.add('has-cine');
+  }
 </script>
 </head>
 
 <body class="page-review">
+
+<!-- ============ TITLE SEQUENCE ============
+     Plays itself, names the infusion they chose, then clears. screening.js
+     writes the infusion into .bs-cine__line--3 before the timeline starts. -->
+<div class="bs-cine" id="bsCine" aria-hidden="true">
+  <div class="bs-cine__stage">
+    <img class="bs-cine__mark" src="../logo.png" alt="" width="120" height="60">
+    <p class="bs-cine__kicker">Alpha Vital Elite IV</p>
+    <p class="bs-cine__line bs-cine__line--1">Welcome.</p>
+    <p class="bs-cine__line bs-cine__line--2">Your review for</p>
+    <p class="bs-cine__line bs-cine__line--3" id="bsCineDrip"><em>IV support.</em></p>
+    <span class="bs-cine__rule"></span>
+    <p class="bs-cine__sub">Reviewed personally by Dr.&nbsp;Violeta Aronov, DO</p>
+  </div>
+  <button class="bs-cine__skip" id="bsSkip" type="button">Skip</button>
+</div>
 
 <a class="ct-skip" href="#main">Skip to content</a>
 <span class="ct-prog" id="ctProg" aria-hidden="true"></span>
@@ -189,11 +209,7 @@
     </dl>
 
     <p class="ct-lede" data-ct="rise" id="bsLede">
-      Complete the safety screening and medical intake forms, then submit them with the $100
-      physician review fee. The fee covers the professional medical review and is non-refundable
-      because the review is completed whether or not you are approved. If approved, the $100 will be
-      applied toward your infusion. Payment does not guarantee approval, and nothing is scheduled
-      until the physician review is complete.
+      About 15 minutes. Dr.&nbsp;Aronov reviews it herself and emails you the outcome.
     </p>
 
     <p class="bs-swap" id="bsSwap" hidden>
@@ -256,93 +272,83 @@
     <ol class="ct-steps ct-steps--four">
       <li class="ct-step" data-ct="pop">
         <span class="ct-step__no">STEP 01</span>
-        <h3 class="ct-step__name">Physician review fee</h3>
-        <p class="ct-step__what">
-          $100, taken before the review begins. Applied toward your infusion if you are approved. Non-refundable &mdash; see the <a href="../policies/refund-policy.html">refund policy</a>.
-        </p>
+        <h3 class="ct-step__name">Your details</h3>
+        <p class="ct-step__what">Name, contact, and the infusion you want.</p>
       </li>
       <li class="ct-step" data-ct="pop">
         <span class="ct-step__no">STEP 02</span>
-        <h3 class="ct-step__name">Safety screening &amp; medical intake</h3>
-        <p class="ct-step__what">
-          Your history, medications and supplements, allergies, infusion goals, and any laboratory results you choose to share. Read only by Dr.&nbsp;Aronov.
-        </p>
+        <h3 class="ct-step__name">Safety &amp; medical history</h3>
+        <p class="ct-step__what">Conditions, medications, allergies. Read only by Dr.&nbsp;Aronov.</p>
       </li>
       <li class="ct-step" data-ct="pop">
         <span class="ct-step__no">STEP 03</span>
-        <h3 class="ct-step__name">Physician review</h3>
+        <h3 class="ct-step__name">$100 review fee</h3>
         <p class="ct-step__what">
-          Dr.&nbsp;Aronov reviews your file herself and determines whether the infusion you asked about is medically appropriate for you.
+          Credited to your infusion if approved.
+          <a href="../policies/refund-policy.html">Non&#8209;refundable</a>.
         </p>
       </li>
       <li class="ct-step" data-ct="pop">
         <span class="ct-step__no">STEP 04</span>
-        <h3 class="ct-step__name">Review outcome by email</h3>
-        <p class="ct-step__what">
-          An email explaining your eligibility and the next step. If approved, it carries a link to book, and your $100 is credited to the infusion.
-        </p>
+        <h3 class="ct-step__name">Outcome by email</h3>
+        <p class="ct-step__what">With a booking link if you&rsquo;re approved.</p>
       </li>
     </ol>
 
     <div class="ct-out" data-ct="rise">
-      <p class="ct-out__lab">Four things her review can conclude</p>
+      <p class="ct-out__lab">What the review can conclude</p>
       <ul class="ct-out__grid">
         <li class="ct-out__item ct-out__item--yes">
           <b>Approved</b>
-          <span>The infusion you asked about is appropriate. You receive a link to book.</span>
+          <span>You get a link to book.</span>
         </li>
         <li class="ct-out__item">
-          <b>A different formulation</b>
-          <span>Another infusion suits you better. Your deposit still applies.</span>
+          <b>A different infusion</b>
+          <span>Another suits you better. Your $100 still applies.</span>
         </li>
         <li class="ct-out__item">
-          <b>More information needed</b>
-          <span>Additional records, laboratory results, or clearance from your own physician.</span>
+          <b>More information</b>
+          <span>Records, labs, or clearance from your own doctor.</span>
         </li>
         <li class="ct-out__item">
           <b>Not appropriate</b>
-          <span>IV support is not the right step for you at this time, and she will say why.</span>
+          <span>She&rsquo;ll explain why, and what to do instead.</span>
         </li>
       </ul>
-      <p class="ct-out__fine">
-        Being told no does not mean your concerns are being dismissed. Depending on the reason, the
-        safest next step may be additional testing, evaluation by your primary-care physician or a
-        specialist, a different supportive option, or no infusion at all. The purpose of the review
-        is to make the safest medical decision for you.
-      </p>
     </div>
 
     <div class="ct-notice bs-999" data-ct="rise">
       <span class="ct-notice__tag"><i class="ph-fill ph-warning"></i> Not for emergencies</span>
       <p>
-        <b>This is not a medical channel and nobody is monitoring it in real time.</b> If this is a
-        medical emergency, call&nbsp;911 or go to your nearest emergency department.
-      </p>
-      <p>
-        If you are unwell right now, the appropriate step is evaluation by a physician &mdash; not
-        an elective infusion. Dr.&nbsp;Aronov will tell you that plainly rather than schedule you.
+        <b>Nobody monitors this in real time.</b> If this is a medical emergency, call&nbsp;911 or go
+        to your nearest emergency department.
       </p>
     </div>
 
   </div>
 </section>
 
-  <div class="bs-legal">
-    <b>Important disclaimer</b>
-    <p>
-      Every infusion offered by Alpha Vital Elite IV is an elective, physician-directed wellness
-      service. None is intended to diagnose, treat, cure, mitigate, prevent or reverse any disease
-      or medical condition. Research involving individual ingredients does not establish the safety
-      or effectiveness of a combined IV protocol. No benefit or outcome is promised or guaranteed.
-    </p>
-    <p>
-      IV administration carries risks, including infection, vein irritation, fluid or electrolyte
-      imbalance, changes in blood pressure or heart rhythm, medication interactions, kidney
-      complications, and allergic reactions, including rare anaphylaxis. Screening and monitoring
-      reduce but do not eliminate these risks. This service does not replace primary or specialist
-      care, prescribed treatment, diagnostic evaluation or emergency care.
-    </p>
-  </div>
+  <!-- Required disclosure. Collapsed so it is not a wall of text on the way to
+       the form, but present on the page and open to anyone who wants it. Do not
+       delete it — it is the risk and non-FDA-approval disclosure. -->
+  <details class="bs-legal bs-legal--fold">
+    <summary><b>Important disclaimer</b><span>Read</span></summary>
+    <div class="bs-legal__body">
+      <p>
+        Every infusion offered by Alpha Vital Elite IV is an elective, physician-directed wellness
+        service. None is intended to diagnose, treat, cure, mitigate, prevent or reverse any disease
+        or medical condition. Research involving individual ingredients does not establish the safety
+        or effectiveness of a combined IV protocol. No benefit or outcome is promised or guaranteed.
+      </p>
+      <p>
+        IV administration carries risks, including infection, vein irritation, fluid or electrolyte
+        imbalance, changes in blood pressure or heart rhythm, medication interactions, kidney
+        complications, and allergic reactions, including rare anaphylaxis. Screening and monitoring
+        reduce but do not eliminate these risks. This service does not replace primary or specialist
+        care, prescribed treatment, diagnostic evaluation or emergency care.
+      </p>
+    </div>
+  </details>
 
 </main>
 
