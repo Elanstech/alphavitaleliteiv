@@ -176,6 +176,33 @@
 .bs-legal p { font-size: .78rem; line-height: 1.75; color: var(--mist); }
 .bs-legal p + p { margin-top: .7rem; }
 
+/* ── FOLDED DISCLAIMER (review.html) ─────────────────────────────────────────
+   The disclosure still has to be on the page, but it does not have to be a wall
+   of small print between the patient and the form. Closed by default, one line
+   tall, opens in place. */
+.bs-legal--fold { padding-bottom: clamp(2.2rem, 5vw, 3.2rem); }
+.bs-legal--fold summary {
+    display: flex; align-items: baseline; gap: .8rem;
+    cursor: pointer; list-style: none;
+    padding: .1rem 0;
+}
+.bs-legal--fold summary::-webkit-details-marker { display: none; }
+.bs-legal--fold summary b { margin-bottom: 0; }
+.bs-legal--fold summary span {
+    font-family: var(--data, ui-monospace, monospace); font-size: .58rem; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold, #C1963F);
+    border-bottom: 1px solid currentColor; padding-bottom: 1px;
+    transition: opacity .25s ease;
+}
+.bs-legal--fold summary:hover span { opacity: .65; }
+.bs-legal--fold[open] summary span { opacity: .5; }
+.bs-legal--fold[open] summary span::after { content: ' \2014 close'; }
+.bs-legal__body { padding-top: 1rem; }
+.bs-legal--fold summary:focus-visible {
+    outline: 2px solid var(--gold, #C1963F); outline-offset: 4px;
+}
+
 
 @media (max-width: 560px) {
     .bs-card { grid-template-columns: auto minmax(0, 1fr) auto; }
