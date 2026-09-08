@@ -426,11 +426,25 @@ const rise = () => {
    and is treated as text, not markup. Trimmed to a sane length so a pasted
    paragraph cannot blow the headline apart. */
 const greet = () => {
+    const here = new URLSearchParams(location.search);
+
     const slot = $('#bsWho');
-    if (!slot) return;
-    const first = (new URLSearchParams(location.search).get('first') || '').trim();
-    if (!first) return;
-    slot.textContent = `, ${first.slice(0, 24)}`;
+    if (slot) {
+        const first = (here.get('first') || '').trim();
+        if (first) slot.textContent = `, ${first.slice(0, 24)}`;
+    }
+
+    /* The reference is what the patient quotes on the phone, so it has to be
+       visible somewhere they can screenshot. textContent, never innerHTML — it
+       arrives from a query string and is treated as text, not markup. */
+    const ref = $('#bsRef');
+    if (ref) {
+        const code = (here.get('ref') || '').trim();
+        if (code) {
+            ref.textContent = `Reference ${code.slice(0, 20)}`;
+            ref.hidden = false;
+        }
+    }
 };
 
 
@@ -571,53 +585,122 @@ const QUESTIONS = [
 ];
 
 
-/* ▸ JOTFORM — THE ONLY BLOCK TO EDIT BEFORE THIS GOES LIVE.
+/* ▸ JOTFORM — two forms, both on the practice's HIPAA account.
    ──────────────────────────────────────────────────────────────────────────
-   The contact form is ours; Jotform is only the store. On a pass we POST the
-   five fields into a hidden iframe, so the patient never leaves this page and
-   never sees a Jotform skin.
+   Field names and endpoints were read off the live forms' own HTML, not
+   guessed. If a field is ever added, moved or renamed inside Jotform these
+   names change — re-read them from the form source rather than editing by eye.
+   A wrong name does not throw; it posts a blank, which is worse.
 
-   `action` and every value in `fields` must be copied out of the live form's
-   own HTML — see the setup notes. Guessing them does not throw an error; it
-   posts a blank submission, which is worse. Leave ACTION empty and the form
-   falls back to the phone number rather than pretending to send. */
+   The patient never sees either form. They fill in our fields, in our page,
+   and we post on their behalf into a hidden iframe. */
 const JOTFORM = {
-    action: '',                     // ← the live form's <form action="...">
-    formID: '',                     // ← the numeric form id
-    fields: {
-        first:  '',                 // ← e.g. q3_fullName[first]
-        last:   '',                 // ← e.g. q3_fullName[last]
-        email:  '',                 // ← e.g. q4_email
-        phone:  '',                 // ← e.g. q5_phone[full]
-        drip:   '',                 // ← e.g. q6_whichIv
-        result: '',                 // ← e.g. q7_screeningResult (hidden field)
+
+    /* Step 1 — sent the moment they finish their details, before question one.
+       Name is one Full Name field here, not two text boxes, so first and last
+       post as [first] and [last] sublabels of the same question. */
+    contact: {
+        action: 'https://hipaa-submit.jotform.com/submit/262506232577054',
+        formID: '262506232577054',
+        fields: {
+            first: 'q2_q2_fullname0[first]',
+            last:  'q2_q2_fullname0[last]',
+            email: 'q3_q3_email1',
+            phone: 'q4_q4_phone2[full]',
+            drip:  'q5_q5_dropdown3',
+            ref:   'q6_q6_textbox4',
+        },
+    },
+
+    /* Step 2 — sent when the screening ends, on a pass OR a stop. Because the
+       details are already in hand by then, a stop is now attributable: Dr.
+       Aronov learns that somebody was turned away, at which question and why,
+       which she could not see when contact came last. */
+    answers: {
+        action: 'https://hipaa-submit.jotform.com/submit/262505471570051',
+        formID: '262505471570051',
+        fields: {
+            ref:       'q2_q2_textbox0',
+            name:      'q3_q3_textbox1',
+            email:     'q4_q4_email2',
+            phone:     'q5_q5_textbox3',
+            drip:      'q6_q6_textbox4',
+            outcome:   'q7_q7_textbox5',
+            stoppedAt: 'q8_q8_textbox6',
+            reason:    'q9_q9_textarea7',
+            emergency: 'q10_q10_textbox8',
+            log:       'q11_q11_textarea9',
+        },
     },
 };
-
-/* What we record about the screening itself. It is always the same string,
-   because a stop never reaches this code — but it makes each submission
-   self-describing in the Jotform inbox, which is the point. */
-const PASS_NOTE = 'Passed preliminary safety screening \u2014 answered No to all 24 questions.';
 
 const PHONE = '+19292010740';
 
 
 /* $ and RM are already defined at the top of this file. */
 let step = 0;                  /* index of the question on screen */
-const ANSWERS = [];            /* 'yes' | 'no', index-aligned, memory only */
+const ANSWERS = [];            /* 'yes' | 'no', index-aligned */
+const PATIENT = {};            /* filled by step one, read by step two */
+
+/* Ties the two submissions together in Dr. Aronov's inbox. Deliberately not a
+   name or an email — those change and repeat; this does not. */
+const REF = 'AVE-' + Date.now().toString(36).toUpperCase().slice(-5)
+          + Math.random().toString(36).toUpperCase().slice(2, 5);
 
 
-/* ── THE RAIL ────────────────────────────────────────────────────────────── */
-const buildRail = (rail) => {
-    const frag = document.createDocumentFragment();
-    QUESTIONS.forEach(() => {
-        const t = document.createElement('span');
-        t.className = 'sq__t';
-        frag.appendChild(t);
+/* ── POSTING ─────────────────────────────────────────────────────────────────
+   A real form POST into a hidden iframe, not fetch(). Jotform's submit endpoint
+   sends no CORS headers, so fetch is blocked outright; a form POST is not.
+   Neither can read the response back, which is why the setup notes insist on a
+   live test — Jotform's own notification email is the only real receipt.
+
+   Fire-and-forget on purpose. Nothing waits on this, so a slow or failed post
+   can never delay a 911 screen appearing. */
+const post = (cfg, values) => {
+    if (!cfg.action) { console.error('[screening] no action configured', cfg); return null; }
+
+    const sink = document.createElement('iframe');
+    sink.style.display = 'none';
+    sink.name = 'sq-' + Math.random().toString(36).slice(2, 9);
+    document.body.appendChild(sink);
+
+    const f = document.createElement('form');
+    f.method = 'POST';
+    f.target = sink.name;
+    f.action = cfg.action;
+    f.style.display = 'none';
+
+    Object.entries(values).forEach(([key, val]) => {
+        const name = cfg.fields[key];
+        if (!name) return;
+        const el = document.createElement('input');
+        el.type = 'hidden'; el.name = name; el.value = val == null ? '' : String(val);
+        f.appendChild(el);
     });
-    rail.appendChild(frag);
-    return [...rail.children];
+
+    const id = document.createElement('input');
+    id.type = 'hidden'; id.name = 'formID'; id.value = cfg.formID;
+    f.appendChild(id);
+
+    document.body.appendChild(f);
+    try {
+        f.submit();
+        console.info('[screening] posted to', cfg.formID, Object.keys(values).join(', '));
+    } catch (err) {
+        console.error('[screening] POST FAILED', cfg.formID, err);
+        return null;
+    }
+    return sink;
 };
+
+/* Every question and its answer, as Dr. Aronov would read it down the page.
+   Unanswered questions are marked rather than omitted, so a stop at question 3
+   does not look like a form that lost twenty-one fields. */
+const answerLog = () => QUESTIONS.map((item, n) => {
+    const a = ANSWERS[n];
+    return (n + 1) + '. ' + item.q + '\n   ANSWER: '
+         + (a ? a.toUpperCase() : 'not reached');
+}).join('\n\n');
 
 
 /* ── THE SCREENER ────────────────────────────────────────────────────────── */
@@ -625,18 +708,43 @@ const screener = () => {
     const card = $('#screeningForm');
     if (!card) return;                              /* not this page */
 
-    const ticks   = buildRail($('#sqRail'));
-    const head    = $('#sqHead');
-    const now     = $('#sqNow');
-    const qText   = $('#sqQ');
-    const back    = $('#sqBack');
-    const halt    = $('#sqHalt');
-    const theme   = $('#themeColor');
+    const side  = $('#bsSide');
+    const ticks = buildRail($('#sqRail'));
+    const head  = $('#sqHead');
+    const now   = $('#sqNow');
+    const qText = $('#sqQ');
+    const back  = $('#sqBack');
+    const halt  = $('#sqHalt');
+    const theme = $('#themeColor');
 
     const pane = (id) => {
-        ['sqIntro', 'sqQuestion', 'sqPass'].forEach((p) => {
+        ['sqIntro', 'sqQuestion', 'sqStop', 'sqPass'].forEach((p) => {
             $('#' + p).classList.toggle('is-on', p === id);
         });
+    };
+
+    /* The green panel has to keep up. This was the bug: the pane changed, the
+       step indicator beside it did not, so the patient was on step two being
+       told they were on step one. */
+    const setStep = (n) => {
+        try {
+            const one = n === 1;
+            $('#bsPath1')?.classList.toggle('is-now', one);
+            $('#bsPath1')?.classList.toggle('is-done', !one);
+            $('#bsPath2')?.classList.toggle('is-now', !one);
+            const num  = $('#sqBarNum');  if (num)  num.textContent  = one ? 'I' : 'II';
+            const lab  = $('#sqBarStep'); if (lab)  lab.textContent  = one ? 'Your details' : 'Safety questions';
+            const eye  = $('#bsEyebrow'); if (eye)  eye.textContent  = one ? 'Step one of two' : 'Step two of two';
+            if (side) {
+                side.dataset.numeral = one ? 'I' : 'II';
+                side.dataset.fill = one ? '0' : '1';
+                $('#bsPath')?.style.setProperty('--fill', one ? '0' : '1');
+            }
+        } catch (err) {
+            /* A wrong step label is cosmetic. Questions not appearing is not —
+               never let this throw into the caller. */
+            console.error('[screening] setStep', err);
+        }
     };
 
     /* ── question ─────────────────────────────────────────────────────────── */
@@ -650,10 +758,7 @@ const screener = () => {
         back.hidden = step === 0;
         head.hidden = false;
         pane('sqQuestion');
-
-        /* Focus the question, not a button — a screen reader has to hear what
-           is being asked before it hears the two options. */
-        qText.focus({ preventScroll: true });
+        qText.focus({ preventScroll: true });        /* hear the question first */
 
         if (!RM.matches && window.gsap) {
             gsap.fromTo(qText, { opacity: 0, y: 12 },
@@ -661,37 +766,64 @@ const screener = () => {
         }
     };
 
+    /* ── record ───────────────────────────────────────────────────────────── */
+    const record = (outcome, n) => {
+        const item = n == null ? null : QUESTIONS[n];
+        return post(JOTFORM.answers, {
+            ref:       REF,
+            name:      PATIENT.first + ' ' + PATIENT.last,
+            email:     PATIENT.email,
+            phone:     PATIENT.phone,
+            drip:      PATIENT.drip,
+            outcome:   outcome,
+            stoppedAt: item ? 'Question ' + (n + 1) + ' of 24' : 'None',
+            reason:    item ? item.r : 'Answered No to all 24 questions.',
+            emergency: item && item.e ? 'YES \u2014 911 instruction shown' : 'No',
+            log:       answerLog(),
+        });
+    };
+
     /* ── stop ─────────────────────────────────────────────────────────────────
-       Covers the whole viewport rather than scrolling to a panel, so there is
-       no moment where half the old screen is still showing. The theme colour
-       goes red too, which turns the browser chrome on a phone. */
+       Two treatments, decided by the question rather than by the code's
+       convenience. Questions 1-10 are emergencies and take over the viewport;
+       11-24 stay in the card, in the house palette, because her wording for
+       them says postpone and rescreen, not call 911. A screen that cries wolf
+       fourteen times out of twenty-four is not believed the ten times it counts.
+
+       The record is posted first and does not block — a slow network must never
+       hold up a 911 screen. */
     const stop = (n) => {
         const item = QUESTIONS[n];
+        const ref = 'Question ' + (n + 1) + ' of 24 \u00B7 Screening ended \u00B7 Ref ' + REF;
+        record('STOPPED', n);
+
+        if (!item.e) {
+            head.hidden = true;
+            $('#sqStopReason').textContent = item.r;
+            $('#sqStopRef').textContent = ref;
+            pane('sqStop');
+            $('#sqStopReason').focus({ preventScroll: true });
+            card.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' });
+            return;
+        }
 
         $('#sqHaltReason').textContent = item.r;
-        $('#sqHaltBody').innerHTML = item.e
-            ? 'Do not wait for a call back, and do not drive yourself. '
-              + '<b>Alpha Vital Elite is not an emergency or urgent-care facility.</b>'
-            : 'Based on your answers, <b>Alpha Vital Elite cannot provide an elective '
-              + 'infusion at this time</b>, and no appointment has been scheduled. '
-              + 'Nothing has been sent to the practice. Questions about this result: '
-              + '<a href="tel:' + PHONE + '">(929) 201-0740</a>.';
-        $('#sqHaltRef').textContent = 'Question ' + (n + 1) + ' of 24 \u00B7 Screening ended';
-        $('#sqHaltCall').hidden = !item.e;
+        $('#sqHaltBody').innerHTML = 'Do not wait for a call back, and do not drive '
+            + 'yourself. <b>Alpha Vital Elite is not an emergency or urgent-care facility.</b>';
+        $('#sqHaltRef').textContent = ref;
+        $('#sqHaltCall').hidden = false;
 
         if (theme) theme.content = '#6E120C';
         document.documentElement.style.overflow = 'hidden';
         $('#main')?.setAttribute('aria-hidden', 'true');
         $('#head')?.setAttribute('aria-hidden', 'true');
         halt.hidden = false;
-
-        /* Land the keyboard on the one control that matters. */
-        (item.e ? $('#sqCall') : $('#sqHaltBack')).focus({ preventScroll: true });
+        $('#sqCall').focus({ preventScroll: true });
     };
 
-    /* Backing out of a stop. Offered because a mis-tap is far more likely than
-       a fabricated symptom — not because the stop is negotiable. It returns to
-       the question that triggered it, with that answer cleared. */
+    /* A mis-tap on a 24-question form is far likelier than a fabricated symptom,
+       so the way back exists. The correction is posted as its own record rather
+       than replacing the first — an audit trail that can only be added to. */
     const unstop = () => {
         halt.hidden = true;
         if (theme) theme.content = '#F6F1E7';
@@ -702,15 +834,65 @@ const screener = () => {
         ask();
     };
 
-    /* ── pass ─────────────────────────────────────────────────────────────── */
+    /* ── pass ─────────────────────────────────────────────────────────────────
+       The card confirms, then hands off to review-done.html — the thank-you
+       page, with the seal, what-happens-next and the practice's number. A card
+       inside a form is the wrong shape for "we are finished and we will call
+       you"; a page they can screenshot is the right one.
+
+       The redirect WAITS for the answers POST to land. Navigating away from an
+       in-flight form submission cancels it, and a screening that silently fails
+       to reach Dr. Aronov while telling the patient it arrived is the worst bug
+       this thing could have. The iframe's load event fires when Jotform
+       responds; the timer is the backstop for a network that never answers, and
+       we go anyway rather than trapping somebody on a spinner. */
     const pass = () => {
+        const sink = record('PASSED', null);
         head.hidden = true;
+        $('#sqPassRef').textContent = 'Screening complete \u00B7 Ref ' + REF;
         pane('sqPass');
         card.scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'start' });
+
+        const q = new URLSearchParams({
+            first: PATIENT.first || '',
+            drip:  PATIENT.drip  || '',
+            ref:   REF,
+        });
+        const go = () => location.assign('review-done.html?' + q.toString());
+
+        let gone = false;
+        const once = () => { if (!gone) { gone = true; go(); } };
+        sink?.addEventListener('load', () => setTimeout(once, 400), { once: true });
+        setTimeout(once, 4000);
     };
 
-    /* ── wiring ───────────────────────────────────────────────────────────── */
-    $('#sqBegin').addEventListener('click', () => { step = 0; ANSWERS.length = 0; ask(); });
+    /* ── step one: their details ──────────────────────────────────────────── */
+    $('#sqBegin').addEventListener('click', () => {
+        const err = $('#sqErr');
+        const val = (id) => ($(id).value || '').trim();
+
+        if (!val('#sqFirst') || !val('#sqLast') || !val('#sqEmail') || !val('#sqPhone')) {
+            err.textContent = 'Add your name, email and phone so the practice can reach you.';
+            err.hidden = false; return;
+        }
+        if (!$('#sqEmail').checkValidity()) {
+            err.textContent = 'That email address does not look right.';
+            err.hidden = false; return;
+        }
+        err.hidden = true;
+
+        PATIENT.first = val('#sqFirst');
+        PATIENT.last  = val('#sqLast');
+        PATIENT.email = val('#sqEmail');
+        PATIENT.phone = val('#sqPhone');
+        PATIENT.drip  = $('#sqDrip').value || 'Not sure yet';
+
+        post(JOTFORM.contact, { ref: REF, ...PATIENT });
+
+        setStep(2);
+        step = 0; ANSWERS.length = 0;
+        ask();
+    });
 
     card.querySelectorAll('.sq__b').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -730,73 +912,9 @@ const screener = () => {
     });
 
     $('#sqHaltBack').addEventListener('click', unstop);
+    $('#sqStopBack').addEventListener('click', () => { pane('sqQuestion'); unstop(); });
 
-    submitForm();
-};
-
-
-/* ── THE CONTACT FORM ────────────────────────────────────────────────────────
-   A real form POST into a hidden iframe, not fetch(). Jotform's submit
-   endpoint sends no CORS headers, so fetch is blocked outright; a form POST
-   is not. Neither can read the response, so the confirmation below is
-   optimistic by design — the practice's own Jotform notification email is the
-   real receipt, which is why the setup notes insist on sending a test. */
-const submitForm = () => {
-    const send = $('#sqSend');
-    if (!send) return;
-
-    const err = $('#sqErr');
-    const val = (id) => ($(id).value || '').trim();
-
-    send.addEventListener('click', () => {
-        if (!val('#sqFirst') || !val('#sqLast') || !val('#sqEmail') || !val('#sqPhone')) {
-            err.textContent = 'Add your name, email and phone so the practice can reach you.';
-            err.hidden = false; return;
-        }
-        if (!$('#sqEmail').checkValidity()) {
-            err.textContent = 'That email address does not look right.';
-            err.hidden = false; return;
-        }
-        if (!JOTFORM.action) {
-            err.textContent = 'This form is not connected yet \u2014 please call the practice on (929) 201-0740.';
-            err.hidden = false; return;
-        }
-        err.hidden = true;
-        send.disabled = true;
-
-        const sink = document.createElement('iframe');
-        sink.name = 'sqSink';
-        sink.style.display = 'none';
-        document.body.appendChild(sink);
-
-        const f = document.createElement('form');
-        f.method = 'POST';
-        f.target = 'sqSink';
-        f.action = JOTFORM.action;
-        f.style.display = 'none';
-
-        const put = (name, value) => {
-            if (!name) return;
-            const el = document.createElement('input');
-            el.type = 'hidden'; el.name = name; el.value = value;
-            f.appendChild(el);
-        };
-
-        put(JOTFORM.fields.first,  val('#sqFirst'));
-        put(JOTFORM.fields.last,   val('#sqLast'));
-        put(JOTFORM.fields.email,  val('#sqEmail'));
-        put(JOTFORM.fields.phone,  val('#sqPhone'));
-        put(JOTFORM.fields.drip,   $('#sqDrip').value || 'Not sure yet');
-        put(JOTFORM.fields.result, PASS_NOTE);
-        put('formID', JOTFORM.formID);
-
-        document.body.appendChild(f);
-        f.submit();
-
-        $('#sqForm').hidden = true;
-        $('#sqSent').hidden = false;
-        $('#sqSent').scrollIntoView({ behavior: RM.matches ? 'auto' : 'smooth', block: 'center' });
-    });
+    setStep(1);
 };
 
 
