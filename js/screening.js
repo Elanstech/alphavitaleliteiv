@@ -721,6 +721,20 @@ const buildRail = (rail) => {
 };
 
 
+/* Warm the handoff. review-done.html shares this stylesheet and script, so by
+   the time it is asked for the only new bytes are its own markup. Called once,
+   four questions out. */
+let warmed = false;
+const warm = () => {
+    if (warmed) return;
+    warmed = true;
+    const l = document.createElement('link');
+    l.rel = 'prefetch';
+    l.href = 'review-done.html';
+    document.head.appendChild(l);
+};
+
+
 /* ── THE SCREENER ────────────────────────────────────────────────────────── */
 const screener = () => {
     const card = $('#screeningForm');
@@ -778,10 +792,15 @@ const screener = () => {
         pane('sqQuestion');
         qText.focus({ preventScroll: true });        /* hear the question first */
 
-        if (!RM.matches && window.gsap) {
-            gsap.fromTo(qText, { opacity: 0, y: 12 },
-                        { opacity: 1, y: 0, duration: .45, ease: 'expo.out' });
-        }
+        /* Retrigger the keyframe. The reflow read is the documented way to
+           restart a CSS animation and is cheaper than building a tween. */
+        qText.classList.remove('is-new');
+        void qText.offsetWidth;
+        qText.classList.add('is-new');
+
+        /* The thank-you page is fetched while they are still answering, so the
+           handoff on the last question is instant rather than a cold load. */
+        if (step === QUESTIONS.length - 4) warm();
     };
 
     /* ── record ───────────────────────────────────────────────────────────── */
@@ -880,8 +899,12 @@ const screener = () => {
 
         let gone = false;
         const once = () => { if (!gone) { gone = true; go(); } };
-        sink?.addEventListener('load', () => setTimeout(once, 400), { once: true });
-        setTimeout(once, 4000);
+        /* Go as soon as the POST is acknowledged. The 150ms is the seal being
+           seen, not a technical wait. The backstop covers a network that never
+           answers — 1.6s, because past that the pause reads as a broken page
+           rather than as work being done. */
+        sink?.addEventListener('load', () => setTimeout(once, 150), { once: true });
+        setTimeout(once, 1600);
     };
 
     /* ── step one: their details ──────────────────────────────────────────── */
