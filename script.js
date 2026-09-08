@@ -1611,33 +1611,33 @@ const DRIPS = [
     { id:'healthyaging', name:'GLyNAC Healthy Aging IV',  slug:'/drips/glynac.html',              img:'glynac',        time:'1 h 15',                     price:'$350',    tag:'Healthy Aging',
       why:'The two compounds the body uses as building components to produce glutathione.' },
 
-    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immun-o-boost.html',       img:'immuneoboost',  time:'2 h 30',                     price:'$550',    tag:'Immune Support',
-      why:'Immune system support, hydration, recovery and wellness optimization.' },
-
-    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/liquixo.html',             img:'liquixo',       time:'45 min',                     price:'$395', tag:'Muscle Recovery',
-      why:'A full 20 amino acid blend with alpha-lipoic acid and exosomes.' },
-
-    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant.html',         img:'antioxidant',   time:'75 min',                     price:'$400',    tag:'Antioxidant Support',
-      why:'Three antioxidants in one network, recharging one another rather than working alone.' },
-
     { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione.html',         img:'glutathione',   time:'15 min push · 30 min visit', price:'$100', tag:'Glutathione IV Therapy',
       why:'Concentrated antioxidant support as a slow physician-administered push.' },
 
     // one infusion, two categories — the quiz can land on it from either route
-    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin.html',          img:'jointsupport',  time:'2 h 30',                     price:'$650',    tag:'Joint Support & Skin Health',
-      why:'Amino acids involved in normal collagen formation, with antioxidant support around them.' },
+    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant.html',         img:'antioxidant',   time:'75 min',                     price:'$400',    tag:'Antioxidant Support',
+      why:'Three antioxidants in one network, recharging one another rather than working alone.' },
 
-    { id:'liver',        name:'Fatty Liver Support IV',           slug:'/drips/fatty-liver-support.html', img:'liversupport',  time:'3 h',                        price:'$650',    tag:'Liver Support',
-      why:'Glycine and taurine for the liver’s normal bile work, with NAC for the glutathione pathway.' },
+    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immun-o-boost.html',       img:'immuneoboost',  time:'2 h 30',                     price:'$550',    tag:'Immune Support',
+      why:'Immune system support, hydration, recovery and wellness optimization.' },
 
-    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/revive.html',              img:'revive',        time:'2 h 15',                     price:'$525', tag:'Recovery Support',
+    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/revive.html',              img:'revive',        time:'1 h 15',                     price:'$325', tag:'Recovery Support',
       why:'Hydration and nutritional replenishment for flexible, as-needed use.' },
 
     // name matches the plate exactly — it used to read "Stress, Mental Burnout
     // & Brain Wellness IV" here and "Stress & Brain Wellness IV" on the card,
     // so a quiz result and the shelf disagreed about what the thing is called
+    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/liquixo.html',             img:'liquixo',       time:'45 min',                     price:'$395', tag:'Muscle Recovery',
+      why:'A full 20 amino acid blend with alpha-lipoic acid and exosomes.' },
+
     { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$500',    tag:'Mind & Focus Support',
       why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
+
+    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin.html',          img:'jointsupport',  time:'2 h 30',                     price:'$650',    tag:'Joint Support & Skin Health',
+      why:'Amino acids involved in normal collagen formation, with antioxidant support around them.' },
+
+    { id:'liver',        name:'Fatty Liver Support IV',           slug:'/drips/fatty-liver-support.html', img:'liversupport',  time:'3 h',                        price:'$650',    tag:'Liver Support',
+      why:'Glycine and taurine for the liver’s normal bile work, with NAC for the glutathione pathway.' },
 
     { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized.html',          img:'customized',    time:'Individually determined',    price:'By consultation', tag:'Customized IV Infusion',
       why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
