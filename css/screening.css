@@ -629,10 +629,14 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 /* The reason is Dr. Aronov's wording, verbatim, at display size. It is the
    only thing on the screen set in the display face — everything else on the
    red field is quiet so this cannot be missed. */
+/* Deliberately NOT the biggest thing on this screen. The largest element is
+   the dialler below, because the useful act is calling — not reading a
+   description of what may be happening to you. Capped in ch so it does not
+   grow into a headline on a desktop the way it does on a phone. */
 .sq-halt__reason {
-    margin: 0 0 1.5rem; font-family: var(--display); font-weight: 400;
-    font-size: clamp(1.45rem, 3.4vw, 2.15rem); line-height: 1.32; letter-spacing: -.018em;
-    color: #FFF3F1;
+    margin: 0 0 1.4rem; font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.18rem, 1.9vw, 1.5rem); line-height: 1.4; letter-spacing: -.01em;
+    color: #FFF3F1; max-width: 30ch;
 }
 .sq-halt__body { margin: 0 0 .8rem; font-size: 1rem; line-height: 1.72; color: rgba(255,243,241,.84); }
 .sq-halt__body b { color: #FFF3F1; font-weight: 600; }
@@ -664,14 +668,27 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 .sq-call b { display: block; font-family: var(--data); font-size: 1.5rem; font-weight: 700; line-height: 1.1; letter-spacing: .01em; }
 .sq-call small { display: block; margin-top: .22rem; font-family: var(--data); font-size: .58rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: rgba(74,11,7,.62); }
 
-.sq-halt__outs { display: flex; flex-wrap: wrap; gap: .4rem 1.6rem; justify-content: center; padding: 0 0 1.5rem; }
-.sq-halt__out {
-    padding: .8rem 0; background: none; border: 0; cursor: pointer;
-    font-family: var(--data); font-size: .62rem; font-weight: 600; letter-spacing: .16em;
-    text-transform: uppercase; color: rgba(255,243,241,.5); text-decoration: none;
-    transition: color .25s;
+/* A mis-tap on a 24-question form is far more likely than a fabricated
+   symptom, so the way back has to be findable. These were 10px and tracked
+   out — legible to me on a laptop, invisible to the person this screen is
+   actually for. Now bordered, thumb-height, and sentence case. */
+.sq-halt__outs {
+    display: flex; flex-wrap: wrap; gap: .7rem; justify-content: center;
+    width: 100%; max-width: 36rem; margin: 0 auto; padding: 0 0 1.6rem;
 }
-.sq-halt__out:hover { color: #FFF3F1; }
+.sq-halt__out {
+    flex: 1 1 14rem; min-height: 54px; padding: .9rem 1.2rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: none; border: 1px solid rgba(255,243,241,.34); border-radius: 4px;
+    cursor: pointer; text-decoration: none;
+    font-family: var(--ui); font-size: .92rem; font-weight: 500; letter-spacing: 0;
+    text-transform: none; color: rgba(255,243,241,.82);
+    transition: border-color .25s, color .25s, background .25s;
+}
+.sq-halt__out:hover, .sq-halt__out:focus-visible {
+    border-color: #FFF3F1; color: #FFF3F1; background: rgba(255,243,241,.08);
+}
+.sq-halt__out:focus-visible { outline: 2px solid #FFF3F1; outline-offset: 2px; }
 
 
 /* ── 4 · PASS ────────────────────────────────────────────────────────────── */
@@ -722,4 +739,58 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 
 @media (prefers-reduced-motion: reduce) {
     .sq__t, .sq__b, .sq__back i, .sq-call { transition: none; }
+}
+
+
+/* ── THE CALM STOP — questions 11 to 24 ──────────────────────────────────────
+   These are not emergencies and Dr. Aronov's wording for them says so: postpone,
+   rescreen after recovery, obtain clearance. A blood-red takeover for "are you
+   pregnant" or "are you taking an antibiotic" frightens somebody for no clinical
+   reason, and a screen that cries wolf fourteen times out of twenty-four is a
+   screen nobody believes the ten times it matters.
+
+   So this one stays inside the card, in the house palette. It is still an
+   unmistakable stop — the rule is gold, the heading says it plainly, and there
+   is no way onward from here — it just is not an alarm. */
+.sq-stop__flag {
+    display: flex; align-items: center; gap: .85rem; margin-bottom: 1.3rem;
+}
+.sq-stop__glyph {
+    display: grid; place-items: center; flex: none; width: 2.9rem; height: 2.9rem;
+    border-radius: 50%; background: var(--forest); color: var(--gold-lite);
+    font-size: 1.2rem; line-height: 1;
+}
+.sq-stop__word {
+    font-family: var(--data); font-size: .64rem; font-weight: 700; letter-spacing: .24em;
+    text-transform: uppercase; color: var(--forest-mid);
+}
+.sq-stop__reason {
+    margin: 0 0 1.2rem; font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.25rem, 2.3vw, 1.68rem); line-height: 1.4; letter-spacing: -.012em;
+    color: var(--forest); max-width: 34ch;
+}
+.sq-stop__body { margin: 0 0 1.6rem; max-width: 58ch; font-size: .95rem; line-height: 1.72; color: var(--mist); }
+.sq-stop__body b { color: var(--forest); font-weight: 600; }
+.sq-stop__ref {
+    margin: 0 0 1.6rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
+    font-family: var(--data); font-size: .62rem; font-weight: 600; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--mist);
+}
+.sq-stop__acts { display: flex; flex-wrap: wrap; gap: .7rem; }
+.sq-stop__out {
+    min-height: 54px; padding: .9rem 1.4rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: none; border: 1px solid var(--rule-gold); border-radius: 4px;
+    cursor: pointer; text-decoration: none;
+    font-family: var(--ui); font-size: .92rem; font-weight: 500; color: var(--forest);
+    transition: border-color .25s, background .25s;
+}
+.sq-stop__out:hover { border-color: var(--gold); background: rgba(193,150,63,.08); }
+.sq-stop__out:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+
+@media (max-width: 720px) {
+    .sq-halt__outs { flex-direction: column; }
+    .sq-halt__out { flex: 1 1 auto; }
+    .sq-stop__acts { flex-direction: column; }
+    .sq-stop__out { width: 100%; }
 }
