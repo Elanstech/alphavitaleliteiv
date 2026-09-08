@@ -729,12 +729,6 @@ class Compounds {
 
 
 /* =============================================================================
-   THE PROGRAM  (#program)
-   Six sessions of the same formulation at ten percent under the single rate.
-   Every figure is derived from the two rates on the button, so the arithmetic
-   can never drift away from the menu.
-============================================================================= */
-/* =============================================================================
    BOOT
 ============================================================================= */
 const modules = {
