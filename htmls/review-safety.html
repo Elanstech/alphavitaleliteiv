@@ -9,15 +9,15 @@
      which hands identified health information to third parties who have no BAA.
      no-referrer stops the header being sent at all. -->
 <meta name="referrer" content="no-referrer">
-<title>Safety Questions — Alpha Vital Elite IV</title>
-<meta name="description" content="Step two of three: twelve short safety questions before your medical history.">
-<meta name="theme-color" content="#F6F1E7">
+<title>Preliminary Safety Screening — Alpha Vital Elite IV</title>
+<meta name="description" content="Twenty-four short safety questions before an elective IV infusion.">
+<meta name="theme-color" content="#F6F1E7" id="themeColor">
 <meta name="format-detection" content="telephone=yes">
 <link rel="canonical" href="https://www.precisionmedicaliv.com/htmls/review-safety.html">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Safety Questions — Alpha Vital Elite IV">
-<meta property="og:description" content="Step two of three: twelve short safety questions before your medical history.">
+<meta property="og:title" content="Preliminary Safety Screening — Alpha Vital Elite IV">
+<meta property="og:description" content="Twenty-four short safety questions before an elective IV infusion.">
 <meta property="og:url" content="https://www.precisionmedicaliv.com/htmls/review-safety.html">
 <meta property="og:image" content="https://www.precisionmedicaliv.com/assets/gen-images/dr.aronov.png">
 
@@ -41,6 +41,7 @@
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../css/contact.css">
 <link rel="stylesheet" href="../css/screening.css">
+<link rel="stylesheet" href="../css/screener.css">
 
 <script>
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -202,7 +203,7 @@
   <div class="ct-wrap">
     <div class="bs-room__grid">
 
-      <aside class="bs-side" id="bsSide" data-numeral="II" data-fill=".5">
+      <aside class="bs-side" id="bsSide" data-numeral="I" data-fill="0">
         <a class="bs-side__back" href="begin-screening.html"><i class="ph ph-arrow-left"></i> All infusions</a>
 
         <div class="bs-bottle" id="bsBottle">
@@ -217,35 +218,134 @@
         </div>
 
         <ol class="bs-path" id="bsPath" style="--fill:0" aria-label="Progress">
-          <li class="bs-path__i is-done"><b>Step I</b><span>Your details</span></li>
-          <li class="bs-path__i is-now"><b>Step II</b><span>Safety questions</span></li>
-          <li class="bs-path__i"><b>Step III</b><span>Medical history &amp; payment</span></li>
+          <li class="bs-path__i is-now"><b>Step I</b><span>Safety questions</span></li>
+          <li class="bs-path__i"><b>Step II</b><span>Your details</span></li>
         </ol>
 
         <div class="bs-side__dr">
           <b>Dr.&nbsp;Violeta Aronov, DO</b>
-          <span>Reviews every request herself and emails you the outcome.</span>
+          <span>Reviews every screening before any infusion is given.</span>
         </div>
       </aside>
 
       <div class="bs-stage" id="bsStage">
         <div class="bs-stage__head">
-          <p class="bs-eyebrow" id="bsEyebrow">Step two of three</p>
-          <h1 class="bs-h1" id="bsTitle"><span class="l"><span>A few</span></span><span class="l"><span><em>safety questions.</em></span></span></h1>
-          <p class="bs-lede" id="bsLede">Twelve quick yes or no questions about how you are feeling <b>right now</b>. Under a minute.</p>
+          <p class="bs-eyebrow" id="bsEyebrow">Step one of two</p>
+          <h1 class="bs-h1" id="bsTitle"><span class="l"><span>Preliminary</span></span><span class="l"><span><em>safety screening.</em></span></span></h1>
+          <p class="bs-lede" id="bsLede">Twenty-four yes or no questions about your health <b>right now</b>. Two to three minutes.</p>
         </div>
 
-        <div class="bs-frame" id="screeningForm" hidden>
-          <div class="bs-frame__bar"><span><b>II</b>Safety questions</span><i>Secure &middot; HIPAA</i></div>
-          <iframe id="ctScreenFrame" data-form="urgent" title="Alpha Vital Elite IV — Safety questions" src="" loading="eager"></iframe>
-        </div>
+        <!-- The card keeps the id #screeningForm so screening.js rise() still
+             animates it and draws the gold hairline. The Jotform iframe that
+             used to live here is gone — the questions are ours now. -->
+        <div class="bs-frame sq" id="screeningForm">
+          <div class="bs-frame__bar sq__bar"><span><b>I</b>Safety screening</span><i>Answers stay on this device</i></div>
 
-        <div class="bs-soon" id="bsSoon">
-          <i class="ph-duotone ph-hourglass-medium"></i>
-          <b>This step is not live yet</b>
-          <p>Call the practice and we will take you through it by phone.</p>
-          <div class="bs-soon__acts">
-            <a class="btn btn--forest btn--lg" href="tel:+19292010740" data-magnetic><span>929 &middot; 201 &middot; 0740</span><i class="ph ph-phone"></i></a>
+          <div class="sq__in">
+
+            <div class="sq__head" id="sqHead" hidden>
+              <div class="sq__rail" id="sqRail" aria-hidden="true"></div>
+              <p class="sq__count"><span>Question <b id="sqNow">1</b> of 24</span><span>Yes or no</span></p>
+            </div>
+
+            <!-- ══ 1 · INTRO ══ -->
+            <section class="sq__pane is-on" id="sqIntro">
+              <p class="bs-lede" style="margin:0 0 1.6rem">Alpha Vital Elite provides elective outpatient
+                IV infusions, not emergency care. This screening exists so that nobody receives an
+                infusion that is unsafe for them on the day they receive it.</p>
+
+              <dl class="sq__terms">
+                <div class="sq__term">
+                  <dt>24<small>Questions</small></dt>
+                  <dd>One at a time, yes or no. There is no <b>unsure</b> option &mdash; if you are unsure, answer yes.</dd>
+                </div>
+                <div class="sq__term">
+                  <dt>1<small>Ends it</small></dt>
+                  <dd>A single <b>yes</b> stops the screening. You will see why, and no appointment is
+                    scheduled. It is not a judgement about you &mdash; it means an elective infusion is
+                    not appropriate today.</dd>
+                </div>
+                <div class="sq__term">
+                  <dt>0<small>Stored</small></dt>
+                  <dd>Your answers stay in this browser and are never sent anywhere. Only your
+                    <b>contact details</b> reach the practice, and only if you answer no to all
+                    twenty-four.</dd>
+                </div>
+              </dl>
+
+              <button class="btn btn--forest btn--lg" id="sqBegin" type="button" data-magnetic><span>Start the screening</span><i class="ph ph-arrow-right"></i></button>
+            </section>
+
+            <!-- ══ 2 · QUESTION ══ -->
+            <section class="sq__pane" id="sqQuestion">
+              <h2 class="sq__q" id="sqQ" tabindex="-1"></h2>
+              <div class="sq__ans">
+                <button class="sq__b" type="button" data-answer="yes">Yes</button>
+                <button class="sq__b" type="button" data-answer="no">No</button>
+              </div>
+              <button class="sq__back" id="sqBack" type="button" hidden><i class="ph ph-arrow-left"></i> Previous question</button>
+            </section>
+
+            <!-- ══ 4 · PASS ══ -->
+            <section class="sq__pane" id="sqPass">
+              <span class="bs-done__seal sq__seal" aria-hidden="true"><i class="ph-fill ph-check"></i></span>
+              <h2 class="sq__pass-title">Nothing here rules out <em>an infusion.</em></h2>
+              <p class="sq__pass-sub">Passing this screening does not mean you are approved. Final
+                eligibility requires physician review of your history, medications, allergies,
+                laboratory information and requested infusion.</p>
+
+              <p class="sq__note">Leave your details and <b>Dr.&nbsp;Violeta Aronov will contact you
+                within 24 hours</b> to ask any necessary follow-up questions and, if the infusion is
+                appropriate, schedule your appointment. The complete medical form and patient
+                attestation are reviewed and signed on-site on the day of your infusion.
+                <b>No screening or physician-review fee is charged.</b></p>
+
+              <div class="sq__form" id="sqForm">
+                <div class="sq__row">
+                  <div class="sq__f">
+                    <label for="sqFirst">First name</label>
+                    <input id="sqFirst" type="text" autocomplete="given-name" required>
+                  </div>
+                  <div class="sq__f">
+                    <label for="sqLast">Last name</label>
+                    <input id="sqLast" type="text" autocomplete="family-name" required>
+                  </div>
+                </div>
+                <div class="sq__f">
+                  <label for="sqEmail">Email</label>
+                  <input id="sqEmail" type="email" autocomplete="email" required>
+                </div>
+                <div class="sq__f">
+                  <label for="sqPhone">Phone</label>
+                  <input id="sqPhone" type="tel" autocomplete="tel" required>
+                </div>
+                <div class="sq__f">
+                  <label for="sqDrip">Infusion you are interested in</label>
+                  <select id="sqDrip">
+                    <option value="">Not sure yet &mdash; please advise</option>
+                    <option>GLyNAC Healthy Aging</option>
+                    <option>Immun-O-Boost IV Support</option>
+                    <option>LIQUIXO Muscle Recovery</option>
+                    <option>Antioxidant &#215;3 Reset</option>
+                    <option>Glutathione IV Injection</option>
+                    <option>Joint &amp; Skin Wellness</option>
+                    <option>Fatty Liver Support</option>
+                    <option>Revive IV Support</option>
+                    <option>Stress &amp; Brain Wellness</option>
+                    <option>Customized IV Infusion</option>
+                  </select>
+                </div>
+                <p class="sq__err" id="sqErr" hidden></p>
+                <button class="btn btn--forest btn--lg sq__send" id="sqSend" type="button" data-magnetic><span>Send my details</span><i class="ph ph-paper-plane-tilt"></i></button>
+              </div>
+
+              <div id="sqSent" hidden>
+                <h2 class="sq__pass-title">Your details are <em>with the practice.</em></h2>
+                <p class="sq__pass-sub">Dr.&nbsp;Violeta Aronov will contact you within 24 hours. You
+                  may be asked to answer a few additional medical questions online before your visit.</p>
+              </div>
+            </section>
+
           </div>
         </div>
 
@@ -255,6 +355,35 @@
     </div>
   </div>
 </section>
+
+<!-- ═══ 3 · STOP ═══════════════════════════════════════════════════════════
+     Outside .bs-room deliberately: it covers the header, the green panel and
+     the footer, so nothing from the previous screen survives and no reading
+     is required to understand that something has changed. -->
+<div class="sq-halt" id="sqHalt" role="alertdialog" aria-modal="true" aria-labelledby="sqHaltReason" hidden>
+  <div class="sq-halt__in">
+    <div class="sq-halt__bar">
+      <span class="sq-halt__glyph" aria-hidden="true">!</span>
+      <span class="sq-halt__word">Stop</span>
+    </div>
+    <div class="sq-halt__rule"></div>
+
+    <p class="sq-halt__reason" id="sqHaltReason"></p>
+    <p class="sq-halt__body" id="sqHaltBody"></p>
+    <p class="sq-halt__ref" id="sqHaltRef"></p>
+
+    <div class="sq-halt__call" id="sqHaltCall" hidden>
+      <a class="sq-call" href="tel:911" id="sqCall">
+        <span><b>Call 911</b><small>Tap to dial now</small></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="sq-halt__outs">
+    <button class="sq-halt__out" id="sqHaltBack" type="button">I answered that by mistake</button>
+    <a class="sq-halt__out" href="../index.html">Leave this page</a>
+  </div>
+</div>
 
 </main>
 
@@ -284,5 +413,6 @@
 <script src="../script.js" type="module"></script>
 <script src="../js/contact.js" type="module"></script>
 <script src="../js/screening.js" type="module"></script>
+<script src="../js/screener.js" type="module"></script>
 </body>
 </html>
