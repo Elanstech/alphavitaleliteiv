@@ -24,6 +24,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<!-- The screening POSTs here mid-session; paying DNS + TLS at submit time
+     is a visible stall on a phone. Opened at page load instead. -->
+<link rel="preconnect" href="https://hipaa-submit.jotform.com" crossorigin>
 <link rel="preload" as="image" href="../logo.png" fetchpriority="high">
 
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
