@@ -794,3 +794,13 @@ html.has-cine body { overflow: hidden; height: 100vh; }
     .sq-stop__acts { flex-direction: column; }
     .sq-stop__out { width: 100%; }
 }
+
+/* The reference code on the thank-you page. Quiet, monospaced-feeling, and
+   selectable — it exists to be read down a phone line or screenshotted. */
+.bs-done__ref {
+    display: inline-block; margin: 1rem 0 0; padding: .5rem .85rem;
+    border: 1px solid var(--rule-gold); border-radius: 4px; background: rgba(193,150,63,.07);
+    font-family: var(--data); font-size: .7rem; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--gold-deep); user-select: all;
+}
+.bs-done__ref[hidden] { display: none; }
