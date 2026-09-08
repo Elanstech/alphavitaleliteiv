@@ -217,8 +217,8 @@
         </div>
 
         <ol class="bs-path" id="bsPath" style="--fill:0" aria-label="Progress">
-          <li class="bs-path__i is-now"><b>Step I</b><span>Safety questions</span></li>
-          <li class="bs-path__i"><b>Step II</b><span>Your details</span></li>
+          <li class="bs-path__i is-now" id="bsPath1"><b>Step I</b><span>Your details</span></li>
+          <li class="bs-path__i" id="bsPath2"><b>Step II</b><span>Safety questions</span></li>
         </ol>
 
         <div class="bs-side__dr">
@@ -230,15 +230,16 @@
       <div class="bs-stage" id="bsStage">
         <div class="bs-stage__head">
           <p class="bs-eyebrow" id="bsEyebrow">Step one of two</p>
-          <h1 class="bs-h1" id="bsTitle"><span class="l"><span>Preliminary</span></span><span class="l"><span><em>safety screening.</em></span></span></h1>
-          <p class="bs-lede" id="bsLede">Twenty-four yes or no questions about your health <b>right now</b>. Two to three minutes.</p>
+          <h1 class="bs-h1" id="bsTitle"><span class="l"><span>Your</span></span><span class="l"><span><em>details.</em></span></span></h1>
+          <p class="bs-lede" id="bsLede">Name, contact, and the infusion you are interested in. <b>About a minute</b>, then twenty-four short safety questions.</p>
         </div>
 
-        <!-- The card keeps the id #screeningForm so screening.js rise() still
-             animates it and draws the gold hairline. The Jotform iframe that
-             used to live here is gone — the questions are ours now. -->
+        <!-- Keeps the id #screeningForm so screening.js rise() still animates it
+             and draws the gold hairline. The Jotform iframe that used to be here
+             is gone: both steps are ours now, and both post to Jotform in the
+             background rather than showing the patient a Jotform skin. -->
         <div class="bs-frame sq" id="screeningForm">
-          <div class="bs-frame__bar sq__bar"><span><b>I</b>Safety screening</span><i>Answers stay on this device</i></div>
+          <div class="bs-frame__bar sq__bar"><span><b id="sqBarNum">I</b><i id="sqBarStep">Your details</i></span><i id="sqBarNote">Secure &middot; HIPAA</i></div>
 
           <div class="sq__in">
 
@@ -247,57 +248,11 @@
               <p class="sq__count"><span>Question <b id="sqNow">1</b> of 24</span><span>Yes or no</span></p>
             </div>
 
-            <!-- ══ 1 · INTRO ══ -->
+            <!-- ══ STEP I · DETAILS ══ -->
             <section class="sq__pane is-on" id="sqIntro">
-              <p class="bs-lede" style="margin:0 0 1.6rem">Alpha Vital Elite provides elective outpatient
-                IV infusions, not emergency care. This screening exists so that nobody receives an
-                infusion that is unsafe for them on the day they receive it.</p>
-
-              <dl class="sq__terms">
-                <div class="sq__term">
-                  <dt>24<small>Questions</small></dt>
-                  <dd>One at a time, yes or no. There is no <b>unsure</b> option &mdash; if you are unsure, answer yes.</dd>
-                </div>
-                <div class="sq__term">
-                  <dt>1<small>Ends it</small></dt>
-                  <dd>A single <b>yes</b> stops the screening. You will see why, and no appointment is
-                    scheduled. It is not a judgement about you &mdash; it means an elective infusion is
-                    not appropriate today.</dd>
-                </div>
-                <div class="sq__term">
-                  <dt>0<small>Stored</small></dt>
-                  <dd>Your answers stay in this browser and are never sent anywhere. Only your
-                    <b>contact details</b> reach the practice, and only if you answer no to all
-                    twenty-four.</dd>
-                </div>
-              </dl>
-
-              <button class="btn btn--forest btn--lg" id="sqBegin" type="button" data-magnetic><span>Start the screening</span><i class="ph ph-arrow-right"></i></button>
-            </section>
-
-            <!-- ══ 2 · QUESTION ══ -->
-            <section class="sq__pane" id="sqQuestion">
-              <h2 class="sq__q" id="sqQ" tabindex="-1"></h2>
-              <div class="sq__ans">
-                <button class="sq__b" type="button" data-answer="yes">Yes</button>
-                <button class="sq__b" type="button" data-answer="no">No</button>
-              </div>
-              <button class="sq__back" id="sqBack" type="button" hidden><i class="ph ph-arrow-left"></i> Previous question</button>
-            </section>
-
-            <!-- ══ 4 · PASS ══ -->
-            <section class="sq__pane" id="sqPass">
-              <span class="bs-done__seal sq__seal" aria-hidden="true"><i class="ph-fill ph-check"></i></span>
-              <h2 class="sq__pass-title">Nothing here rules out <em>an infusion.</em></h2>
-              <p class="sq__pass-sub">Passing this screening does not mean you are approved. Final
-                eligibility requires physician review of your history, medications, allergies,
-                laboratory information and requested infusion.</p>
-
-              <p class="sq__note">Leave your details and <b>Dr.&nbsp;Violeta Aronov will contact you
-                within 24 hours</b> to ask any necessary follow-up questions and, if the infusion is
-                appropriate, schedule your appointment. The complete medical form and patient
-                attestation are reviewed and signed on-site on the day of your infusion.
-                <b>No screening or physician-review fee is charged.</b></p>
+              <p class="bs-lede" style="margin:0 0 1.7rem">Alpha Vital Elite provides elective outpatient
+                IV infusions, not emergency care. After your details we will ask twenty-four yes-or-no
+                questions, and Dr.&nbsp;Aronov reviews every answer before any infusion is given.</p>
 
               <div class="sq__form" id="sqForm">
                 <div class="sq__row">
@@ -321,11 +276,11 @@
                 <div class="sq__f">
                   <label for="sqDrip">Infusion you are interested in</label>
                   <select id="sqDrip">
-                    <option value="">Not sure yet &mdash; please advise</option>
+                    <option value="Not sure yet">Not sure yet &mdash; please advise</option>
                     <option>GLyNAC Healthy Aging</option>
                     <option>Immun-O-Boost IV Support</option>
                     <option>LIQUIXO Muscle Recovery</option>
-                    <option>Antioxidant &#215;3 Reset</option>
+                    <option value="Antioxidant x3 Reset">Antioxidant &#215;3 Reset</option>
                     <option>Glutathione IV Injection</option>
                     <option>Joint &amp; Skin Wellness</option>
                     <option>Fatty Liver Support</option>
@@ -335,14 +290,73 @@
                   </select>
                 </div>
                 <p class="sq__err" id="sqErr" hidden></p>
-                <button class="btn btn--forest btn--lg sq__send" id="sqSend" type="button" data-magnetic><span>Send my details</span><i class="ph ph-paper-plane-tilt"></i></button>
               </div>
 
-              <div id="sqSent" hidden>
-                <h2 class="sq__pass-title">Your details are <em>with the practice.</em></h2>
-                <p class="sq__pass-sub">Dr.&nbsp;Violeta Aronov will contact you within 24 hours. You
-                  may be asked to answer a few additional medical questions online before your visit.</p>
+              <dl class="sq__terms">
+                <div class="sq__term">
+                  <dt>24<small>Questions</small></dt>
+                  <dd>One at a time, yes or no. There is no <b>unsure</b> option &mdash; if you are unsure, answer yes.</dd>
+                </div>
+                <div class="sq__term">
+                  <dt>1<small>Ends it</small></dt>
+                  <dd>A single <b>yes</b> ends the screening. You will see why, and no appointment is
+                    scheduled. It is not a judgement about you &mdash; it means an elective infusion is
+                    not appropriate today.</dd>
+                </div>
+                <div class="sq__term">
+                  <dt>&#9993;<small>Sent to the practice</small></dt>
+                  <dd>Your details and your answers are <b>sent to Dr.&nbsp;Aronov either way</b>,
+                    whether you finish the questions or stop partway. Nothing is charged at any point.</dd>
+                </div>
+              </dl>
+
+              <button class="btn btn--forest btn--lg" id="sqBegin" type="button" data-magnetic><span>Continue to safety questions</span><i class="ph ph-arrow-right"></i></button>
+            </section>
+
+            <!-- ══ STEP II · QUESTION ══ -->
+            <section class="sq__pane" id="sqQuestion">
+              <h2 class="sq__q" id="sqQ" tabindex="-1"></h2>
+              <div class="sq__ans">
+                <button class="sq__b" type="button" data-answer="yes">Yes</button>
+                <button class="sq__b" type="button" data-answer="no">No</button>
               </div>
+              <button class="sq__back" id="sqBack" type="button" hidden><i class="ph ph-arrow-left"></i> Previous question</button>
+            </section>
+
+            <!-- ══ CALM STOP · questions 11-24 ══ -->
+            <section class="sq__pane" id="sqStop">
+              <div class="sq-stop__flag">
+                <span class="sq-stop__glyph" aria-hidden="true"><i class="ph-fill ph-hand-palm"></i></span>
+                <span class="sq-stop__word">Screening ended</span>
+              </div>
+              <h2 class="sq-stop__reason" id="sqStopReason" tabindex="-1"></h2>
+              <p class="sq-stop__body">Based on your answers, <b>Alpha Vital Elite cannot provide an
+                elective infusion at this time</b>, and no appointment has been scheduled. Your answers
+                have been sent to Dr.&nbsp;Aronov, who may follow up. If you think you answered by
+                mistake, go back and change it. Questions:
+                <b><a href="tel:+19292010740">(929)&nbsp;201-0740</a></b>.</p>
+              <p class="sq-stop__ref" id="sqStopRef"></p>
+              <div class="sq-stop__acts">
+                <button class="sq-stop__out" id="sqStopBack" type="button">I answered that by mistake</button>
+                <a class="sq-stop__out" href="../index.html">Leave this page</a>
+              </div>
+            </section>
+
+            <!-- ══ PASS ══ -->
+            <section class="sq__pane" id="sqPass">
+              <span class="bs-done__seal sq__seal" aria-hidden="true"><i class="ph-fill ph-check"></i></span>
+              <h2 class="sq__pass-title">Nothing here rules out <em>an infusion.</em></h2>
+              <p class="sq__pass-sub">Passing this screening does not mean you are approved. Final
+                eligibility requires physician review of your history, medications, allergies,
+                laboratory information and requested infusion.</p>
+
+              <p class="sq__note"><b>Dr.&nbsp;Violeta Aronov will contact you within 24 hours</b> to ask
+                any necessary follow-up questions and, if the infusion is appropriate, schedule your
+                appointment. The complete medical form and patient attestation are reviewed and signed
+                on-site on the day of your infusion. <b>No screening or physician-review fee is
+                charged.</b></p>
+
+              <p class="sq-stop__ref" id="sqPassRef"></p>
             </section>
 
           </div>
@@ -380,7 +394,7 @@
 
   <div class="sq-halt__outs">
     <button class="sq-halt__out" id="sqHaltBack" type="button">I answered that by mistake</button>
-    <a class="sq-halt__out" href="../index.html">Leave this page</a>
+    <a class="sq-halt__out" href="tel:+19292010740">Call the practice instead</a>
   </div>
 </div>
 
