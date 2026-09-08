@@ -703,6 +703,24 @@ const answerLog = () => QUESTIONS.map((item, n) => {
 }).join('\n\n');
 
 
+/* ── THE RAIL ────────────────────────────────────────────────────────────────
+   Twenty-four ticks, one per question, built once at boot. A percentage bar
+   would say "partway through"; this says how many questions there are and
+   exactly which one you are on, which is what somebody actually wants to know
+   at question seven. */
+const buildRail = (rail) => {
+    if (!rail) return [];
+    const frag = document.createDocumentFragment();
+    QUESTIONS.forEach(() => {
+        const t = document.createElement('span');
+        t.className = 'sq__t';
+        frag.appendChild(t);
+    });
+    rail.appendChild(frag);
+    return [...rail.children];
+};
+
+
 /* ── THE SCREENER ────────────────────────────────────────────────────────── */
 const screener = () => {
     const card = $('#screeningForm');
