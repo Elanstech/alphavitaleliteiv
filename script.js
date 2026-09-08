@@ -1900,8 +1900,8 @@ class Quiz {
                     <a class="rx__btn rx__btn--solid" href="${top.slug}">
                         <span>Read the protocol</span><i class="ph ph-arrow-up-right"></i>
                     </a>
-                    <a class="rx__btn" href="tel:+19292010740">
-                        <span>929 · 201 · 0740</span><i class="ph ph-phone"></i>
+                    <a class="rx__btn" href="tel:+13477148660">
+                        <span>347 · 714 · 8660</span><i class="ph ph-phone"></i>
                     </a>
                 </div>
             </div>`);

@@ -7,15 +7,7 @@
 <meta name="theme-color" content="#F6F1E7">
 <meta name="format-detection" content="telephone=yes">
 
-<!-- ============================================================
-     FONTS
-     Prata            display serif — Didone contrast, cuts hard on video
-     Cormorant        italic accent — the living word, pull-quotes, plate notes
-     Marcellus        engraved caps — labels, matches the wordmark
-     Instrument Sans  body + UI
-     Syne             micro-labels — chips, category, actions
-     Archivo          tabular figures — prices, durations, the counter
-     ============================================================ -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -23,9 +15,9 @@
 <link rel="preload" as="image" href="assets/images/hero-poster.webp" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
 
-<!-- ICONS — Phosphor web font. Regular needs the base class: <i class="ph ph-clock"> -->
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
-<!-- fill and duotone are below the fold only — load without blocking first paint -->
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css" media="print" onload="this.media='all'">
 <noscript>
@@ -36,7 +28,7 @@
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="stylesheet" href="styles.css">
 
-<!-- If scripting is off, the preloader must not become a wall -->
+
 <noscript><style>
   .pre { display: none !important; }
   html.is-preloading { overflow: auto !important; }
@@ -52,9 +44,7 @@
 
 <body>
 
-<!-- ==============================================================
-     PRELOADER
-     ============================================================== -->
+
 <div class="pre" id="pre">
   <div class="pre__core">
     <img class="pre__mark" src="logo.png" alt="Alpha Vital Elite IV" width="640" height="592">
@@ -66,18 +56,6 @@
 </div>
 
 
-<!-- ==============================================================
-     HEADER
-
-     NAV ORDER — Home · Infusions (flyout) · Dr. Aronov · Research · Contact
-
-     THE ACTIVE STATE. Every link carries `is-here` in the markup for the page
-     it belongs to, so the correct item is lit before a single byte of JS runs.
-     The Trail module in script.js then re-derives it from location.pathname,
-     which is what makes the ten drip pages work without hand-editing each one:
-     on /drips/fatty-liver-support.html it lights that row inside the flyout
-     AND keeps "Infusions" lit as the parent of the trail.
-     ============================================================== -->
 <header class="head" id="head">
   <div class="head__rail">
 
@@ -89,8 +67,7 @@
 
       <a class="head__link is-here" href="index.html" aria-current="page">Home</a>
 
-      <!-- INFUSIONS + THE FLYOUT — CSS-only: opens on hover, stays open on
-           keyboard focus (:focus-within). The link itself still navigates. -->
+
       <div class="head__drop">
         <a class="head__link" href="htmls/infusions.html">
           Infusions <i class="ph ph-caret-down head__dcaret"></i>
@@ -155,21 +132,13 @@
 </header>
 
 
-<!-- ==============================================================
-     MOBILE MENU
-     Same five destinations, same active grammar. The row for the current
-     page turns gold and carries a dot; on a drip page the Infusions
-     accordion is opened by Trail so the lit row is visible without a tap.
-     ============================================================== -->
 <div class="menu" id="menu">
   <div class="menu__inner">
     <nav class="menu__nav">
 
       <a class="is-here" href="index.html" aria-current="page"><i>i.</i><em>Home</em></a>
 
-      <!-- INFUSIONS ACCORDION — native <details>, no JS. Tapping the row
-           opens the sublist; tapping any link inside still closes the menu
-           through the existing Menu class. -->
+
       <details class="menu__drop">
         <summary>
           <i>ii.</i><em>Infusions</em>
@@ -207,11 +176,7 @@
 
 <main id="main">
 
-<!-- ==============================================================
-     HERO
-     Copy is Dr. Aronov's current approved wording. "Held to hospital
-     standards" and "hospital-level safety" are gone and stay gone.
-     ============================================================== -->
+
 <section class="hero" id="hero">
 
   <div class="hero__media">
@@ -240,8 +205,7 @@
       <span class="word" data-rise style="--i:4"><span>IV Care.</span></span>
     </h1>
 
-    <!-- Nine categories. Joint and Skin are ONE infusion and read as one
-         line, so the loop never implies a tenth signature formula. -->
+
     <p class="hero__for" data-rise style="--i:5">
       <span class="hero__for-lead">Infusions for</span>
       <span class="loop" id="wordLoop">
@@ -291,13 +255,6 @@
 </section>
 
 
-<!-- ==============================================================
-     THE SHELF  (#infusions)   —   CHAPTER I
-     Nine signature infusions + one customized option = ten plates.
-     Category names, order and formulations per Dr. Aronov's 17 Aug email.
-     Quercetin and Curcumin are off the menu. Language rule: "supports" and
-     "designed to complement" — never treats, cures, repairs, or guarantees.
-     ============================================================== -->
 <section class="shelf" id="infusions">
   <span class="shelf__wash"></span>
   <span class="shelf__mesh"></span>
@@ -334,10 +291,7 @@
     </div>
   </header>
 
-  <!-- FILTERS — desktop gets eleven pills; the phone gets the same eleven as
-       one select, because wrapped to five rows they pushed the whole page
-       down. Both write to the same Shelf.applyFilter(), so there is one
-       code path and the two can never disagree. -->
+
   <div class="shelf__filters" data-reveal>
     <button class="shelf__pill is-on" type="button" data-filter="all"><i class="ph ph-squares-four"></i> Everything <sup>10</sup></button>
     <button class="shelf__pill" type="button" data-filter="healthyaging"><i class="ph ph-infinity"></i> Healthy Aging</button>
@@ -656,8 +610,7 @@
 
       </ol>
 
-      <!-- rail furniture — lives inside the pinned element so it stays on
-           screen for the whole horizontal run -->
+
       <div class="shelf__rail">
         <p class="shelf__counter"><b id="shelfNow">01</b> <span class="shelf__counter-sep">/</span> <span id="shelfTotal">10</span></p>
         <span class="shelf__meter"><i id="shelfMeter"></i></span>
@@ -682,12 +635,6 @@
 </section>
 
 
-<!-- ==============================================================
-     HOW A VISIT WORKS  (#visit)   —   CHAPTER II
-     Four beats, one rule, one honest line. Kept deliberately short — the
-     surrounding sections are long, and this one only has to make the
-     no-walk-ins policy feel like a reason rather than an obstacle.
-     ============================================================== -->
 <section class="visit" id="visit">
   <span class="visit__field"></span>
 
@@ -758,29 +705,6 @@
 </section>
 
 
-<!-- ==============================================================
-     WHAT MAKES ALPHA VITAL ELITE DIFFERENT  (#advantage)
-
-     Rebuilt 8/27 from Dr. Aronov's Edits K, L, M, N, O and P (8/26).
-     Three beats, kept short on purpose: the route, the six stages,
-     and the questions. Every line of copy here is hers. Nothing is
-     written on her behalf — if a label is needed and she has not
-     supplied one, it is left out rather than invented.
-
-     Deliberately ABSENT per her instructions; do not put back:
-       Edit N — "The Sequence" · "One appointment does not mean one
-                 bag." · "Everything does not belong in one bag." ·
-                 the "only half a protocol" line
-       Edit P — "The ingredients matter. So does what happens
-                 between them." · "The formulation matters..." ·
-                 the "Begin physician screening" button here
-       Also removed: the old vitamin C / copper example box, and the
-       two old disclaimers, replaced by the single notice at the end.
-
-     Styling is section 08 of styles.css (ap- prefix); the old .adv,
-     .seq, .split, .rack and .seqx rules it replaced have been removed.
-     Behaviour is class Advantage in script.js.
-     ============================================================== -->
 <section class="ap-sec ap-sec--open" id="advantage">
   <div class="ap-wrap ap-wrap--tight">
 
@@ -798,9 +722,6 @@
     </header>
 
 
-    <!-- ==========================================================
-         ONE · THE ROUTE
-         ========================================================== -->
     <div class="ap-beat" data-reveal>
       <span class="ap-beat__no">One</span>
       <div>
@@ -914,9 +835,6 @@
     </div>
 
 
-    <!-- ==========================================================
-         TWO · WHY WE DON'T PUT EVERYTHING IN ONE BAG
-         ========================================================== -->
     <div class="ap-beat" data-reveal>
       <span class="ap-beat__no">Two</span>
       <div>
@@ -957,7 +875,7 @@
 
     </div>
 
-    <!-- ---------- the six stages, in order ---------- -->
+
     <ol class="ap-flow" data-reveal>
       <li class="ap-flow__stage">
         <span class="ap-flow__art"><span class="ap-vial" style="--fluid: rgba(160,180,190,.5); --fluid2: rgba(130,158,172,.8)"></span></span>
@@ -1015,7 +933,7 @@
       given in a deliberate order. Light-sensitive ingredients stay covered; others need no cover.
     </p>
 
-    <!-- ---------- why the sequence matters ---------- -->
+
     <h4 class="ap-why" data-reveal>Why The Sequence Matters</h4>
 
     <div class="ap-reasons">
@@ -1072,9 +990,6 @@
     <p class="ap-punch" data-reveal>Chemistry. Light. Control. Traceability. Every step has a reason.</p>
 
 
-    <!-- ==========================================================
-         THE ALPHA VITAL ELITE DIFFERENCE — the close
-         ========================================================== -->
     <div class="ap-diff" data-reveal>
       <p class="ap-diff__punch">
         An IV bag is not a smoothie.<br>
@@ -1093,9 +1008,7 @@
   </div>
 </section>
 
-<!-- ==============================================================
-     THE PHYSICIAN  (#physician)   —   CHAPTER III
-     ============================================================== -->
+
 <section class="doc" id="physician">
   <div class="doc__wrap">
 
@@ -1179,20 +1092,7 @@
   </div>
 </section>
 
-<!-- ==============================================================
-     FREQUENTLY ASKED  (#faq)
-     Native <details> / <summary> — no JavaScript at all, so this cannot
-     break, and every answer is in the DOM whether or not it is open.
 
-     EVERY ANSWER BELOW IS DRAWN FROM COPY ALREADY APPROVED ELSEWHERE ON THIS
-     PAGE — the hero disclaimer, the shelf stat block, the visit steps, the
-     chain of custody and the footer legal. Nothing here is new claim-making.
-
-     STILL NEEDS HER ANSWERS, then add each as a new <details>:
-        · Do you take insurance
-        · Do I need bloodwork first · Can I eat beforehand
-        · Does it hurt · Cancellation and rescheduling · Where do I park
-     ============================================================== -->
 <section class="faq" id="faq">
   <div class="faq__wrap">
 
@@ -1274,9 +1174,7 @@
           <p>We only provide an infusion when a physician believes it is safe, appropriate, and within the services our practice can responsibly offer.</p>
         </div>
       </details>
-      <!-- ---------- moved down from #advantage on Dr. Aronov's instruction,
-           8/27. Her copy from Edit K (8/26), unchanged; only the markup is
-           the FAQ's own, so these read as part of the same list. ---------- -->
+
 
       <details class="fq">
         <summary class="fq__q">What is the rationale for including each ingredient in this specific IV infusion?<i class="ph ph-plus"></i></summary>
@@ -1389,37 +1287,15 @@
   </div>
 </section>
 
-
-<!-- ==============================================================
-     THE GUIDE LIBRARY  (#guides)   —   PLACEHOLDER, TO BUILD
-     ============================================================== -->
-<section class="slot slot--cream" id="guides">
-  <div class="slot__wrap">
-    <span class="slot__flag">Placeholder</span>
-    <p class="slot__eyebrow"><i class="ph-duotone ph-download-simple"></i> Physician-written guides</p>
-    <h2 class="slot__title">The guide library</h2>
-    <p class="slot__lede">Email capture in exchange for the guides Dr.&nbsp;Aronov already writes. Feeds the same CRM as the screening form and gives you a list of warm prospects who self-identified by topic.</p>
-    <ul class="slot__todo">
-        <li>Live now &mdash; "Zinc, Simply: The Tiny Mineral With a Very Big Job", 12 pages</li>
-        <li>Slim band rather than a full section &mdash; cover thumbnail, one line, email field</li>
-        <li>Wire the submit to whichever CRM the screening form ends up on</li>
-        <li>NEEDS &mdash; a decision on this vs the Stan Store route Liana suggested</li>
-    </ul>
-  </div>
-</section>
-
 </main>
 
 
-<!-- ==============================================================
-     FOOTER
-     ============================================================== -->
 <footer class="foot" id="contact">
   <span class="foot__glow"></span>
 
   <div class="foot__wrap">
 
-    <!-- closing call -->
+
     <div class="foot__call">
       <p class="foot__eyebrow"><i class="ph-duotone ph-seal-check"></i> By physician review only</p>
       <h2 class="foot__title">Physician review<br>comes <em>first</em>.</h2>
@@ -1436,7 +1312,7 @@
       </div>
     </div>
 
-    <!-- the plate -->
+
     <div class="foot__grid">
 
       <div class="foot__col foot__col--wide">
@@ -1486,7 +1362,7 @@
       </div>
     </div>
 
-    <!-- legal -->
+
     <div class="foot__legal">
       <p>
         IV services provided by Alpha Vital Elite IV are intended as supportive care and are
@@ -1505,10 +1381,10 @@
       </ul>
     </div>
 
-    <!-- the wordmark, oversized along the bottom edge -->
+
     <p class="foot__mark">Alpha Vital Elite</p>
 
-    <!-- bar -->
+
     <div class="foot__bar">
       <p class="foot__copy">© <span id="footYear">2026</span> Alpha Vital Elite IV. All rights reserved.</p>
 
@@ -1522,9 +1398,6 @@
 </footer>
 
 
-<!-- ==============================================================
-     THE DOCK
-     ============================================================== -->
 <button class="totop" id="toTop" type="button">
   <i class="ph ph-arrow-up"></i>
   <span>Top</span>
@@ -1565,11 +1438,6 @@
 </div>
 
 
-<!-- ==============================================================
-     THE QUIZ MODAL
-     The question set and the ten protocols live in script.js
-     (DRIPS + ASKS) and match this menu exactly.
-     ============================================================== -->
 <div class="modal" id="quiz">
   <div class="modal__veil" data-close-quiz></div>
 
@@ -1601,7 +1469,6 @@
 </div>
 
 
-<!-- GSAP must be on window before the deferred module runs -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
