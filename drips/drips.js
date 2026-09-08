@@ -5,7 +5,6 @@
 
      Intro      hero master timeline
      Ledger     compound rows, the bag fill, the layer tracker, scroll skew
-     Weeks      the six-week rail
      Money      counters and comparison bars
      Questions  accordion
      Carousel   drag, arrows, meter
@@ -26,7 +25,7 @@ const LOW = (navigator.hardwareConcurrency || 4) <= 4;
 /* release every start state — used when GSAP is missing or motion is reduced */
 const release = () => {
     root.classList.remove('dx-on');
-    $$('[data-anim], .dx-ing, .dx-wk, .dx-char, .dx-comp__why, .dx-comp__role').forEach((el) => {
+    $$('[data-anim], .dx-ing, .dx-char, .dx-comp__why, .dx-comp__role').forEach((el) => {
         el.style.opacity = '1';
         el.style.transform = 'none';
     });
@@ -550,47 +549,6 @@ const ledger = () => {
 };
 
 
-/* ── WEEKS ────────────────────────────────────────────────────────────────── */
-const weeks = () => {
-    const list = $('#dxWeeks');
-    if (!list) return;
-    const fill = $('.dx-weeks__fill', list);
-    const pins = $$('.dx-wk', list);
-
-    gsap.to(pins, {
-        opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'back.out(1.7)',
-        scrollTrigger: { trigger: list, start: 'top 82%', once: true },
-    });
-
-    gsap.matchMedia().add({
-        wide: '(min-width: 781px)',
-        tall: '(max-width: 780px)',
-    }, (ctx) => {
-        const { wide } = ctx.conditions;
-        const tl = gsap.timeline({
-            scrollTrigger: { trigger: list, start: 'top 74%', end: 'bottom 68%', scrub: 0.6 },
-        });
-        tl.fromTo(fill, wide ? { scaleX: 0 } : { scaleY: 0 },
-                        wide ? { scaleX: 1, ease: 'none' } : { scaleY: 1, ease: 'none' });
-
-        pins.forEach((pin, i) => {
-            ScrollTrigger.create({
-                trigger: list,
-                start: `top ${74 - i * 3}%`,
-                end: 'bottom 68%',
-                onToggle: (self) => {
-                    pin.classList.toggle('is-on', self.isActive);
-                    if (self.isActive) {
-                        gsap.fromTo($('.dx-wk__pin', pin), { scale: 0.4 },
-                            { scale: 1, duration: 0.5, ease: 'back.out(3)' });
-                    }
-                },
-            });
-        });
-    });
-};
-
-
 /* ── MONEY ────────────────────────────────────────────────────────────────── */
 const money = () => {
     const fmt = (v, plain) => plain
@@ -851,7 +809,6 @@ const boot = () => {
         go('reveals', reveals);
         go('components', () => { if (!components()) ledger(); });
         go('steps', steps);
-        go('weeks', weeks);
         go('money', money);
         go('questions', questions);
         go('carousel', carousel);
