@@ -9,10 +9,6 @@
 <meta name="format-detection" content="telephone=yes">
 <link rel="canonical" href="https://www.precisionmedicaliv.com/drips/revive.html">
 
-<!-- TEMPLATE FOR ALL TEN DRIPS.
-     Per page you change: data-drip + --tone on <body>, the hero block, the
-     vitals, the ledger rows, the course figures, the spec card, and which
-     nine cards sit at the bottom. Nothing else. -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,9 +16,9 @@
 <link rel="preload" as="image" href="../logo.png" fetchpriority="high">
 <link rel="preload" as="image" href="../assets/drips/liversupport.png" fetchpriority="high">
 
-<!-- site faces: shared header, footer, dock -->
+
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
-<!-- drip faces: condensed display, quiet body, serif italic accent, mono data -->
+
 <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Onest:wght@300..700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
@@ -33,8 +29,7 @@
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="drips.css">
 
-<!-- start states applied before first paint, so nothing flashes in and out
-     before GSAP takes over. Scripting off or motion reduced: no hiding. -->
+
 <script>
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
     document.documentElement.classList.add('dx-on');
@@ -47,7 +42,6 @@
 <span class="dx-prog" aria-hidden="true"></span>
 
 
-<!-- ============ HEADER (shared) ============ -->
 <header class="head" id="head">
   <div class="head__rail">
 
@@ -106,7 +100,7 @@
     </nav>
 
     <div class="head__actions">
-      <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
+      <a class="head__tel" href="tel:+13477148660">347&#8202;·&#8202;714&#8202;·&#8202;8660</a>
       <a class="btn btn--forest head__cta" href="../htmls/begin-screening.html" data-magnetic><span>Begin screening</span></a>
       <button class="head__burger" id="burger" type="button" aria-label="Menu">
         <span></span><span></span>
@@ -117,7 +111,6 @@
 </header>
 
 
-<!-- ============ MOBILE MENU (shared) ============ -->
 <div class="menu" id="menu">
   <div class="menu__inner">
     <nav class="menu__nav">
@@ -152,7 +145,7 @@
     </nav>
     <div class="menu__foot">
       <a class="btn btn--gold" href="../htmls/begin-screening.html"><span>Begin screening</span></a>
-      <a class="menu__tel" href="tel:+19292010740">929 · 201 · 0740</a>
+      <a class="menu__tel" href="tel:+13477148660">347 · 714 · 8660</a>
       <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
   </div>
@@ -169,7 +162,7 @@
 
 <main id="main">
 
-<!-- ============ 01 HERO ============ -->
+
 <section class="dx-hero" id="top">
 
   <div class="dx-hero__wrap">
@@ -211,14 +204,13 @@
       <dd><span data-count="525">$0</span><small>Per session</small></dd>
     </div>
     <div class="dx-vital">
-      <dt>Physician review fee</dt>
-      <dd>$100<small>Applied if approved</small></dd>
+      <dt>Safety screening</dt>
+      <dd>No fee<small>Short questionnaire</small></dd>
     </div>
   </dl>
 </section>
 
 
-<!-- ============ 02 THE FORMULATION ============ -->
 <section class="dx-mix" id="formulation">
   <div class="dx-mix__wrap">
 
@@ -326,7 +318,6 @@
 </section>
 
 
-<!-- ============ 03 QUESTIONS ============ -->
 <section class="dx-qs" id="questions">
   <div class="dx-qs__wrap">
 
@@ -340,16 +331,16 @@
       <details class="dx-q" data-anim="slide">
         <summary class="dx-q__ask">Who provides and monitors my infusion?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__wrap"><div class="dx-q__ans">
-          <p>Dr.&nbsp;Violeta Aronov personally administers and monitors every infusion. Before it begins, she reviews your medical information, confirms the appropriate formulation and dose, prepares the medications, and sets the infusion rate.</p>
-          <p>From the initial medical review through the completion of your infusion, every stage remains under her direct care.</p>
+          <p>Dr.&nbsp;Violeta Aronov personally administers and monitors every infusion. Before it begins, Dr.&nbsp;Aronov reviews your medical information, confirms the appropriate formulation and dose, prepares the medications, and sets the infusion rate.</p>
+          <p>From the initial medical review through the completion of your infusion, every stage remains under Dr.&nbsp;Aronov&rsquo;s direct care.</p>
         </div></div>
       </details>
 
       <details class="dx-q" data-anim="slide" data-delay="60">
         <summary class="dx-q__ask">What happens before I can book?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__wrap"><div class="dx-q__ans">
-          <p>Every infusion begins with a physician eligibility review to make sure it is appropriate for your medical history, medications, current health and goals. To begin the process, a $100 physician review fee is collected. You will then complete the safety screening and medical intake forms for Dr.&nbsp;Aronov to review, along with any relevant laboratory results or medical records.</p>
-          <p>Once the review is complete, you will receive an email explaining your eligibility and next steps. If approved, the full $100 deposit will be applied toward your infusion. If you are not approved, the deposit covers the physician&rsquo;s completed review and is not refundable. Completing the review process does not guarantee approval or reserve an appointment.</p>
+          <p>Every infusion begins with a short safety questionnaire so Dr.&nbsp;Aronov can confirm the infusion is appropriate for your medical history, medications, current health and goals. It takes only a few minutes, and there is no screening or physician review fee.</p>
+          <p>Once your answers have been reviewed, Dr.&nbsp;Aronov will contact you directly &mdash; usually within 24 hours &mdash; to ask any necessary follow-up questions and, if the infusion is appropriate, schedule your appointment. The complete medical form and patient attestation are reviewed and signed on site at the clinic on the day of your infusion. Completing the questionnaire does not guarantee approval or reserve an appointment.</p>
         </div></div>
       </details>
 
@@ -357,7 +348,7 @@
         <summary class="dx-q__ask">I&rsquo;m already receiving care from a specialist. Can I still be considered?<i class="ph ph-plus"></i></summary>
         <div class="dx-q__wrap"><div class="dx-q__ans">
           <p>Yes. Being under a specialist&rsquo;s care does not automatically rule you out. Dr.&nbsp;Aronov will review your diagnosis, medications and current treatment plan to determine whether Revive IV Support is appropriate for you.</p>
-          <p>When coordination is medically appropriate &mdash; and with your permission &mdash; she will make a reasonable effort to contact your treating specialist. Written approval is not routinely required. This infusion is supportive and does not replace or alter the care prescribed by your specialist.</p>
+          <p>When coordination is medically appropriate &mdash; and with your permission &mdash; Dr.&nbsp;Aronov will make a reasonable effort to contact your treating specialist. Written approval is not routinely required. This infusion is supportive and does not replace or alter the care prescribed by your specialist.</p>
         </div></div>
       </details>
 
@@ -374,7 +365,6 @@
 </section>
 
 
-<!-- ============ 04 BEGIN ============ -->
 <section class="dx-begin" id="begin">
   <div class="dx-begin__wrap">
 
@@ -392,38 +382,38 @@
         <li class="dx-step">
           <b class="dx-step__no">01</b>
           <span class="dx-step__body">
-            <b class="dx-step__name">Physician review fee</b>
-            <span class="dx-step__what">A $100 non-refundable fee initiates your physician eligibility review. It reflects the time and clinical expertise required to determine whether IV support is appropriate for you and within the scope of services offered by Alpha Vital Elite.</span>
+            <b class="dx-step__name">Safety screening</b>
+            <span class="dx-step__what">You answer a short safety questionnaire covering your medical history, medications, allergies and goals. It takes only a few minutes, and there is no screening or physician review fee.</span>
           </span>
         </li>
 
         <li class="dx-step">
           <b class="dx-step__no">02</b>
           <span class="dx-step__body">
-            <b class="dx-step__name">Safety screening &amp; medical intake</b>
-            <span class="dx-step__what">You complete the safety screening and medical intake forms.</span>
+            <b class="dx-step__name">Physician review</b>
+            <span class="dx-step__what">Dr.&nbsp;Aronov personally reviews your answers, along with any relevant laboratory results or medical records you provide, to determine whether IV support is appropriate for you and within the scope of services offered by Alpha Vital Elite.</span>
           </span>
         </li>
 
         <li class="dx-step">
           <b class="dx-step__no">03</b>
           <span class="dx-step__body">
-            <b class="dx-step__name">Physician review</b>
-            <span class="dx-step__what">Dr.&nbsp;Aronov personally reviews your medical history, medications and supplements, allergies, available laboratory results, and goals for IV support. When additional information is needed, she may request medical records or, with your authorization, contact your treating physician or specialist.</span>
+            <b class="dx-step__name">A call to schedule</b>
+            <span class="dx-step__what">Dr.&nbsp;Aronov contacts you directly, usually within 24 hours, to ask any necessary follow-up questions and, if the infusion is appropriate, book your appointment. When additional information is needed, Dr.&nbsp;Aronov may request medical records or, with your authorization, contact your treating physician or specialist.</span>
           </span>
         </li>
 
         <li class="dx-step">
           <b class="dx-step__no">04</b>
           <span class="dx-step__body">
-            <b class="dx-step__name">Review outcome by email</b>
-            <span class="dx-step__what">You receive an email explaining the outcome of your review and any next steps. If you are approved for IV support, your $100 physician review fee is applied toward your infusion.</span>
+            <b class="dx-step__name">Medical form at the clinic</b>
+            <span class="dx-step__what">The complete medical form and patient attestation are reviewed and signed on site at the clinic on the day of your infusion, before the infusion begins.</span>
           </span>
         </li>
       </ol>
 
       <p class="dx-begin__after" data-anim="rise" data-delay="140">
-        Following her review, Dr.&nbsp;Aronov may approve the requested infusion, recommend a
+        Following that review, Dr.&nbsp;Aronov may approve the requested infusion, recommend a
         different formulation, request additional information or medical clearance, or determine
         that IV support is not appropriate at this time. No appointment is scheduled until the
         review has been completed.
@@ -433,7 +423,7 @@
         <a class="dx-btn dx-btn--solid" data-mag="0.22" href="../htmls/begin-screening.html">
           <span>Begin eligibility review</span><i class="ph ph-arrow-right"></i>
         </a>
-        <a class="dx-btn" href="tel:+19292010740"><span>929 &middot; 201 &middot; 0740</span><i class="ph ph-phone"></i></a>
+        <a class="dx-btn" href="tel:+13477148660"><span>347 &middot; 714 &middot; 8660</span><i class="ph ph-phone"></i></a>
       </div>
 
       <aside class="dx-aside" data-anim="rise" data-delay="180">
@@ -441,7 +431,7 @@
         <p>
           Not every patient can safely receive every infusion. If Dr.&nbsp;Aronov determines that
           Revive IV Support is not appropriate for you &mdash; or cannot be provided safely within the
-          capabilities of this outpatient practice &mdash; she will explain the reason clearly.
+          capabilities of this outpatient practice &mdash; Dr.&nbsp;Aronov will explain the reason clearly.
         </p>
         <p>
           This does not mean that your concerns are being dismissed. Depending on the reason, the
@@ -457,7 +447,7 @@
         <div><dt>Infusion</dt><dd>Revive IV Support</dd></div>
         <div><dt>Chair time</dt><dd>2 h 15</dd></div>
         <div><dt>Single infusion</dt><dd>$525</dd></div>
-        <div><dt>Physician review fee</dt><dd>$100 non-refundable review fee<small>Applied toward your infusion if approved</small></dd></div>
+        <div><dt>Safety screening</dt><dd>No fee<small>Short questionnaire before scheduling</small></dd></div>
         <div><dt>Location</dt><dd>Middle Village, Queens</dd></div>
       </dl>
 
@@ -479,7 +469,6 @@
 </section>
 
 
-<!-- ============ 06 THE OTHER NINE ============ -->
 <section class="dx-more" id="more">
   <div class="dx-more__wrap">
     <header class="dx-more__top">
@@ -589,7 +578,6 @@
 </main>
 
 
-<!-- ============ FOOTER (shared) ============ -->
 <footer class="foot" id="contact">
   <span class="foot__glow"></span>
   <div class="foot__wrap">
@@ -598,14 +586,13 @@
       <p class="foot__eyebrow"><i class="ph-duotone ph-seal-check"></i> By physician review only</p>
       <h2 class="foot__title">Every infusion begins<br>with a <em>physician</em>.</h2>
       <p class="foot__lede">
-        Appointments only. Tell us what you are looking for and Dr.&nbsp;Aronov reviews the health
-        information you provide herself, then determines whether IV therapy is appropriate.
+        Appointments only. Tell us what you are looking for and Dr.&nbsp;Aronov personally reviews the health information you provide, then determines whether IV therapy is appropriate.
       </p>
       <div class="foot__acts">
         <a class="rx__btn rx__btn--solid" href="../htmls/begin-screening.html">
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
-        <a class="rx__btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
+        <a class="rx__btn" href="tel:+13477148660"><span>347 · 714 · 8660</span><i class="ph ph-phone"></i></a>
       </div>
     </div>
 
@@ -617,7 +604,8 @@
           79-01 Metropolitan Avenue<br>
           Middle Village, NY 11379
         </address>
-        <a class="foot__line" href="tel:+19292010740"><i class="ph ph-phone"></i> 929 · 201 · 0740</a>
+        <a class="foot__line" href="tel:+13477148660"><i class="ph ph-phone"></i> 347 · 714 · 8660</a>
+        <span class="foot__line"><i class="ph ph-printer"></i> Fax · 347 · 714 · 8685</span>
         <a class="foot__line" href="mailto:contact@precisionmedicaliv.com"><i class="ph ph-envelope-simple"></i> contact@precisionmedicaliv.com</a>
         <a class="foot__line" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo"></i> Follow the practice</a>
         <p class="foot__served">Serving Queens · Brooklyn · Long Island · Greater New York</p>
@@ -690,7 +678,6 @@
 </footer>
 
 
-<!-- ============ DOCK (shared) ============ -->
 <button class="totop" id="toTop" type="button">
   <i class="ph ph-arrow-up"></i>
   <span>Top</span>
@@ -698,7 +685,7 @@
 
 <div class="fab" id="fab">
   <ul class="fab__list" id="fabList">
-    <li><a class="fab__act" href="tel:+19292010740"><span class="fab__label">929 · 201 · 0740</span><span class="fab__ico"><i class="ph ph-phone"></i></span></a></li>
+    <li><a class="fab__act" href="tel:+13477148660"><span class="fab__label">347 · 714 · 8660</span><span class="fab__ico"><i class="ph ph-phone"></i></span></a></li>
     <li><a class="fab__act" href="mailto:contact@precisionmedicaliv.com"><span class="fab__label">Email the practice</span><span class="fab__ico"><i class="ph ph-envelope-simple"></i></span></a></li>
     <li><a class="fab__act" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener"><span class="fab__label">Instagram</span><span class="fab__ico"><i class="ph ph-instagram-logo"></i></span></a></li>
   </ul>
@@ -708,11 +695,11 @@
   </button>
 </div>
 
-<!-- GSAP must be on window before the module runs -->
+
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-<!-- /script.js is shared: header, mobile menu, dock, nav state, smooth anchors -->
+
 <script src="../script.js" type="module"></script>
 <script src="drips.js" type="module"></script>
 </body>
