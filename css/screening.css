@@ -1,470 +1,251 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   screening.css — the eligibility review
+   screener.css — the 24-question preliminary safety screening
 
-       begin-screening.html   choose an infusion
-       review.html            step I  · your details
-       review-safety.html     step II · safety questions (last step online)
-       review-done.html       received · what happens next
+   Loaded by review-safety.html AFTER styles.css and screening.css. It adds
+   nothing to the room: the green panel, the stage, the title card and the
+   gold hairline all come from screening.css unchanged. What is here is only
+   the four states that live inside the white card, plus the stop takeover.
 
-   Two materials, used together on every screen: cream paper and forest
-   green, with gold as the hairline that joins them. The title card is all
-   green; the pages that follow are cream rooms with green furniture in them —
-   the companion panel, the "how it works" band, the hover state on a card —
-   so the opening never feels like it belonged to a different site.
-
-   The infusion bottle is the through-line. Chosen on the first page, it rides
-   in the green panel through both steps.
-
-   Motion carries you from one thing to the next: rules draw, numerals light,
-   panels settle, and a step you have finished stays visibly finished.
-
-   Loads after styles.css and contact.css; leans on their tokens and on
-   contact.css for .ct-wrap and the [data-ct] scroll-reveal start states.
+   One colour is added to the system. There is no red in styles.css, and that
+   is deliberate — --halt is not a brand colour, it is a signal colour, and it
+   should read as belonging to a different vocabulary than the gold. The value
+   is the one already used by .bs-911 in screening.css, so nothing new is
+   introduced to the palette, only new weight given to something present.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   0 · SHARED
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.page-begin-screening,
-.page-review { background: var(--parchment); }
-
-/* Paper grain — a whisper of texture so large cream areas do not read as a
-   flat #F6F1E7 rectangle on a big monitor. Fixed and non-interactive. */
-.page-begin-screening::before,
-.page-review::before {
-    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .045;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-.page-begin-screening > *,
-.page-review > * { position: relative; z-index: 1; }
-
-/* Same-origin page transitions: the green panel and the form stage morph from
-   one step to the next where the browser supports it. Elsewhere, nothing. */
-@view-transition { navigation: auto; }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: .45s; }
-::view-transition-group(bs-side)  { animation-duration: .7s; animation-timing-function: var(--ease); }
-::view-transition-group(bs-stage) { animation-duration: .6s; animation-timing-function: var(--ease); }
-@media (prefers-reduced-motion: reduce) {
-    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+:root {
+    --halt:      #B3261E;   /* matches .bs-911 in screening.css */
+    --halt-deep: #6E120C;
+    --halt-dark: #4A0B07;
 }
 
-/* ── The title card ─────────────────────────────────────────────────────── */
-.bs-cine {
-    position: fixed; inset: 0; z-index: 9000;
-    display: none; place-items: center;
-    background: var(--forest-deep, #101B13);
-    text-align: center; padding: 2rem;
-}
-html.has-cine .bs-cine { display: grid; }
-html.has-cine body { overflow: hidden; height: 100vh; }
-.bs-cine__stage { display: grid; justify-items: center; gap: .1rem; max-width: min(90vw, 46ch); }
-.bs-cine__mark { width: clamp(74px, 13vw, 108px); height: auto; opacity: 0; filter: brightness(0) invert(1); }
-.bs-cine__kicker {
-    margin: .9rem 0 1.6rem; opacity: 0;
-    font-family: var(--data); font-size: .58rem; font-weight: 500;
-    letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.5);
-}
-.bs-cine__line {
-    opacity: 0; white-space: nowrap;
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(1.75rem, 5.4vw, 3.1rem); line-height: 1.16;
-    letter-spacing: -.03em; color: #F6F1E7;
-}
-.bs-cine__line em { font-family: var(--accent); font-style: italic; color: var(--gold); }
-.bs-cine__rule { width: 0; height: 1px; margin: 1.5rem 0 1.1rem; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
-.bs-cine__sub { opacity: 0; max-width: 30ch; font-size: .82rem; line-height: 1.65; color: rgba(255,255,255,.6); }
-.bs-cine__skip {
-    position: absolute; right: clamp(1rem, 4vw, 2.4rem); bottom: clamp(1rem, 4vw, 2.4rem);
-    padding: .5rem .9rem; opacity: 0;
-    background: none; border: 1px solid rgba(255,255,255,.22); border-radius: 3px;
-    font-family: var(--data); font-size: .58rem; font-weight: 500;
-    letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.6);
-    cursor: pointer; transition: color .3s ease, border-color .3s ease;
-}
-.bs-cine__skip:hover { color: #F6F1E7; border-color: rgba(255,255,255,.5); }
-@media (prefers-reduced-motion: reduce) { .bs-cine { display: none !important; } }
 
-/* ── Type pieces ────────────────────────────────────────────────────────── */
-.bs-eyebrow {
-    display: inline-flex; align-items: center; gap: .8rem;
-    font-family: var(--data); font-size: .6rem; font-weight: 600;
-    letter-spacing: .22em; text-transform: uppercase; color: var(--gold-deep);
-}
-.bs-eyebrow::before { content: ''; width: 2.4rem; height: 1px; background: var(--gold); transform-origin: left; }
-
-.bs-h1 {
-    margin: 1rem 0 0;
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(2.3rem, 5.6vw, 4.3rem); line-height: 1.0;
-    letter-spacing: -.03em; color: var(--forest); text-wrap: balance;
-}
-.bs-h1 em { font-family: var(--accent); font-style: italic; font-weight: 500; color: var(--gold-deep); }
-/* each line of the headline is clipped so it can ride up into place */
-.bs-h1 .l { display: block; overflow: hidden; }
-.bs-h1 .l > span { display: block; }
-
-.bs-lede { margin: 1.2rem 0 0; max-width: 46ch; font-size: 1.04rem; line-height: 1.65; color: var(--ink-soft); }
-.bs-lede b { color: var(--forest); font-weight: 600; }
-
-/* Gold rule that draws itself. Put --draw on the element to animate it. */
-.bs-rule { height: 1px; background: var(--rule); position: relative; overflow: hidden; }
-.bs-rule::after { content: ''; position: absolute; inset: 0; background: var(--gold); transform: scaleX(var(--draw, 0)); transform-origin: left; transition: transform 1.3s var(--ease); }
-
-/* Folded disclosure */
-.bs-legal { max-width: 82ch; margin: 0 auto; padding: clamp(1.6rem, 4vw, 2.4rem) var(--gut) clamp(2.6rem, 6vw, 4rem); border-top: 1px solid var(--rule); }
-.bs-legal summary { display: flex; align-items: baseline; gap: .8rem; cursor: pointer; list-style: none; }
-.bs-legal summary::-webkit-details-marker { display: none; }
-.bs-legal summary b, .bs-legal__body b { font-family: var(--data); font-size: .58rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--mist); }
-.bs-legal summary span { font-family: var(--data); font-size: .58rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-deep); border-bottom: 1px solid currentColor; padding-bottom: 1px; transition: opacity .25s; }
-.bs-legal summary:hover span { opacity: .6; }
-.bs-legal[open] summary span::after { content: ' \2014 close'; }
-.bs-legal__body { padding-top: 1rem; }
-.bs-legal__body b { display: block; margin: 1rem 0 .5rem; }
-.bs-legal__body p { font-size: .78rem; line-height: 1.75; color: var(--mist); }
-.bs-legal__body p + p { margin-top: .7rem; }
-.bs-legal summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
-
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   1 · BEGIN SCREENING
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.bs-choose { padding: calc(var(--head-h) + clamp(2.8rem, 7vh, 5.2rem)) 0 clamp(2.6rem, 5vw, 4.4rem); }
-.bs-choose__head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 1.5rem 3rem; }
-.bs-choose__count {
-    display: grid; gap: .1rem; text-align: right;
-    font-family: var(--data); font-size: .6rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--mist);
-}
-.bs-choose__count b { font-family: var(--display); font-weight: 400; font-size: 2.6rem; line-height: 1; letter-spacing: -.03em; color: var(--forest); }
-@media (max-width: 700px) { .bs-choose__head { grid-template-columns: 1fr; } .bs-choose__count { display: none; } }
-
-/* ── The cards ──────────────────────────────────────────────────────────────
-   Cream paper with a forest plinth. At rest the plinth is a hairline of green
-   under the bottle; on hover it rises to become the card's lower half, the
-   name goes cream on green, and a gold rule draws under it. The bottle lifts
-   off the plinth. Two materials meeting — the whole site in one card. */
-.bs-bags {
-    list-style: none; margin: clamp(2.4rem, 5vw, 3.8rem) 0 0; padding: 0;
-    display: grid; gap: clamp(.9rem, 1.8vw, 1.4rem);
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-.bs-bag__cell { display: grid; perspective: 1200px; }
-
-.bs-bag {
-    --tone: #4F7D5E;
-    position: relative; isolation: isolate; overflow: hidden;
-    display: grid; grid-template-rows: 1fr auto; gap: 0;
-    background: var(--cream);
-    border: 1px solid var(--rule);
-    border-radius: 16px;
-    text-decoration: none; text-align: center;
-    transform-style: preserve-3d;
-    transition: transform .6s var(--ease), box-shadow .6s var(--ease), border-color .6s var(--ease);
-}
-/* the plinth */
-.bs-bag::before {
-    content: ''; position: absolute; left: 0; right: 0; bottom: 0; z-index: 0;
-    height: 4.6rem; background: var(--forest);
-    transform: translateY(calc(100% - 3px));
-    transition: transform .6s var(--ease);
-}
-/* the pool of tone under the bottle */
-.bs-bag::after {
-    content: ''; position: absolute; z-index: 0; left: 14%; right: 14%; top: 10%; height: 54%;
-    border-radius: 50%; filter: blur(16px); opacity: .5;
-    background: radial-gradient(closest-side, color-mix(in oklab, var(--tone) 38%, transparent), transparent 74%);
-    transition: opacity .6s var(--ease), transform .6s var(--ease);
-}
-/* The art box owns its shape; the image is absolutely fitted inside it. Two of
-   the ten renders are square and eight are portrait, and letting the image's
-   own height drive the layout had the tall ones spilling over the names. */
-.bs-bag__art { position: relative; z-index: 1; aspect-ratio: 4 / 5; min-height: 0; }
-.bs-bag__art img {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    padding: 1.5rem 1rem .5rem; box-sizing: border-box; object-fit: contain;
-    filter: drop-shadow(0 16px 20px rgba(32, 52, 33, .18));
-    transition: transform .65s var(--ease), filter .65s var(--ease);
-}
-.bs-bag__label { position: relative; z-index: 1; display: grid; gap: .3rem; padding: .3rem 1rem 1.15rem; }
-.bs-bag__name {
-    font-family: var(--caps); font-size: .98rem; line-height: 1.25; letter-spacing: .012em; color: var(--forest);
-    transition: color .45s var(--ease) .05s;
-}
-.bs-bag__meta {
-    display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
-    font-family: var(--data); font-size: .6rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--mist);
-    transition: color .45s var(--ease) .05s;
-}
-.bs-bag__meta i { font-style: normal; width: 3px; height: 3px; border-radius: 50%; background: var(--tone); }
-.bs-bag__meta b { font-weight: 600; color: var(--gold-deep); transition: color .45s var(--ease) .05s; }
-/* gold rule under the name, drawn on hover */
-.bs-bag__label::after {
-    content: ''; justify-self: center; width: 2.4rem; height: 1px; margin-top: .35rem;
-    background: var(--gold); transform: scaleX(0); transition: transform .5s var(--ease) .12s;
-}
-.bs-bag__go {
-    position: absolute; right: .9rem; top: .9rem; z-index: 2;
-    display: grid; place-items: center; width: 1.9rem; height: 1.9rem; border-radius: 50%;
-    background: var(--forest); color: var(--cream); font-size: .8rem;
-    opacity: 0; transform: translate(6px, -6px) scale(.8);
-    transition: opacity .45s var(--ease), transform .45s var(--ease);
-}
-
-@media (hover: hover) {
-    .bs-bag:hover {
-        transform: translateY(-8px);
-        border-color: color-mix(in oklab, var(--forest) 30%, var(--rule));
-        box-shadow: 0 28px 50px -22px rgba(16, 27, 19, .45), 0 8px 18px rgba(32, 52, 33, .06);
-    }
-    .bs-bag:hover::before { transform: translateY(0); }
-    .bs-bag:hover::after  { opacity: .95; transform: scale(1.1) translateY(-4%); }
-    .bs-bag:hover .bs-bag__art img { transform: translateY(-9px) scale(1.05); filter: drop-shadow(0 26px 26px rgba(16, 27, 19, .32)); }
-    .bs-bag:hover .bs-bag__name { color: var(--cream); }
-    .bs-bag:hover .bs-bag__meta { color: rgba(246,241,231,.62); }
-    .bs-bag:hover .bs-bag__meta b { color: var(--gold-lite); }
-    .bs-bag:hover .bs-bag__label::after { transform: scaleX(1); }
-    .bs-bag:hover .bs-bag__go { opacity: 1; transform: translate(0,0) scale(1); }
-}
-.bs-bag:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 4px; }
-
-.bs-unsure { margin-top: clamp(1.8rem, 3.6vw, 2.6rem); font-size: .92rem; line-height: 1.65; color: var(--mist); }
-.bs-unsure a { color: var(--forest); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--rule-gold); }
-.bs-unsure a:hover { text-decoration-color: var(--forest); }
-
-@media (max-width: 1100px) { .bs-bags { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 820px)  { .bs-bags { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (max-width: 560px)  {
-    .bs-bags { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
-    .bs-bag { border-radius: 12px; }
-    .bs-bag__art { padding: 1rem .7rem .4rem; }
-    .bs-bag__name { font-size: .82rem; }
-    .bs-bag__meta { font-size: .55rem; }
-    .bs-bag__go { display: none; }
-}
-
-/* ── How it works: the green band ───────────────────────────────────────────
-   The whole section is forest, so the page reads cream → green → cream, the
-   same rhythm as the title card handing over to the picker. Four numerals on
-   one gold line that draws as it scrolls into view. */
-.bs-how { position: relative; padding: clamp(3rem, 7vw, 5.4rem) 0; background: var(--forest); color: var(--cream); overflow: hidden; }
-.bs-how::before {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(60% 80% at 100% 0%, rgba(193,150,63,.14), transparent 60%),
-                radial-gradient(50% 70% at 0% 100%, rgba(44,69,48,.9), transparent 60%);
-}
-.bs-how .ct-wrap { position: relative; }
-.bs-how__head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: end; gap: 1.2rem 3rem; }
-.bs-how .bs-eyebrow { color: var(--gold-lite); }
-.bs-how .bs-eyebrow::before { background: var(--gold); }
-.bs-how__title { margin: .9rem 0 0; font-family: var(--display); font-weight: 400; font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -.025em; color: var(--cream); }
-.bs-how__title em { font-family: var(--accent); font-style: italic; color: var(--gold-lite); }
-.bs-how__head p { margin: 0; max-width: 40ch; font-size: .94rem; line-height: 1.65; color: rgba(246,241,231,.68); }
-@media (max-width: 760px) { .bs-how__head { grid-template-columns: 1fr; } }
-
-.bs-line { position: relative; list-style: none; margin: clamp(2.4rem, 5vw, 3.6rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.6rem; }
-.bs-line::before { content: ''; position: absolute; left: 1.3rem; right: 1.3rem; top: 1.3rem; height: 1px; background: rgba(246,241,231,.18); }
-.bs-line::after  { content: ''; position: absolute; left: 1.3rem; right: 1.3rem; top: 1.3rem; height: 1px; background: var(--gold); transform-origin: left; transform: scaleX(var(--draw, 0)); transition: transform 1.6s var(--ease); }
-.bs-line__i { position: relative; display: grid; gap: .55rem; padding-top: 3.1rem; }
-.bs-line__i b {
-    position: absolute; top: 0; left: 0;
-    display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%;
-    background: var(--forest); border: 1px solid rgba(246,241,231,.22);
-    font-family: var(--display); font-size: .9rem; color: rgba(246,241,231,.55);
-    transition: border-color .6s var(--ease), color .6s var(--ease), background .6s var(--ease), box-shadow .6s var(--ease);
-}
-.bs-line.is-drawn .bs-line__i b { border-color: var(--gold); color: var(--forest-deep); background: var(--gold-lite); box-shadow: 0 0 0 6px rgba(193,150,63,.14); }
-.bs-line.is-drawn .bs-line__i:nth-child(1) b { transition-delay: .2s; }
-.bs-line.is-drawn .bs-line__i:nth-child(2) b { transition-delay: .6s; }
-.bs-line.is-drawn .bs-line__i:nth-child(3) b { transition-delay: 1s; }
-.bs-line.is-drawn .bs-line__i:nth-child(4) b { transition-delay: 1.4s; }
-.bs-line__i h3 { margin: 0; font-family: var(--caps); font-weight: 400; font-size: 1.05rem; color: var(--cream); }
-.bs-line__i p  { margin: 0; font-size: .88rem; line-height: 1.6; color: rgba(246,241,231,.62); }
-.bs-line__i p b { color: var(--gold-lite); font-weight: 600; }
-@media (max-width: 760px) {
-    .bs-line { grid-template-columns: 1fr; gap: 1.3rem; padding-left: 3.4rem; }
-    .bs-line::before, .bs-line::after { left: 1.3rem; right: auto; top: 1.3rem; bottom: 1.3rem; width: 1px; height: auto; transform-origin: top; }
-    .bs-line::after { transform: scaleY(var(--draw, 0)); }
-    .bs-line__i { padding-top: .3rem; min-height: 2.6rem; }
-    .bs-line__i b { left: -3.4rem; top: 0; }
-}
-
-.bs-notes { position: relative; list-style: none; margin: clamp(2.2rem, 4.5vw, 3.4rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1px; background: rgba(246,241,231,.14); border: 1px solid rgba(246,241,231,.14); border-radius: 14px; overflow: hidden; }
-.bs-notes li { padding: 1.15rem 1.25rem; background: var(--forest); font-size: .86rem; line-height: 1.62; color: rgba(246,241,231,.72); }
-.bs-notes li b { color: var(--cream); font-weight: 600; }
-.bs-notes li.is-911 { background: #3A1F1B; color: #F2C9C3; }
-.bs-notes li.is-911 b { color: #FFD9D3; }
-
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   2 · THE REVIEW — two steps, one room
-   ───────────────────────────────────────────────────────────────────────────
-   Left: a tall forest panel — your infusion, and where you are. It is the
-   title card, folded into the page and kept beside you. Right: cream, and the
-   one task in front of you.
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.bs-room { padding: calc(var(--head-h) + clamp(1.6rem, 4vh, 3rem)) 0 clamp(3rem, 6vw, 5rem); }
-.bs-room__grid { display: grid; grid-template-columns: minmax(300px, 360px) minmax(0, 1fr); gap: clamp(2rem, 4.5vw, 4.5rem); align-items: start; }
-
-/* ── The green panel ─────────────────────────────────────────────────────── */
-.bs-side {
-    --tone: #4F7D5E;
-    position: sticky; top: calc(var(--head-h) + 1.2rem);
-    display: grid; gap: 1.5rem; padding: 1.6rem 1.6rem 1.7rem;
-    background: linear-gradient(170deg, var(--forest-mid) 0%, var(--forest) 38%, var(--forest-deep) 100%);
-    color: var(--cream); border-radius: 22px;
-    box-shadow: 0 40px 70px -40px rgba(16,27,19,.7), inset 0 1px 0 rgba(246,241,231,.08);
-    overflow: hidden; isolation: isolate;
-    view-transition-name: bs-side;
-}
-/* a ghost numeral of the current step, very large, very faint */
-.bs-side::before {
-    content: attr(data-numeral); position: absolute; right: -.35em; top: -.32em; z-index: 0;
-    font-family: var(--display); font-size: 13rem; line-height: 1; color: rgba(246,241,231,.045);
-    pointer-events: none; letter-spacing: -.06em;
-}
-/* the tone, as a warm pool in the corner */
-.bs-side::after {
-    content: ''; position: absolute; z-index: 0; left: -20%; top: 14%; width: 80%; height: 40%;
-    border-radius: 50%; filter: blur(48px); opacity: .55;
-    background: radial-gradient(closest-side, color-mix(in oklab, var(--tone) 55%, transparent), transparent 70%);
-    pointer-events: none;
-}
-.bs-side > * { position: relative; z-index: 1; }
-
-.bs-side__back { display: inline-flex; align-items: center; gap: .45rem; width: fit-content; font-family: var(--data); font-size: .6rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: rgba(246,241,231,.6); text-decoration: none; transition: color .3s; }
-.bs-side__back:hover { color: var(--gold-lite); }
-.bs-side__back i { transition: transform .35s var(--ease); }
-.bs-side__back:hover i { transform: translateX(-3px); }
-
-.bs-bottle { display: grid; place-items: center; aspect-ratio: 1 / 1; max-height: 260px; margin: -.4rem 0 -.6rem; }
-.bs-bottle img {
-    width: 66%; height: 92%; object-fit: contain;
-    filter: drop-shadow(0 24px 26px rgba(0,0,0,.42));
-    animation: bsFloat 7s ease-in-out infinite;
-}
-@keyframes bsFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
-@media (prefers-reduced-motion: reduce) { .bs-bottle img { animation: none; } }
-
-.bs-side__id { display: grid; gap: .35rem; }
-.bs-side__kicker { font-family: var(--data); font-size: .56rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-lite); }
-.bs-side__name { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(1.4rem, 2.2vw, 1.75rem); line-height: 1.12; letter-spacing: -.022em; color: var(--cream); }
-.bs-side__meta { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; margin-top: .25rem; font-family: var(--data); font-size: .6rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: rgba(246,241,231,.6); }
-.bs-side__meta b { font-weight: 600; color: var(--gold-lite); }
-.bs-side__swap { margin: .5rem 0 0; font-size: .82rem; color: rgba(246,241,231,.6); }
-.bs-side__swap a { color: var(--cream); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--rule-gold); }
-
-/* Progress: three stops on one gold line, drawn to the current step. */
-.bs-path { position: relative; list-style: none; margin: .2rem 0 0; padding: .2rem 0 .2rem 1.9rem; display: grid; gap: 1.2rem; }
-.bs-path::before { content: ''; position: absolute; left: .6rem; top: .8rem; bottom: .8rem; width: 1px; background: rgba(246,241,231,.18); }
-.bs-path::after  { content: ''; position: absolute; left: .6rem; top: .8rem; width: 1px; height: calc((100% - 1.6rem) * var(--fill, 0)); background: linear-gradient(180deg, var(--gold-lite), var(--gold)); transition: height 1.2s var(--ease) .35s; }
-.bs-path__i { position: relative; display: grid; gap: .1rem; }
-.bs-path__i::before {
-    content: ''; position: absolute; left: -1.9rem; top: .28rem; width: 1.22rem; height: 1.22rem; border-radius: 50%;
-    background: var(--forest); border: 1px solid rgba(246,241,231,.3);
-    transition: border-color .5s var(--ease), background .5s var(--ease), box-shadow .5s var(--ease);
-}
-.bs-path__i b { font-family: var(--data); font-size: .56rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,241,231,.5); }
-.bs-path__i span { font-family: var(--caps); font-size: 1rem; color: rgba(246,241,231,.6); transition: color .5s; }
-.bs-path__i.is-done::before { background: var(--gold); border-color: var(--gold); }
-.bs-path__i.is-done::after  { content: '\2713'; position: absolute; left: -1.9rem; top: .28rem; width: 1.22rem; height: 1.22rem; display: grid; place-items: center; font-size: .62rem; font-weight: 700; color: var(--forest-deep); }
-.bs-path__i.is-done span { color: rgba(246,241,231,.82); }
-.bs-path__i.is-now::before { background: var(--gold-lite); border-color: var(--gold-lite); box-shadow: 0 0 0 5px rgba(231,203,134,.18), 0 0 24px rgba(231,203,134,.35); }
-.bs-path__i.is-now b { color: var(--gold-lite); }
-.bs-path__i.is-now span { color: var(--cream); }
-
-.bs-side__dr { display: grid; gap: .3rem; padding-top: 1.3rem; border-top: 1px solid rgba(246,241,231,.14); font-size: .82rem; line-height: 1.6; color: rgba(246,241,231,.6); }
-.bs-side__dr b { font-family: var(--caps); font-weight: 400; font-size: .94rem; color: var(--cream); }
-
-/* ── The stage ───────────────────────────────────────────────────────────── */
-.bs-stage { display: grid; gap: 1.6rem; view-transition-name: bs-stage; }
-.bs-stage__head { display: grid; }
-.bs-stage__head .bs-h1 { font-size: clamp(2.1rem, 4.4vw, 3.4rem); }
-
-.bs-frame {
-    position: relative; background: #fff; border: 1px solid var(--rule); border-radius: 20px;
+/* ── THE CARD ────────────────────────────────────────────────────────────────
+   Same white stage as .bs-frame and .bs-done so the three steps read as one
+   surface. Padding rather than an iframe, because the questions are ours now. */
+.sq {
+    position: relative; background: #fff;
+    border: 1px solid var(--rule); border-radius: 20px;
     box-shadow: 0 34px 64px -34px rgba(32,52,33,.4), 0 4px 16px rgba(32,52,33,.05);
     overflow: clip;
 }
-.bs-frame[hidden] { display: none; }
-/* gold hairline that draws across the top of the frame when it lands */
-.bs-frame::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-lite), var(--gold)); transform: scaleX(var(--draw, 0)); transform-origin: left; transition: transform 1.2s var(--ease) .3s; z-index: 2; }
-.bs-frame__bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.35rem; border-bottom: 1px solid var(--rule); background: var(--parchment); }
-.bs-frame__bar span { font-family: var(--data); font-size: .6rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--forest); }
-.bs-frame__bar span b { color: var(--gold-deep); margin-right: .5rem; }
-.bs-frame__bar i { display: inline-flex; align-items: center; gap: .45rem; font-family: var(--data); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); font-style: normal; }
-.bs-frame__bar i::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4F7D5E; box-shadow: 0 0 0 3px rgba(79,125,94,.18); }
-.bs-frame iframe { display: block; width: 100%; min-height: 780px; border: 0; background: #fff; }
-
-.bs-soon { display: grid; justify-items: start; gap: .6rem; padding: clamp(1.6rem, 3.4vw, 2.4rem); background: #fff; border: 1px dashed var(--rule-gold); border-radius: 20px; }
-.bs-soon[hidden] { display: none; }
-.bs-soon i { font-size: 1.8rem; color: var(--gold-deep); line-height: 1; }
-.bs-soon b { font-family: var(--caps); font-weight: 400; font-size: 1.15rem; color: var(--forest); }
-.bs-soon p { margin: 0; font-size: .9rem; line-height: 1.7; color: var(--mist); }
-.bs-soon__acts { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .6rem; }
-
-/* ── THE END OF THE LINE ─────────────────────────────────────────────────────
-   review-done.html. Same white stage as the form frame, so arriving here reads
-   as the form having turned into its own receipt rather than as a new page.
-   The seal is the only thing on these pages drawn at that size — it is allowed
-   to be, because it is the one moment the patient is being told they are
-   finished. */
-.bs-done {
-    position: relative; background: #fff; border: 1px solid var(--rule); border-radius: 20px;
-    box-shadow: 0 34px 64px -34px rgba(32,52,33,.4), 0 4px 16px rgba(32,52,33,.05);
-    overflow: clip; padding: clamp(1.8rem, 4vw, 2.9rem);
+.sq::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-lite), var(--gold));
+    transform: scaleX(var(--draw, 0)); transform-origin: left;
+    transition: transform 1.2s var(--ease) .3s; z-index: 2;
 }
-.bs-done::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-lite), var(--gold)); transform: scaleX(var(--draw, 0)); transform-origin: left; transition: transform 1.2s var(--ease) .3s; }
+.sq__bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: 1rem 1.35rem; border-bottom: 1px solid var(--rule); background: var(--parchment);
+}
+.sq__bar span { font-family: var(--data); font-size: .6rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--forest); }
+.sq__bar span b { color: var(--gold-deep); margin-right: .5rem; }
+.sq__bar i { display: inline-flex; align-items: center; gap: .45rem; font-family: var(--data); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); font-style: normal; }
+.sq__bar i::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4F7D5E; box-shadow: 0 0 0 3px rgba(79,125,94,.18); }
 
-.bs-done__seal {
-    display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 50%;
-    background: var(--gold-lite); color: var(--forest-deep); font-size: 1.5rem; line-height: 1;
+.sq__in { padding: clamp(1.5rem, 3.6vw, 2.6rem); }
+
+.sq__pane { display: none; }
+.sq__pane.is-on { display: block; }
+
+
+/* ── THE RAIL ────────────────────────────────────────────────────────────────
+   Twenty-four ticks, one per question. A percentage bar would say "partway
+   through"; this says how many questions exist and exactly which one you are
+   on, which is the thing somebody actually wants to know at question seven.
+   The current tick is the only tall one — the eye finds position without
+   counting. */
+.sq__rail { display: flex; gap: 3px; align-items: flex-end; height: 12px; margin-bottom: .85rem; }
+.sq__t { flex: 1; height: 3px; border-radius: 2px; background: var(--rule);
+         transition: height .45s var(--ease), background .45s var(--ease); }
+.sq__t.is-done { background: var(--gold-deep); }
+.sq__t.is-now  { height: 11px; background: var(--gold); }
+
+.sq__count {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+    margin: 0 0 2rem; font-family: var(--data); font-size: .62rem; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+}
+.sq__count b { color: var(--forest); font-weight: 700; font-variant-numeric: tabular-nums; }
+.sq__head[hidden] { display: none; }
+
+
+/* ── 1 · INTRO ───────────────────────────────────────────────────────────────
+   Three terms and their consequences, as a definition list — because that is
+   what they are, not a feature grid. The numeral carries the meaning: 24, 1, 0. */
+.sq__terms { margin: 0 0 2.2rem; border-top: 1px solid var(--rule); }
+.sq__term {
+    display: grid; grid-template-columns: 3.6rem 1fr; gap: 0 1.2rem;
+    padding: 1.15rem 0; border-bottom: 1px solid var(--rule); align-items: start;
+}
+.sq__term dt { font-family: var(--display); font-size: 1.6rem; line-height: 1; color: var(--gold-deep); }
+.sq__term dt small { display: block; margin-top: .38rem; font-family: var(--data); font-size: .56rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mist); }
+.sq__term dd { margin: 0; font-size: .94rem; line-height: 1.68; color: var(--ink-soft); }
+.sq__term dd b { color: var(--forest); font-weight: 600; }
+
+
+/* ── 2 · QUESTION ────────────────────────────────────────────────────────────
+   The question is the only loud thing on this screen. Prata at display size,
+   ranged left — these run past forty words and centring them would be
+   unreadable. Nothing above it but the rail, nothing below it but two buttons. */
+.sq__q {
+    margin: 0 0 2.4rem; font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.32rem, 2.5vw, 1.95rem); line-height: 1.36; letter-spacing: -.016em;
+    color: var(--forest); max-width: 32ch;
+}
+.sq__q:focus { outline: none; }
+
+/* Yes and No carry identical weight. Styling one as the primary action would
+   nudge a patient toward the answer that lets them through, and that is the
+   one failure this component cannot have. Neither is a default. */
+.sq__ans { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; max-width: 30rem; }
+.sq__b {
+    min-height: 84px; padding: 1rem; border: 1px solid var(--forest); border-radius: 4px;
+    background: transparent; color: var(--forest); cursor: pointer;
+    font-family: var(--caps); font-weight: 400; font-size: 1.28rem; letter-spacing: .02em;
+    transition: background .25s var(--ease), color .25s var(--ease);
+}
+.sq__b:hover, .sq__b:focus-visible { background: var(--forest); color: var(--cream); }
+.sq__b:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+
+.sq__back {
+    display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.8rem;
+    padding: .5rem 0; background: none; border: 0; cursor: pointer;
+    font-family: var(--data); font-size: .62rem; font-weight: 600; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--mist); transition: color .25s;
+}
+.sq__back:hover { color: var(--forest); }
+.sq__back i { transition: transform .35s var(--ease); }
+.sq__back:hover i { transform: translateX(-3px); }
+.sq__back[hidden] { display: none; }
+
+
+/* ── 3 · STOP ────────────────────────────────────────────────────────────────
+   Not a card inside the page. The page becomes red. The green panel, the
+   header, the stage and the footer are all covered, so understanding that
+   something has changed requires no reading at all — which is the point when
+   the person looking at it may be having a stroke.
+
+   position: fixed with inset: 0 rather than a scroll-to, so it cannot be
+   scrolled away from and there is no state in which half of the old screen is
+   still visible underneath. */
+.sq-halt {
+    position: fixed; inset: 0; z-index: 3000;
+    background: var(--halt-deep); color: #FFF3F1;
+    display: flex; flex-direction: column; overflow-y: auto;
+    padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1.15rem, 5vw, 2.6rem) 0;
+    -webkit-overflow-scrolling: touch;
+}
+.sq-halt[hidden] { display: none; }
+.sq-halt__in {
+    flex: 1; width: 100%; max-width: 36rem; margin: 0 auto;
+    display: flex; flex-direction: column; justify-content: center; padding: 1.8rem 0;
+}
+
+.sq-halt__bar { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.6rem; }
+.sq-halt__glyph {
+    display: grid; place-items: center; flex: none; width: 46px; height: 46px;
+    border-radius: 50%; background: #FFF3F1; color: var(--halt-deep);
+    font-family: var(--data); font-size: 1.55rem; font-weight: 700; line-height: 1;
+}
+.sq-halt__word { font-family: var(--data); font-size: 1.05rem; font-weight: 700; letter-spacing: .34em; text-transform: uppercase; }
+.sq-halt__rule { height: 1px; background: rgba(255,243,241,.26); margin-bottom: 1.7rem; }
+
+/* The reason is Dr. Aronov's wording, verbatim, at display size. It is the
+   only thing on the screen set in the display face — everything else on the
+   red field is quiet so this cannot be missed. */
+.sq-halt__reason {
+    margin: 0 0 1.5rem; font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.45rem, 3.4vw, 2.15rem); line-height: 1.32; letter-spacing: -.018em;
+    color: #FFF3F1;
+}
+.sq-halt__body { margin: 0 0 .8rem; font-size: 1rem; line-height: 1.72; color: rgba(255,243,241,.84); }
+.sq-halt__body b { color: #FFF3F1; font-weight: 600; }
+.sq-halt__body a { color: #FFF3F1; text-decoration: underline; text-underline-offset: 3px; }
+.sq-halt__ref {
+    margin: 1.7rem 0 0; padding-top: 1.2rem; border-top: 1px solid rgba(255,243,241,.2);
+    font-family: var(--data); font-size: .62rem; font-weight: 600; letter-spacing: .16em;
+    text-transform: uppercase; color: rgba(255,243,241,.55);
+}
+
+/* The dialler. Sticky to the bottom of the viewport so that however long the
+   reason runs and however small the phone, it is on screen — it cannot be
+   scrolled past. White on red because that is the highest contrast available
+   here, and no icon, because nothing should compete with the number. */
+.sq-halt__call {
+    position: sticky; bottom: 0; margin: 1.9rem -.4rem 0; padding: 0 .4rem 1rem;
+    background: linear-gradient(to bottom, rgba(110,18,12,0), var(--halt-deep) 24%);
+}
+.sq-halt__call[hidden] { display: none; }
+.sq-call {
+    display: flex; align-items: center; justify-content: center; gap: .8rem;
+    width: 100%; min-height: 80px; border-radius: 4px;
+    background: #fff; color: var(--halt-dark); text-decoration: none;
+    box-shadow: 0 12px 36px rgba(0,0,0,.36);
+    transition: transform .2s var(--ease);
+}
+.sq-call:active { transform: scale(.985); }
+.sq-call:focus-visible { outline: 3px solid #FFF3F1; outline-offset: 3px; }
+.sq-call b { display: block; font-family: var(--data); font-size: 1.5rem; font-weight: 700; line-height: 1.1; letter-spacing: .01em; }
+.sq-call small { display: block; margin-top: .22rem; font-family: var(--data); font-size: .58rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: rgba(74,11,7,.62); }
+
+.sq-halt__outs { display: flex; flex-wrap: wrap; gap: .4rem 1.6rem; justify-content: center; padding: 0 0 1.5rem; }
+.sq-halt__out {
+    padding: .8rem 0; background: none; border: 0; cursor: pointer;
+    font-family: var(--data); font-size: .62rem; font-weight: 600; letter-spacing: .16em;
+    text-transform: uppercase; color: rgba(255,243,241,.5); text-decoration: none;
+    transition: color .25s;
+}
+.sq-halt__out:hover { color: #FFF3F1; }
+
+
+/* ── 4 · PASS ────────────────────────────────────────────────────────────── */
+.sq__seal {
+    display: grid; place-items: center; width: 3.2rem; height: 3.2rem; border-radius: 50%;
+    background: var(--gold-lite); color: var(--forest-deep); font-size: 1.4rem; line-height: 1;
     box-shadow: 0 0 0 8px rgba(193,150,63,.13);
 }
-.bs-done__seal i { line-height: 1; }
-.bs-done__title { margin: 1.15rem 0 0; font-family: var(--caps); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 1.85rem); color: var(--forest); }
-.bs-done__title em { font-style: italic; font-family: var(--display); color: var(--gold-deep); }
-.bs-done__sub { margin: .55rem 0 0; max-width: 54ch; font-size: .95rem; line-height: 1.72; color: var(--mist); }
+.sq__pass-title { margin: 1.15rem 0 0; font-family: var(--caps); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 1.85rem); color: var(--forest); }
+.sq__pass-title em { font-style: italic; font-family: var(--display); color: var(--gold-deep); }
+.sq__pass-sub { margin: .55rem 0 0; max-width: 56ch; font-size: .95rem; line-height: 1.72; color: var(--mist); }
 
-/* What happens next — the same numbered spine as the green band, in cream. */
-.bs-done__next { list-style: none; margin: clamp(1.6rem, 3.4vw, 2.3rem) 0 0; padding: 0; display: grid; gap: 1.15rem; }
-.bs-done__next li { position: relative; display: grid; gap: .18rem; padding-left: 3.1rem; }
-.bs-done__next li::before {
-    content: attr(data-n); position: absolute; left: 0; top: -.1rem;
-    display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 50%;
-    background: var(--parchment); border: 1px solid var(--rule-gold, rgba(193,150,63,.32));
-    font-family: var(--display); font-size: .8rem; color: var(--gold-deep);
+.sq__note {
+    margin: 1.6rem 0 2rem; padding: 1.15rem 1.35rem;
+    border-left: 2px solid var(--gold); background: rgba(193,150,63,.07);
+    font-size: .92rem; line-height: 1.68; color: var(--ink-soft);
 }
-.bs-done__next b { font-family: var(--caps); font-weight: 400; font-size: 1.02rem; color: var(--forest); }
-.bs-done__next p { margin: 0; font-size: .88rem; line-height: 1.65; color: var(--mist); }
+.sq__note b { color: var(--forest); font-weight: 600; }
 
-.bs-done__rule { height: 1px; margin: clamp(1.6rem, 3.4vw, 2.2rem) 0; background: var(--rule); }
-.bs-done__free { display: flex; gap: .7rem; align-items: flex-start; font-size: .88rem; line-height: 1.65; color: var(--mist); }
-.bs-done__free i { color: var(--gold-deep); font-size: 1.05rem; margin-top: .05rem; }
-.bs-done__free b { color: var(--forest); font-weight: 600; }
-.bs-done__acts { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.4rem; }
+.sq__form { display: grid; gap: 1.1rem; max-width: 34rem; }
+.sq__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+.sq__f { display: grid; gap: .42rem; }
+.sq__f label { font-family: var(--data); font-size: .6rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+.sq__f input, .sq__f select {
+    width: 100%; min-height: 54px; padding: .85rem 1rem;
+    border: 1px solid var(--rule); border-radius: 4px; background: #fff;
+    font-family: var(--ui); font-size: 1rem; color: var(--ink);
+}
+.sq__f input:focus, .sq__f select:focus {
+    outline: 0; border-color: var(--gold-deep); box-shadow: 0 0 0 3px rgba(193,150,63,.16);
+}
+.sq__f input:user-invalid { border-color: var(--halt); }
+.sq__err { margin: 0; font-size: .84rem; color: var(--halt); }
+.sq__err[hidden] { display: none; }
+.sq__send:disabled { opacity: .55; cursor: progress; }
 
-.bs-911 { display: flex; gap: .85rem; align-items: flex-start; padding: 1rem 1.2rem; border-radius: 14px; background: #FBEFEC; border: 1px solid rgba(179,38,30,.16); font-size: .86rem; line-height: 1.6; color: #7A2A22; }
-.bs-911 i { font-size: 1.05rem; color: #B3261E; margin-top: .1rem; }
-.bs-911 b { color: #9E2A20; font-weight: 600; }
 
-@media (max-width: 900px) {
-    .bs-room__grid { grid-template-columns: 1fr; gap: 1.6rem; }
-    .bs-side { position: static; grid-template-columns: 5.4rem minmax(0,1fr); grid-template-areas: "back back" "bottle id" "path path"; gap: .9rem 1.1rem; align-items: center; padding: 1.2rem 1.25rem 1.3rem; border-radius: 18px; }
-    .bs-side::before { font-size: 8rem; }
-    .bs-side__back { grid-area: back; }
-    .bs-bottle { grid-area: bottle; margin: 0; max-height: none; }
-    .bs-bottle img { width: 82%; height: 88%; }
-    .bs-side__id { grid-area: id; }
-    .bs-side__name { font-size: 1.2rem; }
-    .bs-path { grid-area: path; padding: 1.2rem 0 0; grid-template-columns: repeat(2, 1fr); gap: .5rem; }
-    .bs-path::before { left: .6rem; right: .6rem; top: 1.8rem; bottom: auto; width: auto; height: 1px; }
-    .bs-path::after  { left: .6rem; top: 1.8rem; height: 1px; width: calc((100% - 1.2rem) * var(--fill, 0)); transition: width 1.2s var(--ease) .35s; }
-    .bs-path__i { padding-top: 1.1rem; }
-    .bs-path__i::before, .bs-path__i.is-done::after { left: 0; top: 0; }
-    .bs-path__i span { font-size: .84rem; }
-    .bs-side__dr { display: none; }
-    .bs-frame iframe { min-height: 640px; }
+/* ── MOBILE ────────────────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+    .sq__in { padding: 1.35rem 1.15rem 1.6rem; }
+    .sq__rail { gap: 2px; }
+    .sq__q { font-size: clamp(1.22rem, 5.2vw, 1.6rem); max-width: none; }
+    .sq__ans { max-width: none; }
+    .sq__b { min-height: 76px; font-size: 1.18rem; }
+    .sq__row { grid-template-columns: 1fr; }
+    .sq__term { grid-template-columns: 2.9rem 1fr; gap: 0 .95rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sq__t, .sq__b, .sq__back i, .sq-call { transition: none; }
 }
