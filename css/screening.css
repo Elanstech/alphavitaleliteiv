@@ -546,7 +546,7 @@ html.has-cine body { overflow: hidden; height: 100vh; }
    counting. */
 .sq__rail { display: flex; gap: 3px; align-items: flex-end; height: 12px; margin-bottom: .85rem; }
 .sq__t { flex: 1; height: 3px; border-radius: 2px; background: var(--rule);
-         transition: height .45s var(--ease), background .45s var(--ease); }
+         transition: height .26s var(--ease), background .26s var(--ease); }
 .sq__t.is-done { background: var(--gold-deep); }
 .sq__t.is-now  { height: 11px; background: var(--gold); }
 
@@ -578,11 +578,27 @@ html.has-cine body { overflow: hidden; height: 100vh; }
    ranged left — these run past forty words and centring them would be
    unreadable. Nothing above it but the rail, nothing below it but two buttons. */
 .sq__q {
-    margin: 0 0 2.4rem; font-family: var(--display); font-weight: 400;
+    margin: 0 0 2.2rem; font-family: var(--display); font-weight: 400;
     font-size: clamp(1.32rem, 2.5vw, 1.95rem); line-height: 1.36; letter-spacing: -.016em;
     color: var(--forest); max-width: 32ch;
+
+    /* Hold the tallest question's height so Yes and No never move between
+       screens. The questions run from eight words to forty-five; without this
+       the buttons jump half a screen on every tap, which is ugly on a laptop
+       and a mis-tap risk on a phone — the worst place to have one. */
+    min-height: 4.1em;
 }
 .sq__q:focus { outline: none; }
+
+/* Twenty-four GSAP tweens for a text swap is overhead for no gain. This is a
+   single compositor-only keyframe, retriggered by class, and it is roughly
+   half the duration the tween was — the screen should feel answered, not
+   animated. */
+@keyframes sq-in {
+    from { opacity: 0; transform: translate3d(0, 9px, 0); }
+    to   { opacity: 1; transform: none; }
+}
+.sq__q.is-new { animation: sq-in .24s var(--ease) both; will-change: transform, opacity; }
 
 /* Yes and No carry identical weight. Styling one as the primary action would
    nudge a patient toward the answer that lets them through, and that is the
@@ -592,10 +608,15 @@ html.has-cine body { overflow: hidden; height: 100vh; }
     min-height: 84px; padding: 1rem; border: 1px solid var(--forest); border-radius: 4px;
     background: transparent; color: var(--forest); cursor: pointer;
     font-family: var(--caps); font-weight: 400; font-size: 1.28rem; letter-spacing: .02em;
-    transition: background .25s var(--ease), color .25s var(--ease);
+    transition: background .16s var(--ease), color .16s var(--ease), transform .1s var(--ease);
 }
 .sq__b:hover, .sq__b:focus-visible { background: var(--forest); color: var(--cream); }
 .sq__b:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 3px; }
+/* touch-action kills the ~300ms tap delay mobile Safari still applies; the
+   scale is the only confirmation the patient gets that the tap registered
+   before the next question paints. */
+.sq__b { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.sq__b:active { transform: scale(.985); background: var(--forest); color: var(--cream); }
 
 .sq__back {
     display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.8rem;
@@ -628,6 +649,14 @@ html.has-cine body { overflow: hidden; height: 100vh; }
     -webkit-overflow-scrolling: touch;
 }
 .sq-halt[hidden] { display: none; }
+/* Fast and flat. A leisurely fade on an emergency screen reads as decoration;
+   this is closer to a cut, with just enough movement to register as a change
+   of state rather than a rendering glitch. */
+@keyframes sq-halt-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sq-call-in { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: none; } }
+.sq-halt:not([hidden]) { animation: sq-halt-in .14s linear both; }
+.sq-halt:not([hidden]) .sq-halt__in > * { animation: sq-call-in .3s var(--ease) both; }
+.sq-halt:not([hidden]) .sq-halt__call { animation-delay: .1s; }
 .sq-halt__in {
     flex: 1; width: 100%; max-width: 36rem; margin: 0 auto;
     display: flex; flex-direction: column; justify-content: center; padding: 1.8rem 0;
@@ -746,7 +775,7 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 @media (max-width: 720px) {
     .sq__in { padding: 1.35rem 1.15rem 1.6rem; }
     .sq__rail { gap: 2px; }
-    .sq__q { font-size: clamp(1.22rem, 5.2vw, 1.6rem); max-width: none; }
+    .sq__q { font-size: clamp(1.22rem, 5.2vw, 1.6rem); max-width: none; min-height: 5.6em; }
     .sq__ans { max-width: none; }
     .sq__b { min-height: 76px; font-size: 1.18rem; }
     .sq__row { grid-template-columns: 1fr; }
@@ -755,6 +784,7 @@ html.has-cine body { overflow: hidden; height: 100vh; }
 
 @media (prefers-reduced-motion: reduce) {
     .sq__t, .sq__b, .sq__back i, .sq-call { transition: none; }
+    .sq__q.is-new, .sq-halt:not([hidden]), .sq-halt:not([hidden]) .sq-halt__in > * { animation: none; }
 }
 
 
