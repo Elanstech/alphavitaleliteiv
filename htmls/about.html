@@ -21,7 +21,7 @@
 <link rel="preload" as="image" href="../logo.png" fetchpriority="high">
 <link rel="preload" as="image" href="../assets/gen-images/dr.aronov.png" fetchpriority="high">
 
-<!-- the site faces only — this page adds no new typefaces on purpose -->
+
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
@@ -30,12 +30,11 @@
 
 <link rel="icon" type="image/png" href="../logo.png">
 
-<!-- SHARED sheet first, page sheet second — the page layer only ever adds -->
+
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../css/about.css">
 
-<!-- start states applied before first paint, so nothing flashes in and out
-     before GSAP takes over. Scripting off or motion reduced: no hiding. -->
+
 <script>
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
     document.documentElement.classList.add('ab-on');
@@ -48,7 +47,6 @@
 <span class="ab-prog" id="abProg" aria-hidden="true"></span>
 
 
-<!-- ============ HEADER (shared) ============ -->
 <header class="head" id="head">
   <div class="head__rail">
 
@@ -113,7 +111,7 @@
     </nav>
 
     <div class="head__actions">
-      <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
+      <a class="head__tel" href="tel:+13477148660">347&#8202;·&#8202;714&#8202;·&#8202;8660</a>
       <a class="btn btn--forest head__cta" href="begin-screening.html" data-magnetic><span>Begin screening</span></a>
       <button class="head__burger" id="burger" type="button" aria-label="Menu">
         <span></span><span></span>
@@ -124,7 +122,6 @@
 </header>
 
 
-<!-- ============ MOBILE MENU (shared) ============ -->
 <div class="menu" id="menu">
   <div class="menu__inner">
     <nav class="menu__nav">
@@ -159,7 +156,7 @@
     </nav>
     <div class="menu__foot">
       <a class="btn btn--gold" href="begin-screening.html"><span>Begin screening</span></a>
-      <a class="menu__tel" href="tel:+19292010740">929 · 201 · 0740</a>
+      <a class="menu__tel" href="tel:+13477148660">347 · 714 · 8660</a>
       <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
   </div>
@@ -168,9 +165,7 @@
 
 <main id="main">
 
-<!-- ==============================================================
-     HERO
-     ============================================================== -->
+
 <section class="ab-hero" id="top">
   <span class="ab-hero__bloom" aria-hidden="true"></span>
 
@@ -196,7 +191,7 @@
         <p class="ab-hero__creds" data-ab="rise">
           More than two decades of experience administering intravenous medications and monitoring
           patients in the operating room now guide every aspect of Dr.&nbsp;Aronov&rsquo;s outpatient
-          infusion practice. She personally reviews each patient&rsquo;s medical history, determines
+          infusion practice. Dr.&nbsp;Aronov personally reviews each patient&rsquo;s medical history, determines
           whether an infusion is appropriate, individualizes the ingredients and doses, directs the
           infusion rate, and remains on-site throughout the infusion session.
         </p>
@@ -205,7 +200,7 @@
           <a class="btn btn--forest" href="#film" data-magnetic>
             <span>Meet Dr. Aronov</span><i class="ph ph-play"></i>
           </a>
-          <a class="btn btn--line" href="#path"><span>Explore her career</span></a>
+          <a class="btn btn--line" href="#path"><span>Explore the career</span></a>
         </div>
       </div>
 
@@ -227,18 +222,12 @@
 </section>
 
 
-<!-- ==============================================================
-     THE FILM
-     The frame scales up as it is scrolled into — the page hands her
-     the room. Starts muted (browsers require it); the control bar
-     says so until sound is turned on.
-     ============================================================== -->
 <section class="ab-film" id="film">
   <div class="ab-wrap">
 
     <div class="ab-film__head">
       <div>
-        <p class="ab-eyebrow" data-ab="rise">In her own words</p>
+        <p class="ab-eyebrow" data-ab="rise">In Dr. Aronov&rsquo;s own words</p>
         <h2 class="ab-h2" data-ab-split="lines">
           Four minutes that could change <em>how you choose IV care.</em>
         </h2>
@@ -263,11 +252,7 @@
         <span class="ab-player__tick" aria-hidden="true"></span>
         <span class="ab-player__tick" aria-hidden="true"></span>
 
-        <!-- ▸ SWAP THIS SRC for the file from the previous designer.
-             Host it the same way the home-page hero video is hosted (a GitHub
-             release asset) or drop it at /assets/video/. It runs on its own —
-             muted, looping, no click required. The poster is what shows before
-             the first frame decodes, so it is worth exporting one. -->
+
         <video id="abVideo"
                autoplay muted loop playsinline preload="metadata"
                poster="/assets/gen-images/dr.aronov.png">
@@ -275,9 +260,7 @@
         </video>
       </div>
 
-      <!-- Controls sit BELOW the frame on the cream, not on top of her face.
-           The film runs by itself; the only thing anyone actually needs from
-           this row is the sound. -->
+
       <div class="ab-ctrl" id="abCtrl">
         <button class="ab-ctrl__btn ab-ctrl__mute" type="button" data-ab-mute aria-label="Turn sound on or off">
           <i class="ph-fill ph-speaker-simple-slash ab-ico--a"></i>
@@ -308,10 +291,6 @@
 </section>
 
 
-<!-- ==============================================================
-     THE QUESTION
-     The hinge. The thread passes straight through it.
-     ============================================================== -->
 <section class="ab-q" id="question">
   <span class="ab-q__thread" id="abQThread" aria-hidden="true"></span>
 
@@ -335,12 +314,6 @@
 </section>
 
 
-<!-- ==============================================================
-     THE PATH
-     Dates lead because the overlap is the information — she was in a
-     research lab and an undergraduate degree at the same time, and
-     that is the whole origin of the practice.
-     ============================================================== -->
 <section class="ab-path" id="path">
   <div class="ab-wrap">
 
@@ -356,22 +329,23 @@
       </h2>
       <p class="ab-lede" data-ab="rise">
         Where did Dr.&nbsp;Aronov&rsquo;s path to physician-directed IV care begin? Not with a
-        wellness trend. At a laboratory bench. Before she ever entered an operating room, she was
-        already investigating a question that would shape the way she thought about medicine:
+        wellness trend. At a laboratory bench. Long before an operating room came into the picture,
+        Dr.&nbsp;Aronov was already investigating a question that would shape a whole approach to
+        medicine:
         once a substance enters the body, where does it go &mdash; and what happens next?
       </p>
     </div>
 
     <div class="ab-path__body">
 
-      <!-- sticky era readout -->
+
       <aside class="ab-era" aria-hidden="true">
         <span class="ab-era__no" id="abEraNo">1995</span>
         <span class="ab-era__label" id="abEraLabel">Undergraduate research</span>
         <span class="ab-era__count" id="abEraCount">01 / 05</span>
       </aside>
 
-      <!-- THE THREAD -->
+
       <div class="ab-thread" id="abThread" aria-hidden="true">
         <div class="ab-thread__rail" id="abThreadRail">
           <svg class="ab-thread__svg" viewBox="0 0 44 1000" preserveAspectRatio="none">
@@ -384,7 +358,7 @@
         </div>
       </div>
 
-      <!-- the stops -->
+
       <div class="ab-path__stops" id="abStops">
 
         <article class="ab-stop" data-era="1995" data-label="Undergraduate research">
@@ -397,12 +371,12 @@
             carry it through the body toward the tissue where it was intended to act.
           </p>
           <p class="ab-stop__body" data-ab="rise">
-            <em>What did she study?</em><br>
+            <em>The research</em><br>
             Dr. Aronov&rsquo;s undergraduate research explored how hyaluronic acid&ndash;based polymer
             systems could serve as delivery vehicles for drugs, vitamins and enzymes.
           </p>
           <p class="ab-stop__body" data-ab="rise">
-            <em>What stayed with her?</em><br>
+            <em>What lasted</em><br>
             The substance itself is only part of the story. Its route, delivery, behavior inside the
             body, and the individual patient&rsquo;s response all help shape what happens next.
           </p>
@@ -410,7 +384,7 @@
             Introducing a compound into the body is only the first step. Understanding what happens
             next is where the real science &mdash; and the responsibility &mdash; begin. That
             principle would follow Dr. Aronov from the research bench into the operating room, and
-            ultimately into the practice she founded.
+            ultimately into the practice founded here.
           </p>
         </article>
 
@@ -422,14 +396,14 @@
             <em>The question was microscopic. Its implications were anything but.</em>
           </p>
           <p class="ab-stop__body" data-ab="rise">
-            During the final two years of her biochemistry degree at SUNY Stony Brook, Dr. Aronov
+            During the final two years of a biochemistry degree at SUNY Stony Brook, Dr. Aronov
             entered pharmaceutical research at Regeneron, studying the cellular science behind nerve
             repair and recovery after injury.
           </p>
           <p class="ab-stop__body" data-ab="rise">
-            There, she saw how discoveries made inside a laboratory could one day change what happens
-            at a patient&rsquo;s bedside. That possibility became the bridge that carried her from
-            research into medicine.
+            There, it became clear how discoveries made inside a laboratory could one day change what
+            happens at a patient&rsquo;s bedside. That possibility became the bridge from research
+            into medicine.
           </p>
         </article>
 
@@ -442,10 +416,10 @@
             question: <em>what else in the body may be influencing it?</em>
           </p>
           <p class="ab-stop__body" data-ab="rise">
-            Her osteopathic medical training emphasized anatomy, the musculoskeletal system, and the
-            relationship between structure and function. That foundation continues to shape her
-            interest in joint health &mdash; and the physician-directed, supportive joint protocols
-            she designs today with the whole patient in mind.
+            Osteopathic medical training emphasized anatomy, the musculoskeletal system, and the
+            relationship between structure and function. That foundation continues to shape
+            Dr.&nbsp;Aronov&rsquo;s interest in joint health &mdash; and the physician-directed,
+            supportive joint protocols designed today with the whole patient in mind.
           </p>
           <p class="ab-stop__body" data-ab="rise">
             These protocols complement, rather than replace, care from a rheumatologist, orthopedist
@@ -460,12 +434,12 @@
           <p class="ab-stop__body" data-ab="rise">
             Anesthesiology taught Dr. Aronov that IV medicine leaves no room for casual decisions.
             During four years of intensive training in physiology, pharmacology, airway management
-            and critical care, she learned to recognize subtle changes, anticipate complications and
-            act decisively when seconds matter.
+            and critical care taught Dr.&nbsp;Aronov to recognize subtle changes, anticipate complications
+            and act decisively when seconds matter.
           </p>
           <p class="ab-stop__body" data-ab="rise">
             That same discipline now guides every patient screening, medication selection, dose and
-            infusion she personally oversees.
+            infusion Dr.&nbsp;Aronov personally oversees.
           </p>
           <div class="ab-chips" data-ab="rise">
             <span class="ab-chips__lead">Clinical training affiliates</span>
@@ -486,8 +460,8 @@
           <p class="ab-stop__body" data-ab="rise">
             In clinical anesthesiology, every medication, fluid and electrolyte can affect breathing,
             blood pressure, heart rhythm and cardiovascular stability &mdash; sometimes within
-            seconds. Dr. Aronov&rsquo;s work has required her to anticipate those changes, recognize
-            subtle warning signs, and respond before they become emergencies.
+            seconds. Dr. Aronov&rsquo;s work has required anticipating those changes, recognizing
+            subtle warning signs, and responding before they become emergencies.
           </p>
           <p class="ab-stop__body" data-ab="rise">
             That experience changes how you approach an IV. You do not begin with what can be added
@@ -506,11 +480,6 @@
 </section>
 
 
-<!-- ==============================================================
-     THE APPROACH
-     Four standing principles. Deliberately not numbered — they are
-     not a sequence and nothing is gained by pretending they are.
-     ============================================================== -->
 <section class="ab-appr" id="approach">
   <div class="ab-wrap">
 
@@ -577,11 +546,6 @@
 </section>
 
 
-<!-- ==============================================================
-     WHY IT EXISTS
-     States the contrast without naming anyone, and without any claim
-     about what an infusion will do for a patient.
-     ============================================================== -->
 <section class="ab-why" id="why">
   <div class="ab-wrap">
 
@@ -644,9 +608,6 @@
 </section>
 
 
-<!-- ==============================================================
-     BEGIN
-     ============================================================== -->
 <section class="ab-begin" id="begin">
   <div class="ab-wrap">
     <div class="ab-begin__inner">
@@ -665,7 +626,7 @@
         <a class="btn btn--forest btn--lg" href="begin-screening.html" data-magnetic>
           <span>Begin physician screening</span><i class="ph ph-arrow-right"></i>
         </a>
-        <a class="btn btn--line btn--lg" href="tel:+19292010740"><span>929 · 201 · 0740</span></a>
+        <a class="btn btn--line btn--lg" href="tel:+13477148660"><span>347 · 714 · 8660</span></a>
       </div>
 
       <p class="ab-begin__fine" data-ab="rise">
@@ -681,7 +642,6 @@
 </main>
 
 
-<!-- ============ FOOTER (shared) ============ -->
 <footer class="foot" id="contact">
   <span class="foot__glow"></span>
   <div class="foot__wrap">
@@ -690,14 +650,13 @@
       <p class="foot__eyebrow"><i class="ph-duotone ph-seal-check"></i> By physician review only</p>
       <h2 class="foot__title">Every infusion begins<br>with a <em>physician</em>.</h2>
       <p class="foot__lede">
-        Appointments only. Tell us what you are looking for and Dr.&nbsp;Aronov reviews the health
-        information you provide herself, then determines whether IV therapy is appropriate.
+        Appointments only. Tell us what you are looking for and Dr.&nbsp;Aronov personally reviews the health information you provide, then determines whether IV therapy is appropriate.
       </p>
       <div class="foot__acts">
         <a class="rx__btn rx__btn--solid" href="begin-screening.html">
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
-        <a class="rx__btn" href="tel:+19292010740"><span>929 · 201 · 0740</span><i class="ph ph-phone"></i></a>
+        <a class="rx__btn" href="tel:+13477148660"><span>347 · 714 · 8660</span><i class="ph ph-phone"></i></a>
       </div>
     </div>
 
@@ -710,7 +669,8 @@
           79-01 Metropolitan Avenue<br>
           Middle Village, NY 11379
         </address>
-        <a class="foot__line" href="tel:+19292010740"><i class="ph ph-phone"></i> 929 · 201 · 0740</a>
+        <a class="foot__line" href="tel:+13477148660"><i class="ph ph-phone"></i> 347 · 714 · 8660</a>
+        <span class="foot__line"><i class="ph ph-printer"></i> Fax · 347 · 714 · 8685</span>
         <a class="foot__line" href="mailto:contact@precisionmedicaliv.com"><i class="ph ph-envelope-simple"></i> contact@precisionmedicaliv.com</a>
         <a class="foot__line" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo"></i> Follow the practice</a>
         <p class="foot__served">Serving Queens · Brooklyn · Long Island · Greater New York</p>
@@ -781,7 +741,6 @@
 </footer>
 
 
-<!-- ============ DOCK (shared) ============ -->
 <button class="totop" id="toTop" type="button">
   <i class="ph ph-arrow-up"></i>
   <span>Top</span>
@@ -789,7 +748,7 @@
 
 <div class="fab" id="fab">
   <ul class="fab__list" id="fabList">
-    <li><a class="fab__act" href="tel:+19292010740"><span class="fab__label">929 · 201 · 0740</span><span class="fab__ico"><i class="ph ph-phone"></i></span></a></li>
+    <li><a class="fab__act" href="tel:+13477148660"><span class="fab__label">347 · 714 · 8660</span><span class="fab__ico"><i class="ph ph-phone"></i></span></a></li>
     <li><a class="fab__act" href="mailto:contact@precisionmedicaliv.com"><span class="fab__label">Email the practice</span><span class="fab__ico"><i class="ph ph-envelope-simple"></i></span></a></li>
     <li><a class="fab__act" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener"><span class="fab__label">Instagram</span><span class="fab__ico"><i class="ph ph-instagram-logo"></i></span></a></li>
   </ul>
@@ -799,11 +758,11 @@
   </button>
 </div>
 
-<!-- GSAP must be on window before the modules run -->
+
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-<!-- /script.js is shared: header, mobile menu, dock, nav state, smooth anchors -->
+
 <script src="../script.js" type="module"></script>
 <script src="../js/about.js" type="module"></script>
 </body>

@@ -3,11 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<!-- The intake chain carries the patient's name, email, phone and chosen
-     infusion in the query string. Without this, every request this page makes
-     to Google Fonts and jsDelivr sends that whole URL in the Referer header —
-     which hands identified health information to third parties who have no BAA.
-     no-referrer stops the header being sent at all. -->
+
 <meta name="referrer" content="no-referrer">
 <title>Preliminary Safety Screening — Alpha Vital Elite IV</title>
 <meta name="description" content="Twenty-four short safety questions before an elective IV infusion.">
@@ -24,8 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<!-- The screening POSTs here mid-session; paying DNS + TLS at submit time
-     is a visible stall on a phone. Opened at page load instead. -->
+
 <link rel="preconnect" href="https://hipaa-submit.jotform.com" crossorigin>
 <link rel="preload" as="image" href="../logo.png" fetchpriority="high">
 
@@ -57,9 +52,7 @@
 
 <body class="page-review">
 
-<!-- ============ TITLE SEQUENCE ============
-     Plays itself, names the infusion they chose, then clears. screening.js
-     writes the infusion into .bs-cine__line--3 before the timeline starts. -->
+
 <div class="bs-cine" id="bsCine" aria-hidden="true">
   <div class="bs-cine__stage">
     <img class="bs-cine__mark" src="../logo.png" alt="" width="120" height="60">
@@ -76,7 +69,7 @@
 <a class="ct-skip" href="#main">Skip to content</a>
 <span class="ct-prog" id="ctProg" aria-hidden="true"></span>
 
-<!-- ============ HEADER (shared) ============ -->
+
 <header class="head" id="head">
   <div class="head__rail">
 
@@ -141,7 +134,7 @@
     </nav>
 
     <div class="head__actions">
-      <a class="head__tel" href="tel:+19292010740">929&#8202;·&#8202;201&#8202;·&#8202;0740</a>
+      <a class="head__tel" href="tel:+13477148660">347&#8202;·&#8202;714&#8202;·&#8202;8660</a>
       <a class="btn btn--forest head__cta" href="begin-screening.html" data-magnetic><span>Begin screening</span></a>
       <button class="head__burger" id="burger" type="button" aria-label="Menu">
         <span></span><span></span>
@@ -152,7 +145,6 @@
 </header>
 
 
-<!-- ============ MOBILE MENU (shared) ============ -->
 <div class="menu" id="menu">
   <div class="menu__inner">
     <nav class="menu__nav">
@@ -187,7 +179,7 @@
     </nav>
     <div class="menu__foot">
       <a class="btn btn--gold" href="begin-screening.html"><span>Begin screening</span></a>
-      <a class="menu__tel" href="tel:+19292010740">929 · 201 · 0740</a>
+      <a class="menu__tel" href="tel:+13477148660">347 · 714 · 8660</a>
       <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
   </div>
@@ -196,11 +188,7 @@
 
 <main id="main">
 
-<!-- ============================= THE ROOM =============================
-     Left: the green panel — the infusion and where you are, kept beside you
-     for all three steps. Right: the one task in front of you.
-     screening.js paints the panel from ?drip= (a slug on step I, the infusion
-     name relayed by Jotform on steps II and III) and drives the entrance. -->
+
 <section class="bs-room" id="top">
   <div class="ct-wrap">
     <div class="bs-room__grid">
@@ -237,10 +225,7 @@
           <p class="bs-lede" id="bsLede">Name, contact, and the infusion you are interested in. <b>About a minute</b>, then twenty-four short safety questions.</p>
         </div>
 
-        <!-- Keeps the id #screeningForm so screening.js rise() still animates it
-             and draws the gold hairline. The Jotform iframe that used to be here
-             is gone: both steps are ours now, and both post to Jotform in the
-             background rather than showing the patient a Jotform skin. -->
+
         <div class="bs-frame sq" id="screeningForm">
           <div class="bs-frame__bar sq__bar"><span><b id="sqBarNum">I</b><span id="sqBarStep">Your details</span></span><i id="sqBarNote">Secure &middot; HIPAA</i></div>
 
@@ -251,7 +236,7 @@
               <p class="sq__count"><span>Question <b id="sqNow">1</b> of 24</span><span>Yes or no</span></p>
             </div>
 
-            <!-- ══ STEP I · DETAILS ══ -->
+
             <section class="sq__pane is-on" id="sqIntro">
               <p class="bs-lede" style="margin:0 0 1.7rem">Alpha Vital Elite provides elective outpatient
                 IV infusions, not emergency care. After your details we will ask twenty-four yes-or-no
@@ -316,7 +301,7 @@
               <button class="btn btn--forest btn--lg" id="sqBegin" type="button" data-magnetic><span>Continue to safety questions</span><i class="ph ph-arrow-right"></i></button>
             </section>
 
-            <!-- ══ STEP II · QUESTION ══ -->
+
             <section class="sq__pane" id="sqQuestion">
               <h2 class="sq__q" id="sqQ" tabindex="-1"></h2>
               <div class="sq__ans">
@@ -326,7 +311,7 @@
               <button class="sq__back" id="sqBack" type="button" hidden><i class="ph ph-arrow-left"></i> Previous question</button>
             </section>
 
-            <!-- ══ CALM STOP · questions 11-24 ══ -->
+
             <section class="sq__pane" id="sqStop">
               <div class="sq-stop__flag">
                 <span class="sq-stop__glyph" aria-hidden="true"><i class="ph-fill ph-hand-palm"></i></span>
@@ -337,7 +322,7 @@
                 elective infusion at this time</b>, and no appointment has been scheduled. Your answers
                 have been sent to Dr.&nbsp;Aronov, who may follow up. If you think you answered by
                 mistake, go back and change it. Questions:
-                <b><a href="tel:+19292010740">(929)&nbsp;201-0740</a></b>.</p>
+                <b><a href="tel:+13477148660">(347)&nbsp;714-8660</a></b>.</p>
               <p class="sq-stop__ref" id="sqStopRef"></p>
               <div class="sq-stop__acts">
                 <button class="sq-stop__out" id="sqStopBack" type="button">I answered that by mistake</button>
@@ -345,7 +330,7 @@
               </div>
             </section>
 
-            <!-- ══ PASS ══ -->
+
             <section class="sq__pane" id="sqPass">
               <span class="bs-done__seal sq__seal" aria-hidden="true"><i class="ph-fill ph-check"></i></span>
               <h2 class="sq__pass-title">Nothing here rules out <em>an infusion.</em></h2>
@@ -372,10 +357,7 @@
   </div>
 </section>
 
-<!-- ═══ 3 · STOP ═══════════════════════════════════════════════════════════
-     Outside .bs-room deliberately: it covers the header, the green panel and
-     the footer, so nothing from the previous screen survives and no reading
-     is required to understand that something has changed. -->
+
 </main>
 
 <div class="sq-halt" id="sqHalt" role="alertdialog" aria-modal="true" aria-labelledby="sqHaltReason" hidden>
@@ -399,12 +381,11 @@
 
   <div class="sq-halt__outs">
     <button class="sq-halt__out" id="sqHaltBack" type="button">I answered that by mistake</button>
-    <a class="sq-halt__out" href="tel:+19292010740">Call the practice instead</a>
+    <a class="sq-halt__out" href="tel:+13477148660">Call the practice instead</a>
   </div>
 </div>
 
 
-<!-- ============ DOCK (shared) ============ -->
 <button class="totop" id="toTop" type="button">
   <i class="ph ph-arrow-up"></i>
   <span>Top</span>
@@ -412,7 +393,7 @@
 
 <div class="fab" id="fab">
   <ul class="fab__list" id="fabList">
-    <li><a class="fab__act" href="tel:+19292010740"><span class="fab__label">929 · 201 · 0740</span><span class="fab__ico"><i class="ph ph-phone"></i></span></a></li>
+    <li><a class="fab__act" href="tel:+13477148660"><span class="fab__label">347 · 714 · 8660</span><span class="fab__ico"><i class="ph ph-phone"></i></span></a></li>
     <li><a class="fab__act" href="mailto:contact@precisionmedicaliv.com"><span class="fab__label">Email the practice</span><span class="fab__ico"><i class="ph ph-envelope-simple"></i></span></a></li>
     <li><a class="fab__act" href="https://www.instagram.com/dr.violetaaronov/" target="_blank" rel="noopener"><span class="fab__label">Instagram</span><span class="fab__ico"><i class="ph ph-instagram-logo"></i></span></a></li>
   </ul>
@@ -421,8 +402,6 @@
     <i class="ph ph-x fab__i fab__i--close"></i>
   </button>
 </div>
-
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
