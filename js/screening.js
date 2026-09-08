@@ -55,14 +55,14 @@ const INTAKE_DRIP_FIELD = 'dropdown3';
 
 const MENU = {
     'glynac':              { name: 'GLyNAC Healthy Aging',      price: '$350', chair: '1 h 15', tone: '#5B7098', img: 'glynac' },
-    'immun-o-boost':       { name: 'Immun-O-Boost IV Support',  price: '$550', chair: '2 h 30', tone: '#D9982A', img: 'immuneoboost' },
-    'liquixo':             { name: 'LIQUIXO Muscle Recovery',   price: '$395', chair: '45 min', tone: '#B34E37', img: 'liquixo' },
-    'antioxidant':         { name: 'Antioxidant \u00d73 Reset', price: '$400', chair: '1 h 15', tone: '#4F7D5E', img: 'antioxidant' },
     'glutathione':         { name: 'Glutathione IV Injection',  price: '$100', chair: '30 min', tone: '#7FA08C', img: 'glutathione' },
+    'antioxidant':         { name: 'Antioxidant \u00d73 Reset', price: '$400', chair: '1 h 15', tone: '#4F7D5E', img: 'antioxidant' },
+    'immun-o-boost':       { name: 'Immun-O-Boost IV Support',  price: '$550', chair: '2 h 30', tone: '#D9982A', img: 'immuneoboost' },
+    'revive':              { name: 'Revive IV Support',         price: '$325', chair: '1 h 15', tone: '#35707F', img: 'revive' },
+    'liquixo':             { name: 'LIQUIXO Muscle Recovery',   price: '$395', chair: '45 min', tone: '#B34E37', img: 'liquixo' },
+    'stress-brain':        { name: 'Stress & Brain Wellness',   price: '$500', chair: '1 h 30', tone: '#7A5F98', img: 'brainwellness' },
     'joint-skin':          { name: 'Joint & Skin Wellness',     price: '$650', chair: '2 h 30', tone: '#8C6239', img: 'jointsupport' },
     'fatty-liver-support': { name: 'Fatty Liver Support',       price: '$650', chair: '3 h',    tone: '#5F7A55', img: 'liversupport' },
-    'revive':              { name: 'Revive IV Support',         price: '$525', chair: '2 h 15', tone: '#35707F', img: 'revive' },
-    'stress-brain':        { name: 'Stress & Brain Wellness',   price: '$500', chair: '1 h 30', tone: '#7A5F98', img: 'brainwellness' },
     'customized':          { name: 'Customized IV Infusion',    price: 'By consultation', chair: 'Individual', tone: '#C1963F', img: 'customized' },
 };
 
