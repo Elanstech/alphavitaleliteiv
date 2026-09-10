@@ -765,7 +765,7 @@ const screener = () => {
             $('#bsPath1')?.classList.toggle('is-done', !one);
             $('#bsPath2')?.classList.toggle('is-now', !one);
             const num  = $('#sqBarNum');  if (num)  num.textContent  = one ? 'I' : 'II';
-            const lab  = $('#sqBarStep'); if (lab)  lab.textContent  = one ? 'Your details' : 'Safety questions';
+            const lab  = $('#sqBarStep'); if (lab)  lab.textContent  = one ? 'Your information' : 'Safety screening';
             const eye  = $('#bsEyebrow'); if (eye)  eye.textContent  = one ? 'Step one of two' : 'Step two of two';
             if (side) {
                 side.dataset.numeral = one ? 'I' : 'II';
