@@ -191,15 +191,15 @@
 
     <div class="rs-tally">
       <div class="rs-tally__item" data-rs="rise">
-        <span class="rs-tally__no" data-rs-count="32">0</span>
+        <span class="rs-tally__no" data-rs-count="49">0</span>
         <span class="rs-tally__key">References in the library</span>
       </div>
       <div class="rs-tally__item" data-rs="rise">
-        <span class="rs-tally__no" data-rs-count="7">0</span>
+        <span class="rs-tally__no" data-rs-count="8">0</span>
         <span class="rs-tally__key">Infusions with published references on file</span>
       </div>
       <div class="rs-tally__item" data-rs="rise">
-        <span class="rs-tally__no" data-rs-count="5">0</span>
+        <span class="rs-tally__no" data-rs-count="6">0</span>
         <span class="rs-tally__key">Evidence tiers, ranked and labelled on every card</span>
       </div>
     </div>
@@ -226,31 +226,37 @@
           <span class="rs-tier__rank">TIER 01</span>
           <h3 class="rs-tier__name">Systematic review / meta-analysis</h3>
           <p class="rs-tier__what">Pools every qualifying study on a question. The strongest tier here.</p>
-          <span class="rs-tier__n"><b data-rs-count="3">0</b> of 32 references</span>
+          <span class="rs-tier__n"><b data-rs-count="5">0</b> of 49 references</span>
         </li>
         <li class="rs-tier" style="--tone:var(--t-clinical)" data-rs="pop">
           <span class="rs-tier__rank">TIER 02</span>
           <h3 class="rs-tier__name">Clinical study in people</h3>
           <p class="rs-tier__what">Measured an outcome in human participants.</p>
-          <span class="rs-tier__n"><b data-rs-count="5">0</b> of 32 references</span>
+          <span class="rs-tier__n"><b data-rs-count="8">0</b> of 49 references</span>
         </li>
         <li class="rs-tier" style="--tone:var(--t-review)" data-rs="pop">
           <span class="rs-tier__rank">TIER 03</span>
           <h3 class="rs-tier__name">Peer-reviewed review</h3>
           <p class="rs-tier__what">Summarises a field. Depends on the studies underneath it.</p>
-          <span class="rs-tier__n"><b data-rs-count="16">0</b> of 32 references</span>
+          <span class="rs-tier__n"><b data-rs-count="24">0</b> of 49 references</span>
         </li>
         <li class="rs-tier" style="--tone:var(--t-observation)" data-rs="pop">
           <span class="rs-tier__rank">TIER 04</span>
           <h3 class="rs-tier__name">Observational study</h3>
           <p class="rs-tier__what">Describes an association in a population. Not cause and effect.</p>
-          <span class="rs-tier__n"><b data-rs-count="6">0</b> of 32 references</span>
+          <span class="rs-tier__n"><b data-rs-count="6">0</b> of 49 references</span>
         </li>
         <li class="rs-tier" style="--tone:var(--t-preclinical)" data-rs="pop">
           <span class="rs-tier__rank">TIER 05</span>
           <h3 class="rs-tier__name">Preclinical — animal or cell</h3>
           <p class="rs-tier__what">Not conducted in people. Findings may not carry over.</p>
-          <span class="rs-tier__n"><b data-rs-count="2">0</b> of 32 references</span>
+          <span class="rs-tier__n"><b data-rs-count="3">0</b> of 49 references</span>
+        </li>
+        <li class="rs-tier" style="--tone:var(--t-official)" data-rs="pop">
+          <span class="rs-tier__rank">TIER 06</span>
+          <h3 class="rs-tier__name">Official product information</h3>
+          <p class="rs-tier__what">Labels and supplier documents. States composition and approved use, not effectiveness here.</p>
+          <span class="rs-tier__n"><b data-rs-count="3">0</b> of 49 references</span>
         </li>
     </ol>
   </div>
@@ -344,11 +350,12 @@
     <div class="rs-bar__row">
       <span class="rs-bar__lab" id="labTier">Evidence tier</span>
       <div class="rs-bar__set" role="group" aria-labelledby="labTier">
-            <button class="rs-chip" type="button" data-tier="synthesis" style="--tone:var(--t-synthesis)" aria-pressed="false">Systematic review / meta-analysis <b>3</b></button>
-            <button class="rs-chip" type="button" data-tier="clinical" style="--tone:var(--t-clinical)" aria-pressed="false">Clinical study in people <b>5</b></button>
-            <button class="rs-chip" type="button" data-tier="review" style="--tone:var(--t-review)" aria-pressed="false">Peer-reviewed review <b>16</b></button>
+            <button class="rs-chip" type="button" data-tier="synthesis" style="--tone:var(--t-synthesis)" aria-pressed="false">Systematic review / meta-analysis <b>5</b></button>
+            <button class="rs-chip" type="button" data-tier="clinical" style="--tone:var(--t-clinical)" aria-pressed="false">Clinical study in people <b>8</b></button>
+            <button class="rs-chip" type="button" data-tier="review" style="--tone:var(--t-review)" aria-pressed="false">Peer-reviewed review <b>24</b></button>
             <button class="rs-chip" type="button" data-tier="observation" style="--tone:var(--t-observation)" aria-pressed="false">Observational study <b>6</b></button>
-            <button class="rs-chip" type="button" data-tier="preclinical" style="--tone:var(--t-preclinical)" aria-pressed="false">Preclinical — animal or cell <b>2</b></button>
+            <button class="rs-chip" type="button" data-tier="preclinical" style="--tone:var(--t-preclinical)" aria-pressed="false">Preclinical — animal or cell <b>3</b></button>
+            <button class="rs-chip" type="button" data-tier="official" style="--tone:var(--t-official)" aria-pressed="false">Official product information <b>3</b></button>
       </div>
       <button class="rs-clear" type="button" data-all hidden>
         <i class="ph ph-x"></i> Clear
@@ -361,10 +368,11 @@
             <button class="rs-chip" type="button" data-tx="glynac" aria-pressed="false">GLyNAC Healthy Aging IV <b>9</b></button>
             <button class="rs-chip" type="button" data-tx="glutathione" aria-pressed="false">Glutathione IV Injection <b>2</b></button>
             <button class="rs-chip" type="button" data-tx="antioxidant" aria-pressed="false">Antioxidant ×3 Reset IV <b>5</b></button>
-            <button class="rs-chip" type="button" data-tx="immun-o-boost" aria-pressed="false">Immun-O-Boost IV Supportive Infusion <b>7</b></button>
-            <button class="rs-chip" type="button" data-tx="revive" aria-pressed="false">Revive IV Support <b>2</b></button>
+            <button class="rs-chip" type="button" data-tx="immun-o-boost" aria-pressed="false">Immun-O-Boost IV Supportive Infusion <b>8</b></button>
+            <button class="rs-chip" type="button" data-tx="revive" aria-pressed="false">Revive IV Support <b>17</b></button>
             <button class="rs-chip" type="button" data-tx="liquixo" aria-pressed="false">LIQUIXO Muscle Recovery IV <b>2</b></button>
             <button class="rs-chip" type="button" data-tx="stress-brain" aria-pressed="false">Stress &amp; Brain Wellness IV <b>5</b></button>
+            <button class="rs-chip" type="button" data-tx="joint-skin" aria-pressed="false">Joint &amp; Skin Wellness IV <b>1</b></button>
       </div>
     </div>
 
@@ -374,7 +382,7 @@
 
 <section class="rs-lib" id="library">
   <div class="rs-wrap">
-    <p class="rs-count" id="rsCount" aria-live="polite">Showing all 32 references</p>
+    <p class="rs-count" id="rsCount" aria-live="polite">Showing all 49 references</p>
 
       <section class="rs-group" id="glynac" data-tx="glynac" style="--tone:#5B7098">
         <header class="rs-group__head">
@@ -581,7 +589,7 @@
       <section class="rs-group" id="immun-o-boost" data-tx="immun-o-boost" style="--tone:#D9982A">
         <header class="rs-group__head">
           <div>
-            <span class="rs-group__no">IV — 7 references</span>
+            <span class="rs-group__no">IV — 8 references</span>
             <h2 class="rs-group__name">Immun-O-Boost IV Supportive Infusion</h2>
             <p class="rs-group__tags">Zinc · alpha-lipoic acid · glutathione · immune support</p>
           </div>
@@ -660,14 +668,25 @@
               </div>
             </a>
           </li>
+                  <li class="rs-ref" data-tier="synthesis" style="--tier:var(--t-synthesis)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pubmed.ncbi.nlm.nih.gov/16923308/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>01</i> Systematic review &mdash; different clinical populations</span>
+              <h4 class="rs-ref__name">Glutamine in critical care: current evidence from systematic reviews</h4>
+              <p class="rs-ref__note">Glutamine is one of the components of Immun-O-Boost. This review discusses glutamine as a fuel source for intestinal and immune cells. The research involved critically ill or surgical populations at different doses and formulations; it does not establish benefits for this outpatient infusion.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PubMed</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
         </ol>
       </section>
       <section class="rs-group" id="revive" data-tx="revive" style="--tone:#35707F">
         <header class="rs-group__head">
           <div>
-            <span class="rs-group__no">V — 2 references</span>
+            <span class="rs-group__no">V — 17 references</span>
             <h2 class="rs-group__name">Revive IV Support</h2>
-            <p class="rs-group__tags">B vitamins · minerals · energy &amp; fatigue support</p>
+            <p class="rs-group__tags">Hydration · B vitamins · amino acids · minerals &amp; electrolytes</p>
           </div>
           <a class="rs-group__go" href="../drips/revive.html">
             <span>See the infusion</span><i class="ph ph-arrow-right"></i>
@@ -690,6 +709,171 @@
               <h4 class="rs-ref__name">Vitamins and Minerals for Energy, Fatigue and Cognition: A Narrative Review of the Biochemical and Clinical Evidence</h4>
               <div class="rs-ref__foot">
                 <span class="rs-ref__src">PMC / NIH</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+                  <li class="rs-ref" data-tier="clinical" style="--tier:var(--t-clinical)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pubmed.ncbi.nlm.nih.gov/21736786/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>02</i> Human controlled study</span>
+              <h4 class="rs-ref__name">Mild dehydration impairs cognitive performance and mood of men</h4>
+              <p class="rs-ref__note">This controlled human study found that mild dehydration was associated with increased fatigue and changes in mood and aspects of cognitive performance. It studied dehydration &mdash; not IV therapy or the Revive formulation.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PubMed</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="clinical" style="--tier:var(--t-clinical)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pubmed.ncbi.nlm.nih.gov/22190027/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>02</i> Human controlled study</span>
+              <h4 class="rs-ref__name">Mild dehydration affects mood in healthy young women</h4>
+              <p class="rs-ref__note">Mild dehydration was associated with increased fatigue, headache, difficulty concentrating and worsened mood. This study did not evaluate IV hydration.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PubMed</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="review" style="--tier:var(--t-review)" data-rs="pop">
+            <a class="rs-ref__in" href="https://www.cdc.gov/yellow-book/hcp/preparing-international-travelers/travelers-diarrhea.html" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>03</i> Clinical guidance</span>
+              <h4 class="rs-ref__name">CDC: Travelers&rsquo; Diarrhea &mdash; Oral Rehydration Therapy</h4>
+              <p class="rs-ref__note">The CDC explains that diarrhea causes fluid and electrolyte loss and that replenishment is important. Oral hydration is generally appropriate for stable patients who can drink.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">CDC</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="review" style="--tier:var(--t-review)" data-rs="pop">
+            <a class="rs-ref__in" href="https://ods.od.nih.gov/factsheets/Thiamin-HealthProfessional/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>03</i> Authoritative nutrient reference</span>
+              <h4 class="rs-ref__name">NIH: Thiamin &mdash; Vitamin B1</h4>
+              <p class="rs-ref__note">The NIH describes thiamin&rsquo;s role in normal energy metabolism and cellular function. It also explains that the body stores only small amounts and requires a continuous dietary supply.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">NIH / ODS</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="review" style="--tier:var(--t-review)" data-rs="pop">
+            <a class="rs-ref__in" href="https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>03</i> Authoritative nutrient reference</span>
+              <h4 class="rs-ref__name">NIH: Magnesium</h4>
+              <p class="rs-ref__note">The NIH describes magnesium&rsquo;s roles in normal muscle contraction, nerve conduction, enzyme activity and heart rhythm.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">NIH / ODS</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="review" style="--tier:var(--t-review)" data-rs="pop">
+            <a class="rs-ref__in" href="https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>03</i> Authoritative nutrient reference</span>
+              <h4 class="rs-ref__name">NIH: Calcium</h4>
+              <p class="rs-ref__note">The NIH describes calcium&rsquo;s roles in normal muscle function, nerve transmission, blood-vessel function and blood clotting.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">NIH / ODS</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+                  <li class="rs-ref" data-tier="review" style="--tier:var(--t-review)" data-rs="pop">
+            <a class="rs-ref__in" href="https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>03</i> Clinical guidance</span>
+              <h4 class="rs-ref__name">World Health Organization: Diarrhoeal Disease</h4>
+              <p class="rs-ref__note">The WHO recommends oral rehydration for most diarrhea-related dehydration and reserves intravenous fluids for severe dehydration or shock. This source helps establish the appropriate clinical boundary.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">WHO</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="clinical" style="--tier:var(--t-clinical)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pubmed.ncbi.nlm.nih.gov/37786445/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>02</i> Human randomized study &mdash; oral formulation</span>
+              <h4 class="rs-ref__name">B-Complex Supplementation and Exercise-Related Fatigue</h4>
+              <p class="rs-ref__note">This small study evaluated daily oral B1, B2, B6 and B12 supplementation for 28 days and reported changes in exercise endurance and fatigue-related measures. The route, formulation, duration and population differ from Revive.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PubMed</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="preclinical" style="--tier:var(--t-preclinical)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2904112/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>05</i> Mechanistic research &mdash; chronic alcohol exposure</span>
+              <h4 class="rs-ref__name">Chronic Alcohol Consumption and Intestinal Thiamin Absorption</h4>
+              <p class="rs-ref__note">This research found that chronic alcohol exposure can interfere with intestinal thiamin absorption. It concerns chronic exposure and should not be presented as evidence that one episode of drinking causes a B-vitamin deficiency or that IV B vitamins treat a hangover.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PMC / NIH</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="official" style="--tier:var(--t-official)" data-rs="pop">
+            <a class="rs-ref__in" href="https://www.anazaohealth.com/iv-therapy" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>06</i> Supplier information &mdash; composition only</span>
+              <h4 class="rs-ref__name">AnazaoHealth: IV and Injection Therapy</h4>
+              <p class="rs-ref__note">The supplier lists AminoMultiPlex as containing arginine, glutamine, lysine and proline. It also lists the B vitamins, magnesium chloride and calcium gluconate contained in its nutrient formulations. This source confirms composition &mdash; not clinical effectiveness.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">AnazaoHealth</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="review" style="--tier:var(--t-review)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pubmed.ncbi.nlm.nih.gov/19301095/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>03</i> Scientific review</span>
+              <h4 class="rs-ref__name">Amino Acids: Metabolism, Functions, and Nutrition</h4>
+              <p class="rs-ref__note">This review describes amino acids as protein building blocks and participants in metabolic and signaling pathways. It discusses arginine, glutamine and proline among the functional amino acids but does not study AminoMultiPlex or Revive.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PubMed</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="synthesis" style="--tier:var(--t-synthesis)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pubmed.ncbi.nlm.nih.gov/16923308/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>01</i> Systematic review &mdash; different clinical populations</span>
+              <h4 class="rs-ref__name">Glutamine in Critical Care</h4>
+              <p class="rs-ref__note">This review discusses glutamine as a fuel source for intestinal and immune cells. The research involved critically ill or surgical populations and different doses and formulations; it does not establish benefits for this outpatient infusion.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PubMed</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="review" style="--tier:var(--t-review)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pubmed.ncbi.nlm.nih.gov/32969070/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>03</i> Scientific review</span>
+              <h4 class="rs-ref__name">Prolyl and Lysyl Hydroxylases in Collagen Synthesis</h4>
+              <p class="rs-ref__note">This review explains the roles of proline and lysine-related pathways in collagen formation. It supports the biological description of these amino acids but does not demonstrate that AminoMultiPlex increases collagen production in patients.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PubMed</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="official" style="--tier:var(--t-official)" data-rs="pop">
+            <a class="rs-ref__in" href="https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2105d1c1-54ef-4d1a-a63c-b1619e8b50db" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>06</i> Official product information</span>
+              <h4 class="rs-ref__name">DailyMed: Magnesium Chloride Injection</h4>
+              <p class="rs-ref__note">The official label describes magnesium chloride as an electrolyte replenisher for magnesium deficiency and identifies important contraindications and precautions. It does not establish routine benefit without clinical assessment.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">DailyMed / NIH</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+          <li class="rs-ref" data-tier="official" style="--tier:var(--t-official)" data-rs="pop">
+            <a class="rs-ref__in" href="https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=788ab6d7-d80c-0220-e053-2991aa0ae6e9" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>06</i> Official product information</span>
+              <h4 class="rs-ref__name">DailyMed: Calcium Gluconate Injection</h4>
+              <p class="rs-ref__note">The official label describes calcium gluconate injection, its approved indication, administration requirements, monitoring, incompatibilities and risks. It does not establish the effectiveness of calcium gluconate as part of this wellness formulation.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">DailyMed / NIH</span>
                 <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
               </div>
             </a>
@@ -788,6 +972,31 @@
               <h4 class="rs-ref__name">Alpha lipoic acid for dementia</h4>
               <div class="rs-ref__foot">
                 <span class="rs-ref__src">PMC / NIH</span>
+                <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
+              </div>
+            </a>
+          </li>
+        </ol>
+      </section>
+      <section class="rs-group" id="joint-skin" data-tx="joint-skin" style="--tone:#8C6239">
+        <header class="rs-group__head">
+          <div>
+            <span class="rs-group__no">VIII &mdash; 1 reference</span>
+            <h2 class="rs-group__name">Joint &amp; Skin Wellness IV</h2>
+            <p class="rs-group__tags">Collagen amino acids &middot; proline &middot; lysine &middot; connective tissue</p>
+          </div>
+          <a class="rs-group__go" href="../drips/joint-skin.html">
+            <span>See the infusion</span><i class="ph ph-arrow-right"></i>
+          </a>
+        </header>
+        <ol class="rs-group__grid">
+          <li class="rs-ref" data-tier="review" style="--tier:var(--t-review)" data-rs="pop">
+            <a class="rs-ref__in" href="https://pubmed.ncbi.nlm.nih.gov/32969070/" target="_blank" rel="noopener">
+              <span class="rs-ref__type"><i>03</i> Scientific review</span>
+              <h4 class="rs-ref__name">Prolyl and Lysyl Hydroxylases in Collagen Synthesis</h4>
+              <p class="rs-ref__note">This review explains the roles of proline and lysine-related pathways in collagen formation. It supports the biological description of these amino acids but does not demonstrate that an infusion increases collagen production in patients.</p>
+              <div class="rs-ref__foot">
+                <span class="rs-ref__src">PubMed</span>
                 <span class="rs-ref__go">Read <i class="ph ph-arrow-up-right"></i></span>
               </div>
             </a>
