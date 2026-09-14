@@ -1622,7 +1622,7 @@ const DRIPS = [
       why:'Immune system support, hydration, recovery and wellness optimization.' },
 
     { id:'recovery',     name:'Revive IV Support',                slug:'/drips/revive.html',              img:'revive',        time:'1 h 15',                     price:'$325', tag:'Recovery Support',
-      why:'Hydration and nutritional replenishment for flexible, as-needed use.' },
+      why:'A shorter, focused infusion for times when you feel run down or depleted.' },
 
     // name matches the plate exactly — it used to read "Stress, Mental Burnout
     // & Brain Wellness IV" here and "Stress & Brain Wellness IV" on the card,
