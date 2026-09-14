@@ -280,6 +280,26 @@ html.dx-on .dx-ing  { opacity: 0; }
     font-size: clamp(.94rem, 1.05vw, 1.02rem); line-height: 1.68; color: var(--ink-soft);
 }
 
+/* The three glutathione-related infusions share one explainer, inserted on each
+   of their pages above the reference block. */
+.dx-trio {
+    max-width: 72ch;
+    margin: clamp(2rem, 4vw, 3rem) 0 clamp(1.4rem, 3vw, 2rem);
+    padding: clamp(1.2rem, 2.4vw, 1.7rem) clamp(1.2rem, 2.6vw, 1.8rem);
+    border: 1px solid var(--t-line);
+    border-radius: 8px;
+    background: var(--f01);
+}
+.dx-trio__h {
+    margin-bottom: .9rem;
+    font-family: var(--dx-mono); font-size: .58rem; font-weight: 500;
+    letter-spacing: .17em; text-transform: uppercase; color: var(--forest);
+}
+.dx-trio__list { display: grid; gap: .7rem; }
+.dx-trio__list li { font-size: .95rem; line-height: 1.66; color: var(--ink-soft); }
+.dx-trio__list b { color: var(--forest); font-weight: 600; }
+.dx-trio__note { margin-top: .9rem; font-size: .8rem; line-height: 1.6; color: var(--mist); }
+
 .dx-mix__fine { max-width: 78ch; margin-top: 1.4rem; font-size: .77rem; line-height: 1.68; color: var(--mist); }
 
 
