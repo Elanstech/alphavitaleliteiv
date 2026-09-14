@@ -825,7 +825,6 @@ const probe = () => {
 const modules = {
     hero:      new Hero(),
     typer:     new Typer(),
-    drop:      new Drop(),
     stage:     new Stage(),
     compounds: new Compounds(),
 };
@@ -868,7 +867,7 @@ const boot = () => {
         }),
     ]);
 
-    const EAGER = new Set(['hero', 'typer', 'drop']);
+    const EAGER = new Set(['hero', 'typer']);
     Object.entries(modules).forEach(([key, m]) => {
         if (EAGER.has(key)) start(m);
         else BUILD.then(() => start(m));
