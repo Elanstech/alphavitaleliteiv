@@ -321,6 +321,18 @@ class Typer {
         if (!this.el) return;
         if (REDUCED || !LIVE()) { this.el.textContent = this.lines[0]; return; }
 
+        /* A phone is the one place this loop is expensive. The headline sits
+           directly over the bloom field, so every character written here is a
+           layout of the type PLUS a recomposite of the blurred layers beneath
+           it — twenty times a second, for as long as the page is open. On a
+           desktop GPU that is free. On a phone it is the single most expensive
+           thing still running after the entrance finishes.
+           The line is decorative; below 900px it is simply printed. */
+        if (window.matchMedia('(max-width: 900px)').matches) {
+            this.el.textContent = this.lines[0];
+            return;
+        }
+
         // nothing types until the hero is actually being looked at
         document.addEventListener('visibilitychange', () => {
             this.stopped = document.hidden;
