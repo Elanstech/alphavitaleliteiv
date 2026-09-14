@@ -1892,7 +1892,7 @@ class Quiz {
                 ${altRow}
                 <div class="rx__cta">
                     <a class="rx__btn rx__btn--solid" href="${top.slug}">
-                        <span>Read the protocol</span><i class="ph ph-arrow-up-right"></i>
+                        <span>View Infusion Details</span><i class="ph ph-arrow-up-right"></i>
                     </a>
                     <a class="rx__btn" href="tel:+13477148660">
                         <span>347 · 714 · 8660</span><i class="ph ph-phone"></i>
