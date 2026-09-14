@@ -729,6 +729,97 @@ class Compounds {
 
 
 /* =============================================================================
+   PERF PROBE — add ?debug to the URL
+   -----------------------------------------------------------------------------
+   Off by default and costs nothing when off. With ?debug (or #debug) on the
+   address, a small readout pins to the bottom-left of the page:
+
+     FPS      live frame rate, and the worst value seen since load
+     LONG     count of long tasks (>50ms of blocked main thread) and the worst
+     PAINT    time to first contentful paint
+     HERO     how long the headline entrance took to settle
+
+   A long task is a frame the browser could not deliver. If LONG climbs while
+   the page is arriving, the stutter is main-thread work — script or layout.
+   If FPS dips but LONG stays at 0, it is the compositor — too many blurred or
+   promoted layers, which is a CSS problem, not a script one.
+
+   Everything is also written to console.table on load under [AVE·IX perf].
+============================================================================= */
+const probe = () => {
+    const on = /[?&#]debug\b/.test(location.search + location.hash);
+    if (!on) return;
+
+    const box = document.createElement('div');
+    box.style.cssText = [
+        'position:fixed', 'left:8px', 'bottom:8px', 'z-index:99999',
+        'font:11px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace',
+        'background:rgba(16,18,16,.86)', 'color:#e8e6dd',
+        'padding:8px 10px', 'border-radius:6px', 'white-space:pre',
+        'pointer-events:none', '-webkit-user-select:none', 'user-select:none',
+    ].join(';');
+    document.body.appendChild(box);
+
+    const t0 = performance.now();
+    let frames = 0, fps = 0, worstFps = 999, last = t0;
+    let longCount = 0, longWorst = 0, heroMs = 0;
+
+    HERO_IN.then(() => { heroMs = Math.round(performance.now() - t0); });
+
+    if ('PerformanceObserver' in window) {
+        try {
+            new PerformanceObserver((list) => {
+                list.getEntries().forEach((e) => {
+                    longCount++;
+                    longWorst = Math.max(longWorst, Math.round(e.duration));
+                });
+            }).observe({ entryTypes: ['longtask'] });
+        } catch { /* Safari has no longtask */ }
+    }
+
+    const fcp = () => {
+        const e = performance.getEntriesByName('first-contentful-paint')[0];
+        return e ? Math.round(e.startTime) : '—';
+    };
+
+    const tick = (now) => {
+        frames++;
+        if (now - last >= 500) {
+            fps = Math.round((frames * 1000) / (now - last));
+            // ignore the idle first half-second, it reads artificially low
+            if (now - t0 > 1200) worstFps = Math.min(worstFps, fps);
+            frames = 0; last = now;
+            box.textContent =
+                `FPS   ${String(fps).padStart(3)}  (worst ${worstFps === 999 ? '—' : worstFps})\n` +
+                `LONG  ${String(longCount).padStart(3)}  (worst ${longWorst}ms)\n` +
+                `PAINT ${fcp()}ms\n` +
+                `HERO  ${heroMs ? heroMs + 'ms' : 'settling'}`;
+        }
+        requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+
+    window.addEventListener('load', () => setTimeout(() => {
+        const nav = performance.getEntriesByType('navigation')[0] || {};
+        console.table({
+            'first paint (ms)':      fcp(),
+            'DOM ready (ms)':        Math.round(nav.domContentLoadedEventEnd || 0),
+            'load (ms)':             Math.round(nav.loadEventEnd || 0),
+            'hero settled (ms)':     heroMs,
+            'long tasks':            longCount,
+            'worst long task (ms)':  longWorst,
+            'worst fps':             worstFps === 999 ? '—' : worstFps,
+            'images on page':        $$('img').length,
+            'blooms painted':        $$('.hr__bloom').filter((b) => getComputedStyle(b).display !== 'none').length,
+        });
+        console.info('[AVE·IX perf] heaviest images:',
+            $$('img').map((i) => i.currentSrc || i.src)
+                     .filter(Boolean).slice(0, 12));
+    }, 1500));
+};
+
+
+/* =============================================================================
    BOOT
 ============================================================================= */
 const modules = {
@@ -741,6 +832,8 @@ const modules = {
 
 const boot = () => {
     if (!PAGE) return;
+
+    probe();
 
     if (GSAP_ON()) gsap.registerPlugin(ScrollTrigger);
 
