@@ -90,14 +90,14 @@ const popIn = (targets, opts = {}, trigger, start = 'top 86%') => {
 ============================================================================= */
 const MENU = {
     healthyaging: { no: 'I',    name: 'GLyNAC Healthy Aging', slug: '/drips/glynac.html',          tone: '#5B7098' },
-    immune:       { no: 'II',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immun-o-boost.html',         tone: '#D9982A' },
-    muscle:       { no: 'III',  name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo.html',        tone: '#B34E37' },
-    antioxidant:  { no: 'IV',   name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant.html',    tone: '#4F7D5E' },
-    glutathione:  { no: 'V',    name: 'Glutathione IV Injection',     slug: '/drips/glutathione.html', tone: '#7FA08C' },
-    jointskin:    { no: 'VI',   name: 'Joint & Skin Wellness',        slug: '/drips/joint-skin.html',    tone: '#8C6239' },
-    liver:        { no: 'VII',  name: 'Fatty Liver Support',          slug: '/drips/fatty-liver-support.html',          tone: '#5F7A55' },
-    recovery:     { no: 'VIII', name: 'Revive IV Support',            slug: '/drips/revive.html',       tone: '#35707F' },
-    mind:         { no: 'IX',   name: 'Stress & Brain Wellness',      slug: '/drips/stress-brain.html',     tone: '#7A5F98' },
+    glutathione:  { no: 'II',   name: 'Glutathione IV Injection',     slug: '/drips/glutathione.html', tone: '#7FA08C' },
+    antioxidant:  { no: 'III',  name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant.html',    tone: '#4F7D5E' },
+    immune:       { no: 'IV',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immun-o-boost.html',         tone: '#D9982A' },
+    recovery:     { no: 'V',    name: 'Revive IV Support',            slug: '/drips/revive.html',       tone: '#35707F' },
+    muscle:       { no: 'VI',   name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo.html',        tone: '#B34E37' },
+    mind:         { no: 'VII',  name: 'Stress & Brain Wellness',      slug: '/drips/stress-brain.html',     tone: '#7A5F98' },
+    jointskin:    { no: 'VIII', name: 'Joint & Skin Wellness',        slug: '/drips/joint-skin.html',    tone: '#8C6239' },
+    liver:        { no: 'IX',   name: 'Fatty Liver Support',          slug: '/drips/fatty-liver-support.html',          tone: '#5F7A55' },
     custom:       { no: 'X',    name: 'Customized IV Infusion',       slug: '/drips/customized.html',    tone: '#C1963F' },
 };
 
