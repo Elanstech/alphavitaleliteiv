@@ -26,6 +26,7 @@
     --t-review:       #5B7098;
     --t-observation:  #8C6239;
     --t-preclinical:  #B34E37;
+    --t-official:     #7A5F98;
 
     background: var(--cream);
     color: var(--ink-soft);
@@ -511,6 +512,14 @@ a.rs-ref__in:hover .rs-ref__name { color: var(--gold-deep); }
 
 .rs-ref__take {
     margin-top: .6rem; font-size: .84rem; line-height: 1.62; color: var(--ink-soft);
+}
+
+/* A short plain-language note under the title: what the study actually looked
+   at, and how far it sits from this infusion. Optional — most cards omit it. */
+.rs-ref__note {
+    margin: .55rem 0 .2rem;
+    font-size: .8rem; line-height: 1.6;
+    color: var(--mist);
 }
 
 .rs-ref__foot {

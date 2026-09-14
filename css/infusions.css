@@ -215,12 +215,8 @@ html:not(.ivx-on) .hr__caret { display: none; }
 .hr__acts { display: flex; flex-wrap: wrap; gap: .75rem; }
 
 /* the drop that falls down the left margin */
-.hr__drip { position: absolute; left: calc(var(--gut) / 2); bottom: 0; width: 1px; height: clamp(70px, 12vh, 130px); z-index: 1; }
-.hr__stem { position: absolute; inset: 0; background: linear-gradient(180deg, transparent, var(--rule-brass)); }
-.hr__drop {
-    position: absolute; left: 50%; top: 0; width: 6px; height: 6px;
-    margin-left: -3px; border-radius: 50%; background: var(--brass); opacity: 0;
-}
+/* .hr__drip / .hr__stem / .hr__drop — the falling bead, removed: it ran a
+   GSAP tween on a permanent loop for the life of the page. */
 
 
 /* =============================================================================
