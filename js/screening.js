@@ -54,7 +54,7 @@ const INTAKE_DRIP_FIELD = 'dropdown3';
 
 
 const MENU = {
-    'glynac':              { name: 'GLyNAC Healthy Aging',      price: '$350', chair: '1 h 15', tone: '#5B7098', img: 'glynac' },
+    'glynac':              { name: 'GLyNAC Healthy Aging',      price: '$350', chair: '60 min', tone: '#5B7098', img: 'glynac' },
     'glutathione':         { name: 'Glutathione IV Injection',  price: '$100', chair: '30 min', tone: '#7FA08C', img: 'glutathione' },
     'antioxidant':         { name: 'Antioxidant \u00d73 Reset', price: '$400', chair: '1 h 15', tone: '#4F7D5E', img: 'antioxidant' },
     'immun-o-boost':       { name: 'Immun-O-Boost IV Support',  price: '$550', chair: '2 h 30', tone: '#D9982A', img: 'immuneoboost' },
