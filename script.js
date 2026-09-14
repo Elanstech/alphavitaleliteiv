@@ -1608,7 +1608,7 @@ class Dock {
    Never treats, cures, repairs, or guaranteed-outcome language.
 ============================================================================= */
 const DRIPS = [
-    { id:'healthyaging', name:'GLyNAC Healthy Aging IV',  slug:'/drips/glynac.html',              img:'glynac',        time:'1 h 15',                     price:'$350',    tag:'Healthy Aging',
+    { id:'healthyaging', name:'GLyNAC Healthy Aging IV',  slug:'/drips/glynac.html',              img:'glynac',        time:'60 min',                     price:'$350',    tag:'Healthy Aging',
       why:'The two compounds the body uses as building components to produce glutathione.' },
 
     { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione.html',         img:'glutathione',   time:'15 min push · 30 min visit', price:'$100', tag:'Glutathione IV Therapy',
