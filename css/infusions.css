@@ -638,6 +638,36 @@ html:not(.ivx-on) .hr__caret { display: none; }
     .wl__ttl { display: none; }
 }
 
+/* =============================================================================
+   HERO FIELD · PHONES
+   -----------------------------------------------------------------------------
+   The desktop field is six 620px circles under a 46px blur, drifting forever,
+   with a tiled noise raster painted on top of them. On a desktop GPU those are
+   six cheap composited layers. On a phone each one is a large blurred raster
+   the compositor has to keep alive for the life of the page — and they are all
+   running during the first second, which is exactly when the headline stagger,
+   the webfont swap and the first ScrollTrigger measurement are competing for
+   the same frames. That is the stutter on arrival.
+
+   Nothing here changes the look at a glance: the field still reads as soft
+   colour behind the type. It just stops costing a frame budget to do it.
+     · half the blooms (six overlapping at 52vw is mush on a 390px screen)
+     · no drift — a static blurred circle is rasterised once, not every frame
+     · smaller radius, so the raster is smaller
+     · no grain — a repeating texture over the full hero, repainted above the
+       blurred layers, for a tooth nobody can see at this size
+============================================================================= */
+@media (max-width: 900px) {
+    .hr__bloom {
+        width: clamp(240px, 54vw, 400px);
+        filter: blur(30px);
+        opacity: .3;
+        animation: none;
+    }
+    .hr__bloom:nth-of-type(n + 4) { display: none; }
+    .hr__grain { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .page-infusions *,
     .page-infusions *::before,
