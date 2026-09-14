@@ -1321,7 +1321,7 @@ body.is-ready .hero__title .word > span {
 .plate__clock i { color: var(--tone); font-size: 1.2em; }
 
 .plate__deal {
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem;
+    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem;
     padding-top: .8rem; border-top: 1px solid var(--rule);
 }
 .plate__price b {
