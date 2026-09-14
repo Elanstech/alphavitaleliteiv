@@ -637,31 +637,21 @@ html:not(.ivx-on) .hr__caret { display: none; }
 /* =============================================================================
    HERO FIELD · PHONES
    -----------------------------------------------------------------------------
-   The desktop field is six 620px circles under a 46px blur, drifting forever,
-   with a tiled noise raster painted on top of them. On a desktop GPU those are
-   six cheap composited layers. On a phone each one is a large blurred raster
-   the compositor has to keep alive for the life of the page — and they are all
-   running during the first second, which is exactly when the headline stagger,
-   the webfont swap and the first ScrollTrigger measurement are competing for
-   the same frames. That is the stutter on arrival.
+   The expensive part of this field is the BLUR RADIUS, not the number of
+   layers or the drift. A 46px blur on a 620px circle is a large raster for a
+   phone GPU to hold; the translate that moves it afterwards is free, and the
+   grain is a static tile that paints once.
 
-   Nothing here changes the look at a glance: the field still reads as soft
-   colour behind the type. It just stops costing a frame budget to do it.
-     · half the blooms (six overlapping at 52vw is mush on a 390px screen)
-     · no drift — a static blurred circle is rasterised once, not every frame
-     · smaller radius, so the raster is smaller
-     · no grain — a repeating texture over the full hero, repainted above the
-       blurred layers, for a tooth nobody can see at this size
+   So the field keeps all six blooms, keeps drifting, and keeps its tooth —
+   it just works at a radius a phone can afford. Visually this is the same
+   hero; the compositor simply has less to carry per frame.
 ============================================================================= */
 @media (max-width: 900px) {
     .hr__bloom {
-        width: clamp(240px, 54vw, 400px);
-        filter: blur(30px);
-        opacity: .3;
-        animation: none;
+        width: clamp(260px, 56vw, 420px);
+        filter: blur(22px);
+        opacity: .32;
     }
-    .hr__bloom:nth-of-type(n + 4) { display: none; }
-    .hr__grain { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
