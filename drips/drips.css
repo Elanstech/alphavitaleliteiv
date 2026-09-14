@@ -253,6 +253,33 @@ html.dx-on .dx-ing  { opacity: 0; }
 .dx-ing__chip i { position: absolute; inset: -1px; border-radius: 50%; border: 1.5px solid var(--bt, var(--tone)); opacity: 0; }
 
 .dx-mix__close { margin-top: var(--stack); padding-left: clamp(1rem,2vw,1.7rem); border-left: 2px solid var(--tone); font-family: var(--dx-serif); font-style: italic; font-weight: 400; font-size: clamp(1.25rem,2.3vw,1.85rem); line-height: 1.3; letter-spacing: -.012em; color: var(--forest); max-width: 40ch; }
+/* The carrier is the fluid everything else arrives in — not a numbered
+   component. It sits above the list as a quiet aside so the numbering can
+   start at the first actual ingredient. */
+.dx-comp__aside {
+    max-width: 62ch;
+    margin: 0 0 clamp(1.8rem, 4vw, 2.6rem);
+    padding: clamp(1rem, 2vw, 1.3rem) clamp(1.1rem, 2.2vw, 1.5rem);
+    border-left: 2px solid var(--t-line);
+    background: var(--f01);
+    border-radius: 0 6px 6px 0;
+}
+.dx-comp__aside p:not(.dx-comp__role) {
+    font-size: .92rem; line-height: 1.68; color: var(--ink-soft);
+}
+.dx-comp__aside .dx-comp__role { margin-bottom: .45rem; }
+
+/* Hero sub-blocks: a small label over a short paragraph. */
+.dx-hero__block { max-width: 46ch; margin-bottom: 1.1rem; }
+.dx-hero__lab {
+    margin-bottom: .35rem;
+    font-family: var(--dx-mono); font-size: .55rem; font-weight: 500;
+    letter-spacing: .17em; text-transform: uppercase; color: var(--t-line);
+}
+.dx-hero__block p:not(.dx-hero__lab) {
+    font-size: clamp(.94rem, 1.05vw, 1.02rem); line-height: 1.68; color: var(--ink-soft);
+}
+
 .dx-mix__fine { max-width: 78ch; margin-top: 1.4rem; font-size: .77rem; line-height: 1.68; color: var(--mist); }
 
 
