@@ -1633,11 +1633,9 @@ const DRIPS = [
     { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$500',    tag:'Mind & Focus Support',
       why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
 
-    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin.html',          img:'jointsupport',  time:'2 h 30',                     price:'$650',    tag:'Joint Support & Skin Health',
+    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin.html',          img:'jointsupport',  time:'2 h 30',                     price:'$550',    tag:'Joint Support & Skin Health',
       why:'Amino acids involved in normal collagen formation, with antioxidant support around them.' },
 
-    { id:'liver',        name:'Fatty Liver Support IV',           slug:'/drips/fatty-liver-support.html', img:'liversupport',  time:'3 h',                        price:'$650',    tag:'Liver Support',
-      why:'Glycine and taurine for the liver’s normal bile work, with NAC for the glutathione pathway.' },
 
     { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized.html',          img:'customized',    time:'Individually determined',    price:'By consultation', tag:'Customized IV Infusion',
       why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
@@ -1650,7 +1648,6 @@ const ASKS = [
         { t:'My joints ache',            s:'Stiffness, arthritis, wear',     i:'ph-bone',             w:{ jointskin:6, antioxidant:2 } },
         { t:'I am thinking about my skin', s:'Tone, texture, skin wellness', i:'ph-sparkle',          w:{ jointskin:5, glutathione:3 } },
         { t:'I am losing muscle',        s:'On a GLP-1 or weight-loss plan', i:'ph-barbell',          w:{ muscle:7 } },
-        { t:'My liver markers came back off', s:'Metabolic or liver concern', i:'ph-leaf',            w:{ liver:6, antioxidant:2 } },
         { t:'I want to age well',        s:'Longevity, cellular defenses',   i:'ph-infinity',         w:{ healthyaging:6, antioxidant:3 } },
         /* Seven specific complaints and no way out of them. Anyone who did not
            fit still had to pick one, and got steered somewhere that did not
@@ -1662,7 +1659,6 @@ const ASKS = [
     { ask:'Are you under a specialist’s care for anything?', hint:'This changes how carefully she coordinates, never whether you are welcome.', opts:[
         { t:'Yes — a gut condition',    s:'Crohn’s, colitis, celiac',       i:'ph-first-aid-kit',  flag:true, w:{ custom:5, immune:2 } },
         { t:'Yes — joints or skin',     s:'RA, osteoarthritis, psoriasis',  i:'ph-hand-heart',     flag:true, w:{ custom:4, jointskin:3 } },
-        { t:'Yes — liver or metabolic', s:'Fatty liver, related',           i:'ph-heartbeat',      flag:true, w:{ custom:4, liver:3 } },
         { t:'No — generally well',      s:'No diagnosis, no specialist',    i:'ph-check-circle',   w:{} },
     ]},
 
@@ -1670,22 +1666,20 @@ const ASKS = [
         { t:'About half an hour', s:'A lunch break',      i:'ph-timer',     w:{ glutathione:6 } },
         { t:'About an hour',      s:'A proper sit',       i:'ph-clock',     w:{ healthyaging:4, antioxidant:4, muscle:3 } },
         { t:'Ninety minutes',     s:'Time to switch off', i:'ph-armchair',  w:{ antioxidant:3, healthyaging:2, mind:4 } },
-        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ recovery:5, immune:5, liver:4, jointskin:4 } },
+        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ recovery:5, immune:5, jointskin:4 } },
     ]},
 
-    /* Joint & Skin ($650) and Liver ($650) used to carry no weight here — a
-       deliberate hold from when neither had a confirmed price. Both are
-       published now, and they are the two most expensive infusions on the
-       menu, so the top band could never reach them. They belong in it. */
+    /* Joint & Skin ($550) belongs in the top band. Fatty Liver Support was
+       removed from the menu in Sept 2026. */
     { ask:'What feels comfortable per session?', hint:'Every figure here is her real published rate.', opts:[
         { t:'Under $350',     s:'Single-compound infusions', i:'ph-coins',   w:{ glutathione:5 } },
         { t:'$350 – $550',    s:'The mid-length protocols',  i:'ph-wallet',  w:{ healthyaging:4, antioxidant:4, muscle:3 } },
-        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, recovery:4, mind:4, jointskin:4, liver:4 } },
+        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, recovery:4, mind:4, jointskin:4 } },
         { t:'Let her decide', s:'Whatever is right',         i:'ph-pen-nib', w:{ custom:4 } },
     ]},
 ];
 
-const THINKING = ['Reading your answers', 'Weighing ten infusions', 'Checking time and budget', 'Preparing your starting point'];
+const THINKING = ['Reading your answers', 'Weighing nine infusions', 'Checking time and budget', 'Preparing your starting point'];
 
 class Quiz {
     constructor() {
