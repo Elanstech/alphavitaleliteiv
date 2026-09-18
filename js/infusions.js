@@ -85,7 +85,7 @@ const popIn = (targets, opts = {}, trigger, start = 'top 86%') => {
 
 
 /* =============================================================================
-   THE MENU — the ten, by id
+   THE MENU — the nine, by id
    Names, numerals and slugs match the cards and the header flyout exactly.
 ============================================================================= */
 const MENU = {
@@ -97,8 +97,7 @@ const MENU = {
     muscle:       { no: 'VI',   name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo.html',        tone: '#B34E37' },
     mind:         { no: 'VII',  name: 'Stress & Brain Wellness',      slug: '/drips/stress-brain.html',     tone: '#7A5F98' },
     jointskin:    { no: 'VIII', name: 'Joint & Skin Wellness',        slug: '/drips/joint-skin.html',    tone: '#8C6239' },
-    liver:        { no: 'IX',   name: 'Fatty Liver Support',          slug: '/drips/fatty-liver-support.html',          tone: '#5F7A55' },
-    custom:       { no: 'X',    name: 'Customized IV Infusion',       slug: '/drips/customized.html',    tone: '#C1963F' },
+    custom:       { no: 'IX',   name: 'Customized IV Infusion',       slug: '/drips/customized.html',    tone: '#C1963F' },
 };
 
 
@@ -112,19 +111,19 @@ const MENU = {
 const COMPOUNDS = [
     { id: 'glutathione', name: 'Glutathione', ghost: 'Gl',
       what: 'A major intracellular antioxidant. Given directly in some formulations, and supported in others through the compounds the body builds it from.',
-      in: ['immune', 'antioxidant', 'glutathione', 'jointskin', 'liver', 'recovery'] },
+      in: ['immune', 'antioxidant', 'glutathione', 'jointskin', 'recovery'] },
 
     { id: 'vitaminc', name: 'Vitamin C', ghost: 'C',
       what: 'An antioxidant that is also required for normal collagen production — which is why it appears beside the collagen amino acids as well as in the antioxidant formulations.',
-      in: ['immune', 'antioxidant', 'jointskin', 'liver', 'recovery'] },
+      in: ['immune', 'antioxidant', 'jointskin', 'recovery'] },
 
     { id: 'ala', name: 'Alpha-Lipoic Acid', ghost: 'ALA',
       what: 'Works in mitochondrial energy metabolism and inside the antioxidant network, where it and glutathione recharge one another rather than working alone.',
-      in: ['antioxidant', 'jointskin', 'liver', 'recovery', 'mind'] },
+      in: ['antioxidant', 'jointskin', 'recovery', 'mind'] },
 
     { id: 'bcomplex', name: 'B-Complex', ghost: 'B',
       what: 'B1 through B12, involved in normal energy metabolism and in the production of neurotransmitters. B12 is taken up in the ileum, the stretch of bowel that malabsorption most often involves.',
-      in: ['immune', 'jointskin', 'liver', 'recovery', 'mind'] },
+      in: ['immune', 'jointskin', 'recovery', 'mind'] },
 
     { id: 'aminos', name: 'Amino Acids', ghost: 'AA',
       what: 'Building blocks that reduced intake, long flares and weight-loss programs leave short. LIQUIXO carries a full twenty; the collagen set is glycine, proline and lysine.',
@@ -132,19 +131,19 @@ const COMPOUNDS = [
 
     { id: 'nac', name: 'N-Acetylcysteine', ghost: 'NAC',
       what: 'Supplies cysteine — one of the three amino acids the body needs to make glutathione, and usually the one in shortest supply.',
-      in: ['healthyaging', 'jointskin', 'liver'] },
+      in: ['healthyaging'] },
 
     { id: 'minerals', name: 'Magnesium & Trace Minerals', ghost: 'Mg',
       what: 'Magnesium with copper, manganese and selenium. Cofactors the rest of a formulation depends on — zinc and copper are kept in ratio, since excess zinc interferes with copper absorption.',
-      in: ['immune', 'jointskin', 'liver'] },
+      in: ['immune', 'jointskin'] },
 
     { id: 'glycine', name: 'Glycine', ghost: 'Gly',
       what: 'The second building component of glutathione, and one of the amino acids the liver uses to prepare bile.',
-      in: ['healthyaging', 'liver'] },
+      in: ['healthyaging'] },
 
     { id: 'taurine', name: 'Taurine', ghost: 'Tau',
       what: 'An amino acid involved in the liver\u2019s normal bile work, and present in the brain in high concentration.',
-      in: ['liver', 'mind'] },
+      in: ['mind'] },
 
     { id: 'zinc', name: 'Zinc', ghost: 'Zn',
       what: 'Supports hundreds of enzymes, immune-cell communication and normal tissue repair. Low zinc is documented in inflammatory bowel disease.',
