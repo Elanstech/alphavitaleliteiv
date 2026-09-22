@@ -681,6 +681,22 @@ const post = (cfg, values) => {
     id.type = 'hidden'; id.name = 'formID'; id.value = cfg.formID;
     f.appendChild(id);
 
+    /* Jotform's spam check. Its own form script sets simple_spc to
+       "<formID>-<formID>" on load; a POST without it is treated as a bot and
+       silently dropped — which is why submissions were never arriving. The
+       other three mirror what a real Jotform submit sends (website is the
+       honeypot and must stay empty). */
+    [
+        ['simple_spc', cfg.formID + '-' + cfg.formID],
+        ['submitSource', 'form'],
+        ['jsExecutionTracker', 'build-date-' + Date.now()],
+        ['website', ''],
+    ].forEach(([name, value]) => {
+        const el = document.createElement('input');
+        el.type = 'hidden'; el.name = name; el.value = value;
+        f.appendChild(el);
+    });
+
     document.body.appendChild(f);
     try {
         f.submit();
