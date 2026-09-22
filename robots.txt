@@ -48,7 +48,5 @@ Allow: /
 User-agent: meta-externalagent
 Allow: /
 
-# Patient-facing form steps — no value in search, and never a landing page.
-Disallow: /htmls/review-done.html
 
 Sitemap: https://www.alphaeliteiv.com/sitemap.xml
