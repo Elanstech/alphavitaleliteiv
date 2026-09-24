@@ -315,11 +315,28 @@ html.rs-on .rs-line > span     { transform: translate3d(0, 105%, 0); }
 }
 .rs-feat__acts { margin-top: 1.6rem; }
 
-/* featured report, now nested inside the Stress & Brain Wellness group */
-.rs-feat--inline {
-    margin-top: clamp(1.5rem, 3vw, 2.25rem);
-    padding: clamp(1.5rem, 3.5vw, 2.75rem);
-    border: 1px solid var(--rule);
+/* featured report, now a compact note inside the Stress & Brain Wellness group */
+.rs-mini {
+    max-width: 78ch; margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+    padding: 1.1rem 1.25rem;
+    background: var(--parchment); border: 1px solid var(--rule);
+    border-left: 3px solid var(--tone, var(--gold));
+}
+.rs-mini__kicker {
+    font-family: var(--micro); font-size: .56rem;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--mist);
+}
+.rs-mini__title {
+    margin-top: .45rem;
+    font-family: var(--caps); font-weight: 400; font-size: 1rem;
+    letter-spacing: .03em; color: var(--forest);
+}
+.rs-mini > p:not([class]) { margin-top: .5rem; font-size: .86rem; line-height: 1.65; }
+.rs-mini__btn { margin-top: .85rem; font-size: .78rem; padding: .6rem 1rem; }
+.rs-mini__note {
+    margin-top: .75rem;
+    font-family: var(--accent); font-style: italic;
+    font-size: .8rem; line-height: 1.6; color: var(--mist);
 }
 
 @media (max-width: 900px) {
