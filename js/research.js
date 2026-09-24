@@ -202,7 +202,7 @@ const Filter = {
 
         if (this.count) {
             const parts = [];
-            if (this.tiers.size) parts.push(`${this.tiers.size} evidence tier${this.tiers.size > 1 ? 's' : ''}`);
+            if (this.tiers.size) parts.push(`${this.tiers.size} research type${this.tiers.size > 1 ? 's' : ''}`);
             if (this.txs.size)   parts.push(`${this.txs.size} infusion${this.txs.size > 1 ? 's' : ''}`);
             this.count.textContent = parts.length
                 ? `Showing ${shown} reference${shown === 1 ? '' : 's'} — filtered by ${parts.join(' and ')}`
