@@ -106,12 +106,21 @@ const splitLines = (el) => {
     // rebuild: one masked line per measured row, inner HTML preserved
     const html = rows.map((row) => {
         const frag = document.createElement('div');
+        /* consecutive words from the same parent (an <em>, say) share ONE
+           clone of it. Cloning per word gave every word its own <em>, and
+           where that <em> is display:block each word took a line of its own. */
+        let open = null, owner = null;
         row.forEach((p, i) => {
-            // keep the element the probe was inside (em, etc.) by cloning parents
-            const holder = p.parentElement !== el ? p.parentElement.cloneNode(false) : null;
+            const parent = p.parentElement !== el ? p.parentElement : null;
             const text = document.createTextNode((i ? ' ' : '') + p.textContent);
-            if (holder) { holder.appendChild(text); frag.appendChild(holder); }
-            else frag.appendChild(text);
+            if (parent && parent === owner) { open.appendChild(text); return; }
+            if (parent) {
+                open = parent.cloneNode(false); owner = parent;
+                open.appendChild(text); frag.appendChild(open);
+            } else {
+                open = null; owner = null;
+                frag.appendChild(text);
+            }
         });
         return `<span class="ab-line"><span>${frag.innerHTML}</span></span>`;
     }).join('');
