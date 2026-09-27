@@ -350,28 +350,165 @@ html:not(.ivx-on) .hr__caret { display: none; }
     background: linear-gradient(90deg, var(--brass-lite), var(--brass));
 }
 
-/* ---------- stage · 900: no pin, the panels simply stack ---------- */
+/* ---------- stage · controls (phones only) ---------- */
+.st__ctrl { display: none; }
+
+/* =============================================================================
+   STAGE · PHONES — the deck
+   -----------------------------------------------------------------------------
+   No pin below 900px (the address bar drags it out of register). Instead the
+   nine sit side by side as cards and the reader swipes between them, one at a
+   time — the same idea as the desktop pin, carried by the thumb instead of the
+   scroll. Each card snaps into place, the next one peeks in at the edge so it
+   is obvious there is more, and the numerals above track and jump.
+============================================================================= */
 @media (max-width: 900px) {
+    .ivx-stage { padding-top: clamp(4rem, 14vw, 6rem); padding-bottom: clamp(3.5rem, 12vw, 5rem); }
+    .st__intro { margin-bottom: 1.75rem; }
+
     .st__inner {
-        grid-template-columns: 1fr; gap: 1.5rem; min-height: 0;
-        padding-bottom: 2rem;
+        display: block; min-height: 0; max-width: none;
+        padding: 0;
     }
+
+    /* numerals: all nine across one row, shared evenly */
     .st__rail {
-        flex-direction: row; overflow-x: auto; scrollbar-width: none;
-        gap: .25rem; padding-bottom: .4rem;
-        margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut);
+        display: grid; grid-template-columns: repeat(9, minmax(0, 1fr));
+        gap: .25rem; padding: .2rem var(--gut) 1.1rem;
     }
-    .st__rail::-webkit-scrollbar { display: none; }
-    .st__mark { flex: 0 0 auto; }
-    .st__deck { min-height: 0; display: flex; flex-direction: column; gap: 3.5rem; }
+    .st__rail li { display: grid; place-items: center; min-width: 0; }
+    .st__mark {
+        width: 100%; max-width: 2.6rem; height: auto; aspect-ratio: 1;
+        border-color: var(--rule); background: var(--bone);
+        font-size: .9rem; color: var(--ink-soft);
+    }
+    .st__mark.is-on { transform: none; }
+
+    /* the deck */
+    .st__deck {
+        min-height: 0;
+        display: grid; grid-auto-flow: column;
+        grid-auto-columns: min(84%, 400px);
+        gap: .85rem;
+        overflow-x: auto; overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: var(--gut);
+        padding: .25rem var(--gut) 1.25rem;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .st__deck::-webkit-scrollbar { display: none; }
+
     .st__panel {
-        position: static; opacity: 1; visibility: visible; pointer-events: auto;
-        grid-template-columns: 1fr; gap: 1.5rem;
-        padding-bottom: 3rem; border-bottom: 1px solid var(--rule);
+        position: relative; inset: auto;
+        opacity: 1; visibility: visible; pointer-events: auto;
+        display: flex; flex-direction: column; gap: 0;
+        scroll-snap-align: start; scroll-snap-stop: always;
+        border-radius: 20px; overflow: hidden;
+        background: var(--bone);
+        background: color-mix(in srgb, var(--tone) 7%, var(--bone));
+        border: 1px solid var(--rule);
+        border: 1px solid color-mix(in srgb, var(--tone) 24%, transparent);
+        box-shadow: 0 24px 44px -34px rgba(18, 30, 22, .45);
     }
-    .st__panel:last-child { border-bottom: 0; }
-    .st__shot { order: -1; max-width: 150px; }
+
+    /* the bag sits on its own lit stage at the top of the card */
+    .st__shot {
+        order: -1; max-width: none; margin: 0;
+        height: clamp(200px, 58vw, 250px);
+        display: grid; place-items: center; overflow: hidden;
+        background:
+            radial-gradient(75% 90% at 50% 100%, color-mix(in srgb, var(--tone) 30%, transparent), transparent 70%),
+            color-mix(in srgb, var(--tone) 12%, var(--bone));
+    }
+    .st__halo { width: 70%; opacity: .32; filter: blur(26px); }
+    .st__shot img {
+        width: auto; height: clamp(168px, 49vw, 212px); max-width: 60%;
+        object-fit: contain;
+        filter: drop-shadow(0 18px 22px rgba(18, 30, 22, .28));
+    }
+
+    .st__text {
+        flex: 1; display: flex; flex-direction: column;
+        padding: 1.25rem 1.25rem 1.35rem;
+    }
+    .st__no { margin-bottom: .7rem; }
+    .st__no i { font-size: 1.2rem; }
+    .st__no s { flex-basis: 1.6rem; }
+    .st__name {
+        font-size: clamp(1.55rem, 6.6vw, 1.95rem); line-height: 1.08;
+        margin-bottom: .7rem;
+    }
+    /* four lines at most, so one long description does not stretch all
+       nine cards — the full protocol is one tap away */
+    .st__note {
+        font-size: .95rem; line-height: 1.62; margin-bottom: 1rem;
+        display: -webkit-box; -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4; line-clamp: 4; overflow: hidden;
+    }
+    .st__tags { margin-bottom: 1.1rem; }
+    .st__tags li { background: rgba(255, 255, 255, .55); font-size: .6rem; padding: .32rem .62rem; }
+    .st__no, .st__meta dt { font-size: .58rem; }
+
+    /* price and chair time sit on a shared baseline, pinned to the card foot
+       so every card's button lands in the same place */
+    .st__meta {
+        margin-top: auto; margin-bottom: 1.1rem; padding-top: 1rem;
+        border-top: 1px solid var(--rule);
+        display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    .st__meta dd { font-size: 1.45rem; }
+
+    .st__open {
+        justify-content: center; gap: .55rem;
+        padding: 1rem 1.2rem; border: 0; border-radius: 999px;
+        background: var(--ink); color: var(--bone);
+        font-size: .62rem;
+    }
+    .st__open:hover { gap: .55rem; color: var(--bone); }
+    .st__open i { font-size: .9rem; }
+
+    /* prev · counter + progress · next */
+    .st__ctrl {
+        display: flex; align-items: center; gap: .9rem;
+        padding: 0 var(--gut);
+    }
+    .st__step {
+        flex: 0 0 auto; width: 2.9rem; height: 2.9rem; border-radius: 50%;
+        display: grid; place-items: center;
+        border: 1px solid var(--rule-brass); background: var(--bone); color: var(--ink);
+        font-size: 1.05rem; cursor: pointer;
+        transition: opacity .3s var(--ease), background .3s var(--ease);
+    }
+    .st__step:disabled { opacity: .35; cursor: default; }
+    .st__step:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+    .st__count {
+        flex: 1; display: flex; align-items: center; gap: .75rem;
+        font-family: var(--fx-mono); font-size: .6rem; font-weight: 500;
+        letter-spacing: .16em; color: var(--mist); white-space: nowrap;
+    }
+    .st__count b {
+        font-family: var(--fx-display); font-style: italic; font-weight: 400;
+        font-size: 1.05rem; letter-spacing: 0; color: var(--ink);
+    }
+    .st__count span {
+        flex: 1; height: 2px; border-radius: 2px; background: var(--rule); overflow: hidden;
+    }
+    .st__count span i {
+        display: block; height: 100%; width: 11.11%;
+        background: var(--brass);
+        transition: width .35s var(--ease);
+    }
+
     .st__prog { display: none; }
+}
+
+@media (max-width: 380px) {
+    .st__deck { grid-auto-columns: 86%; }
+    .st__mark { font-size: .78rem; }
+    .st__text { padding: 1.1rem 1.05rem 1.2rem; }
+    .st__meta dd { font-size: 1.3rem; }
 }
 
 /* =============================================================================
@@ -598,7 +735,8 @@ html:not(.ivx-on) .hr__caret { display: none; }
 
     /* a menu row stacks: the bag moves beside the numeral */
 
-    .ivx-wall { grid-template-columns: 1fr; gap: 1.5rem; }
+    .ivx-wall { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+    .wl__rail, .wl__stage { min-width: 0; }
     .wl__raillab { display: none; }
     .wl__keys {
         flex-direction: row; flex-wrap: nowrap; gap: .4rem;
@@ -630,8 +768,35 @@ html:not(.ivx-on) .hr__caret { display: none; }
 }
 
 @media (max-width: 640px) {
-    .wl__bags { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .35rem; }
+    /* nine bags as five over four, centred, short enough that the answer
+       panel is still on screen when a component is tapped */
+    .wl__bags {
+        display: flex; flex-wrap: wrap; justify-content: center;
+        gap: .5rem .25rem; margin-bottom: 1.1rem;
+    }
+    .wl__bag { flex: 0 0 calc(20% - .2rem); }
+    .wl__bag a { padding: .45rem .15rem .5rem; border-radius: 10px; }
+    .wl__glass { display: block; height: clamp(84px, 24vw, 110px); }
+    .wl__bag img { width: auto; height: 100%; max-width: 100%; margin: 0 auto; object-fit: contain; }
+    .wl__bag.is-in a { transform: translateY(-4px); }
+    .wl__no { margin-top: .3rem; font-size: .75rem; }
     .wl__ttl { display: none; }
+    .wl__panel { padding: 1.25rem 1.2rem 1.35rem; border-radius: 14px; }
+    .wl__title { font-size: 1.6rem; }
+
+    /* hero + closing buttons: full width, easy thumbs */
+    .hr__acts, .ivx-begin__acts { flex-direction: column; }
+    .hr__acts .ivx-btn, .ivx-begin__acts .ivx-btn { justify-content: center; width: 100%; }
+    .ivx-hero { min-height: 0; padding-bottom: 4rem; }
+    .hr__folio {
+        flex-direction: column; align-items: flex-start;
+        gap: .4rem; font-size: .52rem; letter-spacing: .2em;
+    }
+    .hr__folio .hr__dot { display: none; }
+    .hr__dek { padding-left: 1rem; font-size: 1rem; line-height: 1.7; }
+    .st__lede, .ivx-idx__lede { padding-left: 1rem; }
+    .ivx-inc__item { padding: 1.4rem .25rem; }
+    .ivx-inc__item i { margin: 1rem 0 .75rem; }
 }
 
 /* =============================================================================
