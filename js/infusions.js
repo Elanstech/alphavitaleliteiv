@@ -129,13 +129,13 @@ const COMPOUNDS = [
       what: 'Building blocks that reduced intake, long flares and weight-loss programs leave short. LIQUIXO carries a full twenty; the collagen set is glycine, proline and lysine.',
       in: ['immune', 'muscle', 'jointskin', 'recovery'] },
 
-    { id: 'nac', name: 'N-Acetylcysteine', ghost: 'NAC',
-      what: 'Supplies cysteine — one of the three amino acids the body needs to make glutathione, and usually the one in shortest supply.',
-      in: ['healthyaging'] },
-
     { id: 'minerals', name: 'Magnesium & Trace Minerals', ghost: 'Mg',
       what: 'Magnesium with copper, manganese and selenium. Cofactors the rest of a formulation depends on — zinc and copper are kept in ratio, since excess zinc interferes with copper absorption.',
       in: ['immune', 'jointskin'] },
+
+    { id: 'nac', name: 'N-Acetylcysteine', ghost: 'NAC',
+      what: 'Supplies cysteine — one of the three amino acids the body needs to make glutathione, and usually the one in shortest supply.',
+      in: ['healthyaging'] },
 
     { id: 'glycine', name: 'Glycine', ghost: 'Gly',
       what: 'The second building component of glutathione, and one of the amino acids the liver uses to prepare bile.',
@@ -419,7 +419,13 @@ class Stage {
         this.panels = $$('.st__panel');
         this.marks  = $$('.st__mark');
         this.fill   = $('#stProgFill');
+        this.rail   = $('#stRail');
+        this.prev   = $('#stPrev');
+        this.next   = $('#stNext');
+        this.now    = $('#stNow');
+        this.bar    = $('#stBar');
         this.mq     = window.matchMedia('(min-width: 901px)');
+        this.swipe  = -1;
         this.at     = -1;
         this.st     = null;
     }
@@ -428,6 +434,15 @@ class Stage {
         if (!this.deck || !this.panels.length) return;
 
         this.marks.forEach((m) => m.addEventListener('click', () => this.jump(+m.dataset.go)));
+        this.prev?.addEventListener('click', () => this.jump(Math.max(0, this.current() - 1)));
+        this.next?.addEventListener('click', () => this.jump(Math.min(this.panels.length - 1, this.current() + 1)));
+
+        // phones: the deck scrolls sideways, and the numerals follow it
+        this.deck.addEventListener('scroll', onFrame(() => this.track()), { passive: true });
+        window.addEventListener('resize', debounce(() => this.track(true), 200));
+        this.track(true);
+
+        this.intro();
 
         if (!LIVE()) { this.panels.forEach((p) => p.classList.add('is-live')); return; }
 
@@ -445,19 +460,22 @@ class Stage {
         this.st = null;
 
         if (!this.mq.matches) {
-            // stacked: every panel is live, each announces itself on arrival
-            this.panels.forEach((p) => p.classList.add('is-live'));
-            gsap.set(this.panels, { clearProps: 'all' });
+            /* The deck: every card is fully written from the start (a card
+               peeking in at the edge must never read '$0' or a half-typed
+               name), and the whole deck arrives as one piece rather than
+               nine separate reveals. */
             this.panels.forEach((p) => {
-                popIn($$('.st__text > *, .st__shot', p), { y: 26, stagger: .06 }, p, 'top 82%');
-                ScrollTrigger.create({
-                    trigger: p, start: 'top 70%', once: true,
-                    onEnter: () => {
-                        this.write(p);
-                        this.tally(p);
-                    },
-                });
+                p.classList.add('is-live');
+                const slot = $('.st__name span', p);
+                if (slot) { gsap.killTweensOf(slot); slot.textContent = $('.st__name', p).dataset.name || ''; }
+                const b = $('.st__rate b', p);
+                if (b && isFinite(+b.dataset.cost)) { gsap.killTweensOf(b); b.textContent = money(+b.dataset.cost); }
             });
+            const inner = [...this.panels, ...$$('.st__text > *, .st__shot img', this.deck)];
+            gsap.killTweensOf(inner);
+            gsap.set(inner, { clearProps: 'opacity,transform,visibility' });
+            popIn([this.rail, this.deck, $('#stCtrl')], { y: 24, stagger: .08 }, this.deck, 'top 90%');
+            this.track(true);
             return;
         }
 
@@ -566,7 +584,70 @@ class Stage {
         countTo(b, to);
     }
 
+    /** phones: is the deck laid out sideways right now */
+    sideways() { return this.deck.scrollWidth > this.deck.clientWidth + 4; }
+
+    /** the card whose left edge is nearest the deck's snap line */
+    current() {
+        if (!this.sideways()) return Math.max(0, this.at);
+        const pad = parseFloat(getComputedStyle(this.deck).scrollPaddingLeft) || 0;
+        const x = this.deck.scrollLeft + pad;
+        let best = 0, dist = Infinity;
+        this.panels.forEach((p, i) => {
+            const d = Math.abs(p.offsetLeft - x);
+            if (d < dist) { dist = d; best = i; }
+        });
+        // the last card can never reach the snap line; count it once the deck bottoms out
+        if (this.deck.scrollLeft + this.deck.clientWidth >= this.deck.scrollWidth - 4) best = this.panels.length - 1;
+        return best;
+    }
+
+    /** keep the numerals, counter and arrows in step with the deck */
+    track(force = false) {
+        if (!this.sideways()) return;
+        const n = this.current();
+        if (n === this.swipe && !force) return;
+        this.swipe = n;
+        const last = this.panels.length - 1;
+
+        this.marks.forEach((m, i) => {
+            m.classList.toggle('is-on', i === n);
+            if (i === n) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current');
+        });
+        if (this.now) this.now.textContent = $('.st__no i', this.panels[n])?.textContent || String(n + 1);
+        if (this.bar) this.bar.style.width = (((n + 1) / this.panels.length) * 100).toFixed(2) + '%';
+        if (this.prev) this.prev.disabled = n === 0;
+        if (this.next) this.next.disabled = n === last;
+
+        // slide the numeral row so the lit numeral stays in view — sideways
+        // only, scrollIntoView would also move the page
+        const mark = this.marks[n];
+        if (this.rail && mark && this.rail.scrollWidth > this.rail.clientWidth) {
+            const li = mark.parentElement;
+            const left = li.offsetLeft - (this.rail.clientWidth - li.offsetWidth) / 2;
+            this.rail.scrollTo({ left: Math.max(0, left), behavior: REDUCED ? 'auto' : 'smooth' });
+        }
+    }
+
+    /** the section heading and lede — nothing else on the page lifts these */
+    intro() {
+        const els = $$('.st__intro [data-rise], .st__intro [data-split]', this.scene);
+        if (!els.length) return;
+        if (!LIVE()) { els.forEach((el) => { el.style.opacity = '1'; el.style.transform = 'none'; }); return; }
+        gsap.fromTo(els, { opacity: 0, y: 26 }, {
+            opacity: 1, y: 0, duration: .85, ease: 'expo.out', stagger: .08,
+            scrollTrigger: { trigger: '.st__intro', start: 'top 88%', once: true },
+        });
+    }
+
     jump(n) {
+        if (this.sideways()) {
+            const p = this.panels[n];
+            if (!p) return;
+            const pad = parseFloat(getComputedStyle(this.deck).scrollPaddingLeft) || 0;
+            this.deck.scrollTo({ left: p.offsetLeft - pad, behavior: REDUCED ? 'auto' : 'smooth' });
+            return;
+        }
         if (!this.st || !this.mq.matches) {
             this.panels[n]?.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
             return;
@@ -614,6 +695,15 @@ class Compounds {
                 this.show(n);
                 this.keys[n].focus();
             });
+        });
+
+        // the counts beside each component come from the data, never by hand
+        this.keys.forEach((key, i) => {
+            const c = COMPOUNDS[i];
+            if (!c) return;
+            const n = $('.wl__n', key), m = $('.wl__meter i', key);
+            if (n) n.textContent = c.in.length;
+            if (m) m.style.setProperty('--w', Math.round((c.in.length / 9) * 100) + '%');
         });
 
         this.light(COMPOUNDS[0], true);
