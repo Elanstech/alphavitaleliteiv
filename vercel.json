@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/drips/glynac.html", "destination": "/htmls/infusions.html", "permanent": true },
+    { "source": "/drips/joint-skin.html", "destination": "/htmls/infusions.html", "permanent": true }
+  ]
+}

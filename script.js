@@ -1608,9 +1608,6 @@ class Dock {
    Never treats, cures, repairs, or guaranteed-outcome language.
 ============================================================================= */
 const DRIPS = [
-    { id:'healthyaging', name:'GLyNAC Healthy Aging IV',  slug:'/drips/glynac.html',              img:'glynac',        time:'60 min',                     price:'$350',    tag:'Healthy Aging',
-      why:'The two compounds the body uses as building components to produce glutathione.' },
-
     { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione.html',         img:'glutathione',   time:'15 min push · 30 min visit', price:'$100', tag:'Glutathione IV Therapy',
       why:'Concentrated antioxidant support as a slow physician-administered push.' },
 
@@ -1633,10 +1630,6 @@ const DRIPS = [
     { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$500',    tag:'Mind & Focus Support',
       why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
 
-    { id:'jointskin',    name:'Joint & Skin Wellness IV',         slug:'/drips/joint-skin.html',          img:'jointsupport',  time:'2 h 30',                     price:'$550',    tag:'Joint Support & Skin Health',
-      why:'Amino acids involved in normal collagen formation, with antioxidant support around them.' },
-
-
     { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized.html',          img:'customized',    time:'Individually determined',    price:'By consultation', tag:'Customized IV Infusion',
       why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
 ];
@@ -1645,11 +1638,9 @@ const ASKS = [
     { ask:'What brought you here?', hint:'Pick whichever is loudest right now.', opts:[
         { t:'I keep getting sick',       s:'Run-down, seasonal',             i:'ph-shield-check',     w:{ immune:6, recovery:2 } },
         { t:'I am still run down',       s:'After illness, travel or stress', i:'ph-arrows-clockwise', w:{ recovery:6, immune:2 } },
-        { t:'My joints ache',            s:'Stiffness, arthritis, wear',     i:'ph-bone',             w:{ jointskin:6, antioxidant:2 } },
-        { t:'I am thinking about my skin', s:'Tone, texture, skin wellness', i:'ph-sparkle',          w:{ jointskin:5, glutathione:3 } },
         { t:'I am losing muscle',        s:'On a GLP-1 or weight-loss plan', i:'ph-barbell',          w:{ muscle:7 } },
-        { t:'I want to age well',        s:'Longevity, cellular defenses',   i:'ph-infinity',         w:{ healthyaging:6, antioxidant:3 } },
-        /* Seven specific complaints and no way out of them. Anyone who did not
+        { t:'I want to age well',        s:'Longevity, cellular defenses',   i:'ph-infinity',         w:{ antioxidant:6, glutathione:3 } },
+        /* Five specific complaints and no way out of them. Anyone who did not
            fit still had to pick one, and got steered somewhere that did not
            match. This is the honest answer, and it is what the customized
            option exists for. */
@@ -1658,28 +1649,28 @@ const ASKS = [
 
     { ask:'Are you under a specialist’s care for anything?', hint:'This changes how carefully she coordinates, never whether you are welcome.', opts:[
         { t:'Yes — a gut condition',    s:'Crohn’s, colitis, celiac',       i:'ph-first-aid-kit',  flag:true, w:{ custom:5, immune:2 } },
-        { t:'Yes — joints or skin',     s:'RA, osteoarthritis, psoriasis',  i:'ph-hand-heart',     flag:true, w:{ custom:4, jointskin:3 } },
+        { t:'Yes — joints or skin',     s:'RA, osteoarthritis, psoriasis',  i:'ph-hand-heart',     flag:true, w:{ custom:4 } },
         { t:'No — generally well',      s:'No diagnosis, no specialist',    i:'ph-check-circle',   w:{} },
     ]},
 
     { ask:'How long can you sit?', hint:'Her chairs are private — the long ones are the unhurried ones.', opts:[
         { t:'About half an hour', s:'A lunch break',      i:'ph-timer',     w:{ glutathione:6 } },
-        { t:'About an hour',      s:'A proper sit',       i:'ph-clock',     w:{ healthyaging:4, antioxidant:4, muscle:3 } },
-        { t:'Ninety minutes',     s:'Time to switch off', i:'ph-armchair',  w:{ antioxidant:3, healthyaging:2, mind:4 } },
-        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ recovery:5, immune:5, jointskin:4 } },
+        { t:'About an hour',      s:'A proper sit',       i:'ph-clock',     w:{ antioxidant:4, muscle:3 } },
+        { t:'Ninety minutes',     s:'Time to switch off', i:'ph-armchair',  w:{ antioxidant:3, mind:4 } },
+        { t:'A full afternoon',   s:'The complete ones',  i:'ph-hourglass', w:{ recovery:5, immune:5 } },
     ]},
 
-    /* Joint & Skin ($550) belongs in the top band. Fatty Liver Support was
-       removed from the menu in Sept 2026. */
+    /* Fatty Liver Support was removed from the menu in Sept 2026. GLyNAC
+       Healthy Aging and Joint & Skin Wellness were removed in Oct 2026. */
     { ask:'What feels comfortable per session?', hint:'Every figure here is her real published rate.', opts:[
         { t:'Under $350',     s:'Single-compound infusions', i:'ph-coins',   w:{ glutathione:5 } },
-        { t:'$350 – $550',    s:'The mid-length protocols',  i:'ph-wallet',  w:{ healthyaging:4, antioxidant:4, muscle:3 } },
-        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, recovery:4, mind:4, jointskin:4 } },
+        { t:'$350 – $550',    s:'The mid-length protocols',  i:'ph-wallet',  w:{ antioxidant:4, muscle:3 } },
+        { t:'$550 and up',    s:'The long, complete ones',   i:'ph-diamond', w:{ immune:4, recovery:4, mind:4 } },
         { t:'Let her decide', s:'Whatever is right',         i:'ph-pen-nib', w:{ custom:4 } },
     ]},
 ];
 
-const THINKING = ['Reading your answers', 'Weighing nine infusions', 'Checking time and budget', 'Preparing your starting point'];
+const THINKING = ['Reading your answers', 'Weighing seven infusions', 'Checking time and budget', 'Preparing your starting point'];
 
 class Quiz {
     constructor() {
