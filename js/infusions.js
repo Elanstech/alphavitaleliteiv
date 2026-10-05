@@ -85,19 +85,17 @@ const popIn = (targets, opts = {}, trigger, start = 'top 86%') => {
 
 
 /* =============================================================================
-   THE MENU — the nine, by id
+   THE MENU — the seven, by id
    Names, numerals and slugs match the cards and the header flyout exactly.
 ============================================================================= */
 const MENU = {
-    healthyaging: { no: 'I',    name: 'GLyNAC Healthy Aging', slug: '/drips/glynac.html',          tone: '#5B7098' },
-    glutathione:  { no: 'II',   name: 'Glutathione IV Injection',     slug: '/drips/glutathione.html', tone: '#7FA08C' },
-    antioxidant:  { no: 'III',  name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant.html',    tone: '#4F7D5E' },
-    immune:       { no: 'IV',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immun-o-boost.html',         tone: '#D9982A' },
-    recovery:     { no: 'V',    name: 'Revive IV Support',            slug: '/drips/revive.html',       tone: '#35707F' },
-    muscle:       { no: 'VI',   name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo.html',        tone: '#B34E37' },
-    mind:         { no: 'VII',  name: 'Stress & Brain Wellness',      slug: '/drips/stress-brain.html',     tone: '#7A5F98' },
-    jointskin:    { no: 'VIII', name: 'Joint & Skin Wellness',        slug: '/drips/joint-skin.html',    tone: '#8C6239' },
-    custom:       { no: 'IX',   name: 'Customized IV Infusion',       slug: '/drips/customized.html',    tone: '#C1963F' },
+    glutathione:  { no: 'I',   name: 'Glutathione IV Injection',     slug: '/drips/glutathione.html', tone: '#7FA08C' },
+    antioxidant:  { no: 'II',  name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant.html',    tone: '#4F7D5E' },
+    immune:       { no: 'III',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immun-o-boost.html',         tone: '#D9982A' },
+    recovery:     { no: 'IV',    name: 'Revive IV Support',            slug: '/drips/revive.html',       tone: '#35707F' },
+    muscle:       { no: 'V',   name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo.html',        tone: '#B34E37' },
+    mind:         { no: 'VI',  name: 'Stress & Brain Wellness',      slug: '/drips/stress-brain.html',     tone: '#7A5F98' },
+    custom:       { no: 'VII',   name: 'Customized IV Infusion',       slug: '/drips/customized.html',    tone: '#C1963F' },
 };
 
 
@@ -111,35 +109,27 @@ const MENU = {
 const COMPOUNDS = [
     { id: 'glutathione', name: 'Glutathione', ghost: 'Gl',
       what: 'A major intracellular antioxidant. Given directly in some formulations, and supported in others through the compounds the body builds it from.',
-      in: ['immune', 'antioxidant', 'glutathione', 'jointskin', 'recovery'] },
+      in: ['immune', 'antioxidant', 'glutathione', 'recovery'] },
 
     { id: 'vitaminc', name: 'Vitamin C', ghost: 'C',
-      what: 'An antioxidant that is also required for normal collagen production — which is why it appears beside the collagen amino acids as well as in the antioxidant formulations.',
-      in: ['immune', 'antioxidant', 'jointskin', 'recovery'] },
+      what: 'An antioxidant that is also required for normal collagen production, and a core part of the antioxidant formulations.',
+      in: ['immune', 'antioxidant', 'recovery'] },
 
     { id: 'ala', name: 'Alpha-Lipoic Acid', ghost: 'ALA',
       what: 'Works in mitochondrial energy metabolism and inside the antioxidant network, where it and glutathione recharge one another rather than working alone.',
-      in: ['antioxidant', 'jointskin', 'recovery', 'mind'] },
+      in: ['antioxidant', 'recovery', 'mind'] },
 
     { id: 'bcomplex', name: 'B-Complex', ghost: 'B',
       what: 'B1 through B12, involved in normal energy metabolism and in the production of neurotransmitters. B12 is taken up in the ileum, the stretch of bowel that malabsorption most often involves.',
-      in: ['immune', 'jointskin', 'recovery', 'mind'] },
+      in: ['immune', 'recovery', 'mind'] },
 
     { id: 'aminos', name: 'Amino Acids', ghost: 'AA',
-      what: 'Building blocks that reduced intake, long flares and weight-loss programs leave short. LIQUIXO carries a full twenty; the collagen set is glycine, proline and lysine.',
-      in: ['immune', 'muscle', 'jointskin', 'recovery'] },
+      what: 'Building blocks that reduced intake, long flares and weight-loss programs leave short. LIQUIXO carries a full twenty.',
+      in: ['immune', 'muscle', 'recovery'] },
 
     { id: 'minerals', name: 'Magnesium & Trace Minerals', ghost: 'Mg',
       what: 'Magnesium with copper, manganese and selenium. Cofactors the rest of a formulation depends on — zinc and copper are kept in ratio, since excess zinc interferes with copper absorption.',
-      in: ['immune', 'jointskin'] },
-
-    { id: 'nac', name: 'N-Acetylcysteine', ghost: 'NAC',
-      what: 'Supplies cysteine — one of the three amino acids the body needs to make glutathione, and usually the one in shortest supply.',
-      in: ['healthyaging'] },
-
-    { id: 'glycine', name: 'Glycine', ghost: 'Gly',
-      what: 'The second building component of glutathione, and one of the amino acids the liver uses to prepare bile.',
-      in: ['healthyaging'] },
+      in: ['immune'] },
 
     { id: 'taurine', name: 'Taurine', ghost: 'Tau',
       what: 'An amino acid involved in the liver\u2019s normal bile work, and present in the brain in high concentration.',
@@ -703,7 +693,7 @@ class Compounds {
             if (!c) return;
             const n = $('.wl__n', key), m = $('.wl__meter i', key);
             if (n) n.textContent = c.in.length;
-            if (m) m.style.setProperty('--w', Math.round((c.in.length / 9) * 100) + '%');
+            if (m) m.style.setProperty('--w', Math.round((c.in.length / 7) * 100) + '%');
         });
 
         this.light(COMPOUNDS[0], true);
