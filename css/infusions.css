@@ -675,6 +675,17 @@ html:not(.ivx-on) .hr__caret { display: none; }
     transition: background .5s var(--ease);
 }
 .ivx-inc__item:hover { background: var(--paper); }
+.ivx-inc__shot {
+    margin: calc(-1 * clamp(1.5rem, 2.6vw, 2.1rem)) calc(-1 * clamp(1.5rem, 2.6vw, 2.1rem)) 1.6rem;
+    aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper);
+}
+.ivx-inc__shot img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    transform: scale(1.04);
+    transition: transform 1.4s var(--ease), filter 1s var(--ease);
+    filter: saturate(.92);
+}
+.ivx-inc__item:hover .ivx-inc__shot img { transform: scale(1.1); filter: saturate(1.05); }
 .ivx-inc__no {
     font-family: var(--fx-mono); font-size: .55rem; font-weight: 500;
     letter-spacing: .2em; color: var(--brass);
@@ -712,6 +723,7 @@ html:not(.ivx-on) .hr__caret { display: none; }
 .ivx-begin__shot { position: relative; }
 .ivx-begin__shot img {
     display: block; width: 100%; height: auto; border-radius: 4px;
+    aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 55%;
     box-shadow: 0 44px 80px -52px rgba(22, 36, 26, .6);
 }
 .ivx-begin__shot figcaption {

@@ -547,6 +547,40 @@ class HeroVideo {
 }
 
 
+
+/* =============================================================================
+   REEL — the photo strip drifts sideways while it is on screen
+============================================================================= */
+class Reel {
+    constructor() {
+        this.section = $('#inside');
+        this.view    = $('#reelView');
+        this.track   = $('#reelTrack');
+    }
+
+    init() {
+        if (!this.section || !this.view || !this.track) return;
+        if (REDUCED || !FINE_POINTER || window.innerWidth < 900) {
+            this.view.classList.add('is-native');
+            return;
+        }
+        let live = false;
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(([e]) => { live = e.isIntersecting; }, { rootMargin: '10% 0px' })
+                .observe(this.section);
+        } else live = true;
+
+        Scroll.add(() => {
+            if (!live) return;
+            const r   = this.section.getBoundingClientRect();
+            const vh  = window.innerHeight;
+            const p   = clamp((vh - r.top) / (vh + r.height), 0, 1);
+            const max = Math.max(0, this.track.scrollWidth - this.view.clientWidth);
+            this.track.style.transform = `translate3d(${(-p * max).toFixed(1)}px, 0, 0)`;
+        });
+    }
+}
+
 /* =============================================================================
    MAGNETIC — primary buttons lean toward the pointer
 ============================================================================= */
@@ -1989,6 +2023,7 @@ const modules = {
     menu:       new Menu(),
     wordLoop:   new WordLoop(),
     heroVideo:  new HeroVideo(),
+    reel:       new Reel(),
     magnetic:   new Magnetic(),
     shelf:      new Shelf(),
     conditions: new Chronic(),

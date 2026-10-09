@@ -1109,3 +1109,12 @@ html.dx-on .dx-comp__dot   { transform: scale(.5); opacity: 0; }
 /* the review fee needs the room to say what it is */
 .dx-card div:has(small) { align-items: start; }
 .dx-card dt { line-height: 1.5; word-break: normal; overflow-wrap: normal; }
+
+/* ── the room, above the spec card ───────────────────────────────────────── */
+.dx-card__shot {
+    margin: 0 0 1rem; aspect-ratio: 3 / 2; overflow: hidden;
+    border-radius: 5px; border: 1px solid var(--t-line);
+    box-shadow: 0 40px 78px -56px rgba(32,52,33,.6);
+}
+.dx-card__shot img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s cubic-bezier(.22,1,.36,1); }
+.dx-card__col:hover .dx-card__shot img { transform: scale(1.04); }

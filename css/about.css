@@ -804,3 +804,21 @@ html.ab-on [data-ab-split]           { opacity: 0; }
     .ab-h2--light, .ab-lede--light, .ab-row, .ab-coord p { color: #000 !important; }
     .ab-path__body { grid-template-columns: 1fr; }
 }
+
+/* ── the room, beside "Why Alpha Vital exists" ─────────────────────────── */
+.ab-why__top {
+    position: relative; z-index: 2;
+    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: clamp(1.75rem, 4vw, 4rem); align-items: end;
+    margin-bottom: clamp(2.75rem, 6vw, 4.5rem);
+}
+.ab-why__top .ab-why__head { margin-bottom: 0; }
+.ab-why__shot {
+    margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 3px;
+    border: 1px solid var(--rule-gold);
+    box-shadow: 0 50px 90px -60px rgba(0, 0, 0, .7);
+}
+.ab-why__shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 900px) {
+    .ab-why__top { grid-template-columns: 1fr; align-items: start; }
+}

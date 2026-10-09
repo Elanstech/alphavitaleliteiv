@@ -4211,3 +4211,99 @@ html:not(.is-locked) body.has-film .head:not(.is-stuck) .head__burger span { bac
 @media (prefers-reduced-motion: reduce) {
     .press__card::before, .press__card, .press__outlet, .press__read { transition: none; }
 }
+
+
+/* =============================================================================
+   REEL — "Inside the practice"
+   The professional photographs of the room, in one long strip. On a desktop
+   it drifts sideways as the page scrolls past; on touch screens it is a plain
+   swipeable row with snap points.
+============================================================================= */
+.reel {
+    position: relative; overflow: hidden;
+    padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+    background: var(--forest-deep);
+    color: var(--cream);
+}
+.reel__head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem 2rem; flex-wrap: wrap;
+    max-width: var(--maxw); margin: 0 auto clamp(1.75rem, 3.5vw, 2.75rem);
+    padding: 0 var(--gut);
+}
+.reel__eyebrow {
+    display: inline-flex; align-items: center; gap: 1rem;
+    font-family: var(--caps); font-size: .76rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold-lite);
+}
+.reel__rule { width: clamp(2.5rem, 5vw, 4.5rem); height: 1px; background: var(--gold); }
+.reel__addr {
+    font-family: var(--micro); font-size: .62rem; font-weight: 600;
+    letter-spacing: .24em; text-transform: uppercase; color: rgba(246, 241, 231, .55);
+}
+.reel__view { overflow: hidden; }
+.reel__track {
+    list-style: none; margin: 0;
+    display: flex; gap: clamp(.75rem, 1.4vw, 1.25rem);
+    padding: 0 var(--gut);
+    width: max-content;
+    will-change: transform;
+}
+.reel__frame {
+    position: relative; flex: 0 0 auto; overflow: hidden;
+    height: clamp(280px, 62vh, 640px);
+    border-radius: 3px;
+    background: #16231A;
+}
+.reel__frame--wide { aspect-ratio: 3 / 2; }
+.reel__frame--tall { aspect-ratio: 2 / 3; }
+.reel__frame img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    transform: scale(1.06);
+    transition: transform 1.6s var(--ease);
+}
+.reel__frame:hover img { transform: scale(1.12); }
+.reel__frame::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(231, 203, 134, .14);
+    border-radius: inherit;
+}
+
+/* touch, narrow or reduced motion: a native swipe row */
+.reel__view.is-native {
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+.reel__view.is-native::-webkit-scrollbar { display: none; }
+.reel__view.is-native .reel__track { will-change: auto; }
+.reel__view.is-native .reel__frame { scroll-snap-align: center; }
+@media (max-width: 900px) {
+    .reel__frame { height: clamp(240px, 46vh, 420px); }
+    .reel__frame--wide { aspect-ratio: 4 / 3; }
+}
+@media (max-width: 640px) {
+    .reel__head { flex-direction: column; gap: .6rem; }
+    .reel__frame--wide { width: 82vw; height: auto; aspect-ratio: 4 / 3; }
+    .reel__frame--tall { width: 56vw; height: auto; aspect-ratio: 2 / 3; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .reel__frame img, .reel__frame:hover img { transition: none; transform: none; }
+}
+
+/* the Dr. Aronov page pairs the press block with the welcome banner */
+.press--photo .press__wrap {
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+    column-gap: clamp(1.75rem, 4vw, 4rem);
+}
+.press--photo .press__head { grid-column: 1; align-self: center; }
+.press--photo .press__shot {
+    grid-column: 2; grid-row: 1; margin: 0 0 clamp(2rem, 4vw, 3rem);
+    aspect-ratio: 4 / 3; overflow: hidden; border-radius: 3px;
+    box-shadow: 0 44px 80px -56px rgba(22, 36, 26, .55);
+}
+.press--photo .press__shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%; }
+.press--photo .press__list { grid-column: 1 / -1; }
+@media (max-width: 900px) {
+    .press--photo .press__wrap { grid-template-columns: 1fr; }
+    .press--photo .press__shot { grid-column: 1; grid-row: auto; }
+}
