@@ -109,15 +109,15 @@ const MENU = {
 const COMPOUNDS = [
     { id: 'glutathione', name: 'Glutathione', ghost: 'Gl',
       what: 'A major intracellular antioxidant. Given directly in some formulations, and supported in others through the compounds the body builds it from.',
-      in: ['immune', 'antioxidant', 'glutathione', 'recovery'] },
+      in: ['immune', 'antioxidant', 'glutathione'] },
 
     { id: 'vitaminc', name: 'Vitamin C', ghost: 'C',
       what: 'An antioxidant that is also required for normal collagen production, and a core part of the antioxidant formulations.',
-      in: ['immune', 'antioxidant', 'recovery'] },
+      in: ['immune', 'antioxidant'] },
 
     { id: 'ala', name: 'Alpha-Lipoic Acid', ghost: 'ALA',
       what: 'Works in mitochondrial energy metabolism and inside the antioxidant network, where it and glutathione recharge one another rather than working alone.',
-      in: ['antioxidant', 'recovery', 'mind'] },
+      in: ['antioxidant', 'immune', 'mind'] },
 
     { id: 'bcomplex', name: 'B-Complex', ghost: 'B',
       what: 'B1 through B12, involved in normal energy metabolism and in the production of neurotransmitters. B12 is taken up in the ileum, the stretch of bowel that malabsorption most often involves.',
@@ -132,11 +132,11 @@ const COMPOUNDS = [
       in: ['immune'] },
 
     { id: 'taurine', name: 'Taurine', ghost: 'Tau',
-      what: 'An amino acid involved in the liver\u2019s normal bile work, and present in the brain in high concentration.',
+      what: 'Taurine is an amino acid naturally present in high concentrations in the brain, where it helps regulate nerve cell activity.',
       in: ['mind'] },
 
     { id: 'zinc', name: 'Zinc', ghost: 'Zn',
-      what: 'Supports hundreds of enzymes, immune-cell communication and normal tissue repair. Low zinc is documented in inflammatory bowel disease.',
+      what: 'Zinc supports T-cell maturation and differentiation, helping these immune cells develop specialized roles in coordinating defenses and targeting virus-infected or cancerous cells.',
       in: ['immune'] },
 ];
 

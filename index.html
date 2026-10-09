@@ -195,7 +195,7 @@
       "name": "How much do the IV infusions cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sessions run from $100 for a glutathione injection to $550 for the longer immune-support infusion, with most signature infusions between $325 and $500. The safety screening and physician review are free."
+        "text": "Sessions run from $100 for a glutathione injection to $550 for the longer immune-support infusion, with most signature infusions between $325 and $400. The safety screening and physician review are free."
       }
     }
   ]
@@ -203,7 +203,7 @@
 </script>
 </head>
 
-<body>
+<body class="has-film">
 
 
 <div class="pre" id="pre">
@@ -254,7 +254,7 @@
               <i>V</i><span>LIQUIXO Muscle Recovery</span><b>$395</b>
             </a>
             <a class="hd-item" href="drips/stress-brain.html" style="--tone:#7A5F98">
-              <i>VI</i><span>Stress &amp; Brain Wellness</span><b>$500</b>
+              <i>VI</i><span>Stress &amp; Brain Wellness</span><b>$350</b>
             </a>
             <a class="hd-item" href="drips/customized.html" style="--tone:#C1963F">
               <i>VII</i><span>Customized IV Infusion</span><b>Consult</b>
@@ -333,9 +333,12 @@
            poster="/assets/images/hero-poster.webp">
       <source src="https://github.com/Elanstech/precisionmedicaliv/releases/download/Hero/hero.mp4" type="video/mp4">
     </video>
+    <span class="hero__grade"></span>
     <span class="hero__scrim"></span>
+    <span class="hero__vignette"></span>
     <span class="hero__grain"></span>
   </div>
+  <span class="hero__bars" aria-hidden="true"></span>
 
   <div class="hero__folio" data-rise style="--i:1">
     <span>Est. Middle Village · Queens, NY</span>
@@ -395,9 +398,58 @@
 
   <div class="hero__foot" data-rise style="--i:8">
     <p class="hero__cred">Appointments only &bull; Physician review and eligibility determination required</p>
-    <a class="hero__scroll" href="#infusions"><span>Scroll</span><i></i></a>
+    <div class="hero__tools">
+      <button class="hero__tool" id="heroPause" type="button" aria-label="Pause the film" aria-pressed="false">
+        <i class="ph-fill ph-pause hero__tool-a"></i><i class="ph-fill ph-play hero__tool-b"></i>
+      </button>
+      <button class="hero__tool hero__tool--film" id="heroTheater" type="button" aria-label="Watch the full film" aria-pressed="false">
+        <i class="ph ph-arrows-out-simple hero__tool-a"></i><i class="ph ph-x hero__tool-b"></i>
+      </button>
+      <a class="hero__scroll" href="#infusions"><span>Scroll</span><i></i></a>
+    </div>
   </div>
 
+</section>
+
+
+<section class="press press--strip" id="press" aria-labelledby="press-title">
+  <div class="press__wrap">
+    <div class="press__head">
+      <p class="press__eyebrow"><i class="ph-duotone ph-newspaper"></i> As featured in</p>
+      <h2 class="press__title" id="press-title"><em>&ldquo;Dr. Violeta Aronov Brings Physician-Led Precision and Medical Oversight to the Growing IV Wellness Industry&rdquo;</em></h2>
+      <p class="press__date">August 21, 2026</p>
+    </div>
+    <ul class="press__list">
+        <li>
+          <a class="press__card" href="https://business.fox80.com/2026/08/21/dr-violeta-aronov-brings-physician-led-precision-and-medical-oversight-to-the-growing-iv-wellness-industry/" target="_blank" rel="noopener">
+            <span class="press__no">01</span>
+            <span class="press__outlet">FOX 80</span>
+            <span class="press__read">Read the feature <i class="ph ph-arrow-up-right"></i></span>
+          </a>
+        </li>
+        <li>
+          <a class="press__card" href="https://abc39.com/dr-violeta-aronov-brings-physician-led-precision-and-medical-oversight-to-the-growing-iv-wellness-industry/" target="_blank" rel="noopener">
+            <span class="press__no">02</span>
+            <span class="press__outlet">ABC 39</span>
+            <span class="press__read">Read the feature <i class="ph ph-arrow-up-right"></i></span>
+          </a>
+        </li>
+        <li>
+          <a class="press__card" href="https://www.streetinsider.com/dr/news.php?id=26960933" target="_blank" rel="noopener">
+            <span class="press__no">03</span>
+            <span class="press__outlet">StreetInsider</span>
+            <span class="press__read">Read the feature <i class="ph ph-arrow-up-right"></i></span>
+          </a>
+        </li>
+        <li>
+          <a class="press__card" href="https://aijourn.com/dr-violeta-aronov-brings-physician-led-precision-and-medical-oversight-to-the-growing-iv-wellness-industry/" target="_blank" rel="noopener">
+            <span class="press__no">04</span>
+            <span class="press__outlet">The AI Journal</span>
+            <span class="press__read">Read the feature <i class="ph ph-arrow-up-right"></i></span>
+          </a>
+        </li>
+    </ul>
+  </div>
 </section>
 
 
@@ -630,7 +682,7 @@
             <div class="plate__foot">
               <p class="plate__clock"><i class="ph ph-clock"></i> 1 h 30</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>$500</b><span>per session</span></p>
+                <p class="plate__price"><b>$350</b><span>per session</span></p>
                 <a class="plate__go" href="drips/stress-brain.html">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>

@@ -484,11 +484,13 @@ class HeroVideo {
 
         if (REDUCED) { this.video.pause(); this.video.removeAttribute('autoplay'); }
 
+        this.controls(play);
+
         // Spare the battery when the tab is hidden
         document.addEventListener('visibilitychange', () => {
             if (REDUCED) return;
             if (document.hidden) this.video.pause();
-            else play();
+            else if (!this.held) play();
         });
 
         /* And when the hero is scrolled past. The video decode and the grain
@@ -497,9 +499,49 @@ class HeroVideo {
         if ('IntersectionObserver' in window && !REDUCED) {
             const grain = $('.hero__grain');
             new IntersectionObserver(([e]) => {
-                if (e.isIntersecting) { play(); if (grain) grain.style.animationPlayState = 'running'; }
+                if (e.isIntersecting) { if (!this.held) play(); if (grain) grain.style.animationPlayState = 'running'; }
                 else { this.video.pause(); if (grain) grain.style.animationPlayState = 'paused'; }
             }, { threshold: 0.01 }).observe(this.media ?? this.video);
+        }
+    }
+
+    /* Pause/play, and the full film: the copy steps aside and a letterbox
+       closes in so the clinic tour can be watched on its own. */
+    controls(play) {
+        const hero    = this.video.closest('.hero');
+        const pause   = $('#heroPause');
+        const theater = $('#heroTheater');
+        this.held = REDUCED;
+        if (pause) pause.setAttribute('aria-pressed', String(this.held));
+
+        pause?.addEventListener('click', () => {
+            this.held = !this.held;
+            if (this.held) this.video.pause(); else play();
+            pause.setAttribute('aria-pressed', String(this.held));
+            pause.setAttribute('aria-label', this.held ? 'Play the film' : 'Pause the film');
+        });
+
+        if (!theater || !hero) return;
+        const set = (on) => {
+            hero.classList.toggle('is-theater', on);
+            document.body.classList.toggle('is-theater', on);
+            theater.setAttribute('aria-pressed', String(on));
+            theater.setAttribute('aria-label', on ? 'Close the film' : 'Watch the full film');
+            if (on) {
+                hero.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+                if (this.held) { this.held = false; play(); pause?.setAttribute('aria-pressed', 'false'); }
+                try { this.video.currentTime = 0; } catch (_) {}
+            }
+        };
+        theater.addEventListener('click', () => set(!hero.classList.contains('is-theater')));
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && hero.classList.contains('is-theater')) { set(false); theater.focus(); }
+        });
+        // leaving the hero closes the film
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(([e]) => {
+                if (!e.isIntersecting && hero.classList.contains('is-theater')) set(false);
+            }, { threshold: 0.35 }).observe(hero);
         }
     }
 }
@@ -1627,7 +1669,7 @@ const DRIPS = [
     { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/liquixo.html',             img:'liquixo',       time:'45 min',                     price:'$395', tag:'Muscle Recovery',
       why:'A full 20 amino acid blend with alpha-lipoic acid and exosomes.' },
 
-    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$500',    tag:'Mind & Focus Support',
+    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$350',    tag:'Mind & Focus Support',
       why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
 
     { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized.html',          img:'customized',    time:'Individually determined',    price:'By consultation', tag:'Customized IV Infusion',

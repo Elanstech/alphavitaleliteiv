@@ -706,6 +706,8 @@ html:not(.ivx-on) .hr__caret { display: none; }
     max-width: 46ch; font-size: 1rem; line-height: 1.8; color: var(--ink-soft);
     margin-bottom: 1.9rem;
 }
+.ivx-begin__lede:has(+ .ivx-begin__fine) { margin-bottom: .9rem; }
+.ivx-begin__fine { font-size: .88rem; color: var(--mist); }
 .ivx-begin__acts { display: flex; flex-wrap: wrap; gap: .7rem; }
 .ivx-begin__shot { position: relative; }
 .ivx-begin__shot img {
