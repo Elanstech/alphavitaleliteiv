@@ -13,7 +13,7 @@
      Header      condense · retreat on the way down · return on the way up
      Menu        parchment page, circular reveal, scroll lock, escape
      WordLoop    the rotating category in the "Infusions for ..." line
-     HeroVideo   autoplay kick for iOS, poster fallback if the file is absent
+     HeroVideo   the full-screen clinic film: open, deck, chapters, lean, exit
      Magnetic    primary buttons lean toward the pointer (fine pointers only)
      Rail        ONE snap-carousel engine — used by the shelf and the evidence
      Shelf       the services rail — pinned horizontally, Rail-driven on phones
@@ -172,7 +172,7 @@ const Nav = {
    the classic reason an active state "randomly" stops working on deploy.
 
    Nav order across the site: Home · Infusions (flyout) · Dr. Aronov ·
-   Research · Contact.
+   Research · FAQ · Contact.
 ============================================================================= */
 const Trail = {
     /** '/Drips/Liver-Support/' · '/htmls/infusions.html' · '/index.html'
@@ -393,7 +393,7 @@ class Menu {
         });
 
         window.addEventListener('resize', debounce(() => {
-            if (this.open && window.innerWidth > 780) this.set(false);
+            if (this.open && window.innerWidth > 1080) this.set(false);
         }, 200));
     }
 
@@ -461,12 +461,31 @@ class WordLoop {
 
 
 /* =============================================================================
-   HERO VIDEO
+   HERO VIDEO — the clinic film, full screen
+   Autoplay kick for iOS, poster fallback if the file is absent, pause, the
+   full film, and the deck: the chapter on screen (from data-chapters on the
+   video), a live progress line that can be clicked, dragged or arrowed to
+   jump, the pointer lean, and the film receding on the way out.
 ============================================================================= */
 class HeroVideo {
     constructor() {
-        this.video = $('#heroVideo');
-        this.media = this.video?.closest('.hero__media') ?? null;
+        this.video  = $('#heroVideo');
+        this.hero   = this.video?.closest('.hero') ?? null;
+        this.media  = this.video?.closest('.hero__media') ?? null;
+        this.screen = $('#heroScreen');
+        this.lean   = $('#heroLean');
+        this.glass  = $('#heroGlass');
+        this.deck   = $('.hero__deck');
+        this.track  = $('#heroTrack');
+        this.fill   = $('#heroFill');
+        this.ticks  = $('#heroTicks');
+        this.time   = $('#heroTime');
+        this.dur    = $('#heroDur');
+        this.label  = $('#heroChapter');
+        this.chapters = [];
+        this.chapter  = -1;
+        this.visible  = true;
+        this.held     = REDUCED;
     }
 
     init() {
@@ -474,52 +493,58 @@ class HeroVideo {
 
         // iOS sometimes needs an explicit kick even with autoplay+muted
         const play = () => this.video.play()?.catch(() => {});
+        this.play = play;
         if (this.video.readyState >= 2) play();
         else this.video.addEventListener('loadeddata', play, { once: true });
 
-        // File missing or codec unsupported -> hold on the poster, stop the drift
-        this.video.addEventListener('error', () => this.media?.classList.add('is-still'), { once: true });
-        const src = this.video.querySelector('source');
-        src?.addEventListener('error', () => this.media?.classList.add('is-still'), { once: true });
+        // File missing or codec unsupported -> hold on the poster
+        const still = () => this.media?.classList.add('is-still');
+        this.video.addEventListener('error', still, { once: true });
+        this.video.querySelector('source')?.addEventListener('error', still, { once: true });
 
         if (REDUCED) { this.video.pause(); this.video.removeAttribute('autoplay'); }
 
-        this.controls(play);
+        this.controls();
+        this.deckSetup();
+        this.leanSetup();
+        this.exitSetup();
 
         // Spare the battery when the tab is hidden
         document.addEventListener('visibilitychange', () => {
             if (REDUCED) return;
             if (document.hidden) this.video.pause();
-            else if (!this.held) play();
+            else if (!this.held && this.visible) play();
         });
 
-        /* And when the hero is scrolled past. The video decode and the grain
-           keyframes were both still running for the whole page — on a phone
-           that is a constant tax for something nobody can see. */
-        if ('IntersectionObserver' in window && !REDUCED) {
-            const grain = $('.hero__grain');
+        // ...and when the hero is scrolled past
+        if ('IntersectionObserver' in window) {
             new IntersectionObserver(([e]) => {
-                if (e.isIntersecting) { if (!this.held) play(); if (grain) grain.style.animationPlayState = 'running'; }
-                else { this.video.pause(); if (grain) grain.style.animationPlayState = 'paused'; }
-            }, { threshold: 0.01 }).observe(this.media ?? this.video);
+                this.visible = e.isIntersecting;
+                if (REDUCED) return;
+                if (e.isIntersecting) { if (!this.held) play(); }
+                else this.video.pause();
+            }, { threshold: 0.01 }).observe(this.hero ?? this.video);
         }
     }
 
-    /* Pause/play, and the full film: the copy steps aside and a letterbox
+    /* Pause/play, and the full film: the glass steps aside and a letterbox
        closes in so the clinic tour can be watched on its own. */
-    controls(play) {
-        const hero    = this.video.closest('.hero');
+    controls() {
+        const { hero, video, play } = this;
         const pause   = $('#heroPause');
         const theater = $('#heroTheater');
-        this.held = REDUCED;
-        if (pause) pause.setAttribute('aria-pressed', String(this.held));
 
-        pause?.addEventListener('click', () => {
-            this.held = !this.held;
-            if (this.held) this.video.pause(); else play();
-            pause.setAttribute('aria-pressed', String(this.held));
-            pause.setAttribute('aria-label', this.held ? 'Play the film' : 'Pause the film');
-        });
+        const hold = (on) => {
+            this.held = on;
+            if (on) video.pause(); else play();
+            hero?.classList.toggle('is-held', on);
+            pause?.setAttribute('aria-pressed', String(on));
+            pause?.setAttribute('aria-label', on ? 'Play the film' : 'Pause the film');
+        };
+        this.hold = hold;
+        hero?.classList.toggle('is-held', this.held);
+        pause?.setAttribute('aria-pressed', String(this.held));
+        pause?.addEventListener('click', () => hold(!this.held));
 
         if (!theater || !hero) return;
         const set = (on) => {
@@ -528,9 +553,9 @@ class HeroVideo {
             theater.setAttribute('aria-pressed', String(on));
             theater.setAttribute('aria-label', on ? 'Close the film' : 'Watch the full film');
             if (on) {
-                hero.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
-                if (this.held) { this.held = false; play(); pause?.setAttribute('aria-pressed', 'false'); }
-                try { this.video.currentTime = 0; } catch (_) {}
+                Nav.toY(hero.getBoundingClientRect().top + window.scrollY);
+                if (this.held) hold(false);
+                try { video.currentTime = 0; } catch (_) {}
             }
         };
         theater.addEventListener('click', () => set(!hero.classList.contains('is-theater')));
@@ -544,40 +569,258 @@ class HeroVideo {
             }, { threshold: 0.35 }).observe(hero);
         }
     }
+
+    /* ---- the deck: chapter, time, progress, seeking ---- */
+    deckSetup() {
+        const { video } = this;
+        const fmt = (s) => {
+            s = Math.max(0, Math.floor(s || 0));
+            return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+        };
+        this.fmt = fmt;
+
+        try { this.chapters = JSON.parse(video.dataset.chapters || '[]'); }
+        catch (_) { this.chapters = []; }
+
+        const meta = () => {
+            const d = video.duration;
+            if (!isFinite(d) || d <= 0) return;
+            if (this.dur) this.dur.textContent = ` / ${fmt(d)}`;
+            // the chapter list was written against this film; if the film is
+            // swapped for one of a different length, the labels stand down
+            const last = this.chapters[this.chapters.length - 1];
+            if (!last || last[0] >= d) this.chapters = [];
+            if (this.ticks) {
+                this.ticks.innerHTML = this.chapters.slice(1)
+                    .map(([t]) => `<i style="left:${((t / d) * 100).toFixed(2)}%"></i>`).join('');
+            }
+            this.paint(true);
+        };
+        if (video.readyState >= 1) meta();
+        else video.addEventListener('loadedmetadata', meta, { once: true });
+
+        // one rAF loop while the film is playing and on screen
+        let running = false;
+        const loop = () => {
+            if (video.paused || !this.visible) { running = false; return; }
+            this.paint();
+            requestAnimationFrame(loop);
+        };
+        video.addEventListener('playing', () => { if (!running) { running = true; requestAnimationFrame(loop); } });
+        video.addEventListener('seeked', () => this.paint(true));
+        video.addEventListener('timeupdate', () => { if (!running) this.paint(); });
+
+        // seeking: click, drag, or the arrow keys
+        const track = this.track;
+        if (!track) return;
+        const seekTo = (clientX) => {
+            const d = video.duration;
+            if (!isFinite(d) || d <= 0) return;
+            const r = track.getBoundingClientRect();
+            const t = clamp((clientX - r.left) / r.width, 0, 1) * d;
+            try { video.currentTime = Math.min(t, d - 0.05); } catch (_) {}
+            this.paint(true, t);
+        };
+        let dragging = false;
+        track.addEventListener('pointerdown', (e) => {
+            dragging = true;
+            track.setPointerCapture?.(e.pointerId);
+            seekTo(e.clientX);
+        });
+        track.addEventListener('pointermove', (e) => { if (dragging) seekTo(e.clientX); });
+        const end = () => { dragging = false; };
+        track.addEventListener('pointerup', end);
+        track.addEventListener('pointercancel', end);
+        track.addEventListener('keydown', (e) => {
+            const d = video.duration;
+            if (!isFinite(d)) return;
+            let t = null;
+            if (e.key === 'ArrowRight') t = video.currentTime + 2;
+            if (e.key === 'ArrowLeft')  t = video.currentTime - 2;
+            if (e.key === 'Home') t = 0;
+            if (e.key === 'End')  t = d - 0.5;
+            if (t === null) return;
+            e.preventDefault();
+            t = clamp(t, 0, d - 0.05);
+            try { video.currentTime = t; } catch (_) {}
+            this.paint(true, t);
+        });
+    }
+
+    paint(force = false, at = null) {
+        const { video } = this;
+        const d = video.duration;
+        const t = at ?? video.currentTime;
+        if (!isFinite(d) || d <= 0) return;
+        const p = clamp(t / d, 0, 1);
+        if (this.fill) this.fill.style.setProperty('--p', p.toFixed(4));
+
+        const shown = this.fmt(t);
+        if (this.time && this.time.textContent !== shown) {
+            this.time.textContent = shown;
+            this.track?.setAttribute('aria-valuenow', String(Math.round(p * 100)));
+            this.track?.setAttribute('aria-valuetext', `${shown} of ${this.fmt(d)}`);
+        }
+
+        if (!this.chapters.length || !this.label) return;
+        let i = 0;
+        for (let k = 0; k < this.chapters.length; k++) if (t >= this.chapters[k][0]) i = k;
+        if (i === this.chapter) return;
+        const first = this.chapter === -1;
+        this.chapter = i;
+        const text = this.chapters[i][1];
+        if (first || REDUCED) { this.label.textContent = text; return; }
+        this.label.classList.add('is-swapping');
+        clearTimeout(this.swap);
+        this.swap = setTimeout(() => {
+            this.label.textContent = text;
+            this.label.classList.remove('is-swapping');
+        }, 300);
+    }
+
+    /* ---- depth: the film leans away from the pointer ---- */
+    leanSetup() {
+        const { hero, lean } = this;
+        if (!hero || !lean || REDUCED || !FINE_POINTER) return;
+        let tx = 0, ty = 0, x = 0, y = 0, running = false;
+        const step = () => {
+            x = lerp(x, tx, 0.06);
+            y = lerp(y, ty, 0.06);
+            lean.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+            if (Math.abs(x - tx) < 0.05 && Math.abs(y - ty) < 0.05) { running = false; return; }
+            requestAnimationFrame(step);
+        };
+        const kick = () => { if (!running) { running = true; requestAnimationFrame(step); } };
+        hero.addEventListener('pointermove', (e) => {
+            if (hero.classList.contains('is-theater')) return;
+            const r = hero.getBoundingClientRect();
+            tx = ((e.clientX - r.left) / r.width  - 0.5) * -26;
+            ty = ((e.clientY - r.top)  / r.height - 0.5) * -16;
+            kick();
+        });
+        hero.addEventListener('pointerleave', () => { tx = 0; ty = 0; kick(); });
+    }
+
+    /* ---- exit: on the way down the film recedes into a rounded frame ----
+       Desktop only; on phones the film is held sticky behind the glass. */
+    exitSetup() {
+        const { hero, screen, glass, deck } = this;
+        if (!hero || !screen || REDUCED) return;
+        const wide = window.matchMedia('(min-width: 981px)');
+        let last = -1;
+
+        const clear = () => {
+            screen.style.transform = ''; screen.style.borderRadius = '';
+            [glass, deck].forEach((el) => { if (el) { el.style.transform = ''; el.style.opacity = ''; } });
+            last = -1;
+        };
+        wide.addEventListener?.('change', clear);
+
+        Scroll.add((y) => {
+            if (!wide.matches) return;
+            const h = hero.offsetHeight || 1;
+            const p = clamp(y / h, 0, 1);
+            if (Math.abs(p - last) < 0.001) return;
+            last = p;
+            if (p <= 0) { clear(); last = 0; return; }
+            const e = p * p * (3 - 2 * p);           // smoothstep
+            screen.style.transform = `translate3d(0, ${(p * 22).toFixed(2)}%, 0) scale(${(1 - e * 0.12).toFixed(4)})`;
+            screen.style.borderRadius = `${(e * 28).toFixed(1)}px`;
+            const fade = clamp(1 - p * 1.8, 0, 1).toFixed(3);
+            if (glass) { glass.style.transform = `translate3d(0, ${(-p * 70).toFixed(1)}px, 0)`; glass.style.opacity = fade; }
+            if (deck)  { deck.style.transform  = `translate3d(0, ${(-p * 40).toFixed(1)}px, 0)`; deck.style.opacity  = fade; }
+        });
+    }
 }
 
 
 
 /* =============================================================================
-   REEL — the photo strip drifts sideways while it is on screen
+   REEL — "Inside the practice": prints laid on a table, one at a time
+   The old sideways drift ran the whole strip past in about one screen of
+   scrolling — too fast to see anything. On a desktop the section now holds
+   still (CSS sticky, so it never fights the shelf's GSAP pin) and each
+   photograph lands on the stack as you scroll, about 70% of a screen apiece;
+   earlier prints sink back and dim beneath it. Touch, narrow or reduced
+   motion: the plain swipeable row.
 ============================================================================= */
 class Reel {
     constructor() {
         this.section = $('#inside');
         this.view    = $('#reelView');
         this.track   = $('#reelTrack');
+        this.frames  = this.track ? $$('.reel__frame', this.track) : [];
+        this.now     = $('#reelNow');
+        this.total   = $('#reelTotal');
+        this.bar     = $('#reelBar');
+        this.on      = false;
+        this.live    = false;
     }
 
     init() {
         if (!this.section || !this.view || !this.track) return;
-        if (REDUCED || !FINE_POINTER || window.innerWidth < 900) {
-            this.view.classList.add('is-native');
-            return;
-        }
-        let live = false;
-        if ('IntersectionObserver' in window) {
-            new IntersectionObserver(([e]) => { live = e.isIntersecting; }, { rootMargin: '10% 0px' })
-                .observe(this.section);
-        } else live = true;
+        const n = this.frames.length;
+        this.section.style.setProperty('--n', String(n));
+        if (this.total) this.total.textContent = String(n).padStart(2, '0');
 
-        Scroll.add(() => {
-            if (!live) return;
-            const r   = this.section.getBoundingClientRect();
-            const vh  = window.innerHeight;
-            const p   = clamp((vh - r.top) / (vh + r.height), 0, 1);
-            const max = Math.max(0, this.track.scrollWidth - this.view.clientWidth);
-            this.track.style.transform = `translate3d(${(-p * max).toFixed(1)}px, 0, 0)`;
+        const wide = window.matchMedia('(min-width: 900px)');
+        const apply = () => {
+            const on = !REDUCED && FINE_POINTER && wide.matches && n > 1;
+            if (on === this.on && this.section.classList.contains(on ? 'is-stack' : 'is-plain')) return;
+            this.on = on;
+            this.section.classList.toggle('is-stack', on);
+            this.section.classList.toggle('is-plain', !on);
+            this.view.classList.toggle('is-native', !on);
+            if (!on) this.frames.forEach((f) => { f.style.transform = ''; f.style.zIndex = ''; f.style.removeProperty('--shade'); });
+            else this.paint();
+        };
+        apply();
+        wide.addEventListener?.('change', () => {
+            apply();
+            if (typeof window.ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
         });
+
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(([e]) => { this.live = e.isIntersecting; if (this.live && this.on) this.paint(); },
+                { rootMargin: '20% 0px' }).observe(this.section);
+        } else this.live = true;
+
+        Scroll.add(() => { if (this.on && this.live) this.paint(); });
+        window.addEventListener('resize', debounce(() => { if (this.on) this.paint(); }, 120));
+    }
+
+    paint() {
+        const n   = this.frames.length;
+        const vh  = window.innerHeight;
+        const r   = this.section.getBoundingClientRect();
+        const run = Math.max(1, r.height - vh - vh * 0.22);   // the last 22% of a screen is a hold
+        const P   = clamp(-r.top / run, 0, 1);
+        const t   = P * (n - 1);
+        const out = (x) => 1 - Math.pow(1 - x, 3);
+
+        // how far each print has landed (the first is already down)
+        const land = this.frames.map((_, i) => (i === 0 ? 1 : out(clamp((t - (i - 1)) / 0.6, 0, 1))));
+        const REST = [-1.4, 1.1, -0.6, 1.5, -1.0, 0.8];
+
+        this.frames.forEach((f, i) => {
+            const s = land[i];
+            let depth = 0;
+            for (let j = i + 1; j < n; j++) depth += land[j];
+            const rot  = REST[i % REST.length] + (1 - s) * (i % 2 ? 9 : -9);
+            const y    = (1 - s) * 115 - depth * 1.6;            // vh: older prints peek out above
+            const x    = (1 - s) * (i % 2 ? 8 : -8);             // vw: each comes in from a slight angle
+            const sc   = 1 - Math.min(depth, 3) * 0.05;
+            f.style.zIndex = String(i + 1);
+            f.style.transform =
+                `translate3d(calc(-50% + ${x.toFixed(2)}vw), calc(-50% + ${y.toFixed(2)}vh), 0) ` +
+                `rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
+            f.style.setProperty('--shade', Math.min(0.6, depth * 0.24).toFixed(3));
+        });
+
+        const cur = clamp(Math.floor(t + 0.45) + 1, 1, n);
+        const txt = String(cur).padStart(2, '0');
+        if (this.now && this.now.textContent !== txt) this.now.textContent = txt;
+        if (this.bar) this.bar.style.setProperty('--p', P.toFixed(4));
     }
 }
 

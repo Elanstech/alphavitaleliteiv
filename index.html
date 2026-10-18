@@ -50,6 +50,8 @@
 
 <noscript><style>
   .pre { display: none !important; }
+  .hero__screen { clip-path: none !important; }
+  .hero__deck { display: none !important; }
   html.is-preloading { overflow: auto !important; }
   [data-rise], .hero__title .word > span { opacity: 1 !important; transform: none !important; }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
@@ -163,7 +165,7 @@
 </script>
 </head>
 
-<body class="has-frame">
+<body class="has-cinema">
 
 
 <div class="pre" id="pre">
@@ -229,6 +231,7 @@
 
       <a class="head__link" href="about/">Dr.&nbsp;Aronov</a>
       <a class="head__link" href="research/">Research</a>
+      <a class="head__link" href="faq/">FAQ</a>
       <a class="head__link" href="contact/">Contact</a>
     </nav>
 
@@ -272,7 +275,8 @@
 
       <a href="about/"><i>iii.</i><em>Dr. Aronov</em></a>
       <a href="research/"><i>iv.</i><em>Research</em></a>
-      <a href="contact/"><i>v.</i><em>Contact</em></a>
+      <a href="faq/"><i>v.</i><em>FAQ</em></a>
+      <a href="contact/"><i>vi.</i><em>Contact</em></a>
     </nav>
     <div class="menu__foot">
       <a class="btn btn--gold" href="begin-screening/"><span>Begin screening</span></a>
@@ -288,85 +292,111 @@
 
 <section class="hero" id="hero">
 
-  <div class="hero__media">
-    <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata"
-           poster="/assets/images/hero-poster.webp">
-      <source src="https://github.com/Elanstech/precisionmedicaliv/releases/download/Hero/hero.mp4" type="video/mp4">
-    </video>
-    <span class="hero__grade"></span>
-    <span class="hero__scrim"></span>
-    <span class="hero__vignette"></span>
-    <span class="hero__grain"></span>
-  </div>
-  <span class="hero__bars" aria-hidden="true"></span>
-
-  <div class="hero__folio" data-rise style="--i:1">
-    <span>Est. Middle Village · Queens, NY</span>
-    <span class="hero__folio-mid">A Physician-Directed Practice</span>
-    <span>Appointments Only</span>
+  <!-- the clinic tour, full screen and in its own colour -->
+  <div class="hero__media" aria-hidden="true">
+    <div class="hero__screen" id="heroScreen">
+      <div class="hero__lean" id="heroLean">
+        <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata"
+               poster="/assets/images/hero-poster.webp"
+               data-chapters='[[0,"Arrival"],[3,"Welcome from Dr. Aronov"],[6.5,"Reception"],[10,"The infusion room"],[13,"Tailored dosing"],[18,"The infusion room"],[23,"Infusion monitoring"],[29.8,"79-01 Metropolitan Avenue"]]'>
+          <source src="https://github.com/Elanstech/precisionmedicaliv/releases/download/Hero/hero.mp4" type="video/mp4">
+        </video>
+      </div>
+      <span class="hero__bars"></span>
+    </div>
   </div>
 
-  <div class="hero__stage">
-    <p class="hero__kicker" data-rise style="--i:2">
-      <span class="hero__rule"></span>
-      Individual Screening &middot; Tailored Dosing &middot; Infusion Monitoring
-    </p>
+  <div class="hero__grid">
 
-    <h1 class="hero__title">
-      <span class="word" data-rise style="--i:3"><span>Physician-Directed</span></span>
-      <span class="word" data-rise style="--i:4"><span>IV Care.</span></span>
-    </h1>
+    <!-- the copy, on frosted glass along the bottom of the frame -->
+    <div class="hero__glass" id="heroGlass">
+      <span class="hero__shine" aria-hidden="true"></span>
 
+      <div class="hero__folio" data-rise style="--i:1">
+        <span>Est. Middle Village · Queens, NY</span>
+        <span class="hero__folio-mid">A Physician-Directed Practice</span>
+        <span>Appointments Only</span>
+      </div>
 
-    <p class="hero__for" data-rise style="--i:5">
-      <span class="hero__for-lead">Infusions for</span>
-      <span class="loop" id="wordLoop">
-        <span class="loop__fallback">Glutathione IV Therapy</span>
-        <span class="loop__stack">
-          <span class="is-on">Glutathione IV Therapy</span>
-          <span>Antioxidant Support</span>
-          <span>Immune Support</span>
-          <span>Post-Illness Recovery Support</span>
-          <span>Muscle Recovery</span>
-          <span>Mind &amp; Focus Support</span>
-        </span>
-      </span>
-    </p>
+      <div class="hero__stage">
+        <p class="hero__kicker" data-rise style="--i:2">
+          <span class="hero__rule"></span>
+          Individual Screening &middot; Tailored Dosing &middot; Infusion Monitoring
+        </p>
 
-    <div class="hero__row" data-rise style="--i:6">
-      <p class="hero__dek">
-        Dr. Violeta Aronov, DO, a board-certified anesthesiologist with nearly two decades of
-        clinical experience, reviews each patient&rsquo;s health information to determine whether
-        IV therapy is appropriate. Following that assessment, Dr.&nbsp;Aronov selects the appropriate
-        supportive care and personally administers and monitors the infusion from start to finish.
-      </p>
-      <div class="hero__actions">
-        <a class="btn btn--gold btn--lg" href="begin-screening/" data-magnetic>
-          <span>Begin screening</span>
-          <i class="ph ph-arrow-right"></i>
-        </a>
-        <a class="btn btn--line btn--lg" href="#infusions"><span>View infusions</span></a>
+        <h1 class="hero__title">
+          <span class="word" data-rise style="--i:3"><span>Physician-Directed</span></span>
+          <span class="word" data-rise style="--i:4"><span>IV Care.</span></span>
+        </h1>
+
+        <div class="hero__split">
+          <div class="hero__lead">
+            <p class="hero__for" data-rise style="--i:5">
+              <span class="hero__for-lead">Infusions for</span>
+              <span class="loop" id="wordLoop">
+                <span class="loop__fallback">Glutathione IV Therapy</span>
+                <span class="loop__stack">
+                  <span class="is-on">Glutathione IV Therapy</span>
+                  <span>Antioxidant Support</span>
+                  <span>Immune Support</span>
+                  <span>Post-Illness Recovery Support</span>
+                  <span>Muscle Recovery</span>
+                  <span>Mind &amp; Focus Support</span>
+                </span>
+              </span>
+            </p>
+
+            <div class="hero__actions" data-rise style="--i:6">
+              <a class="btn btn--gold btn--lg" href="begin-screening/" data-magnetic>
+                <span>Begin screening</span>
+                <i class="ph ph-arrow-right"></i>
+              </a>
+              <a class="btn btn--line btn--lg" href="#infusions"><span>View infusions</span></a>
+            </div>
+          </div>
+
+          <p class="hero__dek" data-rise style="--i:6">
+            Dr. Violeta Aronov, DO, a board-certified anesthesiologist with nearly two decades of
+            clinical experience, reviews each patient&rsquo;s health information to determine whether
+            IV therapy is appropriate. Following that assessment, Dr.&nbsp;Aronov selects the appropriate
+            supportive care and personally administers and monitors the infusion from start to finish.
+          </p>
+        </div>
+
+        <div class="hero__fine" data-rise style="--i:7">
+          <p class="hero__legal">
+            IV services are intended as supportive care and are designed to complement&mdash;not
+            replace&mdash;appropriate primary or specialty medical treatment. Not every patient is
+            eligible. Individual results may vary, and no outcome is guaranteed.
+          </p>
+          <p class="hero__cred">Appointments only &bull; Physician review and eligibility determination required</p>
+        </div>
       </div>
     </div>
 
-    <p class="hero__legal" data-rise style="--i:7">
-      IV services are intended as supportive care and are designed to complement&mdash;not
-      replace&mdash;appropriate primary or specialty medical treatment. Not every patient is
-      eligible. Individual results may vary, and no outcome is guaranteed.
-    </p>
-  </div>
-
-  <div class="hero__foot" data-rise style="--i:8">
-    <p class="hero__cred">Appointments only &bull; Physician review and eligibility determination required</p>
-    <div class="hero__tools">
-      <button class="hero__tool" id="heroPause" type="button" aria-label="Pause the film" aria-pressed="false">
-        <i class="ph-fill ph-pause hero__tool-a"></i><i class="ph-fill ph-play hero__tool-b"></i>
-      </button>
-      <button class="hero__tool hero__tool--film" id="heroTheater" type="button" aria-label="Watch the full film" aria-pressed="false">
-        <i class="ph ph-arrows-out-simple hero__tool-a"></i><i class="ph ph-x hero__tool-b"></i>
-      </button>
-      <a class="hero__scroll" href="#infusions"><span>Scroll</span><i></i></a>
+    <!-- the film deck: what is showing, where we are, pause and full film -->
+    <div class="hero__deck">
+      <div class="hero__now">
+        <span class="hero__live" aria-hidden="true"></span>
+        <span class="hero__chapter" id="heroChapter" aria-live="off">The clinic tour</span>
+        <span class="hero__time"><b id="heroTime">0:00</b><span id="heroDur"></span></span>
+      </div>
+      <div class="hero__track" id="heroTrack" role="slider" tabindex="0" aria-label="Film position"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span class="hero__ticks" id="heroTicks"></span>
+        <i class="hero__fill" id="heroFill"></i>
+      </div>
+      <div class="hero__tools">
+        <button class="hero__tool" id="heroPause" type="button" aria-label="Pause the film" aria-pressed="false">
+          <i class="ph-fill ph-pause hero__tool-a"></i><i class="ph-fill ph-play hero__tool-b"></i>
+        </button>
+        <button class="hero__tool hero__tool--film" id="heroTheater" type="button" aria-label="Watch the full film" aria-pressed="false">
+          <i class="ph ph-arrows-out-simple hero__tool-a"></i><i class="ph ph-x hero__tool-b"></i>
+        </button>
+        <a class="hero__scroll" href="#infusions"><span>Scroll</span><i></i></a>
+      </div>
     </div>
+
   </div>
 
 </section>
@@ -707,6 +737,7 @@
 
 
 <section class="reel" id="inside" aria-label="Inside the practice">
+  <div class="reel__pin">
   <div class="reel__head">
     <p class="reel__eyebrow"><span class="reel__rule"></span>Inside the practice</p>
     <p class="reel__addr">79-01 Metropolitan Avenue &middot; Middle Village</p>
@@ -734,6 +765,11 @@
              sizes="(max-width: 900px) 80vw, 60vw" alt="Treatment chairs and an IV stand inside the infusion room" width="1800" height="1200" loading="lazy" decoding="async">
       </li>
     </ul>
+  </div>
+  <div class="reel__meta" aria-hidden="true">
+    <p class="reel__count"><b id="reelNow">01</b><span> / </span><span id="reelTotal">05</span></p>
+    <span class="reel__bar"><i id="reelBar"></i></span>
+  </div>
   </div>
 </section>
 
