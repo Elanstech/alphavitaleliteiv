@@ -94,7 +94,7 @@ const paint = () => {
         if (swap && !$('#bsDone')) {
             swap.hidden = false;
             swap.innerHTML = 'No infusion chosen yet. You can continue and let physician screening '
-                + 'guide the next step, or <a href="begin-screening.html">choose one first</a>.';
+                + 'guide the next step, or <a href="../begin-screening/">choose one first</a>.';
         } else if (swap) {
             swap.hidden = false;
         }
@@ -110,6 +110,17 @@ const paint = () => {
     set('#bsChair', drip.chair);
     set('#bsPrice', drip.price);
     if (swap) swap.hidden = false;
+
+    /* Pre-select the same infusion in the step-one dropdown. Without this the
+       panel said Glutathione while the form said "Not sure yet", and the
+       contact record reached Dr. Aronov as "Not sure yet" unless the patient
+       noticed and changed it. Matched loosely: "×3" vs "x3", "&" vs "and". */
+    const pick = $('#sqDrip');
+    if (pick) {
+        const key = (t) => t.toLowerCase().replace(/\u00d7/g, 'x').replace(/&/g, 'and').replace(/[^a-z0-9]/g, '');
+        const opt = [...pick.options].find((o) => key(o.value) === key(drip.name) || key(o.text) === key(drip.name));
+        if (opt) pick.value = opt.value;
+    }
 
     document.title = `${drip.name} — ${document.title}`;
     return drip;
@@ -255,6 +266,8 @@ const autosize = (frame) => {
 const cine = () => {
     const box = $('#bsCine');
     if (!box) return;
+    /* Already seen this visit (see the <head> script) — nothing to play. */
+    if (!document.documentElement.classList.contains('has-cine')) { box.remove(); return; }
 
     /* The cue the picker waits on. Fired once, at the moment the curtain
        starts to lift rather than after it has gone, so the two shots overlap. */
@@ -543,9 +556,34 @@ const QUESTIONS = [
   { e: false,
     q: 'Are you taking an antibiotic or antiviral medication for an unresolved acute infection?',
     r: 'Postpone the infusion until the infection and treatment have resolved, or your clinician confirms you are stable.' },
-  { e: false,
-    q: 'In the past 48 hours, have you had ongoing vomiting or diarrhea, been unable to keep liquids down, urinated much less than usual, or felt significantly dizzy or faint when standing?',
-    r: 'You may be dehydrated and need medical evaluation before an elective infusion.' },
+  /* 13A–13C replaced the old question 13 (Oct 2026, Dr. Aronov's wording).
+     13A is the one question where YES does not end the screening: it flags the
+     patient for physician review and the screening continues to 13B and 13C,
+     which DO end it on a yes. */
+  { e: false, n: '13A', stopOn: null,
+    q: 'After a suspected stomach bug or food poisoning within the past 72 hours, are your symptoms mild and improving, AND are all of the following true?',
+    list: [
+      'You can keep small sips of liquids down.',
+      'You continue to urinate regularly.',
+      'You are alert and can walk safely without significant dizziness.',
+      'You have no blood in vomit or stool, severe abdominal pain, or high fever.',
+    ],
+    hint: 'If you have not had a stomach bug or food poisoning in the past 72 hours, answer No.',
+    yesNote: 'You may be considered for an appointment after physician review, provided you answer No to both questions below. The physician must assess your vital signs, abdomen, hydration, and any infection-control concerns before treatment.' },
+  { e: false, n: '13B',
+    q: 'Are you currently experiencing repeated vomiting that prevents adequate drinking, urinating much less than usual, significant dizziness when standing, fever above 102\u00B0F, bloody diarrhea, diarrhea lasting more than two days, or symptoms that are getting worse?',
+    r: 'An IV clinic appointment is not appropriate at this time. Seek evaluation in an emergency department today. If you have any symptoms in question 13C, seek emergency care immediately.',
+    /* Shown on the 13B stop screen, because its instruction points at 13C and
+       a patient stopped at 13B never sees 13C. Her 13C wording, verbatim. */
+    more: {
+        title: 'Question 13C',
+        q: 'Are you currently confused, have you fainted during this illness, are you unable to stand or walk safely, have you stopped urinating, or do you have severe or rapidly worsening abdominal pain, vomiting blood, substantial rectal bleeding, or black, tarry stools?',
+        act: 'If Yes: Seek emergency care NOW. Call 911 for confusion, fainting, inability to stand safely, or substantial bleeding. Otherwise, have someone take you to the nearest emergency department immediately. Do not drive yourself.',
+        foot: 'Do not wait for a response to this screening form when urgent or emergency symptoms are present.',
+    } },
+  { e: true, n: '13C',
+    q: 'Are you currently confused, have you fainted during this illness, are you unable to stand or walk safely, have you stopped urinating, or do you have severe or rapidly worsening abdominal pain, vomiting blood, substantial rectal bleeding, or black, tarry stools?',
+    r: 'Seek emergency care NOW. Call 911 for confusion, fainting, inability to stand safely, or substantial bleeding. Otherwise, have someone take you to the nearest emergency department immediately. Do not drive yourself.' },
   { e: false,
     q: 'Do you receive dialysis, have Stage 4 or 5 kidney disease, a Glomerular Filtration Rate below 30, or produce very little or no urine?',
     r: 'Advanced kidney disease requires specialist fluid and electrolyte management. Alpha Vital Elite cannot offer an elective infusion.' },
@@ -580,6 +618,16 @@ const QUESTIONS = [
     q: 'Are you pregnant, possibly pregnant or breastfeeding?',
     r: 'Elective IV ingredients may not be safe or appropriately dosed during pregnancy or breastfeeding. Alpha Vital Elite does not offer infusions during this time.' },
 ];
+
+{
+    let k = 0;
+    QUESTIONS.forEach((item) => {
+        if (item.n) k = parseInt(item.n, 10);
+        else item.n = String(++k);
+        if (item.stopOn === undefined) item.stopOn = 'yes';
+    });
+}
+const flagged = () => QUESTIONS.some((item, i) => item.yesNote && ANSWERS[i] === 'yes');
 
 
 /* ▸ JOTFORM — two forms, both on the practice's HIPAA account.
@@ -711,8 +759,10 @@ const post = (cfg, values) => {
    does not look like a form that lost twenty-one fields. */
 const answerLog = () => QUESTIONS.map((item, n) => {
     const a = ANSWERS[n];
-    return (n + 1) + '. ' + item.q + '\n   ANSWER: '
-         + (a ? a.toUpperCase() : 'not reached');
+    return item.n + '. ' + item.q
+         + (item.list ? '\n   - ' + item.list.join('\n   - ') : '')
+         + '\n   ANSWER: ' + (a ? a.toUpperCase() : 'not reached')
+         + (item.yesNote && a === 'yes' ? '  \u2192 PHYSICIAN REVIEW REQUIRED' : '');
 }).join('\n\n');
 
 
@@ -743,7 +793,7 @@ const warm = () => {
     warmed = true;
     const l = document.createElement('link');
     l.rel = 'prefetch';
-    l.href = 'review-done.html';
+    l.href = '../review-done/';
     document.head.appendChild(l);
 };
 
@@ -798,8 +848,22 @@ const screener = () => {
             t.classList.toggle('is-done', n < step);
             t.classList.toggle('is-now', n === step);
         });
-        now.textContent = step + 1;
-        qText.textContent = QUESTIONS[step].q;
+        const item = QUESTIONS[step];
+        now.textContent = item.n;
+        qText.textContent = item.q;
+
+        /* 13A carries a checklist, a how-to-answer hint and a note shown on a
+           yes. Every other question has none of these and they stay hidden. */
+        const list = $('#sqList'), hint = $('#sqHint');
+        list.replaceChildren(...(item.list || []).map((t) => {
+            const li = document.createElement('li'); li.textContent = t; return li;
+        }));
+        list.hidden = !item.list;
+        hint.textContent = item.hint || '';
+        hint.hidden = !item.hint;
+        $('#sqNote').hidden = true;
+        $('#sqAns').hidden = false;
+
         back.hidden = step === 0;
         head.hidden = false;
         pane('sqQuestion');
@@ -825,9 +889,14 @@ const screener = () => {
             email:     PATIENT.email,
             phone:     PATIENT.phone,
             drip:      PATIENT.drip,
-            outcome:   outcome,
-            stoppedAt: item ? 'Question ' + (n + 1) + ' of 24' : 'None',
-            reason:    item ? item.r : 'Answered No to all 24 questions.',
+            outcome:   outcome === 'PASSED' && flagged()
+                         ? 'PASSED \u2014 PHYSICIAN REVIEW REQUIRED (13A: recent stomach bug, mild and improving)'
+                         : outcome,
+            stoppedAt: item ? 'Question ' + item.n + ' of 24' : 'None',
+            reason:    item ? item.r
+                     : flagged()
+                         ? 'Answered Yes to 13A (recent stomach bug, mild and improving) and No to every other question. Physician must assess vital signs, abdomen, hydration and infection-control concerns before treatment.'
+                         : 'Answered No to all questions.',
             emergency: item && item.e ? 'YES \u2014 911 instruction shown' : 'No',
             log:       answerLog(),
         });
@@ -844,12 +913,24 @@ const screener = () => {
        hold up a 911 screen. */
     const stop = (n) => {
         const item = QUESTIONS[n];
-        const ref = 'Question ' + (n + 1) + ' of 24 \u00B7 Screening ended \u00B7 Ref ' + REF;
+        const ref = 'Question ' + item.n + ' of 24 \u00B7 Screening ended \u00B7 Ref ' + REF;
         record('STOPPED', n);
 
         if (!item.e) {
             head.hidden = true;
             $('#sqStopReason').textContent = item.r;
+            const more = $('#sqStopMore');
+            more.replaceChildren();
+            if (item.more) {
+                const line = (cls, text) => {
+                    const p = document.createElement('p'); p.className = cls; p.textContent = text; more.appendChild(p);
+                };
+                line('sq-stop__more-title', item.more.title);
+                line('sq-stop__more-q', item.more.q);
+                line('sq-stop__more-act', item.more.act);
+                line('sq-stop__more-foot', item.more.foot);
+            }
+            more.hidden = !item.more;
             $('#sqStopRef').textContent = ref;
             pane('sqStop');
             $('#sqStopReason').focus({ preventScroll: true });
@@ -908,7 +989,7 @@ const screener = () => {
             drip:  PATIENT.drip  || '',
             ref:   REF,
         });
-        const go = () => location.assign('review-done.html?' + q.toString());
+        const go = () => location.assign('../review-done/?' + q.toString());
 
         let gone = false;
         const once = () => { if (!gone) { gone = true; go(); } };
@@ -948,15 +1029,31 @@ const screener = () => {
         ask();
     });
 
+    const next = () => {
+        if (step === QUESTIONS.length - 1) { pass(); return; }
+        step += 1;
+        ask();
+    };
+
     card.querySelectorAll('.sq__b').forEach((btn) => {
         btn.addEventListener('click', () => {
-            ANSWERS[step] = btn.dataset.answer;
-            if (btn.dataset.answer === 'yes') { stop(step); return; }
-            if (step === QUESTIONS.length - 1) { pass(); return; }
-            step += 1;
-            ask();
+            const item = QUESTIONS[step];
+            const answer = btn.dataset.answer;
+            ANSWERS[step] = answer;
+            if (answer === item.stopOn) { stop(step); return; }
+            /* 13A yes: not a stop. Show what it means, then carry on. */
+            if (answer === 'yes' && item.yesNote) {
+                $('#sqNoteText').textContent = item.yesNote;
+                $('#sqAns').hidden = true;
+                $('#sqNote').hidden = false;
+                $('#sqNoteGo').focus({ preventScroll: true });
+                return;
+            }
+            next();
         });
     });
+
+    $('#sqNoteGo').addEventListener('click', next);
 
     back.addEventListener('click', () => {
         if (step === 0) return;

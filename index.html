@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preload" as="image" href="logo.png" fetchpriority="high">
+<link rel="preload" as="image" href="assets/images/logo.png" fetchpriority="high">
 <link rel="preload" as="image" href="assets/images/hero-poster.webp" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
 
@@ -44,8 +44,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
 </noscript>
 
-<link rel="icon" type="image/png" href="logo.png">
-<link rel="stylesheet" href="styles.css">
+<link rel="icon" type="image/png" href="assets/images/logo.png">
+<link rel="stylesheet" href="css/styles.css">
 
 
 <noscript><style>
@@ -69,7 +69,7 @@
       "@id": "https://www.alphaeliteiv.com/#clinic",
       "name": "Alpha Vital Elite IV",
       "url": "https://www.alphaeliteiv.com/",
-      "logo": "https://www.alphaeliteiv.com/logo.png",
+      "logo": "https://www.alphaeliteiv.com/assets/images/logo.png",
       "image": "https://www.alphaeliteiv.com/assets/photos/share.jpg",
       "description": "Physician-run elective outpatient IV infusion practice in Middle Village, Queens. Every patient is screened and reviewed by Dr. Violeta Aronov, DO before an infusion is given.",
       "telephone": "+1-347-714-8660",
@@ -112,7 +112,7 @@
       "name": "Violeta Aronov, DO",
       "honorificSuffix": "DO",
       "jobTitle": "Physician",
-      "url": "https://www.alphaeliteiv.com/htmls/about.html",
+      "url": "https://www.alphaeliteiv.com/about/",
       "image": "https://www.alphaeliteiv.com/assets/gen-images/dr.aronov.png",
       "worksFor": { "@id": "https://www.alphaeliteiv.com/#clinic" },
       "sameAs": ["https://www.instagram.com/dr.violetaaronov/"]
@@ -136,18 +136,10 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Do I need an appointment for IV therapy?",
+      "name": "Do I need an appointment?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. All visits are by appointment only and walk-ins are not accepted. A physician reviews your health information before an infusion can be scheduled, to confirm it can be given safely in an outpatient setting."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What happens before I can book an infusion?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You complete a short safety screening and send your medical history, current medications and allergies. Dr. Violeta Aronov, DO reviews it and decides whether IV therapy is appropriate and which formulation fits. Nothing is booked and nothing is charged at that stage."
+        "text": "Yes. All visits are by appointment only; walk-ins are not accepted. Alpha Vital Elite is an outpatient medical wellness practice, not a hospital. Before an infusion can be scheduled, a physician must review your health information to determine whether the nutritional and antioxidant IV support we offer falls within our scope and can be provided safely and appropriately in our setting. If your medical needs fall outside our services, you may be advised to seek care from an appropriate physician or medical facility."
       }
     },
     {
@@ -155,47 +147,15 @@
       "name": "Is there a physician review fee?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. There is no screening or physician review fee. The screening is a short questionnaire that takes a few minutes. If IV support is appropriate, Dr. Aronov contacts you directly to schedule, and the complete medical form is signed at the clinic on the day of your infusion."
+        "text": "No. There is no screening or physician review fee. Before an infusion can be scheduled, a physician reviews your safety-screening answers, medical history, medications, allergies, relevant laboratory results or medical records, and wellness goals at no charge. This individualized review helps determine whether the IV support available at Alpha Vital Elite is safe and appropriate for you — and, when appropriate, which option may best meet your needs.\nThe screening itself is a short questionnaire that takes only a few minutes. If IV support is appropriate, Dr. Violeta Aronov contacts you directly to schedule your appointment. The complete medical form and patient attestation are reviewed and signed at the clinic on the day of your infusion.\nOccasionally, the review may show that additional information is needed or that the services available at our practice are not the right fit for you. In that situation, the physician will explain why and, when appropriate, whether another option may be considered."
       }
     },
     {
       "@type": "Question",
-      "name": "Who gives and monitors the infusion?",
+      "name": "Who personally provides and monitors my infusion?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "A physician. Dr. Violeta Aronov, or another physician on the Alpha Vital Elite medical team, verifies the formulation and doses, prepares and starts the infusion, sets the flow rate and stays with you through completion. Your infusion is not handed off to a technician."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How long does an IV infusion take?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "It depends on the infusion. A glutathione injection is about a 15-minute push inside a 30-minute visit. Several signature infusions take about an hour. The longest run approximately two and a half to three hours."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I come in if I have a chronic condition?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Possibly. It depends on your condition, your current health and the care you need. A physician reviews your conditions, medications and treatments first. Alpha Vital Elite infusions support hydration, nutritional replenishment, antioxidant defenses and immune function; they do not treat chronic illness."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Where is Alpha Vital Elite IV located?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "79-01 Metropolitan Avenue, Middle Village, NY 11379, in Queens, New York, serving Middle Village, Glendale, Maspeth, Ridgewood, Forest Hills and Rego Park. Open 9am to 5pm, seven days a week, by appointment."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How much do the IV infusions cost?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Sessions run from $100 for a glutathione injection to $550 for the longer immune-support infusion, with most signature infusions between $325 and $400. The safety screening and physician review are free."
+        "text": "At Alpha Vital Elite, physician involvement continues throughout your visit. Your infusion is personally provided and monitored by Dr. Violeta Aronov or another physician on the Alpha Vital Elite medical team.\nThe physician providing your care reviews your medical history, determines and verifies the appropriate formulation and doses, prepares and starts your infusion, sets the flow rate, and remains with you through completion. Your infusion is not handed off to a technician; a physician remains directly responsible for your care from start to finish."
       }
     }
   ]
@@ -208,7 +168,7 @@
 
 <div class="pre" id="pre">
   <div class="pre__core">
-    <img class="pre__mark" src="logo.png" alt="Alpha Vital Elite IV" width="640" height="592">
+    <img class="pre__mark" src="assets/images/logo.png" alt="Alpha Vital Elite IV" width="640" height="592">
     <div class="pre__meter">
       <span class="pre__bar" id="preBar"></span>
       <span class="pre__pct" id="prePct">0</span>
@@ -220,17 +180,17 @@
 <header class="head" id="head">
   <div class="head__rail">
 
-    <a class="head__mark" href="index.html">
-      <img src="logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
+    <a class="head__mark" href="./">
+      <img src="assets/images/logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
     </a>
 
     <nav class="head__nav" id="headNav">
 
-      <a class="head__link is-here" href="index.html" aria-current="page">Home</a>
+      <a class="head__link is-here" href="./" aria-current="page">Home</a>
 
 
       <div class="head__drop">
-        <a class="head__link" href="htmls/infusions.html">
+        <a class="head__link" href="infusions/">
           Infusions <i class="ph ph-caret-down head__dcaret"></i>
         </a>
 
@@ -238,43 +198,43 @@
           <p class="head__panel-eyebrow">The Infusion Menu</p>
 
           <div class="head__panel-grid">
-            <a class="hd-item" href="drips/glutathione.html" style="--tone:#7FA08C">
+            <a class="hd-item" href="drips/glutathione/" style="--tone:#7FA08C">
               <i>I</i><span>Glutathione IV Injection</span><b>$100</b>
             </a>
-            <a class="hd-item" href="drips/antioxidant.html" style="--tone:#4F7D5E">
+            <a class="hd-item" href="drips/antioxidant/" style="--tone:#4F7D5E">
               <i>II</i><span>Antioxidant &times;3 Reset</span><b>$400</b>
             </a>
-            <a class="hd-item" href="drips/immun-o-boost.html" style="--tone:#D9982A">
+            <a class="hd-item" href="drips/immun-o-boost/" style="--tone:#D9982A">
               <i>III</i><span>Immun-O-Boost IV Support</span><b>$550</b>
             </a>
-            <a class="hd-item" href="drips/revive.html" style="--tone:#35707F">
+            <a class="hd-item" href="drips/revive/" style="--tone:#35707F">
               <i>IV</i><span>Revive IV Support</span><b>$325</b>
             </a>
-            <a class="hd-item" href="drips/liquixo.html" style="--tone:#B34E37">
+            <a class="hd-item" href="drips/liquixo/" style="--tone:#B34E37">
               <i>V</i><span>LIQUIXO Muscle Recovery</span><b>$395</b>
             </a>
-            <a class="hd-item" href="drips/stress-brain.html" style="--tone:#7A5F98">
+            <a class="hd-item" href="drips/stress-brain/" style="--tone:#7A5F98">
               <i>VI</i><span>Stress &amp; Brain Wellness</span><b>$350</b>
             </a>
-            <a class="hd-item" href="drips/customized.html" style="--tone:#C1963F">
+            <a class="hd-item" href="drips/customized/" style="--tone:#C1963F">
               <i>VII</i><span>Customized IV Infusion</span><b>Consult</b>
             </a>
           </div>
 
-          <a class="head__panel-foot" href="htmls/infusions.html">
+          <a class="head__panel-foot" href="infusions/">
             <span>View the full menu</span><i class="ph ph-arrow-right"></i>
           </a>
         </div>
       </div>
 
-      <a class="head__link" href="htmls/about.html">Dr.&nbsp;Aronov</a>
-      <a class="head__link" href="htmls/research.html">Research</a>
-      <a class="head__link" href="htmls/contact.html">Contact</a>
+      <a class="head__link" href="about/">Dr.&nbsp;Aronov</a>
+      <a class="head__link" href="research/">Research</a>
+      <a class="head__link" href="contact/">Contact</a>
     </nav>
 
     <div class="head__actions">
       <a class="head__tel" href="tel:+13477148660">347&#8202;·&#8202;714&#8202;·&#8202;8660</a>
-      <a class="btn btn--forest head__cta" href="htmls/begin-screening.html" data-magnetic><span>Begin screening</span></a>
+      <a class="btn btn--forest head__cta" href="begin-screening/" data-magnetic><span>Begin screening</span></a>
       <button class="head__burger" id="burger" type="button" aria-label="Menu">
         <span></span><span></span>
       </button>
@@ -288,7 +248,7 @@
   <div class="menu__inner">
     <nav class="menu__nav">
 
-      <a class="is-here" href="index.html" aria-current="page"><i>i.</i><em>Home</em></a>
+      <a class="is-here" href="./" aria-current="page"><i>i.</i><em>Home</em></a>
 
 
       <details class="menu__drop">
@@ -297,25 +257,25 @@
           <b class="menu__dcaret"><span class="ph ph-caret-down"></span></b>
         </summary>
         <div class="menu__sub">
-          <a class="menu__sub-all" href="htmls/infusions.html">
+          <a class="menu__sub-all" href="infusions/">
             <span>The full menu</span><span class="ph ph-arrow-right"></span>
           </a>
-          <a class="menu__sub-item" href="drips/glutathione.html" style="--tone:#7FA08C"><i>I</i>Glutathione IV Injection</a>
-          <a class="menu__sub-item" href="drips/antioxidant.html" style="--tone:#4F7D5E"><i>II</i>Antioxidant &times;3 Reset</a>
-          <a class="menu__sub-item" href="drips/immun-o-boost.html" style="--tone:#D9982A"><i>III</i>Immun-O-Boost IV Support</a>
-          <a class="menu__sub-item" href="drips/revive.html" style="--tone:#35707F"><i>IV</i>Revive IV Support</a>
-          <a class="menu__sub-item" href="drips/liquixo.html" style="--tone:#B34E37"><i>V</i>LIQUIXO Muscle Recovery</a>
-          <a class="menu__sub-item" href="drips/stress-brain.html" style="--tone:#7A5F98"><i>VI</i>Stress &amp; Brain Wellness</a>
-          <a class="menu__sub-item" href="drips/customized.html" style="--tone:#C1963F"><i>VII</i>Customized IV Infusion</a>
+          <a class="menu__sub-item" href="drips/glutathione/" style="--tone:#7FA08C"><i>I</i>Glutathione IV Injection</a>
+          <a class="menu__sub-item" href="drips/antioxidant/" style="--tone:#4F7D5E"><i>II</i>Antioxidant &times;3 Reset</a>
+          <a class="menu__sub-item" href="drips/immun-o-boost/" style="--tone:#D9982A"><i>III</i>Immun-O-Boost IV Support</a>
+          <a class="menu__sub-item" href="drips/revive/" style="--tone:#35707F"><i>IV</i>Revive IV Support</a>
+          <a class="menu__sub-item" href="drips/liquixo/" style="--tone:#B34E37"><i>V</i>LIQUIXO Muscle Recovery</a>
+          <a class="menu__sub-item" href="drips/stress-brain/" style="--tone:#7A5F98"><i>VI</i>Stress &amp; Brain Wellness</a>
+          <a class="menu__sub-item" href="drips/customized/" style="--tone:#C1963F"><i>VII</i>Customized IV Infusion</a>
         </div>
       </details>
 
-      <a href="htmls/about.html"><i>iii.</i><em>Dr. Aronov</em></a>
-      <a href="htmls/research.html"><i>iv.</i><em>Research</em></a>
-      <a href="htmls/contact.html"><i>v.</i><em>Contact</em></a>
+      <a href="about/"><i>iii.</i><em>Dr. Aronov</em></a>
+      <a href="research/"><i>iv.</i><em>Research</em></a>
+      <a href="contact/"><i>v.</i><em>Contact</em></a>
     </nav>
     <div class="menu__foot">
-      <a class="btn btn--gold" href="htmls/begin-screening.html"><span>Begin screening</span></a>
+      <a class="btn btn--gold" href="begin-screening/"><span>Begin screening</span></a>
       <a class="menu__tel" href="tel:+13477148660">347 · 714 · 8660</a>
       <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
@@ -381,7 +341,7 @@
         supportive care and personally administers and monitors the infusion from start to finish.
       </p>
       <div class="hero__actions">
-        <a class="btn btn--gold btn--lg" href="htmls/begin-screening.html" data-magnetic>
+        <a class="btn btn--gold btn--lg" href="begin-screening/" data-magnetic>
           <span>Begin screening</span>
           <i class="ph ph-arrow-right"></i>
         </a>
@@ -522,7 +482,7 @@
 
 
         <li class="plate" data-tags="glutathione" style="--tone:var(--t-gluta);--i:0">
-          <a class="plate__bag" href="drips/glutathione.html" tabindex="-1">
+          <a class="plate__bag" href="drips/glutathione/" tabindex="-1" aria-label="Glutathione IV Injection">
             <span class="plate__pole"></span>
             <img src="assets/drips/glutathione.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
@@ -534,7 +494,7 @@
               <span class="plate__no">I</span>
             </header>
 
-            <h3 class="plate__name"><a href="drips/glutathione.html">Glutathione IV Injection</a></h3>
+            <h3 class="plate__name"><a href="drips/glutathione/">Glutathione IV Injection</a></h3>
             <p class="plate__note">Replenish your body&rsquo;s natural glutathione &mdash; supporting antioxidant defense, detoxification, and healthy-looking skin.</p>
 
             <ul class="plate__ing"><li>Glutathione</li></ul>
@@ -543,14 +503,14 @@
               <p class="plate__clock"><i class="ph ph-clock"></i> 15 min push &middot; 30 min visit</p>
               <div class="plate__deal">
                 <p class="plate__price"><b>$100</b><span>per session</span></p>
-                <a class="plate__go" href="drips/glutathione.html">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
+                <a class="plate__go" href="drips/glutathione/">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="antioxidant" style="--tone:var(--t-antiox);--i:1">
-          <a class="plate__bag" href="drips/antioxidant.html" tabindex="-1">
+          <a class="plate__bag" href="drips/antioxidant/" tabindex="-1" aria-label="Antioxidant ×3 Reset">
             <span class="plate__pole"></span>
             <img src="assets/drips/antioxidant.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
@@ -562,7 +522,7 @@
               <span class="plate__no">II</span>
             </header>
 
-            <h3 class="plate__name"><a href="drips/antioxidant.html">Antioxidant &times;3 Reset IV</a></h3>
+            <h3 class="plate__name"><a href="drips/antioxidant/">Antioxidant &times;3 Reset IV</a></h3>
             <p class="plate__note">Many chronic inflammatory conditions are associated with increased oxidative stress. Antioxidant &times;3 Reset combines three antioxidants: Vitamin&nbsp;C, Glutathione and Alpha-Lipoic Acid working as one system to support the body&rsquo;s antioxidant defenses.</p>
 
             <ul class="plate__ing"><li>Hydration Fluid</li><li>Vitamin&nbsp;C</li><li>Glutathione</li><li>Alpha-Lipoic Acid</li></ul>
@@ -571,14 +531,14 @@
               <p class="plate__clock"><i class="ph ph-clock"></i> 75 min</p>
               <div class="plate__deal">
                 <p class="plate__price"><b>$400</b><span>per session</span></p>
-                <a class="plate__go" href="drips/antioxidant.html">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
+                <a class="plate__go" href="drips/antioxidant/">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="immune" style="--tone:var(--t-immune);--i:2">
-          <a class="plate__bag" href="drips/immun-o-boost.html" tabindex="-1">
+          <a class="plate__bag" href="drips/immun-o-boost/" tabindex="-1" aria-label="Immun-O-Boost IV Support">
             <span class="plate__pole"></span>
             <img src="assets/drips/immuneoboost.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
@@ -590,7 +550,7 @@
               <span class="plate__no">III</span>
             </header>
 
-            <h3 class="plate__name"><a href="drips/immun-o-boost.html">Immun-O-Boost IV Support</a></h3>
+            <h3 class="plate__name"><a href="drips/immun-o-boost/">Immun-O-Boost IV Support</a></h3>
             <p class="plate__note">Proactive nutritional support while you are well &mdash; not during acute illness &mdash; to support normal immune function, antioxidant defense, cellular energy, and everyday recovery.</p>
 
             <ul class="plate__ing"><li>B-Complex &amp; Minerals</li><li>Amino Acids</li><li>Vitamin&nbsp;C</li><li>Glutathione</li><li>Alpha-Lipoic Acid</li><li>Zinc</li></ul>
@@ -599,14 +559,14 @@
               <p class="plate__clock"><i class="ph ph-clock"></i> 2 h 30</p>
               <div class="plate__deal">
                 <p class="plate__price"><b>$550</b><span>per session</span></p>
-                <a class="plate__go" href="drips/immun-o-boost.html">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
+                <a class="plate__go" href="drips/immun-o-boost/">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="recovery" style="--tone:var(--t-recovery);--i:3">
-          <a class="plate__bag" href="drips/revive.html" tabindex="-1">
+          <a class="plate__bag" href="drips/revive/" tabindex="-1" aria-label="Revive IV Support">
             <span class="plate__pole"></span>
             <img src="assets/drips/revive.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
@@ -618,7 +578,7 @@
               <span class="plate__no">IV</span>
             </header>
 
-            <h3 class="plate__name"><a href="drips/revive.html">Revive IV Support</a></h3>
+            <h3 class="plate__name"><a href="drips/revive/">Revive IV Support</a></h3>
             <p class="plate__note">A shorter, focused infusion for times when you feel run down or depleted &mdash; hydration with B-complex vitamins, minerals and amino acids.</p>
 
             <ul class="plate__ing"><li>Hydration Fluid</li><li>B-Complex</li><li>AminoMultiPlex</li><li>Calcium Gluconate</li><li>Magnesium</li></ul>
@@ -627,14 +587,14 @@
               <p class="plate__clock"><i class="ph ph-clock"></i> 1 h 15</p>
               <div class="plate__deal">
                 <p class="plate__price"><b>$325</b><span>per session</span></p>
-                <a class="plate__go" href="drips/revive.html">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
+                <a class="plate__go" href="drips/revive/">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="muscle" style="--tone:var(--t-muscle);--i:4">
-          <a class="plate__bag" href="drips/liquixo.html" tabindex="-1">
+          <a class="plate__bag" href="drips/liquixo/" tabindex="-1" aria-label="LIQUIXO Muscle Recovery">
             <span class="plate__pole"></span>
             <img src="assets/drips/liquixo.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
@@ -646,7 +606,7 @@
               <span class="plate__no">V</span>
             </header>
 
-            <h3 class="plate__name"><a href="drips/liquixo.html">LIQUIXO Muscle Recovery IV</a></h3>
+            <h3 class="plate__name"><a href="drips/liquixo/">LIQUIXO Muscle Recovery IV</a></h3>
             <p class="plate__note">Lean-muscle and recovery support during GLP-based and other medically supervised weight-loss programs, and during periods of reduced nutritional intake, aging, illness, or prolonged physical stress. LiquiXO combines a complete 20-amino-acid blend with exosome technology.</p>
 
             <ul class="plate__ing"><li>20 Amino Acid Blend</li><li>Exosomes</li></ul>
@@ -655,14 +615,14 @@
               <p class="plate__clock"><i class="ph ph-clock"></i> 45 min</p>
               <div class="plate__deal">
                 <p class="plate__price"><b>$395</b><span>per session</span></p>
-                <a class="plate__go" href="drips/liquixo.html">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
+                <a class="plate__go" href="drips/liquixo/">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
         <li class="plate" data-tags="mind" style="--tone:var(--t-mind);--i:5">
-          <a class="plate__bag" href="drips/stress-brain.html" tabindex="-1">
+          <a class="plate__bag" href="drips/stress-brain/" tabindex="-1" aria-label="Stress &amp; Brain Wellness">
             <span class="plate__pole"></span>
             <img src="assets/drips/brainwellness.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
@@ -674,7 +634,7 @@
               <span class="plate__no">VI</span>
             </header>
 
-            <h3 class="plate__name"><a href="drips/stress-brain.html">Stress &amp; Brain Wellness IV</a></h3>
+            <h3 class="plate__name"><a href="drips/stress-brain/">Stress &amp; Brain Wellness IV</a></h3>
             <p class="plate__note">Brain fuel for stress, mental burnout, and demanding lifestyles &mdash; with B vitamins supporting brain energy, neurotransmitter production, and healthy homocysteine metabolism linked to cognitive decline. Taurine supports neuronal balance, while alpha-lipoic acid crosses the blood&ndash;brain barrier to support antioxidant defenses.</p>
 
             <ul class="plate__ing"><li>Hydration Fluid</li><li>Vitamin B1</li><li>Vitamin B6</li><li>Vitamin B12</li><li>Alpha-Lipoic Acid</li><li>Taurine</li></ul>
@@ -683,7 +643,7 @@
               <p class="plate__clock"><i class="ph ph-clock"></i> 1 h 30</p>
               <div class="plate__deal">
                 <p class="plate__price"><b>$350</b><span>per session</span></p>
-                <a class="plate__go" href="drips/stress-brain.html">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
+                <a class="plate__go" href="drips/stress-brain/">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
@@ -692,7 +652,7 @@
 
 
         <li class="plate" data-tags="custom" style="--tone:var(--t-custom);--i:6">
-          <a class="plate__bag" href="drips/customized.html" tabindex="-1">
+          <a class="plate__bag" href="drips/customized/" tabindex="-1" aria-label="Customized IV Infusion">
             <span class="plate__pole"></span>
             <img src="assets/drips/customized.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
             <span class="plate__cast"></span>
@@ -704,7 +664,7 @@
               <span class="plate__no">VII</span>
             </header>
 
-            <h3 class="plate__name"><a href="drips/customized.html">Customized IV Infusion</a></h3>
+            <h3 class="plate__name"><a href="drips/customized/">Customized IV Infusion</a></h3>
             <p class="plate__note">We listen to your concerns and review your medical history. When appropriate &mdash; and safely within the limits of our office &mdash; Dr.&nbsp;Aronov may offer a customized infusion.</p>
 
             <ul class="plate__ing"><li>Based on individual needs</li><li>Private consultation</li></ul>
@@ -713,7 +673,7 @@
               <p class="plate__clock"><i class="ph ph-clock"></i> Individually determined</p>
               <div class="plate__deal">
                 <p class="plate__price"><b>By consultation</b><span>quoted after screening</span></p>
-                <a class="plate__go" href="drips/customized.html">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
+                <a class="plate__go" href="drips/customized/">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
@@ -837,7 +797,7 @@
         we can safely offer, <em>the physician will explain why.</em>
       </p>
       <div class="visit__cta" data-reveal>
-        <a class="btn btn--forest" href="htmls/begin-screening.html" data-magnetic>
+        <a class="btn btn--forest" href="begin-screening/" data-magnetic>
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="btn btn--line" href="tel:+13477148660"><span>347 · 714 · 8660</span></a>
@@ -1143,10 +1103,10 @@
       </p>
 
       <div class="ap-diff__acts">
-        <a class="btn btn--forest" href="htmls/infusions.html" data-magnetic>
+        <a class="btn btn--forest" href="infusions/" data-magnetic>
           <span>Explore the Infusions</span><i class="ph ph-arrow-right"></i>
         </a>
-        <a class="btn btn--line" href="htmls/contact.html"><span>Begin Physician Review</span></a>
+        <a class="btn btn--line" href="contact/"><span>Begin Physician Review</span></a>
       </div>
     </div>
 
@@ -1169,7 +1129,7 @@
     </h2>
     <p class="doc__sub" data-reveal>Dr. Violeta Aronov, DO &middot; Board-Certified Anesthesiologist &middot; Founder</p>
 
-    <div class="doc__split">
+    <div class="doc__split doc__split--short">
 
       <div class="doc__portrait">
         <figure class="doc__shot">
@@ -1183,56 +1143,23 @@
         </figcaption>
       </div>
 
-      <div class="doc__beats" id="docBeats">
-          <article class="beat">
-            <span class="beat__dot"></span>
-            <p class="beat__when">1995 &mdash; 1999</p>
-            <h3 class="beat__what">SUNY at Stony Brook</h3>
-            <p class="beat__body">Biochemistry research in drug, enzyme, and vitamin delivery using hyaluronic acid polymer technology &mdash; studying how molecules could be carried to their intended destination, years before that same question became part of clinical practice.</p>
-          </article>
+      <div class="doc__brief" data-reveal>
+        <p class="doc__lede">Nearly two decades of clinical anesthesiology guide the medical evaluation and
+          monitoring before and during each infusion &mdash; hydration status, blood pressure, medication
+          response, fluid balance, and signs of a possible reaction.</p>
 
-          <article class="beat">
-            <span class="beat__dot"></span>
-            <p class="beat__when">1997 &mdash; 1999</p>
-            <h3 class="beat__what">Regeneron Pharmaceuticals</h3>
-            <p class="beat__body">Tarrytown, New York. Protein-purification research using multiple biochemical techniques as part of a broader project in nerve regeneration and cellular recovery &mdash; examining how injured or severed tissue attempts to repair itself.</p>
-          </article>
+        <ul class="doc__creds">
+          <li><i class="ph ph-heartbeat" aria-hidden="true"></i><span><b>Nearly two decades in the operating room</b>Clinical anesthesia from general surgery and OB-GYN to pediatrics and orthopedics.</span></li>
+          <li><i class="ph ph-graduation-cap" aria-hidden="true"></i><span><b>Doctor of Osteopathic Medicine</b>New York College of Osteopathic Medicine at NYIT, then anesthesia residency.</span></li>
+          <li><i class="ph ph-flask" aria-hidden="true"></i><span><b>Rooted in research</b>Biochemistry research at Stony Brook and Regeneron Pharmaceuticals.</span></li>
+        </ul>
 
-          <article class="beat">
-            <span class="beat__dot"></span>
-            <p class="beat__when">1999 &mdash; 2004</p>
-            <h3 class="beat__what">New York College of Osteopathic Medicine at NYIT</h3>
-            <p class="beat__body">Medical education leading to the Doctor of Osteopathic Medicine (D.O.) degree.</p>
-          </article>
-
-          <article class="beat">
-            <span class="beat__dot"></span>
-            <p class="beat__when">2004 &mdash; 2008</p>
-            <h3 class="beat__what">Anesthesia residency</h3>
-            <p class="beat__body">Residency training in clinical anesthesiology &mdash; where biochemistry unfolds in real time inside the human body, and medications, fluids, oxygenation, blood pressure, and physiologic changes are managed moment by moment in the operating room.</p>
-          </article>
-
-          <article class="beat">
-            <span class="beat__dot"></span>
-            <p class="beat__when">2008 &mdash; Present</p>
-            <h3 class="beat__what">Nearly two decades in the operating room</h3>
-            <p class="beat__body">Clinical anesthesia across general surgery, OB-GYN, vascular, gastroenterology, pediatrics, urology, dental, bariatric and orthopedic surgery.</p>
-          </article>
-
-          <article class="beat">
-            <span class="beat__dot"></span>
-            <p class="beat__when">2026 &mdash; Present</p>
-            <h3 class="beat__what">Alpha Vital Elite Precision Medical IV</h3>
-            <p class="beat__body">Nearly two decades of clinical anesthesiology experience guide the medical evaluation and monitoring before and during each infusion. This includes interpreting hydration status, blood pressure, medication response, fluid balance, electrolyte shifts, the body&rsquo;s response to stress, and signs of a possible reaction.</p>
-          </article>
+        <div class="doc__cta">
+          <a class="btn btn--forest" href="about/"><span>Meet Dr. Aronov</span><i class="ph ph-arrow-right"></i></a>
+          <a class="btn btn--line" href="research/"><span>The research behind the infusions</span></a>
+        </div>
       </div>
 
-    </div>
-
-
-    <div class="doc__cta" data-reveal>
-      <a class="btn btn--forest" href="htmls/about.html"><span>Read the full biography</span><i class="ph ph-arrow-right"></i></a>
-      <a class="btn btn--line" href="htmls/research.html"><span>The research behind the infusions</span></a>
     </div>
 
   </div>
@@ -1255,11 +1182,6 @@
       </details>
 
       <details class="fq">
-        <summary class="fq__q">What happens before I can book?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a"><p>You send your medical history, current medications and allergies. Dr.&nbsp;Violeta Aronov or another physician on the Alpha Vital Elite medical team reviews it and decides whether IV therapy is appropriate for you and which formula fits. Nothing is booked and nothing is charged at that stage.</p></div>
-      </details>
-
-      <details class="fq">
         <summary class="fq__q">Is there a physician review fee?<i class="ph ph-plus"></i></summary>
         <div class="fq__a">
           <p>No. There is no screening or physician review fee. Before an infusion can be scheduled, a physician reviews your safety-screening answers, medical history, medications, allergies, relevant laboratory results or medical records, and wellness goals at no charge. This individualized review helps determine whether the IV support available at Alpha Vital Elite is safe and appropriate for you &mdash; and, when appropriate, which option may best meet your needs.</p>
@@ -1276,157 +1198,17 @@
         </div>
       </details>
 
-      <details class="fq">
-        <summary class="fq__q">How long does an infusion take?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p>The time depends on which infusion you receive.</p>
-          <p>A glutathione injection takes about 15 minutes to give, with about 30 minutes planned for the entire visit. Some of our signature infusions take about one hour. Our longest infusions take approximately two and a half to three hours.</p>
-          <p>We do not rush your infusion. Giving certain ingredients too quickly may cause breathing problems, chest discomfort, nausea, vomiting, or other side effects. Your infusion is given at a careful rate, with physician monitoring throughout your visit, because your safety comes first.</p>
-        </div>
-      </details>
-
-      <details class="fq">
-        <summary class="fq__q">Can I come in if I have a chronic condition?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p>Maybe. It depends on your condition, your current health, and the care you need.</p>
-          <p>Many of our patients live with chronic conditions. Before we can offer an infusion, you must tell us about your condition, symptoms, medications, supplements, treatments, and the doctors caring for you. A physician will review this information and decide whether supportive IV care is safe for you and within the services we provide.</p>
-          <p>Our infusions may support hydration, nutritional replenishment, normal antioxidant defenses, and immune function. They do not treat rheumatoid arthritis or any other chronic illness.</p>
-          <p>Alpha Vital Elite is not a hospital, urgent care center, primary care office, or replacement for your specialist. When appropriate and with your permission, we may communicate with your healthcare provider. Being under specialist care or receiving treatment does not automatically rule you out.</p>
-          <p>If your needs are outside what we can safely provide, we will tell you clearly and guide you toward a more appropriate doctor or facility.</p>
-        </div>
-      </details>
-
-      <details class="fq">
-        <summary class="fq__q">Will an infusion treat my condition?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p>No. Our infusions do not treat or cure diseases. They provide supportive care only and do not replace your medications, primary care doctor, specialist, or medical treatment.</p>
-          <p>We do, however, specialize in physician-directed supportive IV care. Our approach is informed by published research about different vitamin deficiencies and oxidative stress in chronic conditions such as rheumatoid arthritis, psoriasis, fibromyalgia, Lyme disease with joint symptoms, ulcerative colitis, and Crohn&rsquo;s disease.</p>
-          <p>Oxidative stress means the body is having trouble balancing harmful molecules. Some studies have examined individual antioxidants in people with chronic conditions. However, this research does not prove that our combined IV infusions treat these conditions or will benefit every patient.</p>
-          <p>A physician must review your condition, medications, current treatment, and overall health before deciding whether supportive IV care is safe and appropriate for you. Our supportive IV formulations are not FDA-approved to diagnose, treat, cure, mitigate, prevent, or reverse any disease or medical condition. Results may vary, and no benefit or outcome is promised.</p>
-        </div>
-      </details>
-
-      <details class="fq">
-        <summary class="fq__q">What if I am not eligible?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p>Here is what happens:</p>
-          <ol>
-            <li><strong>A physician reviews your information.</strong> We look at your condition, symptoms, medications, treatments, allergies, and any available laboratory results.</li>
-            <li><strong>We decide whether an infusion is safe for you.</strong> We also decide whether the care you need is something our office can safely provide.</li>
-            <li><strong>We may ask for more information.</strong> Before making a final decision, we may request laboratory results, medical records, or information from your primary care doctor or specialist.</li>
-            <li><strong>If an infusion is not appropriate, we will not approve it.</strong> This does not mean we do not want to help you. It means your needs may be outside the limited supportive care our practice provides.</li>
-            <li><strong>We will explain the decision.</strong> Alpha Vital Elite is not a hospital, urgent care center, primary care office, or specialty treatment center. If you need a different level or type of care, we will guide you back to your doctor, specialist, or a facility better equipped to help you.</li>
-          </ol>
-          <p>We only provide an infusion when a physician believes it is safe, appropriate, and within the services our practice can responsibly offer.</p>
-        </div>
-      </details>
-
-
-      <details class="fq">
-        <summary class="fq__q">What is the rationale for including each ingredient in this specific IV infusion?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p><strong>Every ingredient must have a clear reason for being included.</strong></p>
-          <p>Dr.&nbsp;Aronov&rsquo;s background in biochemistry and nearly 20 years of experience as a board-certified anesthesiologist guide how each infusion is evaluated.</p>
-          <p>Before including an ingredient, Dr.&nbsp;Aronov considers:</p>
-          <ul>
-            <li>What does the ingredient normally do in the body?</li>
-            <li>What supportive purpose does it serve in this specific infusion?</li>
-            <li>Is the proposed dose and IV route appropriate?</li>
-            <li>Is it safe with the patient&rsquo;s health conditions, allergies, medications, and available laboratory results?</li>
-            <li>Can it be used safely with the other ingredients, or should it be given separately?</li>
-            <li>What risks or limitations should the patient understand?</li>
-          </ul>
-          <p>The review is informed by resources from the National Institutes of Health, peer-reviewed medical literature indexed in PubMed, and guidance from established medical organizations. An ingredient is never included simply because it is popular.</p>
-          <p>Research involving an individual ingredient does not prove that it will benefit every patient. It also does not establish that a combined IV formulation is safe or effective for treating any disease or medical condition. The final formulation and eligibility decision are based on an individual physician review.</p>
-        </div>
-      </details>
-
-      <details class="fq">
-        <summary class="fq__q">Why isn&rsquo;t everything mixed in one bag?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p><strong>Not every ingredient belongs in the same bag.</strong></p>
-          <p>Each ingredient has its own needs, including the correct fluid, concentration, acidity level, light protection, and infusion rate.</p>
-          <p>Before ingredients are combined, their compatibility must be considered. Ingredients that do not mix well may become less stable, change when placed together, lose strength, or form tiny particles called precipitates.</p>
-          <p>For these reasons, we do not automatically place a long list of ingredients into one bag. Ingredients are combined only when they are considered compatible in that specific preparation. When needed, they are protected from light or given in separate bags and steps, with an appropriate fluid and rate for each stage.</p>
-          <p>This approach may take longer, but it allows every stage to be prepared and administered carefully. It does not eliminate all infusion risks or guarantee a particular result.</p>
-        </div>
-      </details>
-
-      <details class="fq">
-        <summary class="fq__q">Why does the infusion order matter?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p><strong>Think about building a house.</strong></p>
-          <p>You would not put all the workers, tools, and materials into one big pile. You would use each one at the proper time.</p>
-          <p>An infusion also needs a plan. Some infusions begin with minerals and vitamins. Amino acids and antioxidants may be given in later steps.</p>
-          <p>Some ingredients can go together. Others need their own bag because they may not mix well, may need protection from light, or must be given at a different speed.</p>
-          <p>Giving the infusion in steps also allows the physician to watch how you feel. If needed, the physician can slow down, change, or stop the infusion.</p>
-          <p>The order is chosen for careful preparation and monitoring. It does not remove every risk or guarantee a particular result.</p>
-        </div>
-      </details>
-
-      <details class="fq">
-        <summary class="fq__q">Why do so many infusions include antioxidants?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p>Your body naturally makes tiny molecules called free radicals. A small amount is normal. When too many build up and the body cannot keep them balanced, it is called oxidative stress.</p>
-          <p>Over a lifetime, the body is exposed to sunlight, smoke, pollution, alcohol, illness, inflammation, and everyday stress. Years of oxidative stress may add to normal wear and damage inside the body&rsquo;s cells.</p>
-          <p>Oxidative stress has also been studied in many chronic illnesses, especially conditions involving ongoing inflammation. Think of antioxidants as helpers that support the body&rsquo;s own cleanup and protection systems. This is why selected antioxidant ingredients are included in several Alpha Vital Elite infusions.</p>
-          <p>Antioxidant support cannot erase a lifetime of damage. It has also not been proven to treat, cure, or reverse a chronic illness. Each ingredient must have a clear reason for being included, and a physician must decide whether it is safe and appropriate for the individual patient.</p>
-        </div>
-      </details>
-
-      <details class="fq">
-        <summary class="fq__q">Why can&rsquo;t I simply choose an IV from a menu?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p><strong>Because the same infusion may be appropriate for one person and unsafe for another.</strong></p>
-          <p>Cancer care, an active flare of a chronic illness, heart or kidney or liver problems, fever, infection, pregnancy, abnormal vital signs, or certain medications may completely change the plan.</p>
-          <p>Sometimes the safest answer is:</p>
-          <ul>
-            <li>Regular medical care before any IV</li>
-            <li>No infusion at all</li>
-            <li>More medical information</li>
-            <li>New laboratory results</li>
-            <li>A conversation with a specialist</li>
-            <li>A different infusion</li>
-          </ul>
-          <p>You tell us what concerns you. Dr.&nbsp;Aronov determines whether an IV is appropriate and which option, if any, fits your needs.</p>
-        </div>
-      </details>
-
-      <details class="fq">
-        <summary class="fq__q">What does &ldquo;physician-directed&rdquo; mean?<i class="ph ph-plus"></i></summary>
-        <div class="fq__a">
-          <p><strong>It means you are not expected to select or prescribe your own IV from a menu.</strong></p>
-          <p>Before any infusion, a physician reviews:</p>
-          <ul>
-            <li>What you hope to address with IV support</li>
-            <li>Your medical history</li>
-            <li>Your current symptoms</li>
-            <li>Your medications and supplements</li>
-            <li>Your allergies</li>
-            <li>Your relevant laboratory results</li>
-          </ul>
-          <p>The physician then:</p>
-          <ul>
-            <li>Determines whether IV support is appropriate for you</li>
-            <li>Confirms whether it can be provided within the scope of this practice</li>
-            <li>Selects the appropriate ingredients and doses</li>
-            <li>Determines the fluid volume, sequence, and infusion rate</li>
-            <li>Personally provides and monitors your care from start to finish</li>
-          </ul>
-          <p>The first question is not, &ldquo;Which IV would you like?&rdquo;</p>
-          <p>It is, &ldquo;Should you receive an IV at all &mdash; and, if so, which approach is appropriate for you?&rdquo;</p>
-        </div>
-      </details>
-
     </div>
 
     <div class="faq__foot" data-reveal>
-      <p>Something not answered here?</p>
+      <p>Forty answers, including every infusion.</p>
       <div class="faq__acts">
-        <a class="btn btn--forest" href="htmls/begin-screening.html" data-magnetic>
+        <a class="btn btn--line" href="faq/">
+          <span>See all questions</span><i class="ph ph-arrow-right"></i>
+        </a>
+        <a class="btn btn--forest" href="begin-screening/" data-magnetic>
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
-        <a class="btn btn--line" href="tel:+13477148660"><span>347 · 714 · 8660</span></a>
       </div>
     </div>
 
@@ -1451,7 +1233,7 @@
         and, if so, which option may best fit your needs.
       </p>
       <div class="foot__acts">
-        <a class="rx__btn rx__btn--solid" href="htmls/begin-screening.html">
+        <a class="rx__btn rx__btn--solid" href="begin-screening/">
           <span>Begin screening</span><i class="ph ph-arrow-right"></i>
         </a>
         <a class="rx__btn" href="tel:+13477148660"><span>347 · 714 · 8660</span><i class="ph ph-phone"></i></a>
@@ -1478,29 +1260,30 @@
       <div class="foot__col">
         <h3 class="foot__h">Infusions</h3>
         <ul class="foot__list">
-          <li><a href="drips/glutathione.html">Glutathione IV Injection</a></li>
-          <li><a href="drips/antioxidant.html">Antioxidant &times;3 Reset</a></li>
-          <li><a href="drips/immun-o-boost.html">Immun-O-Boost IV Support</a></li>
-          <li><a href="drips/revive.html">Revive IV Support</a></li>
+          <li><a href="drips/glutathione/">Glutathione IV Injection</a></li>
+          <li><a href="drips/antioxidant/">Antioxidant &times;3 Reset</a></li>
+          <li><a href="drips/immun-o-boost/">Immun-O-Boost IV Support</a></li>
+          <li><a href="drips/revive/">Revive IV Support</a></li>
         </ul>
       </div>
 
       <div class="foot__col">
         <h3 class="foot__h">&nbsp;</h3>
         <ul class="foot__list">
-          <li><a href="drips/liquixo.html">LIQUIXO Muscle Recovery</a></li>
-          <li><a href="drips/stress-brain.html">Stress &amp; Brain Wellness</a></li>
-          <li><a href="drips/customized.html">Customized IV Infusion</a></li>
+          <li><a href="drips/liquixo/">LIQUIXO Muscle Recovery</a></li>
+          <li><a href="drips/stress-brain/">Stress &amp; Brain Wellness</a></li>
+          <li><a href="drips/customized/">Customized IV Infusion</a></li>
         </ul>
       </div>
 
       <div class="foot__col">
         <h3 class="foot__h">The practice</h3>
         <ul class="foot__list">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="htmls/about.html">About Dr. Aronov</a></li>
-          <li><a href="htmls/research.html">Research</a></li>
-          <li><a href="htmls/contact.html">Contact</a></li>
+          <li><a href="./">Home</a></li>
+          <li><a href="about/">About Dr. Aronov</a></li>
+          <li><a href="research/">Research</a></li>
+          <li><a href="faq/">FAQ</a></li>
+          <li><a href="contact/">Contact</a></li>
         </ul>
       </div>
     </div>
@@ -1517,10 +1300,10 @@
         no outcome is guaranteed.
       </p>
       <ul class="foot__mini">
-        <li><a href="policies/disclaimer.html">Disclaimer</a></li>
-        <li><a href="policies/refund-policy.html">Refund Policy</a></li>
-        <li><a href="policies/privacy-policy.html">Privacy Policy</a></li>
-        <li><a href="policies/terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="policies/disclaimer/">Disclaimer</a></li>
+        <li><a href="policies/refund-policy/">Refund Policy</a></li>
+        <li><a href="policies/privacy-policy/">Privacy Policy</a></li>
+        <li><a href="policies/terms/">Terms &amp; Conditions</a></li>
       </ul>
     </div>
 
@@ -1616,6 +1399,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
 <script src="https://elfsightcdn.com/platform.js" async></script>
-<script src="script.js" type="module"></script>
+<script src="js/script.js" type="module"></script>
 </body>
 </html>

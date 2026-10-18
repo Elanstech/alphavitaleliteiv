@@ -337,7 +337,7 @@ html.ab-on [data-ab-split]           { opacity: 0; }
 /* the file is not in place yet — show the mark rather than a black hole */
 .ab-player.is-missing::after {
     content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none;
-    background: url('/logo.png') center / clamp(88px, 11vw, 148px) no-repeat;
+    background: url('/assets/images/logo.png') center / clamp(88px, 11vw, 148px) no-repeat;
     opacity: .18; filter: grayscale(1) brightness(2.4);
 }
 

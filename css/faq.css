@@ -1,0 +1,146 @@
+/* =============================================================================
+   FAQ PAGE — /faq/
+   Every question from the homepage and the seven infusion pages, grouped.
+   The accordions reuse the homepage's .fq styles from styles.css; this file
+   only adds the page around them: hero, search, topic jumps, group headers.
+============================================================================= */
+
+.page-faq { background: var(--cream); color: var(--ink-soft); }
+
+.fp-skip {
+    position: absolute; left: 1rem; top: -4rem; z-index: 2000;
+    padding: .7rem 1rem; border-radius: 6px;
+    background: var(--forest); color: var(--cream); font-family: var(--ui); font-size: .85rem;
+}
+.fp-skip:focus { top: 1rem; }
+
+.fp-wrap { max-width: min(var(--maxw), 62rem); margin: 0 auto; padding-inline: var(--gut); }
+
+/* ── hero ─────────────────────────────────────────────────────────────────── */
+.fp-hero {
+    position: relative;
+    padding: calc(var(--head-h) + clamp(2.5rem, 7vw, 5rem)) 0 clamp(2rem, 5vw, 3.2rem);
+}
+.fp-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(60% 55% at 6% 0%, rgba(231, 203, 134, .26), transparent 62%);
+}
+.fp-hero > .fp-wrap { position: relative; }
+
+.fp-crumbs {
+    display: flex; align-items: center; gap: .6rem; margin-bottom: 1.6rem;
+    font-family: var(--data); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--mist);
+}
+.fp-crumbs a { color: var(--ink-soft); text-decoration: none; }
+.fp-crumbs a:hover { color: var(--gold-deep); }
+.fp-crumbs [aria-current] { color: var(--gold-deep); }
+
+.fp-title {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2.3rem, 6vw, 4.4rem); line-height: 1.02; letter-spacing: -.024em;
+    color: var(--forest); margin: 0 0 1.2rem;
+}
+.fp-title em { font-family: var(--accent); font-style: italic; font-weight: 500; font-size: 1.05em; color: var(--gold-deep); }
+.fp-lede { max-width: 58ch; font-size: clamp(.98rem, 1.3vw, 1.08rem); line-height: 1.75; margin: 0 0 2rem; }
+.fp-lede a { color: var(--forest); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--rule-gold); }
+
+/* ── search ───────────────────────────────────────────────────────────────── */
+.fp-search {
+    position: relative; display: flex; align-items: center; max-width: 34rem;
+    border: 1px solid var(--rule-gold); border-radius: 999px; background: rgba(255, 255, 255, .6);
+    transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.fp-search:focus-within { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(193, 150, 63, .14); }
+.fp-search > i { position: absolute; left: 1.1rem; font-size: 1.1rem; color: var(--gold-deep); pointer-events: none; }
+.fp-search input {
+    flex: 1; min-width: 0; border: 0; background: transparent; outline: none;
+    padding: .95rem 1rem .95rem 2.9rem; font-family: var(--ui); font-size: 1rem; color: var(--ink);
+}
+.fp-search input::placeholder { color: var(--mist); }
+.fp-search__count { padding-right: 1.2rem; font-family: var(--data); font-size: .72rem; letter-spacing: .06em; color: var(--mist); white-space: nowrap; }
+
+/* ── topic jumps ──────────────────────────────────────────────────────────── */
+.fp-jump { margin-top: 2rem; display: grid; gap: .55rem; }
+.fp-jump__label {
+    margin: .4rem 0 0; font-family: var(--data); font-size: .66rem; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--gold-deep);
+}
+.fp-jump__row { display: flex; flex-wrap: wrap; gap: .5rem; }
+.fp-jump__row a {
+    display: inline-flex; align-items: center; gap: .45rem;
+    padding: .5rem .95rem; border: 1px solid var(--rule); border-radius: 999px;
+    font-family: var(--ui); font-size: .86rem; color: var(--forest); text-decoration: none;
+    background: rgba(255, 255, 255, .45);
+    transition: border-color .3s var(--ease), background .3s var(--ease), color .3s var(--ease);
+}
+.fp-jump__row a:hover { border-color: var(--gold); background: #fff; color: var(--gold-deep); }
+.fp-jump__row--drips a i {
+    font-style: normal; font-family: var(--data); font-size: .66rem; font-weight: 600;
+    color: var(--tone, var(--gold-deep));
+}
+
+/* ── groups ───────────────────────────────────────────────────────────────── */
+.fp-body { padding: clamp(1rem, 3vw, 2rem) 0 clamp(3.5rem, 8vw, 6rem); }
+.fp-group { scroll-margin-top: calc(var(--head-h) + 1.25rem); }
+.fp-group + .fp-group { margin-top: clamp(2.6rem, 6vw, 4rem); }
+.fp-group__head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: .4rem 1.5rem; margin-bottom: 1rem;
+}
+.fp-group__no {
+    flex-basis: 100%; margin: 0;
+    font-family: var(--data); font-size: .66rem; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--tone, var(--gold-deep));
+}
+.fp-h {
+    margin: 0; font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.45rem, 3vw, 2.1rem); line-height: 1.15; letter-spacing: -.015em; color: var(--forest);
+}
+.fp-group--drip .fp-h { display: flex; align-items: center; gap: .7rem; }
+.fp-group--drip .fp-h::before {
+    content: ''; flex: 0 0 auto; width: .6rem; height: .6rem; border-radius: 50%; background: var(--tone);
+}
+.fp-group__link {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-family: var(--ui); font-size: .86rem; font-weight: 500; color: var(--gold-deep); text-decoration: none;
+}
+.fp-group__link:hover { color: var(--forest); }
+.fp-group__link i { transition: transform .3s var(--ease); }
+.fp-group__link:hover i { transform: translateX(3px); }
+
+/* deep-linked question: a brief highlight so the eye lands on it */
+.fq { scroll-margin-top: calc(var(--head-h) + 1.25rem); }
+.fq.is-target > .fq__q { color: var(--gold-deep); }
+.fq__a a { color: var(--forest); font-weight: 600; }
+
+.fp-empty {
+    padding: 2rem 0; font-family: var(--accent); font-style: italic; font-size: 1.3rem; color: var(--forest);
+}
+.fp-empty a { color: var(--gold-deep); font-style: normal; font-family: var(--ui); font-size: 1rem; }
+
+/* search hides; [hidden] must beat any display rule */
+.page-faq [hidden] { display: none !important; }
+
+/* ── closing call to action ──────────────────────────────────────────────── */
+.fp-cta { background: var(--forest-deep); color: var(--cream); padding: clamp(3rem, 7vw, 5rem) 0; }
+.fp-cta__inner { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 2rem; }
+.fp-cta__eyebrow {
+    margin: 0 0 .8rem; font-family: var(--caps); font-size: .72rem; letter-spacing: .3em;
+    text-transform: uppercase; color: var(--gold-lite);
+}
+.fp-cta__title {
+    margin: 0 0 .9rem; font-family: var(--display); font-weight: 400;
+    font-size: clamp(1.8rem, 4.2vw, 2.9rem); line-height: 1.08; color: var(--cream);
+}
+.fp-cta__title em { font-family: var(--accent); font-style: italic; color: var(--gold-lite); }
+.fp-cta__lede { max-width: 46ch; margin: 0; line-height: 1.7; color: var(--cream-dim); }
+.fp-cta__acts { display: flex; flex-wrap: wrap; gap: .7rem; }
+.fp-cta .btn--line { color: var(--cream); border-color: var(--rule-light); }
+.fp-cta .btn { border-radius: 2px; }
+
+@media (max-width: 640px) {
+    .fp-jump__row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(var(--gut) * -1); padding-inline: var(--gut); }
+    .fp-jump__row::-webkit-scrollbar { display: none; }
+    .fp-jump__row a { flex: 0 0 auto; }
+    .fq__a { padding-right: .25rem; }
+}

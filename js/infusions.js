@@ -89,13 +89,13 @@ const popIn = (targets, opts = {}, trigger, start = 'top 86%') => {
    Names, numerals and slugs match the cards and the header flyout exactly.
 ============================================================================= */
 const MENU = {
-    glutathione:  { no: 'I',   name: 'Glutathione IV Injection',     slug: '/drips/glutathione.html', tone: '#7FA08C' },
-    antioxidant:  { no: 'II',  name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant.html',    tone: '#4F7D5E' },
-    immune:       { no: 'III',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immun-o-boost.html',         tone: '#D9982A' },
-    recovery:     { no: 'IV',    name: 'Revive IV Support',            slug: '/drips/revive.html',       tone: '#35707F' },
-    muscle:       { no: 'V',   name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo.html',        tone: '#B34E37' },
-    mind:         { no: 'VI',  name: 'Stress & Brain Wellness',      slug: '/drips/stress-brain.html',     tone: '#7A5F98' },
-    custom:       { no: 'VII',   name: 'Customized IV Infusion',       slug: '/drips/customized.html',    tone: '#C1963F' },
+    glutathione:  { no: 'I',   name: 'Glutathione IV Injection',     slug: '/drips/glutathione/', tone: '#7FA08C' },
+    antioxidant:  { no: 'II',  name: 'Antioxidant ×3 Reset',         slug: '/drips/antioxidant/',    tone: '#4F7D5E' },
+    immune:       { no: 'III',   name: 'Immun-O-Boost IV Support',     slug: '/drips/immun-o-boost/',         tone: '#D9982A' },
+    recovery:     { no: 'IV',    name: 'Revive IV Support',            slug: '/drips/revive/',       tone: '#35707F' },
+    muscle:       { no: 'V',   name: 'LIQUIXO Muscle Recovery',      slug: '/drips/liquixo/',        tone: '#B34E37' },
+    mind:         { no: 'VI',  name: 'Stress & Brain Wellness',      slug: '/drips/stress-brain/',     tone: '#7A5F98' },
+    custom:       { no: 'VII',   name: 'Customized IV Infusion',       slug: '/drips/customized/',    tone: '#C1963F' },
 };
 
 

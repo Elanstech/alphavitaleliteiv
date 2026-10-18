@@ -1684,29 +1684,29 @@ class Dock {
    Never treats, cures, repairs, or guaranteed-outcome language.
 ============================================================================= */
 const DRIPS = [
-    { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione.html',         img:'glutathione',   time:'15 min push · 30 min visit', price:'$100', tag:'Glutathione IV Therapy',
+    { id:'glutathione',  name:'Glutathione IV Injection',         slug:'/drips/glutathione/',         img:'glutathione',   time:'15 min push · 30 min visit', price:'$100', tag:'Glutathione IV Therapy',
       why:'Concentrated antioxidant support as a slow physician-administered push.' },
 
     // one infusion, two categories — the quiz can land on it from either route
-    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant.html',         img:'antioxidant',   time:'75 min',                     price:'$400',    tag:'Antioxidant Support',
+    { id:'antioxidant',  name:'Antioxidant ×3 Reset IV',          slug:'/drips/antioxidant/',         img:'antioxidant',   time:'75 min',                     price:'$400',    tag:'Antioxidant Support',
       why:'Three antioxidants in one network, recharging one another rather than working alone.' },
 
-    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immun-o-boost.html',       img:'immuneoboost',  time:'2 h 30',                     price:'$550',    tag:'Immune Support',
+    { id:'immune',       name:'Immun-O-Boost IV Support',         slug:'/drips/immun-o-boost/',       img:'immuneoboost',  time:'2 h 30',                     price:'$550',    tag:'Immune Support',
       why:'Immune system support, hydration, recovery and wellness optimization.' },
 
-    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/revive.html',              img:'revive',        time:'1 h 15',                     price:'$325', tag:'Recovery Support',
+    { id:'recovery',     name:'Revive IV Support',                slug:'/drips/revive/',              img:'revive',        time:'1 h 15',                     price:'$325', tag:'Recovery Support',
       why:'A shorter, focused infusion for times when you feel run down or depleted.' },
 
     // name matches the plate exactly — it used to read "Stress, Mental Burnout
     // & Brain Wellness IV" here and "Stress & Brain Wellness IV" on the card,
     // so a quiz result and the shelf disagreed about what the thing is called
-    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/liquixo.html',             img:'liquixo',       time:'45 min',                     price:'$395', tag:'Muscle Recovery',
+    { id:'muscle',       name:'LIQUIXO Muscle Recovery IV',       slug:'/drips/liquixo/',             img:'liquixo',       time:'45 min',                     price:'$395', tag:'Muscle Recovery',
       why:'A full 20 amino acid blend with alpha-lipoic acid and exosomes.' },
 
-    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain.html',        img:'brainwellness', time:'1 h 30',                     price:'$350',    tag:'Mind & Focus Support',
+    { id:'mind',         name:'Stress & Brain Wellness IV',       slug:'/drips/stress-brain/',        img:'brainwellness', time:'1 h 30',                     price:'$350',    tag:'Mind & Focus Support',
       why:'Brain fuel for stress, mental burnout and demanding lifestyles.' },
 
-    { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized.html',          img:'customized',    time:'Individually determined',    price:'By consultation', tag:'Customized IV Infusion',
+    { id:'custom',       name:'Customized IV Infusion',           slug:'/drips/customized/',          img:'customized',    time:'Individually determined',    price:'By consultation', tag:'Customized IV Infusion',
       why:'Composed for you alone, based on Dr. Aronov’s individual review.' },
 ];
 

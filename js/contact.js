@@ -112,7 +112,9 @@ const Embeds = {
        the frame grow instead. The CSS min-height covers us until it arrives. */
     autosize(frame) {
         window.addEventListener('message', (ev) => {
-            if (!/jotform\.com$/.test(new URL(ev.origin).hostname)) return;
+            let host = '';
+            try { host = new URL(ev.origin).hostname; } catch { return; }   /* origin "null" (sandboxed frames) throws */
+            if (!/(^|\.)jotform\.com$/.test(host)) return;
             const data = typeof ev.data === 'string' ? ev.data : '';
             if (!data.startsWith('setHeight')) return;
 

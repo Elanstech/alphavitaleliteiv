@@ -9,7 +9,7 @@
 <meta name="description" content="Your screening has been received. Dr. Aronov reviews every submission and the practice will contact you.">
 <meta name="theme-color" content="#F6F1E7" id="themeColor">
 <meta name="format-detection" content="telephone=yes">
-<link rel="canonical" href="https://www.alphaeliteiv.com/htmls/review-done.html">
+<link rel="canonical" href="https://www.alphaeliteiv.com/review-done/">
 
 <meta name="robots" content="noindex, nofollow">
 
@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preload" as="image" href="../logo.png" fetchpriority="high">
+<link rel="preload" as="image" href="../assets/images/logo.png" fetchpriority="high">
 
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500;1,600&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
 
@@ -39,9 +39,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/duotone/style.css">
 </noscript>
 
-<link rel="icon" type="image/png" href="../logo.png">
+<link rel="icon" type="image/png" href="../assets/images/logo.png">
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../css/styles.css">
 <link rel="stylesheet" href="../css/contact.css">
 <link rel="stylesheet" href="../css/screening.css">
 
@@ -50,7 +50,12 @@
     document.documentElement.classList.add('ct-on');
     /* Same title sequence as begin-screening. Set before first paint so the
        page underneath never flashes through. */
-    document.documentElement.classList.add('has-cine');
+    /* Title card once per visit, not on every step — it covers the header
+       for ~6s, so replaying it on all three screening pages blocked the
+       menu and the patient for ~18s. */
+    var seen = false;
+    try { seen = sessionStorage.getItem('ave-cine') === '1'; sessionStorage.setItem('ave-cine', '1'); } catch (e) {}
+    if (!seen) document.documentElement.classList.add('has-cine');
   }
 </script>
 <meta property="og:type" content="website">
@@ -58,7 +63,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:title" content="Screening Received | Alpha Vital Elite IV">
 <meta property="og:description" content="Your screening has been received. Dr. Aronov reviews every submission and the practice will contact you.">
-<meta property="og:url" content="https://www.alphaeliteiv.com/htmls/review-done.html">
+<meta property="og:url" content="https://www.alphaeliteiv.com/review-done/">
 <meta property="og:image" content="https://www.alphaeliteiv.com/assets/photos/share.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Screening Received | Alpha Vital Elite IV">
@@ -75,8 +80,8 @@
   "@graph": [
     {
       "@type": "WebPage",
-      "@id": "https://www.alphaeliteiv.com/htmls/review-done.html#page",
-      "url": "https://www.alphaeliteiv.com/htmls/review-done.html",
+      "@id": "https://www.alphaeliteiv.com/review-done/#page",
+      "url": "https://www.alphaeliteiv.com/review-done/",
       "name": "Screening Received | Alpha Vital Elite IV",
       "description": "Your screening has been received. Dr. Aronov reviews every submission and the practice will contact you.",
       "isPartOf": {
@@ -92,9 +97,9 @@
 <body class="page-review">
 
 
-<div class="bs-cine" id="bsCine" aria-hidden="true">
-  <div class="bs-cine__stage">
-    <img class="bs-cine__mark" src="../logo.png" alt="" width="120" height="60">
+<div class="bs-cine" id="bsCine">
+  <div class="bs-cine__stage" aria-hidden="true">
+    <img class="bs-cine__mark" src="../assets/images/logo.png" alt="" width="120" height="60">
     <p class="bs-cine__kicker">Alpha Vital Elite IV</p>
     <p class="bs-cine__line bs-cine__line--1">Thank you.</p>
     <p class="bs-cine__line bs-cine__line--2">Your screening has</p>
@@ -112,16 +117,16 @@
 <header class="head" id="head">
   <div class="head__rail">
 
-    <a class="head__mark" href="../index.html">
-      <img src="../logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
+    <a class="head__mark" href="../">
+      <img src="../assets/images/logo.png" alt="Alpha Vital Elite IV" width="240" height="222">
     </a>
 
     <nav class="head__nav" id="headNav">
 
-      <a class="head__link" href="../index.html">Home</a>
+      <a class="head__link" href="../">Home</a>
 
       <div class="head__drop">
-        <a class="head__link" href="infusions.html">
+        <a class="head__link" href="../infusions/">
           Infusions <i class="ph ph-caret-down head__dcaret"></i>
         </a>
 
@@ -129,43 +134,43 @@
           <p class="head__panel-eyebrow">The Infusion Menu</p>
 
           <div class="head__panel-grid">
-            <a class="hd-item" href="../drips/glutathione.html" style="--tone:#7FA08C">
+            <a class="hd-item" href="../drips/glutathione/" style="--tone:#7FA08C">
               <i>I</i><span>Glutathione IV Injection</span><b>$100</b>
             </a>
-            <a class="hd-item" href="../drips/antioxidant.html" style="--tone:#4F7D5E">
+            <a class="hd-item" href="../drips/antioxidant/" style="--tone:#4F7D5E">
               <i>II</i><span>Antioxidant &times;3 Reset</span><b>$400</b>
             </a>
-            <a class="hd-item" href="../drips/immun-o-boost.html" style="--tone:#D9982A">
+            <a class="hd-item" href="../drips/immun-o-boost/" style="--tone:#D9982A">
               <i>III</i><span>Immun-O-Boost IV Support</span><b>$550</b>
             </a>
-            <a class="hd-item" href="../drips/revive.html" style="--tone:#35707F">
+            <a class="hd-item" href="../drips/revive/" style="--tone:#35707F">
               <i>IV</i><span>Revive IV Support</span><b>$325</b>
             </a>
-            <a class="hd-item" href="../drips/liquixo.html" style="--tone:#B34E37">
+            <a class="hd-item" href="../drips/liquixo/" style="--tone:#B34E37">
               <i>V</i><span>LIQUIXO Muscle Recovery</span><b>$395</b>
             </a>
-            <a class="hd-item" href="../drips/stress-brain.html" style="--tone:#7A5F98">
+            <a class="hd-item" href="../drips/stress-brain/" style="--tone:#7A5F98">
               <i>VI</i><span>Stress &amp; Brain Wellness</span><b>$350</b>
             </a>
-            <a class="hd-item" href="../drips/customized.html" style="--tone:#C1963F">
+            <a class="hd-item" href="../drips/customized/" style="--tone:#C1963F">
               <i>VII</i><span>Customized IV Infusion</span><b>Consult</b>
             </a>
           </div>
 
-          <a class="head__panel-foot" href="infusions.html">
+          <a class="head__panel-foot" href="../infusions/">
             <span>View the full menu</span><i class="ph ph-arrow-right"></i>
           </a>
         </div>
       </div>
 
-      <a class="head__link" href="about.html">Dr.&nbsp;Aronov</a>
-      <a class="head__link" href="research.html">Research</a>
-      <a class="head__link is-here" href="contact.html" aria-current="page">Contact</a>
+      <a class="head__link" href="../about/">Dr.&nbsp;Aronov</a>
+      <a class="head__link" href="../research/">Research</a>
+      <a class="head__link is-here" href="../contact/" aria-current="page">Contact</a>
     </nav>
 
     <div class="head__actions">
       <a class="head__tel" href="tel:+13477148660">347&#8202;·&#8202;714&#8202;·&#8202;8660</a>
-      <a class="btn btn--forest head__cta" href="begin-screening.html" data-magnetic><span>Begin screening</span></a>
+      <a class="btn btn--forest head__cta" href="../begin-screening/" data-magnetic><span>Begin screening</span></a>
       <button class="head__burger" id="burger" type="button" aria-label="Menu">
         <span></span><span></span>
       </button>
@@ -179,7 +184,7 @@
   <div class="menu__inner">
     <nav class="menu__nav">
 
-      <a href="../index.html"><i>i.</i><em>Home</em></a>
+      <a href="../"><i>i.</i><em>Home</em></a>
 
       <details class="menu__drop">
         <summary>
@@ -187,25 +192,25 @@
           <b class="menu__dcaret"><span class="ph ph-caret-down"></span></b>
         </summary>
         <div class="menu__sub">
-          <a class="menu__sub-all" href="infusions.html">
+          <a class="menu__sub-all" href="../infusions/">
             <span>The full menu</span><span class="ph ph-arrow-right"></span>
           </a>
-          <a class="menu__sub-item" href="../drips/glutathione.html" style="--tone:#7FA08C"><i>I</i>Glutathione IV Injection</a>
-          <a class="menu__sub-item" href="../drips/antioxidant.html" style="--tone:#4F7D5E"><i>II</i>Antioxidant &times;3 Reset</a>
-          <a class="menu__sub-item" href="../drips/immun-o-boost.html" style="--tone:#D9982A"><i>III</i>Immun-O-Boost IV Support</a>
-          <a class="menu__sub-item" href="../drips/revive.html" style="--tone:#35707F"><i>IV</i>Revive IV Support</a>
-          <a class="menu__sub-item" href="../drips/liquixo.html" style="--tone:#B34E37"><i>V</i>LIQUIXO Muscle Recovery</a>
-          <a class="menu__sub-item" href="../drips/stress-brain.html" style="--tone:#7A5F98"><i>VI</i>Stress &amp; Brain Wellness</a>
-          <a class="menu__sub-item" href="../drips/customized.html" style="--tone:#C1963F"><i>VII</i>Customized IV Infusion</a>
+          <a class="menu__sub-item" href="../drips/glutathione/" style="--tone:#7FA08C"><i>I</i>Glutathione IV Injection</a>
+          <a class="menu__sub-item" href="../drips/antioxidant/" style="--tone:#4F7D5E"><i>II</i>Antioxidant &times;3 Reset</a>
+          <a class="menu__sub-item" href="../drips/immun-o-boost/" style="--tone:#D9982A"><i>III</i>Immun-O-Boost IV Support</a>
+          <a class="menu__sub-item" href="../drips/revive/" style="--tone:#35707F"><i>IV</i>Revive IV Support</a>
+          <a class="menu__sub-item" href="../drips/liquixo/" style="--tone:#B34E37"><i>V</i>LIQUIXO Muscle Recovery</a>
+          <a class="menu__sub-item" href="../drips/stress-brain/" style="--tone:#7A5F98"><i>VI</i>Stress &amp; Brain Wellness</a>
+          <a class="menu__sub-item" href="../drips/customized/" style="--tone:#C1963F"><i>VII</i>Customized IV Infusion</a>
         </div>
       </details>
 
-      <a href="about.html"><i>iii.</i><em>Dr. Aronov</em></a>
-      <a href="research.html"><i>iv.</i><em>Research</em></a>
-      <a class="is-here" href="contact.html" aria-current="page"><i>v.</i><em>Contact</em></a>
+      <a href="../about/"><i>iii.</i><em>Dr. Aronov</em></a>
+      <a href="../research/"><i>iv.</i><em>Research</em></a>
+      <a class="is-here" href="../contact/" aria-current="page"><i>v.</i><em>Contact</em></a>
     </nav>
     <div class="menu__foot">
-      <a class="btn btn--gold" href="begin-screening.html"><span>Begin screening</span></a>
+      <a class="btn btn--gold" href="../begin-screening/"><span>Begin screening</span></a>
       <a class="menu__tel" href="tel:+13477148660">347 · 714 · 8660</a>
       <p class="menu__addr">79-01 Metropolitan Avenue, Middle Village, NY 11379<br>Queens · Brooklyn · Long Island</p>
     </div>
@@ -220,7 +225,7 @@
     <div class="bs-room__grid">
 
       <aside class="bs-side" id="bsSide" data-numeral="&#10003;" data-fill="1">
-        <a class="bs-side__back" href="../index.html"><i class="ph ph-arrow-left"></i> Back to Alpha Elite IV</a>
+        <a class="bs-side__back" href="../"><i class="ph ph-arrow-left"></i> Back to Alpha Elite IV</a>
 
         <div class="bs-bottle" id="bsBottle">
           <img id="bsBottleImg" src="../assets/drips/customized.png" alt="" width="1024" height="1536" decoding="async" fetchpriority="high">
@@ -280,7 +285,7 @@
 
           <div class="bs-done__acts">
             <a class="btn btn--forest btn--lg" href="tel:+13477148660" data-magnetic><span>347 &middot; 714 &middot; 8660</span><i class="ph ph-phone"></i></a>
-            <a class="btn btn--line btn--lg" href="../index.html"><span>Back to Alpha Elite IV</span></a>
+            <a class="btn btn--line btn--lg" href="../"><span>Back to Alpha Elite IV</span></a>
           </div>
         </div>
 
@@ -295,7 +300,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-<script src="../script.js" type="module"></script>
+<script src="../js/script.js" type="module"></script>
 <script src="../js/contact.js" type="module"></script>
 <script src="../js/screening.js" type="module"></script>
 </body>

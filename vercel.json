@@ -1,6 +1,115 @@
 {
+  "trailingSlash": true,
   "redirects": [
-    { "source": "/drips/glynac.html", "destination": "/htmls/infusions.html", "permanent": true },
-    { "source": "/drips/joint-skin.html", "destination": "/htmls/infusions.html", "permanent": true }
+    {
+      "source": "/htmls/review-done.html",
+      "destination": "/review-done/",
+      "permanent": true
+    },
+    {
+      "source": "/htmls/about.html",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/htmls/contact.html",
+      "destination": "/contact/",
+      "permanent": true
+    },
+    {
+      "source": "/htmls/begin-screening.html",
+      "destination": "/begin-screening/",
+      "permanent": true
+    },
+    {
+      "source": "/htmls/infusions.html",
+      "destination": "/infusions/",
+      "permanent": true
+    },
+    {
+      "source": "/htmls/review-safety.html",
+      "destination": "/review-safety/",
+      "permanent": true
+    },
+    {
+      "source": "/htmls/research.html",
+      "destination": "/research/",
+      "permanent": true
+    },
+    {
+      "source": "/drips/revive.html",
+      "destination": "/drips/revive/",
+      "permanent": true
+    },
+    {
+      "source": "/drips/glutathione.html",
+      "destination": "/drips/glutathione/",
+      "permanent": true
+    },
+    {
+      "source": "/drips/liquixo.html",
+      "destination": "/drips/liquixo/",
+      "permanent": true
+    },
+    {
+      "source": "/drips/customized.html",
+      "destination": "/drips/customized/",
+      "permanent": true
+    },
+    {
+      "source": "/drips/immun-o-boost.html",
+      "destination": "/drips/immun-o-boost/",
+      "permanent": true
+    },
+    {
+      "source": "/drips/stress-brain.html",
+      "destination": "/drips/stress-brain/",
+      "permanent": true
+    },
+    {
+      "source": "/drips/antioxidant.html",
+      "destination": "/drips/antioxidant/",
+      "permanent": true
+    },
+    {
+      "source": "/policies/disclaimer.html",
+      "destination": "/policies/disclaimer/",
+      "permanent": true
+    },
+    {
+      "source": "/policies/terms.html",
+      "destination": "/policies/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/policies/refund-policy.html",
+      "destination": "/policies/refund-policy/",
+      "permanent": true
+    },
+    {
+      "source": "/policies/privacy-policy.html",
+      "destination": "/policies/privacy-policy/",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/logo.png",
+      "destination": "/assets/images/logo.png",
+      "permanent": true
+    },
+    {
+      "source": "/drips/glynac.html",
+      "destination": "/infusions/",
+      "permanent": true
+    },
+    {
+      "source": "/drips/joint-skin.html",
+      "destination": "/infusions/",
+      "permanent": true
+    }
   ]
 }
