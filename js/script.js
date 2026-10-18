@@ -475,7 +475,7 @@ class HeroVideo {
         this.screen = $('#heroScreen');
         this.lean   = $('#heroLean');
         this.glass  = $('#heroGlass');
-        this.deck   = $('.hero__deck');
+        this.deck   = $('.hero__base');      // fine print + film deck, faded together on the way out
         this.track  = $('#heroTrack');
         this.fill   = $('#heroFill');
         this.ticks  = $('#heroTicks');

@@ -838,9 +838,9 @@ body.is-ready .hero__video {
     width: 100%; max-width: var(--maxw);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: minmax(0, 60rem) minmax(17.5rem, 1fr);
-    align-items: end;
-    column-gap: clamp(1rem, 2vw, 2rem);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    row-gap: clamp(1rem, 2.5vh, 2rem);
 }
 
 /* ---------- the copy, set straight on the film ----------
@@ -850,9 +850,12 @@ body.is-ready .hero__video {
    untouched. */
 .hero__shade {
     position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    /* the copy column is on the left, the fine print along the bottom, so the
+       shade sits there; the right of the frame — usually Dr. Aronov — is clear */
     background:
-        linear-gradient(0deg, rgba(8, 14, 10, .84) 0%, rgba(8, 14, 10, .62) 26%, rgba(8, 14, 10, .2) 46%, rgba(8, 14, 10, 0) 60%),
-        linear-gradient(90deg, rgba(8, 14, 10, .38) 0%, rgba(8, 14, 10, 0) 58%);
+        linear-gradient(90deg, rgba(8, 14, 10, .8) 0%, rgba(8, 14, 10, .62) 26%, rgba(8, 14, 10, .26) 44%, rgba(8, 14, 10, 0) 60%),
+        linear-gradient(0deg, rgba(8, 14, 10, .72) 0%, rgba(8, 14, 10, 0) 24%),
+        linear-gradient(180deg, rgba(8, 14, 10, .3) 0%, rgba(8, 14, 10, 0) 20%);
     opacity: 0;
     transition: opacity 1.2s var(--ease);
 }
@@ -868,7 +871,8 @@ body.is-ready .hero__shade { opacity: 1; transition-delay: 1s; }
 
 .hero__glass {
     position: relative;
-    grid-column: 1;
+    align-self: center;
+    max-width: 35rem;
     color: var(--cream);
     text-shadow: 0 1px 18px rgba(5, 9, 6, .45);
     transition: opacity .7s var(--ease), transform .9s var(--ease), filter .7s var(--ease);
@@ -904,8 +908,9 @@ body.is-ready .hero__shade { opacity: 1; transition-delay: 1s; }
 .hero__title {
     font-family: var(--display);
     font-weight: 400;
-    font-size: clamp(2.4rem, 4.3vw, 4.3rem);
-    line-height: 1.06;
+    font-size: clamp(3rem, 5.3vw, 5.6rem);
+    line-height: 1.02;
+    max-width: 7.6em;             /* "Physician- / Directed / IV Care." stacked */
     letter-spacing: -0.01em;
     color: var(--cream);
     text-shadow: 0 2px 30px rgba(5, 9, 6, .45);
@@ -913,13 +918,6 @@ body.is-ready .hero__shade { opacity: 1; transition-delay: 1s; }
 .hero__title .word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.05em; margin-bottom: -0.05em; }
 .hero__title .word > span { display: block; }
 
-.hero__split {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(1.25rem, 2.4vw, 2.25rem);
-    align-items: start;
-    margin-top: clamp(.9rem, 2vh, 1.35rem);
-}
 
 /* --- the word loop: "Infusions for ..." --- */
 .loop__fallback { display: none; }
@@ -968,17 +966,24 @@ body.is-ready .hero__shade { opacity: 1; transition-delay: 1s; }
     color: rgba(246, 241, 231, .92);
     padding-left: 1.15rem;
     border-left: 1px solid var(--gold);
+    max-width: 33rem;
+    margin-top: clamp(1.25rem, 3vh, 1.9rem);
 }
 
 /* the required eligibility / supportive-care disclaimer — quiet, not a banner */
 .hero__fine {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-    gap: .5rem clamp(1.25rem, 2.8vw, 2.75rem);
-    align-items: end;
-    margin-top: clamp(.85rem, 1.9vh, 1.25rem);
+    display: grid; gap: .45rem;
+    max-width: 44rem;
     padding-top: clamp(.7rem, 1.5vh, .95rem);
     border-top: 1px solid rgba(246, 241, 231, .22);
+    color: var(--cream);
+    text-shadow: 0 1px 14px rgba(5, 9, 6, .5);
+}
+/* the bottom row: fine print left, the film deck right */
+.hero__base {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: clamp(1.25rem, 3vw, 3rem);
+    transition: opacity .7s var(--ease);
 }
 .hero__legal {
     font-size: .74rem;
@@ -992,13 +997,11 @@ body.is-ready .hero__shade { opacity: 1; transition-delay: 1s; }
     line-height: 1.7;
     text-transform: uppercase;
     color: rgba(246, 241, 231, .84);
-    text-align: right;
 }
 
 /* ---------- the film deck ---------- */
 .hero__deck {
-    grid-column: 2;
-    justify-self: end; align-self: end;
+    flex: 0 0 auto;
     width: min(100%, 21.5rem);
     padding: .85rem 1rem .8rem;
     background: rgba(12, 21, 15, .42);
@@ -1182,7 +1185,9 @@ body.is-ready .hero__title .word > span {
 }
 .hero.is-theater .hero__bars::before,
 .hero.is-theater .hero__bars::after { transform: scaleY(1); }
-.hero.is-theater .hero__scroll { opacity: 0; pointer-events: none; }
+.hero.is-theater .hero__scroll,
+.hero.is-theater .hero__fine,
+.hero.is-theater .hero__folio { opacity: 0; pointer-events: none; transition: opacity .6s var(--ease); }
 body.is-theater .head { transform: translateY(-102%); }
 body.is-theater .fab, body.is-theater .totop { opacity: 0; pointer-events: none; }
 
@@ -1194,27 +1199,21 @@ body.is-theater .fab, body.is-theater .totop { opacity: 0; pointer-events: none;
 @media (min-width: 981px) and (max-height: 820px) {
     .hero { padding-top: calc(var(--head-h) + 1.5rem); }
     .hero__folio { display: none; }
-    .hero__title { font-size: clamp(2.1rem, 3.2vw, 3rem); }
     .hero__dek { font-size: .86rem; line-height: 1.62; }
     .hero__legal { font-size: .7rem; line-height: 1.5; }
     .hero__for { margin-bottom: .75rem; }
 }
+@media (min-width: 981px) and (max-height: 820px) {
+    .hero__title { font-size: clamp(2.6rem, 4.4vw, 4.2rem); }
+    .hero__dek { margin-top: 1rem; }
+}
 @media (min-width: 981px) and (max-height: 700px) {
     .hero__kicker { display: none; }
-    .hero__split { margin-top: .7rem; }
 }
 
 /* ---------- laptops: keep both buttons on one line ---------- */
 @media (min-width: 981px) and (max-width: 1366px) {
-    .hero__split { grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); }
     .hero__actions .btn--lg { padding: 1rem 1.1rem; font-size: .7rem; gap: .55rem; }
-}
-
-/* ---------- 1100: the deck sits above the band's right end ---------- */
-@media (min-width: 981px) and (max-width: 1100px) {
-    .hero__grid { grid-template-columns: minmax(0, 1fr); row-gap: .75rem; }
-    .hero__glass { grid-row: 2; }
-    .hero__deck { grid-column: 1; grid-row: 1; }
 }
 
 /* ---------- 980 down: the film holds still, the glass scrolls up over it ---------- */
@@ -1235,10 +1234,12 @@ body.is-theater .fab, body.is-theater .totop { opacity: 0; pointer-events: none;
     .hero__grid {
         display: flex; flex-direction: column; align-items: stretch;
         gap: .6rem;
-        padding-top: clamp(10rem, 40svh, 26rem);   /* her face sits in the upper half */
+        padding-top: clamp(10rem, 46svh, 30rem);   /* her face sits in the upper half */
     }
+    .hero__folio { display: none; }
+    .hero__glass { align-self: auto; max-width: none; }
+    .hero__base { flex-direction: column; align-items: stretch; gap: .9rem; margin-top: .9rem; }
     .hero__deck {
-        margin-top: .9rem;
         width: 100%; max-width: 30rem; align-self: flex-start;
         display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
         column-gap: .75rem;
@@ -1249,10 +1250,8 @@ body.is-theater .fab, body.is-theater .totop { opacity: 0; pointer-events: none;
     .hero__tools { grid-column: 2; grid-row: 1 / span 2; }
     .hero__scroll { display: none; }
     .hero__folio-mid { display: none; }
-    .hero__title { font-size: clamp(2.3rem, 7vw, 3.4rem); }
-    .hero__split { grid-template-columns: 1fr; gap: 1.1rem; }
-    .hero__fine { grid-template-columns: 1fr; }
-    .hero__cred { text-align: left; }
+    .hero__title { font-size: clamp(2.3rem, 7vw, 3.4rem); max-width: none; }
+    .hero__dek { max-width: none; }
 }
 
 /* ---------- 640, large phone ---------- */
@@ -2957,6 +2956,8 @@ body.is-theater .fab, body.is-theater .totop { opacity: 0; pointer-events: none;
     gap: clamp(2rem, 5vw, 5rem);
     align-items: start;
 }
+/* linked from the home page ("How to get an appointment") */
+.visit--cards { scroll-margin-top: calc(var(--head-h) - 1rem); }
 .vc__side { position: sticky; top: calc(var(--head-h) + 1.5rem); }
 .vc__side .visit__title { font-size: clamp(2rem, 3.5vw, 3.3rem); margin: clamp(1rem, 2vw, 1.5rem) 0 clamp(1rem, 2vw, 1.4rem); }
 .vc__side .visit__lede { max-width: 40ch; }
