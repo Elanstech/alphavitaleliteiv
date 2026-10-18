@@ -1288,25 +1288,100 @@ class Chronic {
 class Advantage {
     constructor() {
         this.el    = $('#advantage');
-        this.sw    = $('.ap-switch', this.el ?? document);
-        this.opts  = $$('.ap-opt',   this.el ?? document);
-        this.lanes = $$('.ap-lane',  this.el ?? document);
+        /* Oct 17: the homepage keeps a three-line summary; the full story (the
+           route switch, the six stages, the four reasons) lives in the
+           #apMore modal, opened by "Learn more". Everything below is scoped to
+           the modal when it exists, and its animations play on OPEN rather than
+           on page scroll — ScrollTrigger watches the window, and the modal
+           scrolls on its own, so scroll-driven reveals would never fire there. */
+        this.box   = $('#apMore');
+        const scope = this.box ?? this.el ?? document;
+        this.sw    = $('.ap-switch', scope);
+        this.opts  = $$('.ap-opt',   scope);
+        this.lanes = $$('.ap-lane',  scope);
         this.at    = 'oral';
+        this.open  = false;
     }
 
     init() {
         if (!this.el) return;
 
         this.wireSwitch();
+        this.wireModal();
 
         /* No GSAP, or motion turned down. Nothing here starts hidden in CSS —
            only this class ever hides anything — so there is nothing to undo. */
         if (typeof window.gsap === 'undefined' || REDUCED) return;
 
         gsap.registerPlugin(ScrollTrigger);
+        if (this.box) return;            // the modal plays its own entrance in show()
         this.drawSteps(this.laneEl('oral'));
         this.wireFlow();
         this.wireReasons();
+    }
+
+    /* =====================================================================
+       0 · THE MODAL — "Learn more"
+       ===================================================================== */
+    wireModal() {
+        const opener = $('#apMoreOpen');
+        if (!this.box || !opener) return;
+        this.body = $('.modal__body', this.box);
+
+        opener.addEventListener('click', () => this.show(opener));
+        $$('[data-close-ap]', this.box).forEach((b) => b.addEventListener('click', () => this.hide()));
+        document.addEventListener('keydown', (e) => {
+            if (!this.open) return;
+            if (e.key === 'Escape') { this.hide(); return; }
+            if (e.key !== 'Tab') return;
+            const f = $$('button, [href], input, select, textarea, [tabindex="0"]', this.box)
+                .filter((el) => el.offsetParent !== null && el.tabIndex !== -1);
+            if (!f.length) return;
+            const first = f[0], last = f[f.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        });
+    }
+
+    show(opener) {
+        this.lastFocus = opener || document.activeElement;
+        this.open = true;
+        this.box.classList.add('is-open');
+        this.box.setAttribute('aria-hidden', 'false');
+        document.documentElement.classList.add('is-locked');
+        if (this.body) this.body.scrollTop = 0;
+        setTimeout(() => $('.modal__x', this.box)?.focus({ preventScroll: true }), 60);
+        this.entrance();
+    }
+
+    hide() {
+        if (!this.open) return;
+        this.open = false;
+        this.box.classList.remove('is-open');
+        this.box.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('is-locked');
+        this.lastFocus?.focus({ preventScroll: true });
+    }
+
+    /** The same three moves the section used to make on scroll, played once
+     *  the modal is open: the stops of the live road, the six stages left to
+     *  right, the four reasons. Each runs only the first time it is opened. */
+    entrance() {
+        if (typeof window.gsap === 'undefined' || REDUCED) return;
+        this.drawSteps(this.laneEl(this.at));
+        if (this.played) return;
+        this.played = true;
+        const flow = $('.ap-flow', this.box);
+        if (flow) {
+            gsap.fromTo($$('.ap-flow__stage, .ap-flow__arrow', flow),
+                { opacity: 0, y: 14 },
+                { opacity: 1, y: 0, duration: .45, ease: 'expo.out', stagger: .07, delay: .35 });
+        }
+        const reasons = $$('.ap-reason', this.box);
+        if (reasons.length) {
+            gsap.fromTo(reasons, { opacity: 0, y: 22 },
+                { opacity: 1, y: 0, duration: .55, ease: 'back.out(1.4)', stagger: .08, delay: .5 });
+        }
     }
 
     laneEl(lane) { return this.lanes.find((l) => l.dataset.lane === lane); }
@@ -1373,8 +1448,8 @@ class Advantage {
             }
         };
 
-        // already on screen? play now. Otherwise wait until it is.
-        if (lane.getBoundingClientRect().top < window.innerHeight * .9) { run(); return; }
+        // already on screen (or inside the open modal)? play now. Otherwise wait until it is.
+        if (this.box || lane.getBoundingClientRect().top < window.innerHeight * .9) { run(); return; }
 
         gsap.set([...steps, verdict].filter(Boolean), { opacity: 0, y: 24 });
         ScrollTrigger.create({ trigger: lane, start: 'top 86%', once: true, onEnter: run });
