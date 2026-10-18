@@ -1363,25 +1363,34 @@ class Advantage {
         this.lastFocus?.focus({ preventScroll: true });
     }
 
-    /** The same three moves the section used to make on scroll, played once
-     *  the modal is open: the stops of the live road, the six stages left to
-     *  right, the four reasons. Each runs only the first time it is opened. */
+    /** The same three moves the section makes on the page, inside the modal:
+     *  the stops of the live road play on open; the six stages and the four
+     *  reasons wait until they scroll into view in the modal's own scroller. */
     entrance() {
         if (typeof window.gsap === 'undefined' || REDUCED) return;
         this.drawSteps(this.laneEl(this.at));
         if (this.played) return;
         this.played = true;
-        const flow = $('.ap-flow', this.box);
-        if (flow) {
-            gsap.fromTo($$('.ap-flow__stage, .ap-flow__arrow', flow),
-                { opacity: 0, y: 14 },
-                { opacity: 1, y: 0, duration: .45, ease: 'expo.out', stagger: .07, delay: .35 });
-        }
+
+        const flow    = $('.ap-flow', this.box);
+        const kids    = flow ? $$('.ap-flow__stage, .ap-flow__arrow', flow) : [];
         const reasons = $$('.ap-reason', this.box);
-        if (reasons.length) {
-            gsap.fromTo(reasons, { opacity: 0, y: 22 },
-                { opacity: 1, y: 0, duration: .55, ease: 'back.out(1.4)', stagger: .08, delay: .5 });
-        }
+        if (kids.length)    gsap.set(kids,    { opacity: 0, y: 14 });
+        if (reasons.length) gsap.set(reasons, { opacity: 0, y: 22 });
+
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(({ isIntersecting, target }) => {
+                if (!isIntersecting) return;
+                io.unobserve(target);
+                if (target === flow) {
+                    gsap.to(kids, { opacity: 1, y: 0, duration: .45, ease: 'expo.out', stagger: .07 });
+                } else {
+                    gsap.to(reasons, { opacity: 1, y: 0, duration: .55, ease: 'back.out(1.4)', stagger: .08 });
+                }
+            });
+        }, { root: this.body, threshold: .2 });
+        if (flow) io.observe(flow);
+        if (reasons.length) io.observe(reasons[0].parentElement);
     }
 
     laneEl(lane) { return this.lanes.find((l) => l.dataset.lane === lane); }
