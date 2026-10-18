@@ -19,7 +19,7 @@
      Shelf       the services rail — pinned horizontally, Rail-driven on phones
      Chronic     the chronic-condition switcher, its compounds and spotlight
      Advantage   the oral-vs-IV switch, drawn on arrival and on every toggle
-     Visit       the four-step ledger
+     Visit       the four steps, as cards
      Physician   sticky portrait, beats that pop, the chain of custody
      Research    the reference rail — a Rail with drag enabled
      Dock        back to top (left) and the action dial (right)
@@ -710,6 +710,7 @@ class HeroVideo {
         let last = -1;
 
         const clear = () => {
+            hero.style.removeProperty('--dim');
             screen.style.transform = ''; screen.style.borderRadius = '';
             [glass, deck].forEach((el) => { if (el) { el.style.transform = ''; el.style.opacity = ''; } });
             last = -1;
@@ -717,7 +718,12 @@ class HeroVideo {
         wide.addEventListener?.('change', clear);
 
         Scroll.add((y) => {
-            if (!wide.matches) return;
+            if (!wide.matches) {
+                // phones: deepen the shade as the copy rides up over the film
+                const d = clamp(y / (window.innerHeight * 0.45), 0, 1).toFixed(3);
+                if (hero.style.getPropertyValue('--dim') !== d) hero.style.setProperty('--dim', d);
+                return;
+            }
             const h = hero.offsetHeight || 1;
             const p = clamp(y / h, 0, 1);
             if (Math.abs(p - last) < 0.001) return;
@@ -736,13 +742,10 @@ class HeroVideo {
 
 
 /* =============================================================================
-   REEL — "Inside the practice": prints laid on a table, one at a time
-   The old sideways drift ran the whole strip past in about one screen of
-   scrolling — too fast to see anything. On a desktop the section now holds
-   still (CSS sticky, so it never fights the shelf's GSAP pin) and each
-   photograph lands on the stack as you scroll, about 70% of a screen apiece;
-   earlier prints sink back and dim beneath it. Touch, narrow or reduced
-   motion: the plain swipeable row.
+   REEL — "Inside the practice": one swipe row, with arrow buttons
+   Kept deliberately quiet (Oct 17): the scroll-driven versions were too fast,
+   then too much. A native scroll-snap row everywhere; the buttons step one
+   photograph at a time, and the count and line follow the row's position.
 ============================================================================= */
 class Reel {
     constructor() {
@@ -753,74 +756,52 @@ class Reel {
         this.now     = $('#reelNow');
         this.total   = $('#reelTotal');
         this.bar     = $('#reelBar');
-        this.on      = false;
-        this.live    = false;
+        this.prev    = $('#reelPrev');
+        this.next    = $('#reelNext');
     }
 
     init() {
-        if (!this.section || !this.view || !this.track) return;
-        const n = this.frames.length;
-        this.section.style.setProperty('--n', String(n));
-        if (this.total) this.total.textContent = String(n).padStart(2, '0');
+        if (!this.section || !this.view || !this.frames.length) return;
+        this.view.classList.add('is-native');
+        if (this.total) this.total.textContent = String(this.frames.length).padStart(2, '0');
 
-        const wide = window.matchMedia('(min-width: 900px)');
-        const apply = () => {
-            const on = !REDUCED && FINE_POINTER && wide.matches && n > 1;
-            if (on === this.on && this.section.classList.contains(on ? 'is-stack' : 'is-plain')) return;
-            this.on = on;
-            this.section.classList.toggle('is-stack', on);
-            this.section.classList.toggle('is-plain', !on);
-            this.view.classList.toggle('is-native', !on);
-            if (!on) this.frames.forEach((f) => { f.style.transform = ''; f.style.zIndex = ''; f.style.removeProperty('--shade'); });
-            else this.paint();
+        const step = (dir) => {
+            const i = clamp(this.index() + dir, 0, this.frames.length - 1);
+            const f = this.frames[i];
+            const left = f.offsetLeft - (this.view.clientWidth - f.offsetWidth) / 2;
+            this.view.scrollTo({ left: Math.max(0, left), behavior: REDUCED ? 'auto' : 'smooth' });
         };
-        apply();
-        wide.addEventListener?.('change', () => {
-            apply();
-            if (typeof window.ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+        this.prev?.addEventListener('click', () => step(-1));
+        this.next?.addEventListener('click', () => step(1));
+
+        this.view.addEventListener('scroll', onFrame(() => this.paint()), { passive: true });
+        window.addEventListener('resize', debounce(() => this.paint(), 150));
+        this.paint();
+    }
+
+    /** the photograph nearest the middle of the row */
+    index() {
+        const mid = this.view.scrollLeft + this.view.clientWidth / 2;
+        let best = 0, dist = Infinity;
+        this.frames.forEach((f, i) => {
+            const d = Math.abs(f.offsetLeft + f.offsetWidth / 2 - mid);
+            if (d < dist) { dist = d; best = i; }
         });
-
-        if ('IntersectionObserver' in window) {
-            new IntersectionObserver(([e]) => { this.live = e.isIntersecting; if (this.live && this.on) this.paint(); },
-                { rootMargin: '20% 0px' }).observe(this.section);
-        } else this.live = true;
-
-        Scroll.add(() => { if (this.on && this.live) this.paint(); });
-        window.addEventListener('resize', debounce(() => { if (this.on) this.paint(); }, 120));
+        return best;
     }
 
     paint() {
+        const max = Math.max(0, this.view.scrollWidth - this.view.clientWidth);
+        const x   = this.view.scrollLeft;
         const n   = this.frames.length;
-        const vh  = window.innerHeight;
-        const r   = this.section.getBoundingClientRect();
-        const run = Math.max(1, r.height - vh - vh * 0.22);   // the last 22% of a screen is a hold
-        const P   = clamp(-r.top / run, 0, 1);
-        const t   = P * (n - 1);
-        const out = (x) => 1 - Math.pow(1 - x, 3);
-
-        // how far each print has landed (the first is already down)
-        const land = this.frames.map((_, i) => (i === 0 ? 1 : out(clamp((t - (i - 1)) / 0.6, 0, 1))));
-        const REST = [-1.4, 1.1, -0.6, 1.5, -1.0, 0.8];
-
-        this.frames.forEach((f, i) => {
-            const s = land[i];
-            let depth = 0;
-            for (let j = i + 1; j < n; j++) depth += land[j];
-            const rot  = REST[i % REST.length] + (1 - s) * (i % 2 ? 9 : -9);
-            const y    = (1 - s) * 115 - depth * 1.6;            // vh: older prints peek out above
-            const x    = (1 - s) * (i % 2 ? 8 : -8);             // vw: each comes in from a slight angle
-            const sc   = 1 - Math.min(depth, 3) * 0.05;
-            f.style.zIndex = String(i + 1);
-            f.style.transform =
-                `translate3d(calc(-50% + ${x.toFixed(2)}vw), calc(-50% + ${y.toFixed(2)}vh), 0) ` +
-                `rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
-            f.style.setProperty('--shade', Math.min(0.6, depth * 0.24).toFixed(3));
-        });
-
-        const cur = clamp(Math.floor(t + 0.45) + 1, 1, n);
-        const txt = String(cur).padStart(2, '0');
+        let i = this.index();
+        if (x >= max - 2) i = n - 1;
+        if (x <= 2) i = 0;
+        const txt = String(i + 1).padStart(2, '0');
         if (this.now && this.now.textContent !== txt) this.now.textContent = txt;
-        if (this.bar) this.bar.style.setProperty('--p', P.toFixed(4));
+        if (this.bar) this.bar.style.setProperty('--p', ((i + 1) / n).toFixed(3));
+        if (this.prev) this.prev.disabled = x <= 2;
+        if (this.next) this.next.disabled = x >= max - 2;
     }
 }
 
@@ -1746,7 +1727,7 @@ class Advantage {
 
 
 /* =============================================================================
-   HOW A VISIT WORKS — four beats on one rule (#visit)
+   THE EXPERIENCE — the four steps as cards (About page, #experience)
    The rule draws once, on arrival, and each node lights as the fill reaches
    it. Deliberately simple: the section sits between two heavy ones and its job
    is to be over quickly. Horizontal above 640px, vertical below, so the fill
@@ -1754,62 +1735,14 @@ class Advantage {
 ============================================================================= */
 class Visit {
     constructor() {
-        this.el    = $('#visit');
-        this.list  = $('#visitSteps');
-        this.steps = $$('.vs', this.list ?? document);
-        this.fill  = $('.visit__fill', this.el ?? document);
-        this.drawn = false;
+        this.el    = $('.visit--cards');
+        this.cards = $$('.vcard', this.el ?? document);
     }
 
     init() {
-        if (!this.el || !this.steps.length) return;
-
-        // no GSAP or reduced motion -> everything already lit, nothing to draw
-        if (typeof window.gsap === 'undefined' || REDUCED) {
-            this.steps.forEach((s) => s.classList.add('is-on'));
-            return;
-        }
-
+        if (!this.el || !this.cards.length || typeof window.gsap === 'undefined') return;
         gsap.registerPlugin(ScrollTrigger);
-
-        ScrollTrigger.create({
-            trigger: this.list,
-            start: 'top 74%',
-            once: true,
-            onEnter: () => { this.drawn = true; this.draw(); },
-        });
-
-        popIn(this.steps, { y: 26, stagger: .09, duration: .55, ease: 'back.out(1.5)' }, this.list, 'top 82%');
-        popIn($$('.visit__intro > *, .visit__close > *', this.el),
-              { y: 22, stagger: .08, duration: .55 }, this.el, 'top 86%');
-
-        // same axis-flip problem as the advantage lanes — redraw on the hinge
-        const mq = window.matchMedia('(max-width: 640px)');
-        const onFlip = () => { if (this.drawn) this.draw(); };
-        mq.addEventListener ? mq.addEventListener('change', onFlip) : mq.addListener(onFlip);
-    }
-
-    /** fill the rule and light each node as it is passed */
-    draw() {
-        if (!this.fill) return;
-        const vertical = window.matchMedia('(max-width: 640px)').matches;
-        const axis = vertical ? 'height' : 'width';
-        // clear the other axis, or a flip leaves the old one at 100%
-        this.fill.style[vertical ? 'width' : 'height'] = '';
-        const span = { v: 0 };
-
-        gsap.killTweensOf(span);
-        gsap.to(span, {
-            v: 100,
-            duration: 1.5,
-            ease: 'power2.inOut',
-            onUpdate: () => {
-                this.fill.style[axis] = span.v.toFixed(1) + '%';
-                this.steps.forEach((s, i) => {
-                    s.classList.toggle('is-on', span.v >= (i / this.steps.length) * 100);
-                });
-            },
-        });
+        popIn(this.cards, { y: 34, stagger: .1, duration: .6, ease: 'back.out(1.4)' }, $('#visitSteps'), 'top 82%');
     }
 }
 
