@@ -1,0 +1,137 @@
+/* =============================================================================
+   ALPHA VITAL ELITE IV — HYDROGEN.CSS
+   Hydrogen inhalation page. Builds on drips.css (the dx-* system) and only
+   adds what an inhalation service needs that an infusion page does not:
+   the molecule in the hero, the comparison table, grouped questions and the
+   reference list.
+============================================================================= */
+
+
+/* ── HERO · the molecule in place of a bag ───────────────────────────────── */
+.h2-orb { width: clamp(230px, 30vw, 390px); }
+.h2-orb svg { display: block; width: 100%; height: auto; overflow: visible; }
+.h2-orb__atom { filter: drop-shadow(0 30px 40px rgba(32, 52, 33, .18)); }
+.h2-orb__h {
+    font-family: var(--dx-serif); font-style: italic;
+    font-size: 64px; fill: rgba(255, 255, 255, .92);
+}
+.h2-orb__ring { fill: none; stroke: var(--t-line); stroke-width: 1; stroke-dasharray: 2 7; }
+.h2-orb__bub { fill: none; stroke: var(--tone); stroke-width: 1.4; opacity: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+    .h2-orb__ring { animation: h2-spin 60s linear infinite; transform-origin: 200px 200px; }
+    .h2-orb__float { animation: h2-float 7s ease-in-out infinite; transform-origin: 200px 200px; }
+    .h2-orb__bub { animation: h2-rise 6s ease-in infinite; }
+    .h2-orb__bub:nth-of-type(2) { animation-delay: 1.4s; animation-duration: 7s; }
+    .h2-orb__bub:nth-of-type(3) { animation-delay: 2.9s; animation-duration: 5.4s; }
+    .h2-orb__bub:nth-of-type(4) { animation-delay: 4.1s; animation-duration: 6.6s; }
+}
+@media (prefers-reduced-motion: reduce) { .h2-orb__bub { opacity: .45; } }
+
+@keyframes h2-spin  { to { transform: rotate(360deg); } }
+@keyframes h2-float { 50% { transform: translateY(-10px) rotate(-2deg); } }
+@keyframes h2-rise {
+    0%   { opacity: 0; transform: translateY(0); }
+    20%  { opacity: .7; }
+    100% { opacity: 0; transform: translateY(-120px); }
+}
+
+
+/* ── WHERE IT MAY HELP · the closing caveat ──────────────────────────────── */
+.h2-caveat {
+    max-width: 72ch;
+    margin-top: clamp(1.6rem, 3vw, 2.2rem);
+    padding: clamp(1rem, 2vw, 1.3rem) clamp(1.1rem, 2.2vw, 1.5rem);
+    border-left: 2px solid var(--t-line);
+    background: var(--f01);
+    border-radius: 0 6px 6px 0;
+    font-size: .88rem; line-height: 1.7; color: var(--ink-soft);
+}
+
+
+/* ── COMPARISON ─────────────────────────────────────────────────────────── */
+.h2-cmp { position: relative; padding: var(--pad) var(--gut); background: var(--cream); }
+.h2-cmp__wrap { max-width: var(--maxw); margin: 0 auto; }
+.h2-cmp__head { max-width: 56ch; margin-bottom: var(--stack); }
+
+.h2-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem; line-height: 1.6;
+}
+.h2-table th, .h2-table td {
+    padding: 1rem clamp(.6rem, 1.4vw, 1.1rem);
+    text-align: left; vertical-align: top;
+    border-bottom: 1px solid var(--rule);
+}
+.h2-table thead th {
+    border-bottom: 1px solid var(--forest);
+    font-family: var(--dx-mono); font-size: .58rem; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+}
+.h2-table thead th.is-ours { color: var(--t-ink); }
+.h2-table tbody th {
+    width: 15%;
+    font-family: var(--dx-mono); font-size: .58rem; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--forest);
+}
+.h2-table td b { display: block; margin-bottom: .2rem; font-family: var(--dx-display); font-weight: 500; font-size: 1rem; letter-spacing: -.02em; color: var(--forest); }
+.h2-table td.is-ours { background: var(--f01); }
+.h2-table td.is-ours b { color: var(--t-ink); }
+.h2-cmp__note { max-width: 78ch; margin-top: 1.2rem; font-size: .77rem; line-height: 1.68; color: var(--mist); }
+
+/* below 760px each feature becomes its own card */
+@media (max-width: 760px) {
+    .h2-table, .h2-table tbody, .h2-table tr, .h2-table th, .h2-table td { display: block; width: 100%; }
+    .h2-table thead { display: none; }
+    .h2-table tr { margin-bottom: 1.1rem; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: rgba(255, 255, 255, .6); }
+    .h2-table tbody th { width: 100%; padding: .8rem 1rem; background: var(--forest); color: var(--cream); border-bottom: 0; }
+    .h2-table td { padding: .85rem 1rem; }
+    .h2-table td:last-child { border-bottom: 0; }
+    .h2-table td::before {
+        content: attr(data-label); display: block; margin-bottom: .3rem;
+        font-family: var(--dx-mono); font-size: .52rem; letter-spacing: .14em;
+        text-transform: uppercase; color: var(--mist);
+    }
+}
+
+
+/* ── QUESTIONS · grouped ─────────────────────────────────────────────────── */
+.h2-group {
+    margin: clamp(2rem, 4vw, 2.8rem) 0 .7rem;
+    font-family: var(--dx-mono); font-size: .6rem; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--t-ink);
+}
+.h2-group:first-of-type { margin-top: 0; }
+.dx-q__ans .h2-list { display: grid; gap: .45rem; max-width: 66ch; margin: .75rem 0; padding-left: 1.1rem; list-style: disc; }
+.dx-q__ans .h2-list li { font-size: .93rem; line-height: 1.65; }
+.dx-q__ans .h2-list li::marker { color: var(--tone); }
+.dx-q__ans .h2-list b { color: var(--forest); font-weight: 600; }
+
+
+/* ── BOOK · what the card says differently ───────────────────────────────── */
+.h2-ok { color: var(--t-ink) !important; }
+
+
+/* ── REFERENCES ─────────────────────────────────────────────────────────── */
+.h2-refs { position: relative; padding: var(--pad) var(--gut); background: var(--parchment); }
+.h2-refs__wrap { max-width: min(var(--maxw), 62rem); margin: 0 auto; }
+.h2-refs__head { max-width: 58ch; margin-bottom: var(--stack); }
+.h2-refs__set + .h2-refs__set { margin-top: clamp(1.6rem, 3vw, 2.2rem); }
+.h2-refs__h {
+    padding-bottom: .6rem; margin-bottom: .2rem;
+    border-bottom: 1px solid var(--forest);
+    font-family: var(--dx-mono); font-size: .6rem; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--forest);
+}
+.h2-refs__list { list-style: none; }
+.h2-refs__list li { padding: .85rem 0; border-bottom: 1px solid var(--rule); font-size: .86rem; line-height: 1.6; color: var(--ink-soft); }
+.h2-refs__list a { color: var(--forest); text-decoration: underline; text-decoration-color: var(--t-line); text-underline-offset: 3px; transition: text-decoration-color .3s var(--ease); }
+.h2-refs__list a:hover { text-decoration-color: var(--tone); }
+.h2-refs__type {
+    display: inline-block; margin-left: .35rem; padding: .1rem .45rem;
+    border: 1px solid var(--rule); border-radius: 999px;
+    font-family: var(--dx-mono); font-size: .5rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--mist); vertical-align: .15em;
+}
+.h2-refs__note { max-width: 78ch; margin-top: 1.4rem; font-size: .77rem; line-height: 1.68; color: var(--mist); }

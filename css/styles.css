@@ -461,6 +461,11 @@ ul { list-style: none; }
 }
 .head__panel-foot i { font-size: 1.3em; }
 .head__panel-foot:hover { background: var(--forest); color: var(--gold-lite); gap: .95rem; }
+
+/* the second shelf of the flyout: services that are not infusions */
+.head__panel-eyebrow--next { margin-top: .85rem; }
+.head__panel-grid--one { grid-template-columns: 1fr; }
+.head__panel-grid--one .hd-item { border-bottom: 0; }
  
 /* ---------- the actions ---------- */
 .head__actions { display: flex; align-items: center; gap: clamp(0.85rem, 1.6vw, 1.5rem); }

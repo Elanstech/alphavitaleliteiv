@@ -171,8 +171,8 @@ const Nav = {
    /htmls/infusions/ depending on the host, and a trailing-slash mismatch is
    the classic reason an active state "randomly" stops working on deploy.
 
-   Nav order across the site: Home · Infusions (flyout) · Dr. Aronov ·
-   Research · FAQ · Contact.
+   Nav order across the site: Home · Services (flyout: IV infusions, then
+   hydrogen inhalation) · Dr. Aronov · Research · FAQ · Contact.
 ============================================================================= */
 const Trail = {
     /** '/Drips/Liver-Support/' · '/htmls/infusions.html' · '/index.html'
