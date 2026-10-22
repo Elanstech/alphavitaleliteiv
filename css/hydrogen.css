@@ -2,38 +2,17 @@
    ALPHA VITAL ELITE IV — HYDROGEN.CSS
    Hydrogen inhalation page. Builds on drips.css (the dx-* system) and only
    adds what an inhalation service needs that an infusion page does not:
-   the molecule in the hero, the comparison table, grouped questions and the
-   reference list.
+   a wide product photo in the hero, the comparison table and grouped
+   questions. The research lives on /research/#hydrogen with the other services.
 ============================================================================= */
 
 
-/* ── HERO · the molecule in place of a bag ───────────────────────────────── */
-.h2-orb { width: clamp(230px, 30vw, 390px); }
-.h2-orb svg { display: block; width: 100%; height: auto; overflow: visible; }
-.h2-orb__atom { filter: drop-shadow(0 30px 40px rgba(32, 52, 33, .18)); }
-.h2-orb__h {
-    font-family: var(--dx-serif); font-style: italic;
-    font-size: 64px; fill: rgba(255, 255, 255, .92);
-}
-.h2-orb__ring { fill: none; stroke: var(--t-line); stroke-width: 1; stroke-dasharray: 2 7; }
-.h2-orb__bub { fill: none; stroke: var(--tone); stroke-width: 1.4; opacity: 0; }
-
-@media (prefers-reduced-motion: no-preference) {
-    .h2-orb__ring { animation: h2-spin 60s linear infinite; transform-origin: 200px 200px; }
-    .h2-orb__float { animation: h2-float 7s ease-in-out infinite; transform-origin: 200px 200px; }
-    .h2-orb__bub { animation: h2-rise 6s ease-in infinite; }
-    .h2-orb__bub:nth-of-type(2) { animation-delay: 1.4s; animation-duration: 7s; }
-    .h2-orb__bub:nth-of-type(3) { animation-delay: 2.9s; animation-duration: 5.4s; }
-    .h2-orb__bub:nth-of-type(4) { animation-delay: 4.1s; animation-duration: 6.6s; }
-}
-@media (prefers-reduced-motion: reduce) { .h2-orb__bub { opacity: .45; } }
-
-@keyframes h2-spin  { to { transform: rotate(360deg); } }
-@keyframes h2-float { 50% { transform: translateY(-10px) rotate(-2deg); } }
-@keyframes h2-rise {
-    0%   { opacity: 0; transform: translateY(0); }
-    20%  { opacity: .7; }
-    100% { opacity: 0; transform: translateY(-120px); }
+/* ── HERO · the InhaleH2 unit in place of a bag ─────────────────────────── */
+/* the bag is tall; the unit is wide, so it gets more width and a softer shadow */
+.h2-unit { width: clamp(300px, 40vw, 560px); }
+.h2-unit img { filter: drop-shadow(0 36px 44px rgba(32, 52, 33, .2)); }
+@media (max-width: 900px) {
+    .h2-unit { width: clamp(240px, 78vw, 380px); }
 }
 
 
@@ -111,27 +90,3 @@
 
 /* ── BOOK · what the card says differently ───────────────────────────────── */
 .h2-ok { color: var(--t-ink) !important; }
-
-
-/* ── REFERENCES ─────────────────────────────────────────────────────────── */
-.h2-refs { position: relative; padding: var(--pad) var(--gut); background: var(--parchment); }
-.h2-refs__wrap { max-width: min(var(--maxw), 62rem); margin: 0 auto; }
-.h2-refs__head { max-width: 58ch; margin-bottom: var(--stack); }
-.h2-refs__set + .h2-refs__set { margin-top: clamp(1.6rem, 3vw, 2.2rem); }
-.h2-refs__h {
-    padding-bottom: .6rem; margin-bottom: .2rem;
-    border-bottom: 1px solid var(--forest);
-    font-family: var(--dx-mono); font-size: .6rem; font-weight: 500;
-    letter-spacing: .18em; text-transform: uppercase; color: var(--forest);
-}
-.h2-refs__list { list-style: none; }
-.h2-refs__list li { padding: .85rem 0; border-bottom: 1px solid var(--rule); font-size: .86rem; line-height: 1.6; color: var(--ink-soft); }
-.h2-refs__list a { color: var(--forest); text-decoration: underline; text-decoration-color: var(--t-line); text-underline-offset: 3px; transition: text-decoration-color .3s var(--ease); }
-.h2-refs__list a:hover { text-decoration-color: var(--tone); }
-.h2-refs__type {
-    display: inline-block; margin-left: .35rem; padding: .1rem .45rem;
-    border: 1px solid var(--rule); border-radius: 999px;
-    font-family: var(--dx-mono); font-size: .5rem; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--mist); vertical-align: .15em;
-}
-.h2-refs__note { max-width: 78ch; margin-top: 1.4rem; font-size: .77rem; line-height: 1.68; color: var(--mist); }

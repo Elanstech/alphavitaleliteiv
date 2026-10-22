@@ -24,6 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preload" as="image" href="../assets/images/logo.png" fetchpriority="high">
+<link rel="preload" as="image" href="../assets/hydrogen/inhaleh2-unit.webp" imagesrcset="../assets/hydrogen/inhaleh2-unit-sm.webp 640w, ../assets/hydrogen/inhaleh2-unit.webp 1061w" imagesizes="(max-width: 900px) 80vw, 40vw" fetchpriority="high">
 
 
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Cormorant:ital,wght@0,500;1,400;1,500&family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
@@ -222,7 +223,6 @@
   <a href="#compare" data-label="How it compares" aria-label="How it compares"></a>
   <a href="#questions" data-label="Questions" aria-label="Questions"></a>
   <a href="#book" data-label="Book" aria-label="Book"></a>
-  <a href="#references" data-label="References" aria-label="References"></a>
 </nav>
 
 
@@ -255,34 +255,12 @@
       </div>
     </div>
 
-    <figure class="dx-hero__bag h2-orb" aria-hidden="true">
-      <svg viewBox="0 0 400 400" role="presentation">
-        <defs>
-          <radialGradient id="h2Atom" cx="35%" cy="30%" r="75%">
-            <stop offset="0" style="stop-color:#fff" />
-            <stop offset=".45" style="stop-color:color-mix(in oklab, var(--tone) 55%, #fff)" />
-            <stop offset="1" style="stop-color:var(--tone)" />
-          </radialGradient>
-          <radialGradient id="h2Wash" cx="50%" cy="50%" r="50%">
-            <stop offset="0" style="stop-color:var(--tone);stop-opacity:.16" />
-            <stop offset="1" style="stop-color:var(--tone);stop-opacity:0" />
-          </radialGradient>
-        </defs>
-        <circle cx="200" cy="200" r="196" fill="url(#h2Wash)" />
-        <ellipse class="h2-orb__ring" cx="200" cy="200" rx="176" ry="118" transform="rotate(-18 200 200)" />
-        <g class="h2-orb__float">
-          <g class="h2-orb__atom">
-            <circle cx="152" cy="214" r="76" fill="url(#h2Atom)" />
-            <circle cx="250" cy="182" r="76" fill="url(#h2Atom)" />
-          </g>
-          <text class="h2-orb__h" x="130" y="236">H</text>
-          <text class="h2-orb__h" x="228" y="204">H</text>
-        </g>
-        <circle class="h2-orb__bub" cx="96"  cy="340" r="7" />
-        <circle class="h2-orb__bub" cx="312" cy="330" r="5" />
-        <circle class="h2-orb__bub" cx="214" cy="356" r="4" />
-        <circle class="h2-orb__bub" cx="150" cy="350" r="3" />
-      </svg>
+    <figure class="dx-hero__bag h2-unit">
+      <img src="../assets/hydrogen/inhaleh2-unit.webp"
+           srcset="../assets/hydrogen/inhaleh2-unit-sm.webp 640w, ../assets/hydrogen/inhaleh2-unit.webp 1061w"
+           sizes="(max-width: 900px) 80vw, 40vw"
+           alt="The InhaleH2 hydrogen inhalation unit with its hose and face-mask attachment"
+           width="1061" height="871" fetchpriority="high" decoding="async">
     </figure>
 
   </div>
@@ -377,20 +355,20 @@
     <p class="dx-mix__close dx-say">A quiet, cumulative practice &mdash; like sleep or hydration, the difference tends to show up over time.</p>
 
     <p class="h2-caveat" data-anim="rise">
-      Most of the studies listed below took place in hospitals or laboratories, with different devices,
+      Most of the published studies took place in hospitals or laboratories, with different devices,
       concentrations, session lengths and patient groups than a wellness session. They show what researchers
       are investigating; they do not predict how sessions will affect you. Individual results vary and are
       not guaranteed.
     </p>
 
-    <a class="dx-cite" href="#references" data-anim="pop">
+    <a class="dx-cite" href="../research/#hydrogen" data-anim="pop">
       <span class="dx-cite__icon" aria-hidden="true"><i class="ph-duotone ph-books"></i></span>
       <span class="dx-cite__main">
         <b class="dx-cite__eyebrow">The research</b>
         <b class="dx-cite__name">Selected peer-reviewed studies on molecular hydrogen</b>
         <b class="dx-cite__note">Reviews, laboratory studies and human trials in respiratory health, post-viral recovery, oncology support, brain health and cardiac recovery, each labelled by study type.</b>
       </span>
-      <span class="dx-cite__go"><span>See references</span><i class="ph ph-arrow-down"></i></span>
+      <span class="dx-cite__go"><span>Read the research</span><i class="ph ph-arrow-up-right"></i></span>
     </a>
 
   </div>
@@ -762,7 +740,7 @@
     </div>
 
     <div class="dx-card__col" data-anim="pop" data-delay="120">
-      <figure class="dx-card__shot"><img src="../assets/photos/room-chairs.webp" srcset="../assets/photos/room-chairs-sm.webp 900w, ../assets/photos/room-chairs.webp 1800w" sizes="(max-width: 900px) 100vw, 38vw" alt="Treatment chairs at Alpha Vital Elite, Middle Village" width="1800" height="1200" loading="lazy" decoding="async"></figure>
+      <figure class="dx-card__shot"><img src="../assets/hydrogen/inhaleh2-mask-hose.webp" srcset="../assets/hydrogen/inhaleh2-mask-hose-sm.webp 900w, ../assets/hydrogen/inhaleh2-mask-hose.webp 1600w" sizes="(max-width: 900px) 100vw, 38vw" alt="The InhaleH2 unit with its breathing hose and face mask" width="1600" height="1067" loading="lazy" decoding="async"></figure>
       <dl class="dx-card">
         <div><dt>Service</dt><dd>Hydrogen inhalation</dd></div>
         <div><dt>Session</dt><dd>30 &ndash; 90 min</dd></div>
@@ -785,67 +763,6 @@
     <p>Hydrogen inhalation is offered as an elective wellness service. Clinical benefits and long-term safety for general wellness use have not been established, and no outcome is guaranteed. This service is not intended to diagnose, treat, cure or prevent disease and does not replace prescribed treatment, specialist care or emergency care.</p>
     <b style="margin-top:1rem">Important disclaimer</b>
     <p>Hydrogen inhalation is offered as an elective general wellness service and is not intended to diagnose, treat, cure or prevent disease. Clinical evidence is limited, and no benefit or outcome is guaranteed. Research findings do not establish that our sessions reduce chemotherapy side effects. This service does not replace professional medical advice, diagnosis, prescribed treatment or emergency care. Eligibility requires prior physician review, and patients receiving cancer treatment must consult their treating oncologist before proceeding. Do not stop or change prescribed treatment. In a medical emergency, call 911 immediately.</p>
-  </div>
-</section>
-
-
-<section class="h2-refs" id="references">
-  <div class="h2-refs__wrap">
-
-    <header class="h2-refs__head">
-      <p class="dx-eyebrow" data-anim="rise"><i class="ph-duotone ph-books"></i> See references <s></s></p>
-      <h2 class="dx-h" data-anim="rise">The research<br>behind <em>hydrogen</em>.</h2>
-      <p class="dx-lede" data-anim="rise" data-delay="90">
-        Molecular hydrogen, once considered an inert gas, is gaining attention as an antioxidant,
-        anti-inflammatory and anti-apoptotic agent. These peer-reviewed sources are publicly accessible.
-      </p>
-    </header>
-
-    <div class="h2-refs__set" data-anim="rise">
-      <h3 class="h2-refs__h">Respiratory health</h3>
-      <ol class="h2-refs__list">
-        <li>Zajac D, Jampolska M, Wojciechowski P. <a href="https://pubmed.ncbi.nlm.nih.gov/40362357/" target="_blank" rel="noopener">Molecular Hydrogen in the Treatment of Respiratory Diseases.</a> Int J Mol Sci. 2025;26(9):4116. <span class="h2-refs__type">Review</span></li>
-        <li>Li H, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/41146240/" target="_blank" rel="noopener">Hydrogen inhalation ameliorates lung inflammation in mice with asthma.</a> Eur J Med Res. 2025;30(1):1024. <span class="h2-refs__type">Animal study</span></li>
-        <li>Zhang N, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/29568538/" target="_blank" rel="noopener">Inhalation of hydrogen gas attenuates airway inflammation and oxidative stress in allergic asthmatic mice.</a> Asthma Res Pract. 2018;4:3. <span class="h2-refs__type">Animal study</span></li>
-        <li>Lu W, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/30069319/" target="_blank" rel="noopener">Hydrogen gas inhalation protects against cigarette smoke-induced COPD development in mice.</a> J Thorac Dis. 2018;10(6):3232&ndash;3243. <span class="h2-refs__type">Animal study</span></li>
-      </ol>
-    </div>
-    <div class="h2-refs__set" data-anim="rise">
-      <h3 class="h2-refs__h">Recovery after viral illness</h3>
-      <ol class="h2-refs__list">
-        <li>Botek M, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/35206179/" target="_blank" rel="noopener">Molecular Hydrogen Positively Affects Physical and Respiratory Function in Acute Post-COVID-19 Patients: A New Perspective in Rehabilitation.</a> Int J Environ Res Public Health. 2022;19(4):1992. <span class="h2-refs__type">Human RCT &middot; inhaled</span></li>
-        <li>Salomez-Ihl C, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/39016593/" target="_blank" rel="noopener">H2 inhalation therapy in patients with moderate COVID-19 (H2COVID): a prospective ascending-dose phase I clinical trial.</a> Antimicrob Agents Chemother. 2024;68(8):e0057324. <span class="h2-refs__type">Phase I safety &middot; inhaled</span></li>
-      </ol>
-    </div>
-    <div class="h2-refs__set" data-anim="rise">
-      <h3 class="h2-refs__h">Support during cancer treatment</h3>
-      <ol class="h2-refs__list">
-        <li>Chen JB, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/32541132/" target="_blank" rel="noopener">Hydrogen therapy can be used to control tumor progression and alleviate the adverse events of medications in patients with advanced non-small cell lung cancer.</a> Med Gas Res. 2020;10(2):75&ndash;80. <span class="h2-refs__type">Small open-label trial &middot; inhaled</span></li>
-      </ol>
-    </div>
-    <div class="h2-refs__set" data-anim="rise">
-      <h3 class="h2-refs__h">Brain health</h3>
-      <ol class="h2-refs__list">
-        <li>Ono H, Nishijima Y, Ohta S. <a href="https://pubmed.ncbi.nlm.nih.gov/36986533/" target="_blank" rel="noopener">Therapeutic Inhalation of Hydrogen Gas for Alzheimer&rsquo;s Disease Patients and Subsequent Long-Term Follow-Up as a Disease-Modifying Treatment: An Open Label Pilot Study.</a> Pharmaceuticals. 2023;16(3):434. <span class="h2-refs__type">Open-label pilot &middot; inhaled</span></li>
-        <li>Yoritaka A, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/23400965/" target="_blank" rel="noopener">Pilot study of H2 therapy in Parkinson&rsquo;s disease: a randomized double-blind placebo-controlled trial.</a> Mov Disord. 2013;28(6):836&ndash;839. <span class="h2-refs__type">Pilot RCT &middot; hydrogen water</span></li>
-        <li>Wu C, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/36567361/" target="_blank" rel="noopener">Molecular Hydrogen: an Emerging Therapeutic Medical Gas for Brain Disorders.</a> Mol Neurobiol. 2023;60(4):1749&ndash;1765. <span class="h2-refs__type">Review</span></li>
-      </ol>
-    </div>
-    <div class="h2-refs__set" data-anim="rise">
-      <h3 class="h2-refs__h">Heart recovery</h3>
-      <ol class="h2-refs__list">
-        <li>Katsumata Y, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/28321000/" target="_blank" rel="noopener">The Effects of Hydrogen Gas Inhalation on Adverse Left Ventricular Remodeling After Percutaneous Coronary Intervention for ST-Elevated Myocardial Infarction &ndash; First Pilot Study in Humans.</a> Circ J. 2017;81(7):940&ndash;947. <span class="h2-refs__type">Human pilot &middot; inhaled</span></li>
-        <li>Tamura T, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/27334126/" target="_blank" rel="noopener">Feasibility and Safety of Hydrogen Gas Inhalation for Post-Cardiac Arrest Syndrome &ndash; First-in-Human Pilot Study.</a> Circ J. 2016;80(8):1870&ndash;1873. <span class="h2-refs__type">Human pilot &middot; inhaled</span></li>
-        <li>Hayashida K, et al. <a href="https://pubmed.ncbi.nlm.nih.gov/18541148/" target="_blank" rel="noopener">Inhalation of hydrogen gas reduces infarct size in the rat model of myocardial ischemia-reperfusion injury.</a> Biochem Biophys Res Commun. 2008;373(1):30&ndash;35. <span class="h2-refs__type">Animal study</span></li>
-      </ol>
-    </div>
-
-    <p class="h2-refs__note">
-      Study labels show what kind of evidence each source is. Laboratory and animal findings do not
-      establish effects in people, and studies of hydrogen-rich water or high-concentration hospital
-      mixtures do not establish the effects of a wellness inhalation session.
-    </p>
-
   </div>
 </section>
 
