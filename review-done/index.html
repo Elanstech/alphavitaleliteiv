@@ -20,7 +20,11 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'AW-18485585918');
+  // Report only the page path - the ?first= and ?drip= details stay off Google's servers.
+  gtag('config', 'AW-18485585918', { page_location: location.origin + location.pathname });
+
+  // Google Ads conversion: Screening submitted (website)
+  gtag('event', 'conversion', {'send_to': 'AW-18485585918/0AuGCO_8q6UdEP7Pzu5E'});
 </script>
 
 
