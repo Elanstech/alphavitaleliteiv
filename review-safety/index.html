@@ -2,6 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18485585918"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // Report only the page path - the name, email and phone in this URL stay off Google's servers.
+  gtag('config', 'AW-18485585918', { page_location: location.origin + location.pathname,
+                                     page_referrer: document.referrer.split('?')[0] });
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <meta name="referrer" content="no-referrer">
