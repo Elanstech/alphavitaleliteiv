@@ -4492,3 +4492,57 @@ body.is-theater .fab, body.is-theater .totop { opacity: 0; pointer-events: none;
     .press--photo .press__wrap { grid-template-columns: 1fr; }
     .press--photo .press__shot { grid-column: 1; grid-row: auto; }
 }
+
+
+/* =============================================================================
+   HOME · HYDROGEN INHALATION BAND
+   A deliberately small promo between the infusion shelf and the reel: one
+   line of pitch and a "learn more", not another chapter.
+============================================================================= */
+.h2band { position: relative; padding: clamp(2.25rem, 5vw, 3.75rem) var(--gut); background: var(--parchment); }
+.h2band__card {
+    --tone: #5E8FB3;
+    position: relative; overflow: hidden;
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+    gap: clamp(1.1rem, 3vw, 2.75rem);
+    max-width: 1180px; margin: 0 auto;
+    padding: clamp(1.1rem, 2.4vw, 1.6rem) clamp(1.25rem, 3vw, 2.5rem);
+    border: 1px solid var(--rule); border-radius: 18px;
+    background: linear-gradient(105deg, color-mix(in oklab, var(--tone) 13%, var(--cream)) 0%, var(--cream) 58%);
+    box-shadow: 0 30px 60px -48px rgba(16, 27, 19, .45);
+}
+.h2band__art { width: clamp(108px, 12vw, 164px); margin: 0; }
+.h2band__art img { display: block; width: 100%; height: auto; filter: drop-shadow(0 16px 20px rgba(32, 52, 33, .2)); transition: transform .8s var(--ease); }
+.h2band__card:hover .h2band__art img { transform: translateY(-4px) scale(1.03); }
+.h2band__eyebrow {
+    display: flex; align-items: center; gap: .65rem; margin-bottom: .55rem;
+    font-family: var(--caps); font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; color: var(--forest);
+}
+.h2band__eyebrow span {
+    padding: .25rem .6rem; border-radius: 999px; background: var(--tone); color: #fff;
+    font-family: var(--ui); font-size: .56rem; font-weight: 600; letter-spacing: .16em;
+}
+.h2band__title {
+    margin-bottom: .55rem;
+    font-family: var(--display); font-weight: 400; font-size: clamp(1.45rem, 2.5vw, 2.1rem);
+    line-height: 1.12; letter-spacing: -.01em; color: var(--forest);
+}
+.h2band__title em { font-family: var(--accent); font-style: italic; font-weight: 500; color: color-mix(in oklab, var(--tone) 62%, var(--forest)); }
+.h2band__text { max-width: 60ch; font-family: var(--ui); font-size: .93rem; line-height: 1.66; color: var(--ink-soft); }
+.h2band__meta {
+    display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .7rem; margin-top: .8rem;
+    font-family: var(--ui); font-size: .64rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--mist);
+}
+.h2band__meta i { width: 3px; height: 3px; border-radius: 50%; background: var(--tone); }
+.h2band__go { white-space: nowrap; }
+
+@media (max-width: 880px) {
+    .h2band__card { grid-template-columns: auto minmax(0, 1fr); }
+    .h2band__go { grid-column: 2; justify-self: start; }
+}
+@media (max-width: 560px) {
+    .h2band__card { grid-template-columns: 1fr; gap: .9rem; }
+    .h2band__art { width: 132px; }
+    .h2band__go { grid-column: 1; width: 100%; }
+}
+
