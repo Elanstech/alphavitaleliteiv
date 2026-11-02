@@ -97,23 +97,57 @@
         "postalCode": "11379",
         "addressCountry": "US"
       },
-      "geo": { "@type": "GeoCoordinates", "latitude": 40.7156, "longitude": -73.8779 },
-      "openingHoursSpecification": [{
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-        "opens": "09:00",
-        "closes": "17:00"
-      }],
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 40.7156,
+        "longitude": -73.8779
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
+          "opens": "09:00",
+          "closes": "17:00"
+        }
+      ],
       "areaServed": [
-        { "@type": "Place", "name": "Middle Village, Queens, NY" },
-        { "@type": "Place", "name": "Forest Hills, Queens, NY" },
-        { "@type": "Place", "name": "Rego Park, Queens, NY" },
-        { "@type": "Place", "name": "Glendale, Queens, NY" },
-        { "@type": "Place", "name": "Maspeth, Queens, NY" },
-        { "@type": "Place", "name": "Ridgewood, Queens, NY" }
+        {
+          "@type": "Place",
+          "name": "Middle Village, Queens, NY"
+        },
+        {
+          "@type": "Place",
+          "name": "Forest Hills, Queens, NY"
+        },
+        {
+          "@type": "Place",
+          "name": "Rego Park, Queens, NY"
+        },
+        {
+          "@type": "Place",
+          "name": "Glendale, Queens, NY"
+        },
+        {
+          "@type": "Place",
+          "name": "Maspeth, Queens, NY"
+        },
+        {
+          "@type": "Place",
+          "name": "Ridgewood, Queens, NY"
+        }
       ],
       "medicalSpecialty": "https://schema.org/PublicHealth",
-      "physician": { "@id": "https://www.alphaeliteiv.com/#aronov" },
+      "physician": {
+        "@id": "https://www.alphaeliteiv.com/#aronov"
+      },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Services",
@@ -122,17 +156,6 @@
             "@type": "OfferCatalog",
             "name": "IV Infusions",
             "itemListElement": [
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Service",
-                  "name": "Glutathione IV Injection",
-                  "url": "https://www.alphaeliteiv.com/drips/glutathione/",
-                  "serviceType": "IV infusion therapy"
-                },
-                "price": "100",
-                "priceCurrency": "USD"
-              },
               {
                 "@type": "Offer",
                 "itemOffered": {
@@ -201,7 +224,7 @@
           },
           {
             "@type": "OfferCatalog",
-            "name": "Vitamin Injections",
+            "name": "Injections",
             "itemListElement": [
               {
                 "@type": "Offer",
@@ -210,7 +233,9 @@
                   "name": "Vitamin D3 Injection (100,000 IU)",
                   "url": "https://www.alphaeliteiv.com/injections/vitamin-d3/",
                   "serviceType": "Vitamin injection (intramuscular)"
-                }
+                },
+                "price": "75",
+                "priceCurrency": "USD"
               },
               {
                 "@type": "Offer",
@@ -219,7 +244,20 @@
                   "name": "B12 Injection (Methylcobalamin)",
                   "url": "https://www.alphaeliteiv.com/injections/b12/",
                   "serviceType": "Vitamin injection (intramuscular)"
-                }
+                },
+                "price": "75",
+                "priceCurrency": "USD"
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Glutathione IV Injection",
+                  "url": "https://www.alphaeliteiv.com/drips/glutathione/",
+                  "serviceType": "Slow IV push injection"
+                },
+                "price": "100",
+                "priceCurrency": "USD"
               }
             ]
           },
@@ -255,15 +293,21 @@
       "jobTitle": "Physician",
       "url": "https://www.alphaeliteiv.com/about/",
       "image": "https://www.alphaeliteiv.com/assets/gen-images/dr.aronov.png",
-      "worksFor": { "@id": "https://www.alphaeliteiv.com/#clinic" },
-      "sameAs": ["https://www.instagram.com/dr.violetaaronov/"]
+      "worksFor": {
+        "@id": "https://www.alphaeliteiv.com/#clinic"
+      },
+      "sameAs": [
+        "https://www.instagram.com/dr.violetaaronov/"
+      ]
     },
     {
       "@type": "WebSite",
       "@id": "https://www.alphaeliteiv.com/#website",
       "url": "https://www.alphaeliteiv.com/",
       "name": "Alpha Vital Elite IV",
-      "publisher": { "@id": "https://www.alphaeliteiv.com/#clinic" },
+      "publisher": {
+        "@id": "https://www.alphaeliteiv.com/#clinic"
+      },
       "inLanguage": "en-US"
     }
   ]
@@ -339,36 +383,36 @@
           <p class="head__panel-eyebrow">IV Infusions</p>
 
           <div class="head__panel-grid">
-            <a class="hd-item" href="drips/glutathione/" style="--tone:#7FA08C">
-              <i>I</i><span>Glutathione IV Injection</span><b>$100</b>
-            </a>
             <a class="hd-item" href="drips/antioxidant/" style="--tone:#4F7D5E">
-              <i>II</i><span>Antioxidant &times;3 Reset</span><b>$400</b>
+              <i>I</i><span>Antioxidant &times;3 Reset</span><b>$400</b>
             </a>
             <a class="hd-item" href="drips/immun-o-boost/" style="--tone:#D9982A">
-              <i>III</i><span>Immun-O-Boost IV Support</span><b>$550</b>
+              <i>II</i><span>Immun-O-Boost IV Support</span><b>$550</b>
             </a>
             <a class="hd-item" href="drips/revive/" style="--tone:#35707F">
-              <i>IV</i><span>Revive IV Support</span><b>$325</b>
+              <i>III</i><span>Revive IV Support</span><b>$325</b>
             </a>
             <a class="hd-item" href="drips/liquixo/" style="--tone:#B34E37">
-              <i>V</i><span>LIQUIXO Muscle Recovery</span><b>$395</b>
+              <i>IV</i><span>LIQUIXO Muscle Recovery</span><b>$395</b>
             </a>
             <a class="hd-item" href="drips/stress-brain/" style="--tone:#7A5F98">
-              <i>VI</i><span>Stress &amp; Brain Wellness</span><b>$350</b>
+              <i>V</i><span>Stress &amp; Brain Wellness</span><b>$350</b>
             </a>
             <a class="hd-item" href="drips/customized/" style="--tone:#C1963F">
-              <i>VII</i><span>Customized IV Infusion</span><b>Consult</b>
+              <i>VI</i><span>Customized IV Infusion</span><b>Consult</b>
             </a>
           </div>
 
-          <p class="head__panel-eyebrow head__panel-eyebrow--next">Injections &middot; Intramuscular</p>
+          <p class="head__panel-eyebrow head__panel-eyebrow--next">Injections</p>
           <div class="head__panel-grid">
             <a class="hd-item" href="injections/vitamin-d3/" style="--tone:#D9A21E">
-              <i>D&#8323;</i><span>Vitamin D3 Injection</span><b>IM</b>
+              <i>D&#8323;</i><span>Vitamin D3 Injection</span><b>$75</b>
             </a>
-            <a class="hd-item" href="injections/b12/" style="--tone:#C2334E">
-              <i>B&#8321;&#8322;</i><span>B12 Injection</span><b>IM</b>
+            <a class="hd-item" href="injections/b12/" style="--tone:#2F6FD6">
+              <i>B&#8321;&#8322;</i><span>B12 Injection</span><b>$75</b>
+            </a>
+            <a class="hd-item" href="drips/glutathione/" style="--tone:#7FA08C">
+              <i>G</i><span>Glutathione IV Push</span><b>$100</b>
             </a>
           </div>
 
@@ -418,15 +462,15 @@
           <a class="menu__sub-all" href="infusions/">
             <span>All IV infusions</span><span class="ph ph-arrow-right"></span>
           </a>
-          <a class="menu__sub-item" href="drips/glutathione/" style="--tone:#7FA08C"><i>I</i>Glutathione IV Injection</a>
-          <a class="menu__sub-item" href="drips/antioxidant/" style="--tone:#4F7D5E"><i>II</i>Antioxidant &times;3 Reset</a>
-          <a class="menu__sub-item" href="drips/immun-o-boost/" style="--tone:#D9982A"><i>III</i>Immun-O-Boost IV Support</a>
-          <a class="menu__sub-item" href="drips/revive/" style="--tone:#35707F"><i>IV</i>Revive IV Support</a>
-          <a class="menu__sub-item" href="drips/liquixo/" style="--tone:#B34E37"><i>V</i>LIQUIXO Muscle Recovery</a>
-          <a class="menu__sub-item" href="drips/stress-brain/" style="--tone:#7A5F98"><i>VI</i>Stress &amp; Brain Wellness</a>
-          <a class="menu__sub-item" href="drips/customized/" style="--tone:#C1963F"><i>VII</i>Customized IV Infusion</a>
+          <a class="menu__sub-item" href="drips/antioxidant/" style="--tone:#4F7D5E"><i>I</i>Antioxidant &times;3 Reset</a>
+          <a class="menu__sub-item" href="drips/immun-o-boost/" style="--tone:#D9982A"><i>II</i>Immun-O-Boost IV Support</a>
+          <a class="menu__sub-item" href="drips/revive/" style="--tone:#35707F"><i>III</i>Revive IV Support</a>
+          <a class="menu__sub-item" href="drips/liquixo/" style="--tone:#B34E37"><i>IV</i>LIQUIXO Muscle Recovery</a>
+          <a class="menu__sub-item" href="drips/stress-brain/" style="--tone:#7A5F98"><i>V</i>Stress &amp; Brain Wellness</a>
+          <a class="menu__sub-item" href="drips/customized/" style="--tone:#C1963F"><i>VI</i>Customized IV Infusion</a>
           <a class="menu__sub-item" href="injections/vitamin-d3/" style="--tone:#D9A21E"><i>D&#8323;</i>Vitamin D3 Injection</a>
-          <a class="menu__sub-item" href="injections/b12/" style="--tone:#C2334E"><i>B&#8321;&#8322;</i>B12 Injection</a>
+          <a class="menu__sub-item" href="injections/b12/" style="--tone:#2F6FD6"><i>B&#8321;&#8322;</i>B12 Injection</a>
+          <a class="menu__sub-item" href="drips/glutathione/" style="--tone:#7FA08C"><i>G</i>Glutathione IV Push</a>
           <a class="menu__sub-item" href="hydrogen-inhalation/" style="--tone:#5E8FB3"><i>H&#8322;</i>Hydrogen Inhalation</a>
         </div>
       </details>
@@ -598,7 +642,7 @@
 </section>
 
 
-<section class="shelf" id="infusions">
+<section class="shelf" id="infusions" data-kind="infusion">
   <span class="shelf__wash"></span>
   <span class="shelf__mesh"></span>
 
@@ -615,20 +659,34 @@
     </h2>
 
     <div class="shelf__deck">
-      <p class="shelf__lede" data-reveal>
-        Each signature infusion is a thoughtfully designed starting point&mdash;not a
-        one-size-fits-all formula or a promise of results. Before scheduling, Dr.&nbsp;Aronov
-        reviews the health information you provide, including your medical history, medications,
-        allergies, and individual needs, to determine whether you may be eligible for IV support.
-        Based on that review, Dr.&nbsp;Aronov may recommend a signature infusion, modify the formula, or
-        create a customized option. IV support is intended to complement&mdash;not
-        replace&mdash;care from your primary care physician or specialist. Every infusion is
-        physician-reviewed and directed.
-      </p>
+      <div class="shelf__ledes" data-reveal>
+        <p class="shelf__lede" data-for="infusion">
+          Every IV infusion is physician-prepared, and each ingredient is given from its own
+          separate bag rather than mixed together in one. That way every component stays on its
+          own, and Dr.&nbsp;Aronov controls how each one is delivered. Before scheduling,
+          Dr.&nbsp;Aronov reviews your medical history, medications, allergies, and individual needs
+          to determine whether IV support is right for you&mdash;and may recommend a signature
+          infusion, modify the formula, or create a customized option. IV support is intended to
+          complement&mdash;not replace&mdash;care from your primary care physician or specialist.
+        </p>
+        <p class="shelf__lede" data-for="injection">
+          Vitamin&nbsp;D3 and B12 are given as intramuscular (IM) shots&mdash;a quick, nearly
+          painless injection into the muscle of your arm or hip. The muscle absorbs and releases
+          the vitamin directly, skipping the digestive system. Glutathione is different: it is
+          given as a slow IV push straight into a vein over about 15 minutes, on its own&mdash;not
+          mixed into a bag of IV fluids. Every injection is physician-reviewed and directed.
+        </p>
+        <p class="shelf__lede" data-for="inhalation">
+          Hydrogen inhalation is completely needle-free. You relax in a quiet, hands-free session
+          for 30 to 90 minutes while you breathe a gentle hydrogen blend through your own personal
+          mask&mdash;no IV, no downtime. A brief health screening is required before your first
+          session, and sessions are available Monday, Wednesday and Friday.
+        </p>
+      </div>
 
       <div class="shelf__stats" data-reveal>
-        <div class="shelf__stat"><b>6</b><span>Signature IV infusions</span></div>
-        <div class="shelf__stat"><b>1</b><span>Customized infusion option — based on individual needs</span></div>
+        <div class="shelf__stat"><b>6</b><span>IV infusions, each ingredient in its own bag</span></div>
+        <div class="shelf__stat"><b>3</b><span>Injections — Vitamin D3, B12 and Glutathione</span></div>
         <div class="shelf__stat shelf__stat--word"><b>No Screening Fee</b><span>A short safety questionnaire is required before scheduling to determine whether IV support is appropriate for you. There is no screening or physician review fee.</span></div>
       </div>
     </div>
@@ -637,40 +695,14 @@
 
   <div class="shelf__kinds" role="tablist" aria-label="Choose a service type" data-reveal>
     <button class="shelf__kind is-on" type="button" role="tab" aria-selected="true" data-kind="infusion">
-      <i class="ph ph-drop"></i><span class="shelf__kind-txt"><b>IV Infusions</b><small>7 options</small></span>
+      <i class="ph ph-drop"></i><span class="shelf__kind-txt"><b>IV Infusions</b><small>6 options</small></span>
     </button>
     <button class="shelf__kind" type="button" role="tab" aria-selected="false" data-kind="injection">
-      <i class="ph ph-syringe"></i><span class="shelf__kind-txt"><b>Injections</b><small>Vitamin D3 &middot; B12</small></span>
+      <i class="ph ph-syringe"></i><span class="shelf__kind-txt"><b>Injections</b><small>D3 &middot; B12 &middot; Glutathione</small></span>
     </button>
     <button class="shelf__kind" type="button" role="tab" aria-selected="false" data-kind="inhalation">
       <i class="ph ph-wind"></i><span class="shelf__kind-txt"><b>Inhalation</b><small>Hydrogen</small></span>
     </button>
-  </div>
-
-  <div class="shelf__filters" data-reveal>
-    <button class="shelf__pill is-on" type="button" data-filter="all"><i class="ph ph-squares-four"></i> All infusions <sup>7</sup></button>
-    <button class="shelf__pill" type="button" data-filter="glutathione"><i class="ph ph-drop"></i> Glutathione IV Therapy</button>
-    <button class="shelf__pill" type="button" data-filter="antioxidant"><i class="ph ph-atom"></i> Antioxidant Support</button>
-    <button class="shelf__pill" type="button" data-filter="immune"><i class="ph ph-shield-check"></i> Immune Support</button>
-    <button class="shelf__pill" type="button" data-filter="recovery"><i class="ph ph-arrows-clockwise"></i> Post-Illness Recovery</button>
-    <button class="shelf__pill" type="button" data-filter="muscle"><i class="ph ph-barbell"></i> Muscle Recovery</button>
-    <button class="shelf__pill" type="button" data-filter="mind"><i class="ph ph-brain"></i> Mind &amp; Focus Support</button>
-    <button class="shelf__pill" type="button" data-filter="custom"><i class="ph ph-pen-nib"></i> Customized IV Infusion</button>
-  </div>
-
-  <div class="shelf__jump" data-reveal>
-    <i class="ph ph-funnel-simple shelf__jump-ico"></i>
-    <select class="shelf__select" id="shelfJump">
-      <option value="all">All infusions &mdash; 7 options</option>
-      <option value="glutathione">Glutathione IV Therapy</option>
-      <option value="antioxidant">Antioxidant Support</option>
-      <option value="immune">Immune Support</option>
-      <option value="recovery">Post-Illness Recovery</option>
-      <option value="muscle">Muscle Recovery</option>
-      <option value="mind">Mind &amp; Focus Support</option>
-      <option value="custom">Customized IV Infusion</option>
-    </select>
-    <i class="ph ph-caret-down shelf__caret"></i>
   </div>
 
   <div class="shelf__pin" id="shelfPin">
@@ -678,33 +710,6 @@
       <ol class="shelf__track" id="shelfTrack">
 
 
-        <li class="plate" data-kind="infusion" data-tags="glutathione" style="--tone:var(--t-gluta);--i:0">
-          <a class="plate__bag" href="drips/glutathione/" tabindex="-1" aria-label="Glutathione IV Injection">
-            <span class="plate__pole"></span>
-            <img src="assets/drips/glutathione.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
-            <span class="plate__cast"></span>
-          </a>
-
-          <div class="plate__body">
-            <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-drop"></i> Glutathione IV Therapy</p>
-              <span class="plate__no">I</span>
-            </header>
-
-            <h3 class="plate__name"><a href="drips/glutathione/">Glutathione IV Injection</a></h3>
-            <p class="plate__note">Replenish your body&rsquo;s natural glutathione &mdash; supporting antioxidant defense, detoxification, and healthy-looking skin.</p>
-
-            <ul class="plate__ing"><li>Glutathione</li></ul>
-
-            <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock"></i> 15 min push &middot; 30 min visit</p>
-              <div class="plate__deal">
-                <p class="plate__price"><b>$100</b><span>per session</span></p>
-                <a class="plate__go" href="drips/glutathione/">View Infusion Details <i class="ph ph-arrow-up-right"></i></a>
-              </div>
-            </div>
-          </div>
-        </li>
 
         <li class="plate" data-kind="infusion" data-tags="antioxidant" style="--tone:var(--t-antiox);--i:1">
           <a class="plate__bag" href="drips/antioxidant/" tabindex="-1" aria-label="Antioxidant ×3 Reset">
@@ -716,7 +721,7 @@
           <div class="plate__body">
             <header class="plate__head">
               <p class="plate__cat"><i class="ph ph-atom"></i> Antioxidant Support</p>
-              <span class="plate__no">II</span>
+              <span class="plate__no">I</span>
             </header>
 
             <h3 class="plate__name"><a href="drips/antioxidant/">Antioxidant &times;3 Reset IV</a></h3>
@@ -744,7 +749,7 @@
           <div class="plate__body">
             <header class="plate__head">
               <p class="plate__cat"><i class="ph ph-shield-check"></i> Immune Support</p>
-              <span class="plate__no">III</span>
+              <span class="plate__no">II</span>
             </header>
 
             <h3 class="plate__name"><a href="drips/immun-o-boost/">Immun-O-Boost IV Support</a></h3>
@@ -772,7 +777,7 @@
           <div class="plate__body">
             <header class="plate__head">
               <p class="plate__cat"><i class="ph ph-arrows-clockwise"></i> Post-Illness Recovery</p>
-              <span class="plate__no">IV</span>
+              <span class="plate__no">III</span>
             </header>
 
             <h3 class="plate__name"><a href="drips/revive/">Revive IV Support</a></h3>
@@ -800,7 +805,7 @@
           <div class="plate__body">
             <header class="plate__head">
               <p class="plate__cat"><i class="ph ph-barbell"></i> Muscle Recovery</p>
-              <span class="plate__no">V</span>
+              <span class="plate__no">IV</span>
             </header>
 
             <h3 class="plate__name"><a href="drips/liquixo/">LIQUIXO Muscle Recovery IV</a></h3>
@@ -828,7 +833,7 @@
           <div class="plate__body">
             <header class="plate__head">
               <p class="plate__cat"><i class="ph ph-brain"></i> Mind &amp; Focus Support</p>
-              <span class="plate__no">VI</span>
+              <span class="plate__no">V</span>
             </header>
 
             <h3 class="plate__name"><a href="drips/stress-brain/">Stress &amp; Brain Wellness IV</a></h3>
@@ -858,7 +863,7 @@
           <div class="plate__body">
             <header class="plate__head">
               <p class="plate__cat"><i class="ph ph-pen-nib"></i> Customized IV Infusion</p>
-              <span class="plate__no">VII</span>
+              <span class="plate__no">VI</span>
             </header>
 
             <h3 class="plate__name"><a href="drips/customized/">Customized IV Infusion</a></h3>
@@ -880,7 +885,7 @@
         <li class="plate is-out" data-kind="injection" data-tags="vitamin-d3" style="--tone:#D9A21E;--i:7">
           <a class="plate__bag" href="injections/vitamin-d3/" tabindex="-1" aria-label="Vitamin D3 Injection">
             <span class="plate__pole"></span>
-            <img src="assets/injections/vitamin-d3.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="assets/injections/vitamin-d3.png" alt="" loading="lazy" decoding="async" width="893" height="1478">
             <span class="plate__cast"></span>
           </a>
 
@@ -898,17 +903,17 @@
             <div class="plate__foot">
               <p class="plate__clock"><i class="ph ph-clock"></i> Quick IM shot &middot; arm or hip</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>By request</b><span>call for pricing</span></p>
+                <p class="plate__price"><b>$75</b><span>per injection</span></p>
                 <a class="plate__go" href="injections/vitamin-d3/">View Injection Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
         </li>
 
-        <li class="plate is-out" data-kind="injection" data-tags="b12" style="--tone:#C2334E;--i:8">
+        <li class="plate is-out" data-kind="injection" data-tags="b12" style="--tone:#2F6FD6;--i:8">
           <a class="plate__bag" href="injections/b12/" tabindex="-1" aria-label="B12 Injection (Methylcobalamin)">
             <span class="plate__pole"></span>
-            <img src="assets/injections/b12.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <img src="assets/injections/b12.png" alt="" loading="lazy" decoding="async" width="893" height="1478">
             <span class="plate__cast"></span>
           </a>
 
@@ -926,8 +931,36 @@
             <div class="plate__foot">
               <p class="plate__clock"><i class="ph ph-clock"></i> Weekly or bi-weekly</p>
               <div class="plate__deal">
-                <p class="plate__price"><b>By request</b><span>call for pricing</span></p>
+                <p class="plate__price"><b>$75</b><span>per injection</span></p>
                 <a class="plate__go" href="injections/b12/">View Injection Details <i class="ph ph-arrow-up-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="plate is-out" data-kind="injection" data-tags="glutathione" style="--tone:var(--t-gluta);--i:0">
+          <a class="plate__bag" href="drips/glutathione/" tabindex="-1" aria-label="Glutathione IV Injection">
+            <span class="plate__pole"></span>
+            <img src="assets/drips/glutathione.png" alt="" loading="lazy" decoding="async" width="524" height="1478">
+            <span class="plate__cast"></span>
+          </a>
+
+          <div class="plate__body">
+            <header class="plate__head">
+              <p class="plate__cat"><i class="ph ph-drop"></i> Slow IV Push</p>
+              <span class="plate__no">GSH</span>
+            </header>
+
+            <h3 class="plate__name"><a href="drips/glutathione/">Glutathione IV Injection</a></h3>
+            <p class="plate__note">Replenish your body&rsquo;s natural glutathione &mdash; supporting antioxidant defense, detoxification, and healthy-looking skin.</p>
+
+            <ul class="plate__ing"><li>Glutathione</li><li>Slow IV push</li><li>No IV fluids</li></ul>
+
+            <div class="plate__foot">
+              <p class="plate__clock"><i class="ph ph-clock"></i> 15 min push &middot; 30 min visit</p>
+              <div class="plate__deal">
+                <p class="plate__price"><b>$100</b><span>per session</span></p>
+                <a class="plate__go" href="drips/glutathione/">View Injection Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>

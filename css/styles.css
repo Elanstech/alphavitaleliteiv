@@ -4545,6 +4545,12 @@ body.is-theater .fab, body.is-theater .totop { opacity: 0; pointer-events: none;
 .shelf[data-kind="injection"] .shelf__jump,
 .shelf[data-kind="inhalation"] .shelf__jump { display: none; }
 
+/* one explanation per tab */
+.shelf__lede[data-for] { display: none; }
+.shelf[data-kind="infusion"]   .shelf__lede[data-for="infusion"],
+.shelf[data-kind="injection"]  .shelf__lede[data-for="injection"],
+.shelf[data-kind="inhalation"] .shelf__lede[data-for="inhalation"] { display: block; }
+
 /* landscape artwork (the hydrogen unit) in a slot built for tall bags */
 .plate--wide .plate__bag img {
     height: auto; width: clamp(200px, 18vw, 280px);
