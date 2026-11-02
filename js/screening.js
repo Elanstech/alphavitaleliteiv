@@ -61,6 +61,8 @@ const MENU = {
     'liquixo':             { name: 'LIQUIXO Muscle Recovery',   price: '$395', chair: '45 min', tone: '#B34E37', img: 'liquixo' },
     'stress-brain':        { name: 'Stress & Brain Wellness',   price: '$350', chair: '1 h 30', tone: '#7A5F98', img: 'brainwellness' },
     'customized':          { name: 'Customized IV Infusion',    price: 'By consultation', chair: 'Individual', tone: '#C1963F', img: 'customized' },
+    'b12':                 { name: 'B12 Injection',             price: '$75',  chair: 'IM shot', tone: '#2F6FD6', img: 'injections/b12' },
+    'vitamin-d3':          { name: 'Vitamin D3 Injection',      price: '$75',  chair: 'IM shot', tone: '#D9A21E', img: 'injections/vitamin-d3' },
 };
 
 /* ?drip= is a slug on step I (from the picker) and the infusion NAME on step
@@ -103,7 +105,7 @@ const paint = () => {
 
     side.style.setProperty('--tone', drip.tone);
     const img = $('#bsBottleImg');
-    if (img) { img.src = `../assets/drips/${drip.img}.png`; img.alt = drip.name; }
+    if (img) { img.src = drip.img.includes('/') ? `../assets/${drip.img}.png` : `../assets/drips/${drip.img}.png`; img.alt = drip.name; }
 
     const set = (sel, val) => { const el = $(sel); if (el) el.textContent = val; };
     set('#bsName',  drip.name);

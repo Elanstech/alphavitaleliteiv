@@ -1190,6 +1190,16 @@ class Shelf {
 
         const setX = gsap.quickSetter(this.track, 'x', 'px');
 
+        /* the "choose one" stop: the section pins and holds still for about
+           half a screen of scrolling before the rail moves, with the tabs
+           pulsing, so people notice they can switch category */
+        const lead  = () => Math.round(window.innerHeight * 0.55);
+        const total = () => distance() + window.innerHeight * 0.6 + lead();
+        const prog  = (self) => {
+            const px = self.progress * total();
+            return clamp((px - lead()) / Math.max(1, total() - lead()), 0, 1);
+        };
+
         this.st = ScrollTrigger.create({
             trigger: this.pin,
             start: 'top top',
@@ -1197,7 +1207,7 @@ class Shelf {
                length is re-measured against the live set every refresh —
                which is what makes filtering shorten the section instead of
                leaving a stretch of empty scroll behind the last card. */
-            end: () => '+=' + (distance() + window.innerHeight * 0.6),
+            end: () => '+=' + total(),
             pin: this.viewport,
             pinSpacing: true,
             scrub: true,
@@ -1207,11 +1217,14 @@ class Shelf {
             onToggle: (self) => {
                 Shelf.pinned = self.isActive;
                 this.track.style.willChange = self.isActive ? 'transform' : 'auto';
+                if (!self.isActive) this.scene.classList.remove('is-dwell');
             },
             onUpdate: (self) => {
-                setX(-Math.round(self.progress * distance()));
+                const q = prog(self);
+                this.scene.classList.toggle('is-dwell', self.isActive && q === 0);
+                setX(-Math.round(q * distance()));
                 const list = this.live();
-                this.paint(Math.round(self.progress * (list.length - 1)));
+                this.paint(Math.round(q * (list.length - 1)));
 
                 // numerals counter-scroll — one pass, not a trigger per card
                 const vw = window.innerWidth;

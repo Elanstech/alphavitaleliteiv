@@ -403,16 +403,16 @@
             </a>
           </div>
 
-          <p class="head__panel-eyebrow head__panel-eyebrow--next">Injections</p>
+          <p class="head__panel-eyebrow head__panel-eyebrow--next">Injections &middot; Screening required</p>
           <div class="head__panel-grid">
-            <a class="hd-item" href="injections/vitamin-d3/" style="--tone:#D9A21E">
-              <i>D&#8323;</i><span>Vitamin D3 Injection</span><b>$75</b>
+            <a class="hd-item" href="drips/glutathione/" style="--tone:#7FA08C">
+              <i>G</i><span>Glutathione IV Push</span><b>$100</b>
             </a>
             <a class="hd-item" href="injections/b12/" style="--tone:#2F6FD6">
               <i>B&#8321;&#8322;</i><span>B12 Injection</span><b>$75</b>
             </a>
-            <a class="hd-item" href="drips/glutathione/" style="--tone:#7FA08C">
-              <i>G</i><span>Glutathione IV Push</span><b>$100</b>
+            <a class="hd-item" href="injections/vitamin-d3/" style="--tone:#D9A21E">
+              <i>D&#8323;</i><span>Vitamin D3 Injection</span><b>$75</b>
             </a>
           </div>
 
@@ -468,9 +468,9 @@
           <a class="menu__sub-item" href="drips/liquixo/" style="--tone:#B34E37"><i>IV</i>LIQUIXO Muscle Recovery</a>
           <a class="menu__sub-item" href="drips/stress-brain/" style="--tone:#7A5F98"><i>V</i>Stress &amp; Brain Wellness</a>
           <a class="menu__sub-item" href="drips/customized/" style="--tone:#C1963F"><i>VI</i>Customized IV Infusion</a>
-          <a class="menu__sub-item" href="injections/vitamin-d3/" style="--tone:#D9A21E"><i>D&#8323;</i>Vitamin D3 Injection</a>
-          <a class="menu__sub-item" href="injections/b12/" style="--tone:#2F6FD6"><i>B&#8321;&#8322;</i>B12 Injection</a>
           <a class="menu__sub-item" href="drips/glutathione/" style="--tone:#7FA08C"><i>G</i>Glutathione IV Push</a>
+          <a class="menu__sub-item" href="injections/b12/" style="--tone:#2F6FD6"><i>B&#8321;&#8322;</i>B12 Injection</a>
+          <a class="menu__sub-item" href="injections/vitamin-d3/" style="--tone:#D9A21E"><i>D&#8323;</i>Vitamin D3 Injection</a>
           <a class="menu__sub-item" href="hydrogen-inhalation/" style="--tone:#5E8FB3"><i>H&#8322;</i>Hydrogen Inhalation</a>
         </div>
       </details>
@@ -674,7 +674,8 @@
           painless injection into the muscle of your arm or hip. The muscle absorbs and releases
           the vitamin directly, skipping the digestive system. Glutathione is different: it is
           given as a slow IV push straight into a vein over about 15 minutes, on its own&mdash;not
-          mixed into a bag of IV fluids. Every injection is physician-reviewed and directed.
+          mixed into a bag of IV fluids. Every injection requires a short safety screening before
+          scheduling and is physician-reviewed and directed.
         </p>
         <p class="shelf__lede" data-for="inhalation">
           Hydrogen inhalation is completely needle-free. You relax in a quiet, hands-free session
@@ -686,27 +687,28 @@
 
       <div class="shelf__stats" data-reveal>
         <div class="shelf__stat"><b>6</b><span>IV infusions, each ingredient in its own bag</span></div>
-        <div class="shelf__stat"><b>3</b><span>Injections — Vitamin D3, B12 and Glutathione</span></div>
+        <div class="shelf__stat"><b>3</b><span>Injections — Glutathione, B12 and Vitamin D3</span></div>
         <div class="shelf__stat shelf__stat--word"><b>No Screening Fee</b><span>A short safety questionnaire is required before scheduling to determine whether IV support is appropriate for you. There is no screening or physician review fee.</span></div>
       </div>
     </div>
   </header>
 
 
-  <div class="shelf__kinds" role="tablist" aria-label="Choose a service type" data-reveal>
-    <button class="shelf__kind is-on" type="button" role="tab" aria-selected="true" data-kind="infusion">
-      <i class="ph ph-drop"></i><span class="shelf__kind-txt"><b>IV Infusions</b><small>6 options</small></span>
-    </button>
-    <button class="shelf__kind" type="button" role="tab" aria-selected="false" data-kind="injection">
-      <i class="ph ph-syringe"></i><span class="shelf__kind-txt"><b>Injections</b><small>D3 &middot; B12 &middot; Glutathione</small></span>
-    </button>
-    <button class="shelf__kind" type="button" role="tab" aria-selected="false" data-kind="inhalation">
-      <i class="ph ph-wind"></i><span class="shelf__kind-txt"><b>Inhalation</b><small>Hydrogen</small></span>
-    </button>
-  </div>
 
   <div class="shelf__pin" id="shelfPin">
     <div class="shelf__viewport" id="shelfViewport">
+      <div class="shelf__kinds" role="tablist" aria-label="Choose a service type">
+        <p class="shelf__choose" id="shelfChoose"><span>Choose one</span><i class="ph ph-hand-pointing"></i></p>
+        <button class="shelf__kind is-on" type="button" role="tab" aria-selected="true" data-kind="infusion">
+          <i class="ph ph-drop"></i><span class="shelf__kind-txt"><b>IV Infusions</b><small>6 options</small></span>
+        </button>
+        <button class="shelf__kind" type="button" role="tab" aria-selected="false" data-kind="injection">
+          <i class="ph ph-syringe"></i><span class="shelf__kind-txt"><b>Injections</b><small>Glutathione &middot; B12 &middot; D3</small></span>
+        </button>
+        <button class="shelf__kind" type="button" role="tab" aria-selected="false" data-kind="inhalation">
+          <i class="ph ph-wind"></i><span class="shelf__kind-txt"><b>Inhalation</b><small>Hydrogen</small></span>
+        </button>
+      </div>
       <ol class="shelf__track" id="shelfTrack">
 
 
@@ -881,63 +883,6 @@
           </div>
         </li>
 
-
-        <li class="plate is-out" data-kind="injection" data-tags="vitamin-d3" style="--tone:#D9A21E;--i:7">
-          <a class="plate__bag" href="injections/vitamin-d3/" tabindex="-1" aria-label="Vitamin D3 Injection">
-            <span class="plate__pole"></span>
-            <img src="assets/injections/vitamin-d3.png" alt="" loading="lazy" decoding="async" width="893" height="1478">
-            <span class="plate__cast"></span>
-          </a>
-
-          <div class="plate__body">
-            <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-sun"></i> Vitamin Injection</p>
-              <span class="plate__no">D&#8323;</span>
-            </header>
-
-            <h3 class="plate__name"><a href="injections/vitamin-d3/">Vitamin D3 Injection</a></h3>
-            <p class="plate__note">High-dose Vitamin D3 muscle injection that skips the digestive system &mdash; for immunity, bone strength, and energy when your blood test shows a level under 30.</p>
-
-            <ul class="plate__ing"><li>100,000 IU Vitamin D3</li><li>1 cc IM shot</li><li>Labs rechecked at 2&ndash;3 months</li></ul>
-
-            <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock"></i> Quick IM shot &middot; arm or hip</p>
-              <div class="plate__deal">
-                <p class="plate__price"><b>$75</b><span>per injection</span></p>
-                <a class="plate__go" href="injections/vitamin-d3/">View Injection Details <i class="ph ph-arrow-up-right"></i></a>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <li class="plate is-out" data-kind="injection" data-tags="b12" style="--tone:#2F6FD6;--i:8">
-          <a class="plate__bag" href="injections/b12/" tabindex="-1" aria-label="B12 Injection (Methylcobalamin)">
-            <span class="plate__pole"></span>
-            <img src="assets/injections/b12.png" alt="" loading="lazy" decoding="async" width="893" height="1478">
-            <span class="plate__cast"></span>
-          </a>
-
-          <div class="plate__body">
-            <header class="plate__head">
-              <p class="plate__cat"><i class="ph ph-lightning"></i> Vitamin Injection</p>
-              <span class="plate__no">B&#8321;&#8322;</span>
-            </header>
-
-            <h3 class="plate__name"><a href="injections/b12/">B12 Injection <small>(Methylcobalamin)</small></a></h3>
-            <p class="plate__note">The active coenzyme form of B12, ready to use the moment it&rsquo;s injected &mdash; for energy, brain clarity, and nerve health.</p>
-
-            <ul class="plate__ing"><li>5 mg Methylcobalamin</li><li>1 cc IM shot</li><li>Olympia Pharmacy</li></ul>
-
-            <div class="plate__foot">
-              <p class="plate__clock"><i class="ph ph-clock"></i> Weekly or bi-weekly</p>
-              <div class="plate__deal">
-                <p class="plate__price"><b>$75</b><span>per injection</span></p>
-                <a class="plate__go" href="injections/b12/">View Injection Details <i class="ph ph-arrow-up-right"></i></a>
-              </div>
-            </div>
-          </div>
-        </li>
-
         <li class="plate is-out" data-kind="injection" data-tags="glutathione" style="--tone:var(--t-gluta);--i:0">
           <a class="plate__bag" href="drips/glutathione/" tabindex="-1" aria-label="Glutathione IV Injection">
             <span class="plate__pole"></span>
@@ -961,6 +906,62 @@
               <div class="plate__deal">
                 <p class="plate__price"><b>$100</b><span>per session</span></p>
                 <a class="plate__go" href="drips/glutathione/">View Injection Details <i class="ph ph-arrow-up-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="plate is-out" data-kind="injection" data-tags="b12" style="--tone:#2F6FD6;--i:8">
+          <a class="plate__bag" href="injections/b12/" tabindex="-1" aria-label="B12 Injection (Methylcobalamin)">
+            <span class="plate__pole"></span>
+            <img src="assets/injections/b12.png" alt="" loading="lazy" decoding="async" width="893" height="1478">
+            <span class="plate__cast"></span>
+          </a>
+
+          <div class="plate__body">
+            <header class="plate__head">
+              <p class="plate__cat"><i class="ph ph-lightning"></i> IM Injection &middot; Screening required</p>
+              <span class="plate__no">B&#8321;&#8322;</span>
+            </header>
+
+            <h3 class="plate__name"><a href="injections/b12/">B12 Injection <small>(Methylcobalamin)</small></a></h3>
+            <p class="plate__note">The active coenzyme form of B12, ready to use the moment it&rsquo;s injected &mdash; for energy, brain clarity, and nerve health.</p>
+
+            <ul class="plate__ing"><li>5 mg Methylcobalamin</li><li>1 cc IM shot</li><li>Olympia Pharmacy</li></ul>
+
+            <div class="plate__foot">
+              <p class="plate__clock"><i class="ph ph-clock"></i> Weekly or bi-weekly</p>
+              <div class="plate__deal">
+                <p class="plate__price"><b>$75</b><span>per injection</span></p>
+                <a class="plate__go" href="injections/b12/">View Injection Details <i class="ph ph-arrow-up-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="plate is-out" data-kind="injection" data-tags="vitamin-d3" style="--tone:#D9A21E;--i:7">
+          <a class="plate__bag" href="injections/vitamin-d3/" tabindex="-1" aria-label="Vitamin D3 Injection">
+            <span class="plate__pole"></span>
+            <img src="assets/injections/vitamin-d3.png" alt="" loading="lazy" decoding="async" width="893" height="1478">
+            <span class="plate__cast"></span>
+          </a>
+
+          <div class="plate__body">
+            <header class="plate__head">
+              <p class="plate__cat"><i class="ph ph-sun"></i> IM Injection &middot; Screening required</p>
+              <span class="plate__no">D&#8323;</span>
+            </header>
+
+            <h3 class="plate__name"><a href="injections/vitamin-d3/">Vitamin D3 Injection</a></h3>
+            <p class="plate__note">High-dose Vitamin D3 muscle injection that skips the digestive system &mdash; for immunity, bone strength, and energy when your blood test shows a level under 30.</p>
+
+            <ul class="plate__ing"><li>100,000 IU Vitamin D3</li><li>1 cc IM shot</li><li>Labs rechecked at 2&ndash;3 months</li></ul>
+
+            <div class="plate__foot">
+              <p class="plate__clock"><i class="ph ph-clock"></i> Quick IM shot &middot; arm or hip</p>
+              <div class="plate__deal">
+                <p class="plate__price"><b>$75</b><span>per injection</span></p>
+                <a class="plate__go" href="injections/vitamin-d3/">View Injection Details <i class="ph ph-arrow-up-right"></i></a>
               </div>
             </div>
           </div>
@@ -1294,8 +1295,8 @@
           <li><a href="drips/stress-brain/">Stress &amp; Brain Wellness</a></li>
           <li><a href="drips/customized/">Customized IV Infusion</a></li>
           <li><a href="hydrogen-inhalation/">Hydrogen Inhalation</a></li>
-          <li><a href="injections/vitamin-d3/">Vitamin D3 Injection</a></li>
           <li><a href="injections/b12/">B12 Injection</a></li>
+          <li><a href="injections/vitamin-d3/">Vitamin D3 Injection</a></li>
         </ul>
       </div>
 

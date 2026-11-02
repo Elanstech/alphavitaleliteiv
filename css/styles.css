@@ -4545,6 +4545,41 @@ body.is-theater .fab, body.is-theater .totop { opacity: 0; pointer-events: none;
 .shelf[data-kind="injection"] .shelf__jump,
 .shelf[data-kind="inhalation"] .shelf__jump { display: none; }
 
+/* the tabs ride inside the pinned viewport, so they stay on screen while the
+   rail scrolls — and the rail holds still for a beat first ("choose one") */
+@media (min-width: 901px) {
+    .shelf__viewport {
+        flex-direction: column; justify-content: center; align-items: stretch;
+        padding-top: clamp(4.25rem, 9vh, 5.5rem);
+    }
+    .shelf__viewport > .shelf__kinds {
+        width: 100%; max-width: none; margin: 0;
+        padding-bottom: clamp(.6rem, 2vh, 1.4rem);
+        align-items: center;
+    }
+}
+.shelf__choose {
+    display: inline-flex; align-items: center; gap: .45rem;
+    margin-right: .4rem;
+    font-family: var(--micro); font-size: .62rem; font-weight: 600;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--gold-deep);
+}
+.shelf__choose i { font-size: 1.1rem; transform: rotate(90deg); }
+.shelf.is-dwell .shelf__choose i { animation: shelfNudge 1.1s var(--ease) infinite; }
+.shelf.is-dwell .shelf__kind:not(.is-on) { animation: shelfGlow 1.6s ease-in-out infinite; }
+.shelf.is-dwell .shelf__kind:nth-of-type(3) { animation-delay: .25s; }
+@keyframes shelfNudge { 0%,100% { transform: rotate(90deg) translateY(0); } 50% { transform: rotate(90deg) translateY(-5px); } }
+@keyframes shelfGlow {
+    0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--gold) 0%, transparent); }
+    50%     { box-shadow: 0 0 0 5px color-mix(in oklab, var(--gold) 28%, transparent); border-color: var(--gold); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .shelf.is-dwell .shelf__choose i, .shelf.is-dwell .shelf__kind { animation: none; }
+}
+@media (max-width: 900px) {
+    .shelf__choose { grid-column: 1 / -1; justify-content: center; margin: 0 0 .1rem; }
+}
+
 /* one explanation per tab */
 .shelf__lede[data-for] { display: none; }
 .shelf[data-kind="infusion"]   .shelf__lede[data-for="infusion"],
