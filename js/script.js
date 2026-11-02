@@ -1123,6 +1123,7 @@ class Shelf {
         this.next     = $('#shelfNext');
         this.jump     = $('#shelfJump');
         this.at       = 'all';
+        this.kind     = 'infusion';
         this.last     = -1;
         this.st       = null;
         this.rail     = null;
@@ -1134,6 +1135,8 @@ class Shelf {
 
         this.filters();
         this.skipButton();
+        this.scene.dataset.kind = this.kind;
+        this.mark();
         this.count();
         this.paint(0);
 
@@ -1311,22 +1314,56 @@ class Shelf {
         });
 
         this.jump?.addEventListener('change', () => this.applyFilter(this.jump.value));
+
+        // the service-type switcher: IV infusions · injections · inhalation
+        $$('[data-kind]', this.scene).forEach((tab) => {
+            if (tab.classList.contains('plate')) return;
+            tab.addEventListener('click', () => this.applyKind(tab.dataset.kind));
+        });
+    }
+
+    /** hide every plate that is not in the open kind or the active pill */
+    mark() {
+        $$('.plate', this.track).forEach((plate) => {
+            const tags = (plate.dataset.tags || '').split(' ');
+            const kindOk = (plate.dataset.kind || 'infusion') === this.kind;
+            const tagOk  = this.at === 'all' || tags.includes(this.at);
+            plate.classList.toggle('is-out', !(kindOk && tagOk));
+        });
+    }
+
+    syncControls() {
+        $$('[data-filter]', this.scene).forEach((p) => {
+            p.classList.toggle('is-on', p.dataset.filter === this.at);
+        });
+        if (this.jump && this.jump.value !== this.at) this.jump.value = this.at;
+    }
+
+    applyKind(kind) {
+        if (!kind || kind === this.kind) return;
+        this.kind = kind;
+        this.at = 'all';
+        this.scene.dataset.kind = kind;
+
+        $$('.shelf__kind', this.scene).forEach((tab) => {
+            const on = tab.dataset.kind === kind;
+            tab.classList.toggle('is-on', on);
+            tab.setAttribute('aria-selected', String(on));
+        });
+
+        this.syncControls();
+        this.refresh();
     }
 
     applyFilter(key) {
         if (!key || key === this.at) return;
         this.at = key;
+        this.syncControls();
+        this.refresh();
+    }
 
-        // keep both controls in step, whichever one was used
-        $$('[data-filter]', this.scene).forEach((p) => {
-            p.classList.toggle('is-on', p.dataset.filter === key);
-        });
-        if (this.jump && this.jump.value !== key) this.jump.value = key;
-
-        $$('.plate', this.track).forEach((plate) => {
-            const tags = (plate.dataset.tags || '').split(' ');
-            plate.classList.toggle('is-out', !(key === 'all' || tags.includes(key)));
-        });
+    refresh() {
+        this.mark();
 
         this.last = -1;
         this.count();
@@ -1336,12 +1373,15 @@ class Shelf {
         if (this.rail) { this.rail.refilter(); }
         else { this.track.scrollLeft = 0; this.paint(0); }
 
-        if (typeof window.gsap === 'undefined' || REDUCED) return;
+        if (typeof window.gsap === 'undefined' || REDUCED) {
+            this.live().forEach((p) => p.classList.add('is-active'));
+            return;
+        }
 
         gsap.set(this.track, { x: 0 });
         gsap.fromTo(this.live(),
             { opacity: 0, y: 24 },
-            { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04 });
+            { opacity: 1, y: 0, duration: .6, ease: 'expo.out', stagger: .04, clearProps: 'opacity' });
 
         /* THE FILTER → BLANK-SECTIONS BUG, FIXED.
            Filtering changes the pin's scroll length, which changes the height

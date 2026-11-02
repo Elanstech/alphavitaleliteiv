@@ -110,6 +110,26 @@
       "source": "/drips/joint-skin.html",
       "destination": "/infusions/",
       "permanent": true
+    },
+    {
+      "source": "/injections",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/b12",
+      "destination": "/injections/b12/",
+      "permanent": true
+    },
+    {
+      "source": "/vitamin-d3",
+      "destination": "/injections/vitamin-d3/",
+      "permanent": true
+    },
+    {
+      "source": "/vitamin-d",
+      "destination": "/injections/vitamin-d3/",
+      "permanent": true
     }
   ]
 }
