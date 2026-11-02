@@ -1002,6 +1002,7 @@ const screener = () => {
     };
 
     /* ── step one: their details ──────────────────────────────────────────── */
+    let contactCounted = false;
     $('#sqBegin').addEventListener('click', () => {
         const err = $('#sqErr');
         const val = (id) => ($(id).value || '').trim();
@@ -1023,6 +1024,14 @@ const screener = () => {
         PATIENT.drip  = $('#sqDrip').value || 'Not sure yet';
 
         post(JOTFORM.contact, { ref: REF, ...PATIENT });
+
+        /* Google Ads "Screening started (contact info)": counted only here, once the
+           details are valid and sent - opening the page is not a lead. Event name and
+           label only; no personal data goes to Google. */
+        if (!contactCounted && typeof window.gtag === 'function') {
+            contactCounted = true;
+            try { window.gtag('event', 'conversion', { send_to: 'AW-18485585918/0Fa5CJ-HraUdEP7Pzu5E' }); } catch (e) {}
+        }
 
         setStep(2);
         step = 0; ANSWERS.length = 0;

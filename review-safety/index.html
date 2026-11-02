@@ -13,8 +13,8 @@
   gtag('config', 'AW-18485585918', { page_location: location.origin + location.pathname,
                                      page_referrer: document.referrer.split('?')[0] });
 
-  // Google Ads conversion: Screening started (contact info) - tracked only, not bid on yet
-  gtag('event', 'conversion', {'send_to': 'AW-18485585918/0Fa5CJ-HraUdEP7Pzu5E'});
+  // Google Ads conversion "Screening started (contact info)" fires from js/screening.js
+  // only after a valid name/email/phone is sent - not on page load.
 </script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
