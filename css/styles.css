@@ -479,6 +479,25 @@ ul { list-style: none; }
     transition: color .35s var(--ease);
 }
 .head__tel:hover { color: var(--gold-deep); }
+.head__staff {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--caps);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--forest);
+    white-space: nowrap;
+    transition: color .35s var(--ease);
+}
+.head__staff i { font-size: 1rem; }
+.head__staff:hover { color: var(--gold-deep); }
+@media (max-width: 780px) {
+    .head__staff span { display: none; }
+    .head__staff { width: 44px; height: 44px; justify-content: center; }
+    .head__staff i { font-size: 1.25rem; }
+}
 .head__cta { padding: 0.78rem 1.4rem; font-size: 0.68rem; }
  
 .head__burger {
