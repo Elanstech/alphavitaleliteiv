@@ -23,8 +23,11 @@
   // Report only the page path - the ?first= and ?drip= details stay off Google's servers.
   gtag('config', 'AW-18485585918', { page_location: location.origin + location.pathname });
 
-  // Google Ads conversion: Screening submitted (website)
-  gtag('event', 'conversion', {'send_to': 'AW-18485585918/0AuGCO_8q6UdEP7Pzu5E'});
+  // Google Ads conversion: Screening submitted (website) - only when arriving from a passed
+  // screening (it always sends ?ref=AVE-...), not on a refresh, bookmark or direct visit.
+  if (/[?&]ref=AVE-/.test(location.search)) {
+    gtag('event', 'conversion', {'send_to': 'AW-18485585918/0AuGCO_8q6UdEP7Pzu5E'});
+  }
 </script>
 
 
