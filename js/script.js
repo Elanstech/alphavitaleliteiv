@@ -2435,5 +2435,20 @@ if (document.readyState === 'loading') {
     boot();
 }
 
+/* Google Ads "Site call click": a tap on the clinic's number anywhere on the site
+   (tel:+13477148660 only - never the 911 link on the safety screening). Once per page
+   view; event name and label only, no personal data. Capture phase so it still fires
+   when another handler stops the click. */
+(() => {
+    let sent = false;
+    document.addEventListener('click', (ev) => {
+        const a = ev.target?.closest?.('a[href^="tel:"]');
+        if (!a || sent || !/3477148660/.test(a.getAttribute('href') || '')) return;
+        if (typeof window.gtag !== 'function') return;
+        sent = true;
+        try { window.gtag('event', 'conversion', { send_to: 'AW-18485585918/6xbJCN6kmbIdEP7Pzu5E' }); } catch (e) {}
+    }, true);
+})();
+
 // handy in the console while the rest of the pages get built
 window.AVE = { modules, boot, Trail, DRIPS, ASKS, Rail, helpers: { $, $$, clamp, lerp, onFrame, debounce } };
